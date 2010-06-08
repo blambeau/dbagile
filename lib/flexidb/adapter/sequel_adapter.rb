@@ -55,6 +55,7 @@ module FlexiDB
 
     # Inserts a tuple inside a given table
     def insert(table, tuple)
+      raise ArgumentError, "No such table #{table}" unless has_table?(table)
       db[table].insert(tuple)
       tuple
     end
