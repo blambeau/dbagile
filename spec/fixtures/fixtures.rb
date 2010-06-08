@@ -8,6 +8,20 @@ module Fixtures
       schema  TEXT
     );
   EOF
+
+  # Installs the default db on a given adapter
+  def install_default_db(adapter)
+    adapter.create_table(:flexidb, {:id => Integer, :version => String, :schema => String})
+  end
+  module_function :install_default_db
+  
+  # Returns adapters under test
+  def adapters_under_test
+    adapters = [::FlexiDB::MemoryAdapter.new]
+    adapters.each{|a| install_default_db(a)}
+    adapters
+  end
+  module_function :adapters_under_test
   
   # Returns root path
   def root_path

@@ -4,4 +4,5 @@ module FlexiDB
     include FlexiDB::Adapter::AbstractAdapter
   end # class Adapter
 end # module FlexiDB
+require 'flexidb/adapter/memory_adapter'
 require 'flexidb/adapter/sequel_adapter'

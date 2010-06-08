@@ -12,7 +12,7 @@ module FlexiDB
         @tuples = []
       end
       def column_names(sort = false)
-        sort ? heading.keys : heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s}
+        sort ?  heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s} : heading.keys
       end
       def add_columns(columns)
         heading.merge!(columns)
@@ -46,6 +46,7 @@ module FlexiDB
     
     # Creates a table with some attributes.
     def create_table(name, columns)
+      raise ArgumentError, "Table #{name} already exists" if has_table?(name)
       tables[name] = Table.new(columns)
     end
     
