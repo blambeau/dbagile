@@ -28,9 +28,10 @@ module FlexiDB
       raise NotImplementedError
     end
     
-    # Returns true if a column exists, false otherwise
-    def has_column?(table, column)
-      has_table?(table) and db[table].columns.include?(column)
+    # Returns the list of column names for a given table
+    def column_names(table)
+      raise ArgumentError, "No such table #{table}" unless has_table?(table)
+      db[table].columns
     end
     
     # Creates a table with some attributes.

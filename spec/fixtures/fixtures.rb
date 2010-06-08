@@ -2,6 +2,13 @@ require 'fileutils'
 require 'sequel'
 module Fixtures
   
+  TESTDB_CREATE_SQL = <<-EOF
+    CREATE TABLE flexidb (
+      version CHAR(10),
+      schema  TEXT
+    );
+  EOF
+  
   # Returns root path
   def root_path
     File.expand_path(File.dirname(__FILE__))
@@ -25,7 +32,7 @@ module Fixtures
     return if File.exists?(sqlite_testdb_path) and not(force)
     FileUtils.rm_rf(sqlite_testdb_path)
     db = Sequel::connect(sqlite_testdb_uri)
-    db << "CREATE TABLE flexidb (version CHAR(25));"
+    db << TESTDB_CREATE_SQL
     db.disconnect
   end
   module_function :ensure_sqlite_testdb
