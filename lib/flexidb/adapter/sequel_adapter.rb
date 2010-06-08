@@ -18,6 +18,12 @@ module FlexiDB
       @db ||= Sequel.connect(uri)
     end
     
+    # Returns a Dataset object for a given table
+    def dataset(table)
+      raise ArgumentError, "No such table #{table}" unless has_table?(table)
+      db[table]
+    end
+      
     # Returns true if a table exists, false otherwise
     def has_table?(name)
       db.tables.include?(name)

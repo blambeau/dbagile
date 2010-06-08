@@ -5,6 +5,11 @@ module FlexiDB
     #
     module AbstractAdapter
       
+      # Returns a Dataset object for a given table
+      def dataset(table)
+        raise NotImplementedError
+      end
+      
       # Returns true if a table exists, false otherwise
       def has_table?(name)
         raise NotImplementedError

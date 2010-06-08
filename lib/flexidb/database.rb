@@ -23,5 +23,10 @@ module FlexiDB
       adapter.insert(table, tuple)
     end
     
+    # Returns the contents of a table
+    def [](table)
+      adapter.dataset(table)
+    end
+    
   end # class Database
 end # module FlexiDB
