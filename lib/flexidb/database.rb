@@ -15,6 +15,11 @@ module FlexiDB
       @schema_lock.synchronize{ yield(adapter) }
     end
     
+    # Does a table exists?
+    def table_exists?(table)
+      adapter.has_table?(table)
+    end
+    
     # Inserts a tuple inside a given table
     def insert(table, tuple)
       # Ensure the schema first
@@ -26,6 +31,11 @@ module FlexiDB
     # Returns the contents of a table
     def [](table)
       adapter.dataset(table)
+    end
+    
+    # Send sql directly 
+    def direct_sql(sql)
+      adapter.direct_sql(sql)
     end
     
   end # class Database

@@ -58,6 +58,11 @@ module FlexiDB
       db[table].insert(tuple)
       tuple
     end
+    
+    # Send SQL directly to the database SQL server
+    def direct_sql(sql)
+      db[sql]
+    end
 
   end # class SequelAdapter
 end # module FlexiDB

@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+#
+#  FlexiDB - Flexible interface on top of SQL databases
+#        (see lib/flexidb/flexidb.rb for more information)
+#
+#  Copyright (c) 2010 Bernard Lambeau & University of Louvain, 
+#  Released under a MIT or Ruby licence
+#
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'rubygems'
+require 'flexidb'
+require 'flexidb/commands'
+begin
+  require 'highline'
+rescue LoadError
+  puts "This command line tool requires highline gem. Please run 'gem install highline'"
+  exit(-1)
+end
+
+begin
+  r = FlexiDB::Commands::Main.new.run '.', ARGV
+rescue Interrupt => e
+  $stderr.puts
+  $stderr.puts "Interrupted"
+  raise e
+rescue OptionParser::ParseError => e
+  $stderr.puts e.message
+  raise e
+rescue => e
+  $stderr.puts e.message
+  raise e
+end

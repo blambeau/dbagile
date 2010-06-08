@@ -53,6 +53,11 @@ module FlexiDB
         raise NotImplementedError
       end
       
+      # Send SQL directly to the database SQL server
+      def direct_sql(sql)
+        raise NotImplementedError
+      end
+
     end # module AbstractAdapter
   end # class Adapter
 end # module FlexiDB
