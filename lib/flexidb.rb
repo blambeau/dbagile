@@ -11,5 +11,5 @@ module FlexiDB
   
 end # module FlexiDB
 require 'flexidb/adapter'
-require 'flexidb/utils'
+require 'flexidb/chain'
 require 'flexidb/database'

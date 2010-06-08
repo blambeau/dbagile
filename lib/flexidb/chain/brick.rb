@@ -4,6 +4,7 @@ module FlexiDB
     # Defines common contract of all Bricks inside the update chain
     #
     class Brick
+      include Utils
       
       # Brick options
       attr_reader :options
@@ -25,13 +26,6 @@ module FlexiDB
       # Returns the SQL adapter which is at end of the chain
       def adapter
         @adapter ||= delegate.adapter
-      end
-      
-      # Computes and returns the heading of a tuple
-      def tuple_heading(tuple)
-        heading = {}
-        tuple.each_pair{|name, value| heading[name] = value.class unless value.nil?}
-        heading
       end
       
       # Makes an insertion inside a table

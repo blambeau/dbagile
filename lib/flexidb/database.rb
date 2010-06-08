@@ -19,11 +19,18 @@ module FlexiDB
     def table_exists?(table)
       adapter.has_table?(table)
     end
+
+    # Returns the heading of a given tuple
+    def heading_of(tuple)
+      heading = {}
+      tuple.each_pair{|name, value| heading[name] = value.class unless value.nil?}
+      heading
+    end
     
     # Inserts a tuple inside a given table
     def insert(table, tuple)
       # Ensure the schema first
-      heading = Utils.heading_of(tuple)
+      heading = heading_of(tuple)
       with_schema_lock{|adapter| adapter.ensure_table(table, heading) }
       adapter.insert(table, tuple)
     end
