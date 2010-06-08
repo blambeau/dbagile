@@ -13,4 +13,9 @@ describe "::FlexiDB::Adapter.has_column" do
     it{ should == [:version, :schema] }
   end
   
+  describe "When called with sorting option" do
+    subject{ adapter.column_names(:flexidb, true) }
+    it{ should == [:schema, :version] }
+  end
+  
 end
