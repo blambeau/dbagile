@@ -23,17 +23,27 @@ module FlexiDB
         # Main highline loop
         h = HighLine.new
         while true
-          case res = h.ask("flexidb=# ")
-            when '\q', 'quit'
-              break
-            when /^[a-zA-Z0-9_]+$/
-              if database.table_exists?(res.to_sym)
-                show_dataset(database[res.to_sym])
+          begin
+            case res = h.ask("flexidb=# ")
+              when '\q', 'quit'
+                break
+              when /^[a-zA-Z0-9_]+$/
+                if database.table_exists?(res.to_sym)
+                  show_dataset(database[res.to_sym])
+                else
+                  h.say("No such table #{res}")
+                end
+              when /^\s*(select|SELECT)/
+                show_dataset(database.direct_sql(res))
+              when /^\s*(insert\s+into|INSERT\s+INTO)/
+                puts database.direct_sql(res)
+              when /^\s*(delete|DELETE)/
+                puts database.direct_sql(res)
               else
-                h.say("No such table #{res}")
-              end
-            when /^\s*SELECT/
-              show_dataset(database.direct_sql(res))
+                puts database.instance_eval(res).inspect
+            end
+          rescue => ex
+            h.say("Error occured: #{ex.message}")
           end
         end
       end
