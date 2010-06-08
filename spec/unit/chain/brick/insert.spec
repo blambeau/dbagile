@@ -7,8 +7,8 @@ describe "::FlexiDB::Chain::Brick#insert" do
     let(:brick){ ::FlexiDB::Chain::Brick.new(fake_adapter) }
     specify {
       brick.insert(:table_name, :id => 1, :name => "flexidb")
-      fake_adapter.calls.should == [
-        [:insert, [:table_name, {:id => 1, :name => "flexidb"}]]
+      fake_adapter.inserts.should == [
+        [:table_name, {:id => 1, :name => "flexidb"}]
       ]
     }
   end
@@ -17,8 +17,8 @@ describe "::FlexiDB::Chain::Brick#insert" do
     let(:brick){ ::FlexiDB::Chain::Brick.new(::FlexiDB::Chain::Brick.new(fake_adapter)) }
     specify {
       brick.insert(:table_name, :id => 1, :name => "flexidb")
-      fake_adapter.calls.should == [
-        [:insert, [:table_name, {:id => 1, :name => "flexidb"}]]
+      fake_adapter.inserts.should == [
+        [:table_name, {:id => 1, :name => "flexidb"}]
       ]
     }
   end

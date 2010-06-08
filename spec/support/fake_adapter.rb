@@ -10,13 +10,13 @@ module FlexiDB
     end
     
     # All other method calls 
-    def calls
-      @calls ||= []  
+    def inserts
+      @inserts ||= []  
     end
     
     # Trace the method call
-    def method_missing(name, *args, &block)
-      calls << [name, args]
+    def insert(table, tuple)
+      inserts << [table, tuple]
     end
     
   end # class FakeAdapter
