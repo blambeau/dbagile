@@ -61,7 +61,11 @@ module FlexiDB
     
     # Send SQL directly to the database SQL server
     def direct_sql(sql)
-      db[sql]
+      if /^\s*(select|SELECT)/ =~ sql
+        db[sql]
+      else
+        db << sql
+      end
     end
 
   end # class SequelAdapter
