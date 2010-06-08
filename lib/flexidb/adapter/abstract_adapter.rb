@@ -43,6 +43,11 @@ module FlexiDB
         true
       end
       
+      # Inserts a tuple inside a given table
+      def insert(table, tuple)
+        raise NotImplementedError
+      end
+      
     end # module AbstractAdapter
   end # class Adapter
 end # module FlexiDB

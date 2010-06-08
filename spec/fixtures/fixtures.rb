@@ -44,4 +44,10 @@ module Fixtures
   end
   module_function :sqlite_testdb_sequel_adapter
   
+  # Returns a Database instance on testdb sqlite adapter
+  def sqlite_testdb
+    FlexiDB::Database.new(sqlite_testdb_sequel_adapter)
+  end
+  module_function :sqlite_testdb
+  
 end # module Fixture
