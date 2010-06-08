@@ -1,0 +1,3 @@
+h2. FlexiDB
+
+FlexiDB provides a flexible, truly-relational inspired interface on top of SQL databases.
