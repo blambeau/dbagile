@@ -11,6 +11,17 @@ describe "::FlexiDB::Adapter.dataset" do
     describe "When called on an existing table" do
       subject{ adapter.dataset(:flexidb) }
       it{ should be_kind_of(Enumerable) }
+      it{ should respond_to(:to_a) }
+    end
+    
+    describe "When called on a given table, with records" do
+      before{ 
+        adapter.create_table(:example, :id => Integer) 
+        adapter.insert(:example, :id => 1)
+      }
+      specify{
+        adapter.dataset(:example).to_a.should == [{:id => 1}]
+      }
     end
   
   end

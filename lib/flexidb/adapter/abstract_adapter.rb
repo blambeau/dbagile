@@ -5,6 +5,13 @@ module FlexiDB
     #
     module AbstractAdapter
       
+      # Acquires a lock on the schema and yield the block with the adapter
+      # as first argument. The default implementation simply yields the 
+      # block.
+      def with_schema_lock
+        yield(self)
+      end
+      
       # Returns a Dataset object for a given table
       def dataset(table)
         raise NotImplementedError

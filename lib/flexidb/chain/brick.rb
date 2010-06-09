@@ -25,7 +25,7 @@ module FlexiDB
       
       # Returns the SQL adapter which is at end of the chain
       def adapter
-        @adapter ||= delegate.adapter
+        @adapter ||= (delegate.respond_to?(:adapter) ? delegate.adapter : delegate)
       end
       
       # Makes an insertion inside a table

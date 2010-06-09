@@ -28,6 +28,9 @@ module FlexiDB
       def count
         tuples.size
       end
+      def to_a
+        tuples
+      end
     end
     
     # Table hash (name -> array of hash tuples)
