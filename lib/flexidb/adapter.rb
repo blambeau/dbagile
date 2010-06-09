@@ -1,7 +1,8 @@
-require 'flexidb/adapter/abstract_adapter'
+require 'flexidb/adapter/contract'
+require 'flexidb/adapter/delegate'
 module FlexiDB
   class Adapter
-    include FlexiDB::Adapter::AbstractAdapter
+    include FlexiDB::Adapter::Contract
   end # class Adapter
 end # module FlexiDB
 require 'flexidb/adapter/memory_adapter'

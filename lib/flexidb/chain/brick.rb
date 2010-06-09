@@ -5,6 +5,7 @@ module FlexiDB
     #
     class Brick
       include Utils
+      include Adapter::Delegate
       
       # Brick options
       attr_reader :options
@@ -28,21 +29,6 @@ module FlexiDB
         @adapter ||= (delegate.respond_to?(:adapter) ? delegate.adapter : delegate)
       end
     
-      # Delegated  
-      def dataset(table)
-        delegate.dataset(table)
-      end
-      
-      # Delegated  
-      def direct_sql(table)
-        delegate.direct_sql(table)
-      end
-      
-      # Makes an insertion inside a table
-      def insert(table, tuple)
-        delegate.insert(table, tuple)
-      end
-      
     end # class Brick
   end # module Chain
 end # module FlexiDB

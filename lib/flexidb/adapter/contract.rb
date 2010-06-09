@@ -3,7 +3,7 @@ module FlexiDB
     #
     # Specification of all the methods FlexiDB needs to make its job.
     #
-    module AbstractAdapter
+    module Contract
       
       # Acquires a lock on the schema and yield the block with the adapter
       # as first argument. The default implementation simply yields the 
@@ -52,6 +52,6 @@ module FlexiDB
         raise NotImplementedError
       end
 
-    end # module AbstractAdapter
+    end # module AbstractContract
   end # class Adapter
 end # module FlexiDB
