@@ -1,4 +1,4 @@
-require 'flexidb/engine/highline_environment'
+require 'flexidb/engine/console_environment'
 require 'flexidb/engine/command'
 module FlexiDB
   class Engine
@@ -38,7 +38,7 @@ module FlexiDB
     end
     
     # Executes on a given environment
-    def __execute(env = HighlineEnvironment.new)
+    def __execute(env = ConsoleEnvironment.new)
       @quit = false
       until @quit
         next if (command = env.ask("flexidb=# ").strip).empty?
@@ -60,6 +60,7 @@ module FlexiDB
           env.error(ex.message)
         end
       end
+      env.save_history if env.respond_to?(:save_history)
     end
     
     # Install all commands now
