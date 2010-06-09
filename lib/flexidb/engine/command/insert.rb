@@ -2,9 +2,14 @@ class FlexiDB::Engine::Command::Insert < FlexiDB::Engine::Command
         
   # Returns command's banner
   def banner
-    "insert table_name, {tuple...}"
+    "insert TABLE_NAME, {TUPLE...}"
   end
         
+  # Returns command's help
+  def help
+    "insert a {:attribute_name => value, ...} tuple inside a table"
+  end
+      
   # Executes the command on the engine
   def execute(engine, env, args)
     if args =~ /^([^,]+),(.*)$/

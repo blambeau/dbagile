@@ -2,9 +2,14 @@ class FlexiDB::Engine::Command::Define < FlexiDB::Engine::Command
         
   # Returns command's banner
   def banner
-    "define table_name, {heading...}"
+    "define TABLE_NAME, {HEADING...}"
   end
         
+  # Returns command's help
+  def help
+    "define/create a new table with a specific {:attribute_name => AttributeType, ...} heading"
+  end
+      
   # Executes the command on the engine
   def execute(engine, env, args)
     if args =~ /^([^,]+),(.*)$/

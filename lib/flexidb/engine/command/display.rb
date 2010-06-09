@@ -2,8 +2,13 @@ class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
         
   # Returns command's banner
   def banner
-    "display table_name"
+    "display TABLE_NAME"
   end  
+      
+  # Returns command's help
+  def help
+    "display contents of a table"
+  end
       
   # Executes the command on the engine
   def execute(engine, env, table_name)

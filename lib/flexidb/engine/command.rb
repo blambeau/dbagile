@@ -10,7 +10,12 @@ module FlexiDB
     
       # Returns command's banner
       def banner
-        self.class.command_name
+        self.class.command_name.to_s
+      end  
+    
+      # Returns command's help
+      def help
+        "Sorry, no documentation for #{self.banner}"
       end  
       
     end # class Command

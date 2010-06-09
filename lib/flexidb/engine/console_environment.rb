@@ -21,7 +21,9 @@ module FlexiDB
       def load_history
         histfile = File.join(ENV['HOME'], '.flexidb_history')
         if File.exists?(histfile)
-          File.readlines(histfile).each{|c| Readline::HISTORY.push(c)}
+          File.readlines(histfile).each{|c| 
+            Readline::HISTORY.push(c) unless c.strip.empty?
+          }
         end
       end
       
@@ -29,13 +31,25 @@ module FlexiDB
       def save_history
         histfile = File.join(ENV['HOME'], '.flexidb_history')
         File.open(histfile, 'w') do |io|
-          Readline::HISTORY.each{|c| io << c << "\n"}
+          Readline::HISTORY.to_a.reverse[0..(ENV['HISTORY'].to_i || 100)].each{|c| 
+            (io << c << "\n") unless c.strip.empty?
+          }
         end
       end
       
+      # Stolen on http://bogojoker.com/readline/
+      def readline_with_hist_management(what)
+        line = Readline.readline(what, true)
+        return nil if line.nil?
+        if line =~ /^\s*$/ or Readline::HISTORY.to_a[-2] == line
+          Readline::HISTORY.pop
+        end
+        line
+      end
+
       # Asks something
       def ask(what)
-        Readline.readline(what, true)
+        readline_with_hist_management(what)
       end
       
       # Says something

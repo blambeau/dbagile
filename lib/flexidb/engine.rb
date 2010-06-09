@@ -8,7 +8,8 @@ module FlexiDB
     
     # Command shortcuts
     SHORTCUTS = {
-      '\q' => :quit,
+      '\q'    => :quit,
+      '\quit' => :quit,
       '\h' => :help
     }
     
