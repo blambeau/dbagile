@@ -42,19 +42,6 @@ module FlexiDB
         raise NotImplementedError
       end
       
-      # Ensures that a table exists and that all columns are correctly
-      # defined
-      def ensure_table(table, columns)
-        if has_table?(table) 
-          known_columns = column_names(table)
-          columns = columns.dup.delete_if{|k,v| known_columns.include?(k)}
-          add_columns(table, columns) unless columns.empty?
-        else
-          create_table(table, columns)
-        end
-        true
-      end
-      
       # Inserts a tuple inside a given table
       def insert(table, tuple)
         raise NotImplementedError

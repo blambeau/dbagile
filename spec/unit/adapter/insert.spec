@@ -4,7 +4,7 @@ describe "::FlexiDB::Adapter.has_table" do
   Fixtures::adapters_under_test.each do |adapter|
   
     describe "When called on existing table" do
-      before{ adapter.ensure_table(:example, :id => Integer) }
+      before{ adapter.create_table(:example, :id => Integer) }
       subject{ adapter.insert(:example, :id => 12) }
       specify{ 
         subject.should == {:id => 12} 

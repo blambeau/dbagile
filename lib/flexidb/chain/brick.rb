@@ -27,6 +27,11 @@ module FlexiDB
       def adapter
         @adapter ||= (delegate.respond_to?(:adapter) ? delegate.adapter : delegate)
       end
+    
+      # Delegated  
+      def dataset(table)
+        delegate.dataset(table)
+      end
       
       # Makes an insertion inside a table
       def insert(table, tuple)
