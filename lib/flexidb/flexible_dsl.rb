@@ -11,8 +11,8 @@ module FlexiDB
     
     # Lookup for chain elements ...
     def self.const_missing(name)
-      if ::FlexiDB::Chain::const_defined?(name)
-        ::FlexiDB::Chain::const_get(name)
+      if ::FlexiDB::Plugin::const_defined?(name)
+        ::FlexiDB::Plugin::const_get(name)
       else
         super
       end
@@ -25,7 +25,7 @@ module FlexiDB
     
     # Ensure that all tables are flexible 
     def flexible_tables(options = {})
-      use(::FlexiDB::Chain::FlexibleTable, options)
+      use(::FlexiDB::Plugin::FlexibleTable, options)
     end
       
     private :db

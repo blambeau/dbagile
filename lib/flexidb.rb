@@ -21,6 +21,6 @@ module FlexiDB
   
 end # module FlexiDB
 require 'flexidb/adapter'
-require 'flexidb/chain'
+require 'flexidb/plugin'
 require 'flexidb/flexible_dsl'
 require 'flexidb/database'

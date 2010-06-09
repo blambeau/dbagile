@@ -9,7 +9,6 @@ require 'spec'
 require 'spec/autorun'
 
 require 'fixtures'
-require 'fake_adapter'
 
 Spec::Runner.configure do |config|
 end

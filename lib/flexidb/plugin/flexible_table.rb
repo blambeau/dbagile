@@ -1,18 +1,18 @@
 module FlexiDB
-  module Chain
+  class Plugin
     #
     # Makes a table flexible in the sense that new columns are automatically
     # added when not existing at insert time.
     #
-    class FlexibleTable < Brick
+    class FlexibleTable < Plugin
       
       # Returns default brick options
-      def __default_options
+      def default_options
         {:create_table => true}
       end
       
       # Ensures the columns of some table
-      def __ensure_columns(table, tuple)
+      def ensure_columns(table, tuple)
         heading = tuple_heading(tuple)
         if has_table?(table)
           existing_columns = column_names(table)
@@ -25,11 +25,11 @@ module FlexiDB
       
       # Makes an insertion inside a table
       def insert(table, tuple)
-        __ensure_columns(table, tuple)
+        ensure_columns(table, tuple)
         delegate.insert(table, tuple)
       end
       
-      private :__ensure_columns
-    end # class FlexTable
-  end # module Chain
+      private :ensure_columns
+    end # class FlexibleTable
+  end # class Plugin
 end # module FlexiDB
