@@ -33,6 +33,11 @@ module FlexiDB
         delegate.dataset(table)
       end
       
+      # Delegated  
+      def direct_sql(table)
+        delegate.direct_sql(table)
+      end
+      
       # Makes an insertion inside a table
       def insert(table, tuple)
         delegate.insert(table, tuple)

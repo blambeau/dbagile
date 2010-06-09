@@ -28,11 +28,7 @@ module FlexiDB
               when '\q', 'quit'
                 break
               when /^[a-zA-Z0-9_]+$/
-                if database.table_exists?(res.to_sym)
-                  show_dataset(database[res.to_sym])
-                else
-                  h.say("No such table #{res}")
-                end
+                show_dataset(database.dataset(res.to_sym))
               when /^\s*(select|SELECT)/
                 show_dataset(database.direct_sql(res))
               when /^\s*(insert\s+into|INSERT\s+INTO)/
