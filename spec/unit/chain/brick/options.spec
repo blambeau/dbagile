@@ -3,7 +3,7 @@ describe "::FlexiDB::Chain::Brick#options" do
   
   let(:defbrick){ 
     class DefBrick < ::FlexiDB::Chain::Brick
-      def default_options() {:default => 12} end
+      def __default_options() {:default => 12} end
     end
     DefBrick
   }

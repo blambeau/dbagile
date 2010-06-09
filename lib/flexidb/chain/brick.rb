@@ -15,20 +15,16 @@ module FlexiDB
       
       # Creates a brick instance with a given delegate
       def initialize(delegate, options = {})
-        @options = default_options.merge(options)
+        @options = __default_options.merge(options)
         @delegate = delegate
       end
       
       # Returns default brick options
-      def default_options
+      def __default_options
         {}
       end
       
-      # Returns the SQL adapter which is at end of the chain
-      def adapter
-        @adapter ||= (delegate.respond_to?(:adapter) ? delegate.adapter : delegate)
-      end
-    
+      private :__default_options
     end # class Brick
   end # module Chain
 end # module FlexiDB
