@@ -19,7 +19,7 @@ module FlexiDB
           case value
             when NilClass
             when Proc
-              value = value.call(tuple)
+              value = value.arity > 0 ? value.call(tuple) : value.call
               defaults[key] = value unless value.nil?
             else
               defaults[key] = value
