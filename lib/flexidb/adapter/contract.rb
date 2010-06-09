@@ -6,6 +6,16 @@ module FlexiDB
     module Contract
       
       # 
+      # Ping the SQL server, returns true if everything is fine. Raises an
+      # error otherwise
+      #
+      # @return true
+      #
+      def ping
+        Kernel.raise NotImplementedError
+      end
+      
+      # 
       # Disconnect the adapter and frees all resources.
       #
       # @return true

@@ -15,6 +15,7 @@ module FlexiDB
     def __connect(db)
       __disconnect
       @database = FlexiDB::connect(db)
+      @database.adapter.ping
     end
     
     # Disconnects from the database
@@ -34,9 +35,10 @@ module FlexiDB
         next if (command = env.ask("flexidb=# ").strip).empty?
         begin
           if /^([^\s]+)\s*(.*)$/ =~ command
-            cmd, args = $1, Kernel.eval("[#{$2}]")
+            cmd, args = $1, $2.strip
             if self.respond_to?(cmd)
-              self.send(cmd, *([self, env] + args))
+              args = args.empty? ? [self, env] : [self, env, args]
+              self.send(cmd, *args)
             else
               env.error("Uknown command #{command}")
             end

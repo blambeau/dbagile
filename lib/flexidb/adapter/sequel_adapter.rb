@@ -13,6 +13,11 @@ module FlexiDB
       @uri = uri
     end
     
+    # Pings the server
+    def ping
+      db.test_connection
+    end
+      
     # Disconnect the adapter and frees all resources.
     def disconnect
       @db.disconnect if @db
@@ -31,7 +36,7 @@ module FlexiDB
       
     # Returns true if a table exists, false otherwise
     def has_table?(name)
-      db.tables.include?(name)
+      db.table_exists?(name)
     end
     
     # Creates a table with some attributes

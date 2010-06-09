@@ -44,6 +44,11 @@ module FlexiDB
       @tables = {}
     end
     
+    # Pings the server
+    def ping
+      true
+    end
+      
     # Disconnect the adapter and frees all resources.
     def disconnect
       tables = {}

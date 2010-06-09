@@ -12,3 +12,4 @@ module FlexiDB
   end # class Engine
 end # module FlexiDB
 require 'flexidb/engine/command/quit'
+require 'flexidb/engine/command/connect'
