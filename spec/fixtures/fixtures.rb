@@ -2,27 +2,6 @@ require 'fileutils'
 require 'sequel'
 module Fixtures
   
-  TESTDB_CREATE_SQL = <<-EOF
-    CREATE TABLE flexidb (
-      version CHAR(10),
-      schema  TEXT
-    );
-  EOF
-
-  # Installs the default db on a given adapter
-  def install_default_db(adapter)
-    adapter.create_table(:flexidb, {:id => Integer, :version => String, :schema => String})
-  end
-  module_function :install_default_db
-  
-  # Returns adapters under test
-  def adapters_under_test
-    adapters = [::FlexiDB::MemoryAdapter.new]
-    adapters.each{|a| install_default_db(a)}
-    adapters
-  end
-  module_function :adapters_under_test
-  
   # Returns root path
   def root_path
     File.expand_path(File.dirname(__FILE__))
@@ -41,20 +20,26 @@ module Fixtures
   end
   module_function :sqlite_testdb_uri
   
-  # Ensures that the sqlite test database is correctly installed
-  def ensure_sqlite_testdb(force = false)
-    return if File.exists?(sqlite_testdb_path) and not(force)
-    FileUtils.rm_rf(sqlite_testdb_path)
-    db = Sequel::connect(sqlite_testdb_uri)
-    db << TESTDB_CREATE_SQL
-    db.disconnect
+  # Installs the default db on a given adapter
+  def install_default_db(adapter)
+    adapter.create_table(:flexidb, {:id => Integer, :version => String, :schema => String})
   end
-  module_function :ensure_sqlite_testdb
+  module_function :install_default_db
+  
+  # Returns a Memory adapter on the test database
+  def memory_testdb_adapter
+    adapter = ::FlexiDB::MemoryAdapter.new
+    install_default_db(adapter)
+    adapter
+  end
+  module_function :memory_testdb_adapter
   
   # Returns a SequelAdapter on the test database
   def sqlite_testdb_sequel_adapter
-    ensure_sqlite_testdb(true)
-    FlexiDB::SequelAdapter.new(sqlite_testdb_uri)
+    FileUtils.rm_rf(sqlite_testdb_path)
+    adapter = FlexiDB::SequelAdapter.new(sqlite_testdb_uri)
+    install_default_db(adapter)
+    adapter
   end
   module_function :sqlite_testdb_sequel_adapter
   
@@ -63,5 +48,11 @@ module Fixtures
     FlexiDB::Database.new(sqlite_testdb_sequel_adapter)
   end
   module_function :sqlite_testdb
+  
+  # Returns adapters under test
+  def adapters_under_test
+    [memory_testdb_adapter, sqlite_testdb_sequel_adapter]
+  end
+  module_function :adapters_under_test
   
 end # module Fixture

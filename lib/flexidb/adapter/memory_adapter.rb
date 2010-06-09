@@ -5,11 +5,15 @@ module FlexiDB
   class MemoryAdapter < Adapter
     
     class Table
+      include Enumerable
       attr_accessor :heading
       attr_accessor :tuples
       def initialize(heading, tuples = [])
         @heading = heading
         @tuples = []
+      end
+      def each(&block)
+        tuples.each(&block)
       end
       def column_names(sort = false)
         sort ?  heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s} : heading.keys
@@ -19,6 +23,7 @@ module FlexiDB
       end
       def insert(tuple)
         tuples << tuple
+        tuple
       end
       def count
         tuples.size
