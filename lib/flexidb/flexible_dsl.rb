@@ -43,8 +43,8 @@ module FlexiDB
     end
     
     # Adds a brick in the main chain
-    def use(clazz, options = {})
-      db.__insert_in_main_chain(clazz, options)
+    def use(clazz, *args)
+      db.__insert_in_main_chain(clazz, *args)
     end
       
     private :db, :execute

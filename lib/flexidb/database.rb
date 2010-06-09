@@ -10,8 +10,8 @@ module FlexiDB
     end
     
     # Adds a brick inside the global chain
-    def __insert_in_main_chain(clazz, options)
-      @adapter = clazz.new(@adapter, options)
+    def __insert_in_main_chain(clazz, *args)
+      @adapter = clazz.new(@adapter, *args)
     end
     
     # Returns the contents of a table

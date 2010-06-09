@@ -34,3 +34,4 @@ module FlexiDB
   end # class Plugin
 end # module FlexiDB
 require 'flexidb/plugin/flexible_table'
+require 'flexidb/plugin/defaults'
