@@ -30,8 +30,13 @@ module FlexiDB
     
     # Returns a Dataset object for a given table
     def dataset(table)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
-      db[table]
+      case table
+        when Symbol
+          raise ArgumentError, "No such table #{table}" unless has_table?(table)
+          db[table]
+        else
+          db[table]
+      end
     end
       
     # Returns true if a table exists, false otherwise

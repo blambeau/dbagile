@@ -2,7 +2,7 @@ class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
         
   # Returns command's banner
   def banner
-    "display TABLE_NAME"
+    "display TABLE_NAME|SELECT..."
   end  
       
   # Returns command's help
@@ -11,12 +11,16 @@ class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
   end
       
   # Executes the command on the engine
-  def execute(engine, env, table_name)
-    if engine.database.has_table?(table_name.to_sym)
-      env.say(engine.database.dataset(table_name.to_sym).to_a.inspect)
-    else
-      env.error("No such table #{table_name}")
+  def execute(engine, env, source)
+    dataset = case source
+      when Symbol, /^[^\s]+$/
+        engine.database.dataset(source.to_sym)
+      when String
+        engine.database.dataset(source)
+      else
+        source
     end
+    env.say(dataset.to_a.inspect)
   end
         
 end # class Quit
