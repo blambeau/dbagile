@@ -21,6 +21,8 @@ desc "Launches all tests"
 task :test => [:spec]
 
 YARD::Rake::YardocTask.new do |t|
+  YARD::Tags::Library.define_tag "Precondition", :pre
+  YARD::Tags::Library.define_tag "Postcondition", :post
   t.files   = ['lib/**/*.rb']
   t.options = ['--output-dir', 'doc/api', '-', "README.textile", "LICENCE.textile", "CHANGELOG.textile"]
 end

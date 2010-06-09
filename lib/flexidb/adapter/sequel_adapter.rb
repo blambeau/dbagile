@@ -1,6 +1,6 @@
 module FlexiDB
   #
-  # Implements the Adapter contract using Sequel gem.
+  # Implements Adapter::Contract using the Sequel gem.
   #
   class SequelAdapter < Adapter
     
