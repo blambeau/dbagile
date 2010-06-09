@@ -1,14 +1,18 @@
 class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
+  
+  # Command's names
+  names '\d', 'display'
+  
+  # Command's signatures
+  signature{
+    argument(:TABLE_NAME, Symbol)
+  }
+  signature{
+    argument(:QUERY, String)
+  }
         
-  # Returns command's banner
-  def banner
-    "display TABLE_NAME|SELECT..."
-  end  
-      
-  # Returns command's help
-  def help
-    "display contents of a table"
-  end
+  # Command's synopsis
+  synopsis "display contents of a table"
       
   # Executes the command on the engine
   def execute(engine, env, source)

@@ -1,14 +1,16 @@
 class FlexiDB::Engine::Command::Define < FlexiDB::Engine::Command
         
-  # Returns command's banner
-  def banner
-    "define TABLE_NAME, {HEADING...}"
-  end
+  # Command's names
+  names 'define'
         
-  # Returns command's help
-  def help
-    "define/create a new table with a specific {:attribute_name => AttributeType, ...} heading"
-  end
+  # Command's signature
+  signature{
+    argument(:TABLE_NAME, Symbol)
+    argument(:HEADER,     Hash){|h| h.keys.all?{|k| Symbol===k} and h.values.all?{|v| Class===v}}
+  }
+  
+  # Command's synopsis
+  synopsis "define/create a new table with a specific {:attribute_name => AttributeType, ...} heading"
       
   # Executes the command on the engine
   def execute(engine, env, args)

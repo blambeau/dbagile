@@ -1,22 +1,76 @@
 module FlexiDB
   class Engine
     class Command
+
+      # DSL methods
+      class << self
+
+        # Sets command names
+        def names(*names)
+          if names.empty?
+            @names
+          else
+            @names = names
+          end
+        end
+        
+        # Returns offical command name
+        def name
+          names.last
+        end
+        
+        # Sets synopsis
+        def synopsis(synopsis = nil)
+          if synopsis.nil?
+            @synopsis
+          else
+            @synopsis = synopsis
+          end
+        end
+      
+        # Returns method signatures
+        def signatures
+          @signatures ||= []
+        end
+      
+        # Adds a signature for the command
+        def signature
+          signatures << FlexiDB::Engine::Signature.new
+          yield if block_given?
+        end
+      
+        # Adds an argument to the current signature
+        def argument(name, type, &check)
+          @signatures.last.add_argument(name, type, check)
+        end
     
-      # Returns the command name
-      def self.command_name
-        self.name =~ /([A-Za-z]+)$/
-        $1.downcase.to_sym
+      end # DSL methods
+      
+      # Returns command names
+      def names
+        self.class.names
       end
-    
-      # Returns command's banner
+      
+      # Returns command name
+      def name
+        names.last
+      end
+      
+      # Returns command signature
+      def signatures
+        self.class.signatures
+      end
+      
+      # Returns command banner
       def banner
-        self.class.command_name.to_s
-      end  
-    
-      # Returns command's help
-      def help
-        "Sorry, no documentation for #{self.banner}"
-      end  
+        name = self.name
+        signatures.collect{|s| "#{s.banner(name)}"}
+      end
+      
+      # Returns command's synopsis
+      def synopsis
+        self.class.synopsis
+      end
       
     end # class Command
   end # class Engine

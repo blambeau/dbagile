@@ -1,13 +1,13 @@
 class FlexiDB::Engine::Command::Quit < FlexiDB::Engine::Command
         
-  def banner
-    '\q[uit], quit'
-  end
-        
-  # Returns command's help
-  def help
-    "quit flexidb"
-  end
+  # Command's names
+  names '\q', 'quit'
+
+  # Command's signatures
+  signature{}
+
+  # Command's synopsys
+  synopsis "quit flexidb"
       
   # Executes the command on the engine
   def execute(engine, env)

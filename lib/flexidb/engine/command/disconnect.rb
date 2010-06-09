@@ -1,9 +1,13 @@
 class FlexiDB::Engine::Command::Disconnect < FlexiDB::Engine::Command
         
-  # Returns command's help
-  def help
-    "disconnect from the current database"
-  end
+  # Command's names
+  names 'disconnect'
+  
+  # Command's signatures
+  signature{}      
+        
+  # Command's synopsis
+  synopsis "disconnect from the current database"
       
   # Executes the command on the engine
   def execute(engine, env)

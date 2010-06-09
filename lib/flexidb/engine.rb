@@ -1,4 +1,5 @@
 require 'flexidb/engine/console_environment'
+require 'flexidb/engine/signature'
 require 'flexidb/engine/command'
 module FlexiDB
   class Engine
@@ -59,6 +60,7 @@ module FlexiDB
           end
         rescue => ex
           env.error(ex.message)
+          env.say(ex.backtrace.join("\n"))
         end
       end
       env.save_history if env.respond_to?(:save_history)
@@ -69,9 +71,9 @@ module FlexiDB
       c = FlexiDB::Engine::Command::const_get(c)
       next unless c.kind_of?(Class)
       next unless c.superclass == Command
-      COMMANDS[c.command_name] = c.new
-      define_method(c.command_name) do |*args|
-        COMMANDS[c.command_name].execute(*args)
+      COMMANDS[c.name] = c.new
+      define_method(c.name) do |*args|
+        COMMANDS[c.name].execute(*args)
       end
     end
     

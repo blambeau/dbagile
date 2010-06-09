@@ -1,14 +1,16 @@
 class FlexiDB::Engine::Command::Help < FlexiDB::Engine::Command
 
-  # Returns command's banner
-  def banner
-    "help [COMMAND]"
-  end
+  # Command's names
+  names '\h', 'help'
 
-  # Returns command's help
-  def help
-    "show available commands or display help of a specific command"
-  end
+  # Command's signatures
+  signature{}
+  signature{
+    argument(:COMMAND, String)
+  }
+
+  # Command's synopsys
+  synopsis "show available commands or display help of a specific command"
       
   # Executes the command on the engine
   def execute(engine, env, cmd = nil)
@@ -16,19 +18,15 @@ class FlexiDB::Engine::Command::Help < FlexiDB::Engine::Command
       env.say("General:")
       FlexiDB::Engine::COMMANDS.keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each do |c|
         cmd = FlexiDB::Engine::COMMANDS[c]
-        banner, help = cmd.banner, cmd.help
-        if banner.size < 19
-          env.say(" "*2 << banner << " "*(19-banner.size) << help << "\n")
-        else
-          env.say(" "*2 << banner << "\n")
-          env.say(" "*21 << help << "\n")
-        end
+        cmd.banner.each{|b| env.say(" "*2 << b.to_s)}
+        env.say(" "*20 << cmd.synopsis)
+        env.say("\n")
       end
     elsif FlexiDB::Engine::COMMANDS.key?(cmd.to_sym)
       cmd = FlexiDB::Engine::COMMANDS[cmd.to_sym]
       env.say("\n")
-      env.say(" "*2 << cmd.banner)
-      env.say(" "*5 << cmd.help)
+      cmd.banner.each{|b| env.say(" "*2 << b.to_s)}
+      env.say(" "*20 << cmd.synopsis)
       env.say("\n")
     end
   end

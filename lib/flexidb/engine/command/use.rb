@@ -1,15 +1,16 @@
 class FlexiDB::Engine::Command::Use < FlexiDB::Engine::Command
         
-  # Returns command's banner
-  def banner
-    "use PLUGIN {PLUGIN_OPTIONS...}"
-  end  
+  # Command's names
+  names '\u', 'use'
 
-  # Returns command's help
-  def help
-    "push plugin into the main adapter chain"
-  end
-      
+  # Command's signatures
+  signature{
+    argument(:PLUGIN, Module)
+  }
+
+  # Command's synopsys
+  synopsis "push plugin into the main adapter chain"
+            
   # Executes the command on the engine
   def execute(engine, env, args)
     if args =~ /^([^\s]+)\s*(.*)$/

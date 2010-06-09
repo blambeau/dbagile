@@ -1,14 +1,15 @@
 class FlexiDB::Engine::Command::Sql < FlexiDB::Engine::Command
 
-  # Returns command's banner
-  def banner
-    "sql COMMAND"
-  end
+  # Command's names
+  names '\s', 'sql'
 
-  # Returns command's help
-  def help
-    "send a sql command to the database server"
-  end
+  # Command's signatures
+  signature{
+    argument(:QUERY, String)
+  }
+
+  # Command's synopsys
+  synopsis "send a sql command to the database server"
       
   # Executes the command on the engine
   def execute(engine, env, cmd)

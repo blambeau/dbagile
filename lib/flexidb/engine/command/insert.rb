@@ -1,14 +1,16 @@
 class FlexiDB::Engine::Command::Insert < FlexiDB::Engine::Command
         
-  # Returns command's banner
-  def banner
-    "insert TABLE_NAME, {TUPLE...}"
-  end
+  # Command's names
+  names 'insert'      
+  
+  # Command's signatures
+  signature{
+    argument(:TABLE_NAME, Symbol)
+    argument(:TUPLE,      Hash)
+  }
         
-  # Returns command's help
-  def help
-    "insert a {:attribute_name => value, ...} tuple inside a table"
-  end
+  # Command's synopsys
+  synopsis "insert a {:attribute_name => value, ...} tuple inside a table"
       
   # Executes the command on the engine
   def execute(engine, env, args)
