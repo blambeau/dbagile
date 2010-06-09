@@ -14,7 +14,7 @@ class FlexiDB::Engine::Command::Insert < FlexiDB::Engine::Command
       
   # Executes the command on the engine
   def execute_1(engine, table_name, tuple)
-    engine.database.insert(name, tuple)
+    engine.database.insert(table_name, tuple)
   end
         
 end # class Quit

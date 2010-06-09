@@ -58,4 +58,13 @@ describe "FlexiDB::Engine::Signature#match" do
     }
   end
   
+  context "when called on the sql command signature " do
+    let(:signature){ 
+      FlexiDB::Engine::Signature.new{ add_argument(:QUERY, /^\s*(select|SELECT)/) }
+    }
+    specify{
+      signature.arguments.size.should == 1
+      signature.match(["SELECT * FROM TABLE"]).should == {:QUERY => "SELECT * FROM TABLE"}
+    }
+  end
 end

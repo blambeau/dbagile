@@ -1,4 +1,5 @@
 require 'flexidb/engine/console_environment'
+require 'flexidb/engine/file_environment'
 require 'flexidb/engine/signature'
 require 'flexidb/engine/command'
 module FlexiDB
@@ -70,8 +71,26 @@ module FlexiDB
     end
     
     # Yields the block with each command in turn
-    def each_command(&block)
-      COMMANDS.each(&block)
+    def each_command(sorted_by_name = false, &block)
+      sorted_by_name ? COMMANDS.sort{|cmd1,cmd2| cmd1.name.to_s <=> cmd2.name.to_s}.each(&block) : COMMANDS.each(&block)
+    end
+    
+    #
+    # Finds a command based on a name, find the execution method through signature
+    # matching.
+    #
+    # @return [Command, Symbol, Array] a triple [cmd, execution_method, args]
+    # @raises ArgumentError if the command cannot be found or the signature does 
+    #         not match
+    #  
+    def prepare_command_exec(command_name, args)
+      cmd = find_command(command_name)
+      cmd.signatures.each_with_index do |s, i|
+        next unless hash_args = s.match(args)
+        new_args = s.match_to_args(hash_args)
+        return [cmd, "execute_#{i+1}".to_sym, new_args]
+      end
+      raise ArgumentError, "Signature mistmatch:\n#{cmd.banner.join('\n')}"
     end
 
     # Environment ##################################################################
@@ -94,7 +113,22 @@ module FlexiDB
     # Execution ####################################################################
     
     # Executes on a given environment
-    def execute()
+    def execute
+      @quit = false
+      until @quit
+        begin
+          command, args = ask("flexidb=# ")
+          if command
+            cmd, method, args = prepare_command_exec(command, args || [])
+            res = cmd.send(method, *args.unshift(self))
+            env.say(res.inspect) unless res.nil?
+          end
+        rescue => ex
+          error(ex.message)
+          error(ex.backtrace.join("\n"))
+        end
+      end
+      env.save_history if env.respond_to?(:save_history)
     end
     
   end # class Engine

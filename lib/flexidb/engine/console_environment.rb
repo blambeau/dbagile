@@ -51,7 +51,14 @@ module FlexiDB
 
       # Asks something
       def ask(what)
-        readline_with_hist_management(what)
+        line = readline_with_hist_management(what)
+        if line =~ /^([^\s]+)\s*(.*)$/
+          cmd, args = $1, Kernel.eval("[#{$2}]")
+          [cmd, args]
+        else
+          error("Unknown command: #{line}")
+          [nil, nil]
+        end
       end
       
       # Says something

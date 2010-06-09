@@ -14,7 +14,7 @@ module FlexiDB
       # Adds an argument to the signature
       def add_argument(name, *checks, &block)
         checks << block if block
-        arguments << [name, checks]
+        arguments << [name, checks.compact]
       end
       
       # Returns banner of this signature
@@ -41,6 +41,8 @@ module FlexiDB
                 rescue => ex
                   return nil
                 end
+              when Regexp
+                value.kind_of?(String) and not(check.match(value).nil?)
               else
                 check === value
             end
@@ -48,6 +50,12 @@ module FlexiDB
           result[name] = value
         end
         result
+      end
+      
+      # Converts a match hash to an array of parameters on this 
+      # signature
+      def match_to_args(match)
+        arguments.collect{|arg| match[arg[0]]}
       end
 
     end # class Signature

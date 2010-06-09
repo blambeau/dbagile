@@ -7,9 +7,9 @@ class FlexiDB::Engine::Command::Sql < FlexiDB::Engine::Command
   signature{
     argument(:QUERY, /^\s*(select|SELECT)/)
   }
-  signature{
-    argument(:QUERY, String)
-  }
+  # signature{
+  #   argument(:QUERY, String)
+  # }
 
   # Command's synopsys
   synopsis "send a sql command to the database server"

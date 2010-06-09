@@ -40,8 +40,8 @@ module FlexiDB
         end
       
         # Adds an argument to the current signature
-        def argument(name, type, &check)
-          @signatures.last.add_argument(name, type, check)
+        def argument(name, *checks, &block)
+          @signatures.last.add_argument(name, *checks, &block)
         end
     
         # Checks that command installation is correct

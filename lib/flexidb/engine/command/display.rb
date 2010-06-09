@@ -17,6 +17,16 @@ class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
   # Command's synopsis
   synopsis "display contents of a table/sql query/ruby object"
   
+  # Displays something
+  def do_display(engine, what)
+    if what.kind_of?(Enumerable)
+      what.each{|o| engine.say(o.inspect)}
+    else
+      engine.say(what.inspect)
+    end
+    nil
+  end
+  
   # Executes with a table name as argument
   def execute_1(engine, table_name)
     do_display(engine, engine.database.dataset(table_name))

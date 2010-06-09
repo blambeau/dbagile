@@ -14,7 +14,7 @@ class FlexiDB::Engine::Command::Connect < FlexiDB::Engine::Command
   
   # Executes on signature 1
   def execute_1(engine, uri)
-    engine.__connect(uri)
+    engine.connect(uri)
   end
   
 end # class Quit
