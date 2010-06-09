@@ -13,6 +13,11 @@ module FlexiDB
       @uri = uri
     end
     
+    # Disconnect the adapter and frees all resources.
+    def disconnect
+      @db.disconnect if @db
+    end
+    
     # Returns the underlying Sequel::Database instance
     def db
       @db ||= Sequel.connect(uri)

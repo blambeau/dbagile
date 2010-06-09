@@ -44,6 +44,12 @@ module FlexiDB
       @tables = {}
     end
     
+    # Disconnect the adapter and frees all resources.
+    def disconnect
+      tables = {}
+      true
+    end
+    
     # Returns a Dataset object for a given table
     def dataset(table)
       raise ArgumentError, "No such table #{table}" unless has_table?(table)

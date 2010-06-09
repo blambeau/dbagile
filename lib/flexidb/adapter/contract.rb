@@ -5,6 +5,15 @@ module FlexiDB
     #
     module Contract
       
+      # 
+      # Disconnect the adapter and frees all resources.
+      #
+      # @return true
+      #
+      def disconnect
+        Kernel.raise NotImplementedError
+      end
+    
       #
       # Returns a dataset object for a given table (if a Symbol is given) or query 
       # (if a String is given). 

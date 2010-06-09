@@ -110,12 +110,6 @@ module FlexiDB
         true
       end
       
-      # Creates a Sequel database instance for a given schema
-      def connect_database
-        raise "Missing database uri" unless uri
-        db = ::FlexiDB.connect(uri)
-      end
-      
       # Runs the sub-class defined command
       def __run(requester_file, arguments)
         raise "Command._run should be overriden"

@@ -9,6 +9,11 @@ module FlexiDB
       @adapter = adapter
     end
     
+    # Disconnect from the database
+    def disconnect
+      adapter.disconnect
+    end
+    
     # Adds a brick inside the global chain
     def __insert_in_main_chain(clazz, *args)
       @adapter = clazz.new(@adapter, *args)
