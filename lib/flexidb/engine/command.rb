@@ -8,12 +8,19 @@ module FlexiDB
         $1.downcase.to_sym
       end
     
+      # Returns command's banner
+      def banner
+        self.class.command_name
+      end  
+      
     end # class Command
   end # class Engine
 end # module FlexiDB
-require 'flexidb/engine/command/quit'
-require 'flexidb/engine/command/ping'
 require 'flexidb/engine/command/connect'
-require 'flexidb/engine/command/display'
 require 'flexidb/engine/command/define'
+require 'flexidb/engine/command/disconnect'
+require 'flexidb/engine/command/display'
+require 'flexidb/engine/command/help'
 require 'flexidb/engine/command/insert'
+require 'flexidb/engine/command/ping'
+require 'flexidb/engine/command/quit'

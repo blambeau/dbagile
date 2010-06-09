@@ -1,5 +1,10 @@
 class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
         
+  # Returns command's banner
+  def banner
+    "display table_name"
+  end  
+      
   # Executes the command on the engine
   def execute(engine, env, table_name)
     if engine.database.has_table?(table_name.to_sym)

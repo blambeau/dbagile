@@ -3,9 +3,13 @@ require 'flexidb/engine/command'
 module FlexiDB
   class Engine
     
+    # All commands defined 
+    COMMANDS = {}
+    
     # Command shortcuts
     SHORTCUTS = {
-      '\q' => :quit
+      '\q' => :quit,
+      '\h' => :help
     }
     
     # Current database on which this engine is connected
@@ -63,8 +67,9 @@ module FlexiDB
       c = FlexiDB::Engine::Command::const_get(c)
       next unless c.kind_of?(Class)
       next unless c.superclass == Command
+      COMMANDS[c.command_name] = c.new
       define_method(c.command_name) do |*args|
-        c.new.execute(*args)
+        COMMANDS[c.command_name].execute(*args)
       end
     end
     
