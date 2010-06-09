@@ -14,7 +14,7 @@ module FlexiDB
         raise ArgumentError, "Unable to use #{uri} for accessing database"
     end
     db = Database.new(uri)
-    FlexibleDSL.new(db).instance_eval(&block) if block
+    FlexibleDSL.new(db).send(:execute, &block) if block
     db
   end
   module_function :connect

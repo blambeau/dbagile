@@ -2,7 +2,7 @@ require File.expand_path("../../spec_helper", __FILE__)
 
 Fixtures::adapters_under_test.each do |adapter|
   db = FlexiDB.connect(adapter) do
-    use FlexiDB::Plugin::FlexibleTable, :create_table => true 
+    use FlexibleTable, :create_table => true 
   end
   db.insert(:example, :id => 1)
   db.insert(:example, :name => "blambeau")
