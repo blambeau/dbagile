@@ -13,7 +13,10 @@ module FlexiDB
         @tuples = []
       end
       def each(&block)
-        tuples.each(&block)
+        tuples.each {|tuple|
+          (heading.keys-tuple.keys).each{|k| tuple[k] = nil}
+          yield tuple
+        }
       end
       def column_names(sort = false)
         sort ?  heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s} : heading.keys
@@ -29,7 +32,7 @@ module FlexiDB
         tuples.size
       end
       def to_a
-        tuples
+        self.collect{|t| t}
       end
     end
     
