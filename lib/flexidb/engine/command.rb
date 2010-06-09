@@ -16,7 +16,7 @@ module FlexiDB
         
         # Returns offical command name
         def name
-          names.last
+          names.nil? ? nil : names.last
         end
         
         # Sets synopsis
@@ -44,6 +44,13 @@ module FlexiDB
           @signatures.last.add_argument(name, type, check)
         end
     
+        # Checks that command installation is correct
+        def check
+          raise "Missing command name on #{self.class}" unless name
+          raise "Missing command signatures on #{self.class}" if (signatures.nil? or signatures.empty?)
+          raise "Missing command synopsis on #{self.class}" unless synopsis
+        end
+      
       end # DSL methods
       
       # Returns command names
@@ -53,7 +60,7 @@ module FlexiDB
       
       # Returns command name
       def name
-        names.last
+        self.class.name
       end
       
       # Returns command signature

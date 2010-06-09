@@ -10,9 +10,10 @@ class FlexiDB::Engine::Command::Quit < FlexiDB::Engine::Command
   synopsis "quit flexidb"
       
   # Executes the command on the engine
-  def execute(engine, env)
+  def execute_1(engine)
     engine.__disconnect
     engine.__quit
+    "bye"
   end
         
 end # class Quit

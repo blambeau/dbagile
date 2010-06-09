@@ -11,10 +11,10 @@ class FlexiDB::Engine::Command::Connect < FlexiDB::Engine::Command
   
   # Command's synopsis
   synopsis "connect to a database through a adapter://user@host/database URI"
-      
-  # Executes the command on the engine
-  def execute(engine, env, uri)
+  
+  # Executes on signature 1
+  def execute_1(engine, uri)
     engine.__connect(uri)
   end
-        
+  
 end # class Quit

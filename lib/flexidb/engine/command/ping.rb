@@ -10,8 +10,8 @@ class FlexiDB::Engine::Command::Ping < FlexiDB::Engine::Command
   synopsis "ping the current database to see if it responds"
       
   # Executes the command on the engine
-  def execute(engine, env)
-    env.say(engine.database.adapter.ping)
+  def execute_1(engine)
+    engine.database.adapter.ping
   end
         
 end # class Quit

@@ -5,20 +5,23 @@ class FlexiDB::Engine::Command::Sql < FlexiDB::Engine::Command
 
   # Command's signatures
   signature{
+    argument(:QUERY, /^\s*(select|SELECT)/)
+  }
+  signature{
     argument(:QUERY, String)
   }
 
   # Command's synopsys
   synopsis "send a sql command to the database server"
       
+  # Executes a select query
+  def execute_1(engine, query)
+    engine.database.dataset(query)
+  end
+        
   # Executes the command on the engine
-  def execute(engine, env, cmd)
-    if /^\s*(select|SELECT)/ =~ cmd
-      engine.display(engine, env, engine.database.dataset(cmd))
-    else
-      result = engine.database.direct_sql(cmd)
-      env.say(result.inspect)
-    end
+  def execute_2(engine, cmd)
+    engine.database.direct_sql(cmd)
   end
         
 end # class Quit

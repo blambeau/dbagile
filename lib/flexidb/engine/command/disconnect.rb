@@ -10,7 +10,7 @@ class FlexiDB::Engine::Command::Disconnect < FlexiDB::Engine::Command
   synopsis "disconnect from the current database"
       
   # Executes the command on the engine
-  def execute(engine, env)
+  def execute_1(engine)
     engine.__disconnect
   end
         

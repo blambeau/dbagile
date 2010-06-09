@@ -13,13 +13,8 @@ class FlexiDB::Engine::Command::Insert < FlexiDB::Engine::Command
   synopsis "insert a {:attribute_name => value, ...} tuple inside a table"
       
   # Executes the command on the engine
-  def execute(engine, env, args)
-    if args =~ /^([^,]+),(.*)$/
-      name, tuple = $1.strip.to_sym, Kernel.eval($2)
-      env.say(engine.database.insert(name, tuple).inspect)
-    else
-      env.say(banner)
-    end
+  def execute_1(engine, table_name, tuple)
+    engine.database.insert(name, tuple)
   end
         
 end # class Quit

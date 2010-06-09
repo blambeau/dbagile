@@ -10,21 +10,27 @@ class FlexiDB::Engine::Command::Display < FlexiDB::Engine::Command
   signature{
     argument(:QUERY, String)
   }
+  signature{
+    argument(:OBJECT, Object)
+  }
         
   # Command's synopsis
-  synopsis "display contents of a table"
-      
-  # Executes the command on the engine
-  def execute(engine, env, source)
-    dataset = case source
-      when Symbol, /^[^\s]+$/
-        engine.database.dataset(source.to_sym)
-      when String
-        engine.database.dataset(source)
-      else
-        source
-    end
-    env.say(dataset.to_a.inspect)
+  synopsis "display contents of a table/sql query/ruby object"
+  
+  # Executes with a table name as argument
+  def execute_1(engine, table_name)
+    do_display(engine, engine.database.dataset(table_name))
   end
+      
+  # Executes with a query as argument
+  def execute_2(engine, query)
+    do_display(engine, engine.database.dataset(query))
+  end
+      
+  # Executes with an object as argument
+  def execute_3(engine, object)
+    do_display(engine, object)
+  end
+      
         
 end # class Quit
