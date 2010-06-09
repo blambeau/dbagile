@@ -3,6 +3,11 @@ require 'flexidb/engine/command'
 module FlexiDB
   class Engine
     
+    # Command shortcuts
+    SHORTCUTS = {
+      '\q' => :quit
+    }
+    
     # Current database on which this engine is connected
     attr_reader :database
     
@@ -34,7 +39,9 @@ module FlexiDB
       until @quit
         next if (command = env.ask("flexidb=# ").strip).empty?
         begin
-          if /^([^\s]+)\s*(.*)$/ =~ command
+          if SHORTCUTS.key?(command)
+            self.send(SHORTCUTS[command], self, env)
+          elsif /^([^\s]+)\s*(.*)$/ =~ command
             cmd, args = $1, $2.strip
             if self.respond_to?(cmd)
               args = args.empty? ? [self, env] : [self, env, args]

@@ -18,12 +18,12 @@ module FlexiDB
       
       # Says something
       def say(what)
-        highline.say(what)
+        highline.say(what.to_s)
       end
       
       # Prints an error
       def error(message)
-        highline.say(message)
+        highline.say(highline.color("ERROR: #{message}", :red))
       end
       
     end # class HighlineEnvironment

@@ -1,5 +1,6 @@
 module FlexiDB
   class Database
+    include FlexiDB::Adapter::Delegate
     
     # Underlying adapter
     attr_reader :adapter
@@ -19,19 +20,9 @@ module FlexiDB
       @adapter = clazz.new(@adapter, *args)
     end
     
-    # Returns the contents of a table
-    def dataset(table)
-      adapter.dataset(table)
-    end
-    
-    # Send sql directly 
-    def direct_sql(sql)
-      adapter.direct_sql(sql)
-    end
-    
-    # Inserts a tuple inside a given table
-    def insert(table, tuple)
-      adapter.insert(table, tuple)
+    # Returns the adapter as delegate
+    def delegate
+      adapter
     end
     
   end # class Database

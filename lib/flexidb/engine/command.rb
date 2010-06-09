@@ -12,4 +12,8 @@ module FlexiDB
   end # class Engine
 end # module FlexiDB
 require 'flexidb/engine/command/quit'
+require 'flexidb/engine/command/ping'
 require 'flexidb/engine/command/connect'
+require 'flexidb/engine/command/display'
+require 'flexidb/engine/command/define'
+require 'flexidb/engine/command/insert'
