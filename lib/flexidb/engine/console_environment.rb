@@ -31,7 +31,9 @@ module FlexiDB
       def save_history
         histfile = File.join(ENV['HOME'], '.flexidb_history')
         File.open(histfile, 'w') do |io|
-          Readline::HISTORY.to_a.reverse[0..(ENV['HISTORY'].to_i || 100)].each{|c| 
+          hist = Readline::HISTORY.to_a
+          hist = hist.reverse[0..(ENV['HISTORY'].to_i || 100)]
+          hist.reverse.each{|c| 
             (io << c << "\n") unless c.strip.empty?
           }
         end

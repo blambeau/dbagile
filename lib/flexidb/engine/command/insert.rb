@@ -14,7 +14,7 @@ class FlexiDB::Engine::Command::Insert < FlexiDB::Engine::Command
   def execute(engine, env, args)
     if args =~ /^([^,]+),(.*)$/
       name, tuple = $1.strip.to_sym, Kernel.eval($2)
-      env.say(engine.database.insert(name, tuple))
+      env.say(engine.database.insert(name, tuple).inspect)
     else
       env.say(banner)
     end
