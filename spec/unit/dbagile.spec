@@ -16,7 +16,11 @@ describe DbAgile do
   end
   
   it "should correctly resolve constants" do
-    lambda{ DbAgile::execute{ use Defaults } }.should_not raise_error
+    DbAgile::execute{ 
+      connect "sqlite://test.db"
+      use AgileTable 
+      insert :people, {:id => 1}
+    }.should be_kind_of(DbAgile::Database)
   end
   
 end

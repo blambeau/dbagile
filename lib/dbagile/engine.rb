@@ -135,7 +135,7 @@ module DbAgile
         return [cmd, "execute_#{i+1}".to_sym, new_args]
       end
       execute_command('help', [command_name])
-      nil
+      invalid_command!("#{command_name} #{args.inspect}")
     end
 
     # Env delegate #################################################################
