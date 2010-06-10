@@ -33,5 +33,5 @@ module DbAgile
     private :tuple_heading
   end # class Plugin
 end # module DbAgile
-require 'flexidb/plugin/flexible_table'
-require 'flexidb/plugin/defaults'
+require 'dbagile/plugin/flexible_table'
+require 'dbagile/plugin/defaults'

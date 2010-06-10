@@ -1,5 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-require 'flexidb/engine'
+require 'dbagile/engine'
 describe "DbAgile::Engine#prepare_command_exec" do
   
   let(:engine){ DbAgile::Engine.new }

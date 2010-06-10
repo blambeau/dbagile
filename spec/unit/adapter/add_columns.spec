@@ -9,10 +9,10 @@ describe "::DbAgile::Adapter.add_columns" do
     end
 
     describe "When called on an existing table" do
-      subject{ adapter.add_columns(:flexidb, {:hello => Integer, :name => String}) }
+      subject{ adapter.add_columns(:dbagile, {:hello => Integer, :name => String}) }
       specify{ 
         subject.should be_true
-        adapter.column_names(:flexidb, true).should == [:hello, :id, :name, :schema, :version]
+        adapter.column_names(:dbagile, true).should == [:hello, :id, :name, :schema, :version]
       }
     end
   

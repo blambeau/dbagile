@@ -22,7 +22,7 @@ module Fixtures
   
   # Installs the default db on a given adapter
   def install_default_db(adapter)
-    adapter.create_table(:flexidb, {:id => Integer, :version => String, :schema => String})
+    adapter.create_table(:dbagile, {:id => Integer, :version => String, :schema => String})
   end
   module_function :install_default_db
   

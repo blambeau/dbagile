@@ -5,8 +5,8 @@ describe "::DbAgile::Plugin::Defaults#compute_defaults" do
   let(:defaults){ ::DbAgile::Plugin::Defaults.new(nil, nil) }
   
   describe "When called with constant values" do
-    subject{ defaults.compute_defaults(nil, :name => "flexidb", :version => DbAgile::VERSION) }
-    it { should == {:name => "flexidb", :version => DbAgile::VERSION} }
+    subject{ defaults.compute_defaults(nil, :name => "dbagile", :version => DbAgile::VERSION) }
+    it { should == {:name => "dbagile", :version => DbAgile::VERSION} }
   end
   
   describe "When called with nil" do
@@ -22,8 +22,8 @@ describe "::DbAgile::Plugin::Defaults#compute_defaults" do
   
   describe "When called with a proc taing tuple as parameter" do
     let(:proc){ lambda{|tuple| tuple[:name]*2 }}
-    subject{ defaults.compute_defaults({:name => "flexidb"}, :saytwice => proc) }
-    it { should == {:saytwice => "flexidbflexidb"} }
+    subject{ defaults.compute_defaults({:name => "dbagile"}, :saytwice => proc) }
+    it { should == {:saytwice => "dbagiledbagile"} }
   end
   
 end

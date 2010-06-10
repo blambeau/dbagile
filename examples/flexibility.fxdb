@@ -1,4 +1,4 @@
-#!/usr/bin/env flexidb
+#!/usr/bin/env dbagile
 
 # First, we connect a database
 connect "sqlite://example.db"
@@ -8,7 +8,7 @@ use :FlexibleTable
 use :Defaults, {:now => lambda{Time.now}}
 
 # Let insert some tuples in a tools table...
-insert :tools, {:name => "flexidb", :version => "0.0.1"}
+insert :tools, {:name => "dbagile", :version => "0.0.1"}
 insert :tools, {:name => "sequel",  :version => "3.8.0"}
 
 # And see the result now!

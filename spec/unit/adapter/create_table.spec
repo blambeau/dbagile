@@ -4,7 +4,7 @@ describe "::DbAgile::Adapter.create_table" do
   Fixtures::adapters_under_test.each do |adapter|
   
     describe "When called on an existing table" do
-      subject{ lambda{ adapter.create_table(:flexidb, {:id => Integer}) } }
+      subject{ lambda{ adapter.create_table(:dbagile, {:id => Integer}) } }
       it{ should raise_error(ArgumentError) }
     end
 

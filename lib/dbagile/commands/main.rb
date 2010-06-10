@@ -1,4 +1,4 @@
-require 'flexidb/engine'
+require 'dbagile/engine'
 module DbAgile
   module Commands
     class Main < Command
@@ -24,7 +24,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "flexidb [options] URI"
+        "dbagile [options] URI"
       end
       
       # Checks if an argument looks like an URI

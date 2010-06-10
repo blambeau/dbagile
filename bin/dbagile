@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 #
 #  DbAgile - Flexible interface on top of SQL databases
-#        (see lib/flexidb/flexidb.rb for more information)
+#        (see lib/dbagile/dbagile.rb for more information)
 #
 #  Copyright (c) 2010 Bernard Lambeau & University of Louvain, 
 #  Released under a MIT or Ruby licence
 #
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
-require 'flexidb'
-require 'flexidb/commands'
+require 'dbagile'
+require 'dbagile/commands'
 begin
   require 'highline'
 rescue LoadError

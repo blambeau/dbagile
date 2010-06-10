@@ -1,3 +1,3 @@
-h2. FlexiDB
+h2. DbAgile
 
-FlexiDB provides a flexible, truly-relational inspired interface on top of SQL databases.
+DbAgile provides a flexible, truly-relational inspired interface on top of SQL databases.

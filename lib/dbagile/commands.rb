@@ -1,2 +1,2 @@
-require 'flexidb/commands/command'
-require 'flexidb/commands/main'
+require 'dbagile/commands/command'
+require 'dbagile/commands/main'

@@ -20,7 +20,7 @@ module DbAgile
   module_function :connect
   
 end # module DbAgile
-require 'flexidb/adapter'
-require 'flexidb/plugin'
-require 'flexidb/flexible_dsl'
-require 'flexidb/database'
+require 'dbagile/adapter'
+require 'dbagile/plugin'
+require 'dbagile/flexible_dsl'
+require 'dbagile/database'

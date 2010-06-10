@@ -9,7 +9,7 @@ describe "::DbAgile::Adapter.has_table" do
     end
   
     describe "When called on existing table" do
-      subject{ adapter.has_table?(:flexidb) }
+      subject{ adapter.has_table?(:dbagile) }
       it{ should be_true }
     end
 

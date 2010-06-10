@@ -9,7 +9,7 @@ describe "::DbAgile::Adapter.has_column" do
     end
   
     describe "When called with sorting option" do
-      subject{ adapter.column_names(:flexidb, true) }
+      subject{ adapter.column_names(:dbagile, true) }
       it{ should == [:id, :schema, :version] }
     end
   

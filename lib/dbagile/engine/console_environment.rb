@@ -17,9 +17,9 @@ module DbAgile
         end
       end
       
-      # Loads flexidb engine's history
+      # Loads dbagile engine's history
       def load_history
-        histfile = File.join(ENV['HOME'], '.flexidb_history')
+        histfile = File.join(ENV['HOME'], '.dbagile_history')
         if File.exists?(histfile)
           File.readlines(histfile).each{|c| 
             Readline::HISTORY.push(c) unless c.strip.empty?
@@ -27,9 +27,9 @@ module DbAgile
         end
       end
       
-      # Saves flexidb engine's history
+      # Saves dbagile engine's history
       def save_history
-        histfile = File.join(ENV['HOME'], '.flexidb_history')
+        histfile = File.join(ENV['HOME'], '.dbagile_history')
         File.open(histfile, 'w') do |io|
           hist = Readline::HISTORY.to_a
           hist = hist.reverse[0..(ENV['HISTORY'].to_i || 100)]

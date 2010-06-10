@@ -4,7 +4,7 @@ describe "::DbAgile::Plugin#tuple_heading" do
   let(:plugin){ DbAgile::Plugin.new(nil) }
   
   describe "When called on on a typical tuple" do
-    subject{ plugin.send(:tuple_heading, :id => 1, :name => "flexidb") }
+    subject{ plugin.send(:tuple_heading, :id => 1, :name => "dbagile") }
     it{ should == {:id => Fixnum, :name => String} }
   end
 

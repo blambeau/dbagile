@@ -1,7 +1,7 @@
-require 'flexidb/engine/console_environment'
-require 'flexidb/engine/file_environment'
-require 'flexidb/engine/signature'
-require 'flexidb/engine/command'
+require 'dbagile/engine/console_environment'
+require 'dbagile/engine/file_environment'
+require 'dbagile/engine/signature'
+require 'dbagile/engine/command'
 module DbAgile
   class Engine
     
@@ -121,7 +121,7 @@ module DbAgile
       @quit = false
       until @quit
         begin
-          command, args = next_command("flexidb=# ")
+          command, args = next_command("dbagile=# ")
           if command
             cmd, method, args = prepare_command_exec(command, args || [])
             res = cmd.send(method, *args.unshift(self))

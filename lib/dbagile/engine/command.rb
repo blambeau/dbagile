@@ -82,13 +82,13 @@ module DbAgile
     end # class Command
   end # class Engine
 end # module DbAgile
-require 'flexidb/engine/command/connect'
-require 'flexidb/engine/command/define'
-require 'flexidb/engine/command/disconnect'
-require 'flexidb/engine/command/display'
-require 'flexidb/engine/command/help'
-require 'flexidb/engine/command/insert'
-require 'flexidb/engine/command/ping'
-require 'flexidb/engine/command/quit'
-require 'flexidb/engine/command/use'
-require 'flexidb/engine/command/sql'
+require 'dbagile/engine/command/connect'
+require 'dbagile/engine/command/define'
+require 'dbagile/engine/command/disconnect'
+require 'dbagile/engine/command/display'
+require 'dbagile/engine/command/help'
+require 'dbagile/engine/command/insert'
+require 'dbagile/engine/command/ping'
+require 'dbagile/engine/command/quit'
+require 'dbagile/engine/command/use'
+require 'dbagile/engine/command/sql'

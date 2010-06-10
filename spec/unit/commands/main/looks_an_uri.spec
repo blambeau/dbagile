@@ -1,5 +1,5 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-require 'flexidb/commands'
+require 'dbagile/commands'
 describe "::DbAgile::Commands::Main#looks_an_uri" do
   
   let(:command){ ::DbAgile::Commands::Main.new }

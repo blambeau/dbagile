@@ -7,7 +7,7 @@ class DbAgile::Engine::Command::Quit < DbAgile::Engine::Command
   signature{}
 
   # Command's synopsys
-  synopsis "quit flexidb"
+  synopsis "quit dbagile"
       
   # Executes the command on the engine
   def execute_1(engine)

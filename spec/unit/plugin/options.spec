@@ -9,13 +9,13 @@ describe "::DbAgile::Plugin#options" do
   }
   
   describe "When initialize with default options without overriding" do
-    subject{ defplugin.new(nil, :name => "flexidb").options }
-    it { should == {:default => 12, :name => "flexidb"} }
+    subject{ defplugin.new(nil, :name => "dbagile").options }
+    it { should == {:default => 12, :name => "dbagile"} }
   end
 
   describe "When initialize with default options with overriding" do
-    subject{ defplugin.new(nil, :default => 1, :name => "flexidb").options }
-    it { should == {:default => 1, :name => "flexidb"} }
+    subject{ defplugin.new(nil, :default => 1, :name => "dbagile").options }
+    it { should == {:default => 1, :name => "dbagile"} }
   end
 
 end

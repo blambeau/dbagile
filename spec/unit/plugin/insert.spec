@@ -7,16 +7,16 @@ describe "::DbAgile::Plugin#insert" do
   describe "when call on last brick" do
     let(:brick){ ::DbAgile::Plugin.new(adapter) }
     specify {
-      brick.insert(:table_name, :id => 1, :name => "flexidb")
-      adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "flexidb"}]
+      brick.insert(:table_name, :id => 1, :name => "dbagile")
+      adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "dbagile"}]
     }
   end
   
   describe "when call on non-last brick" do
     let(:brick){ ::DbAgile::Plugin.new(::DbAgile::Plugin.new(adapter)) }
     specify {
-      brick.insert(:table_name, :id => 1, :name => "flexidb")
-      adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "flexidb"}]
+      brick.insert(:table_name, :id => 1, :name => "dbagile")
+      adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "dbagile"}]
     }
   end
 
