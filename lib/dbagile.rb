@@ -5,6 +5,7 @@ module DbAgile
   
   # Connects to a database and returns a Database instance
   def connect(uri, &block)
+    return uri if uri.kind_of?(DbAgile::Database)
     uri = case uri
       when String 
         SequelAdapter.new(uri)
@@ -14,7 +15,7 @@ module DbAgile
         raise ArgumentError, "Unable to use #{uri} for accessing database"
     end
     db = Database.new(uri)
-    FlexibleDSL.new(db).send(:execute, &block) if block
+    db.execute(block) if block
     db
   end
   module_function :connect
@@ -22,5 +23,4 @@ module DbAgile
 end # module DbAgile
 require 'dbagile/adapter'
 require 'dbagile/plugin'
-require 'dbagile/flexible_dsl'
 require 'dbagile/database'

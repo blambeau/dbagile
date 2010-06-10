@@ -1,5 +1,4 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-require 'dbagile/engine'
 describe "DbAgile::Engine::Signature#add_argument" do
   
   let(:signature){ DbAgile::Engine::Signature.new }

@@ -10,6 +10,9 @@ module DbAgile
     #
     class Environment
       
+      # The engine which is currently running
+      attr_accessor :engine
+      
       #
       # Ask the environment to find the next command to execute and to pass 
       # it to the continuation block.
@@ -57,6 +60,16 @@ module DbAgile
       def say(something, color = nil)
         writeline(something, color)
         nil
+      end
+      
+      #
+      # Handles an error that occured during last command execution.
+      #
+      # @param [Exception] error the error that was raised
+      # @return nil to continue execution, an error to raise otherwise
+      #
+      def on_error(error)
+        say("ERROR: #{error.message}", :red)
       end
 
 

@@ -2,6 +2,7 @@ require 'dbagile/engine/errors'
 require 'dbagile/engine/environment'
 require 'dbagile/engine/console_environment'
 require 'dbagile/engine/file_environment'
+require 'dbagile/engine/dsl_environment'
 require 'dbagile/engine/signature'
 require 'dbagile/engine/command'
 module DbAgile
@@ -37,6 +38,7 @@ module DbAgile
     # Creates an engine instance on top of a database
     def initialize(env = ConsoleEnvironment.new)
       @env = env
+      env.engine = self unless env.nil?
     end
     
     # Basic commands start here ####################################################
@@ -169,12 +171,14 @@ module DbAgile
       @quit = false
       until @quit
         begin
+          @last_error = nil
           env.next_command("dbagile=# ") do |cmd|
             execute_command(*cmd) if cmd
           end
         rescue Exception => ex
           @last_error = ex
-          env.say("ERROR: #{ex.message}", :red)
+          res = env.on_error(ex)
+          raise res unless res.nil?
         end
       end
       env.save_history if env.respond_to?(:save_history)

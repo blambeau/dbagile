@@ -20,6 +20,15 @@ module DbAgile
       @adapter = clazz.new(@adapter, *args)
     end
     
+    # Starts an engine instance on this database and 
+    # executes the given block.
+    def execute(source = nil, &block)
+      engine = DbAgile::Engine.new(DbAgile::Engine::DslEnvironment.new(source || block))
+      engine.connect(self)
+      engine.execute
+      self
+    end
+    
     # Returns the adapter as delegate
     def delegate
       adapter
