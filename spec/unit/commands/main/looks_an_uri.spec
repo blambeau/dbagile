@@ -1,8 +1,8 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 require 'flexidb/commands'
-describe "::FlexiDB::Commands::Main#looks_an_uri" do
+describe "::DbAgile::Commands::Main#looks_an_uri" do
   
-  let(:command){ ::FlexiDB::Commands::Main.new }
+  let(:command){ ::DbAgile::Commands::Main.new }
   
   describe "when called on typical URIs" do
     subject{ command.looks_an_uri?("sqlite://test.db") }

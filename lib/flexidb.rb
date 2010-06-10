@@ -1,6 +1,6 @@
-module FlexiDB
+module DbAgile
   
-  # Version of the FlexiDB interface
+  # Version of the DbAgile interface
   VERSION = "0.0.1".freeze
   
   # Connects to a database and returns a Database instance
@@ -19,7 +19,7 @@ module FlexiDB
   end
   module_function :connect
   
-end # module FlexiDB
+end # module DbAgile
 require 'flexidb/adapter'
 require 'flexidb/plugin'
 require 'flexidb/flexible_dsl'

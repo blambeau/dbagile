@@ -1,12 +1,12 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-describe "::FlexiDB::Plugin::Defaults#compute_defaults" do
+describe "::DbAgile::Plugin::Defaults#compute_defaults" do
   
-  before{ ::FlexiDB::Plugin::Defaults.instance_eval{public :compute_defaults} }
-  let(:defaults){ ::FlexiDB::Plugin::Defaults.new(nil, nil) }
+  before{ ::DbAgile::Plugin::Defaults.instance_eval{public :compute_defaults} }
+  let(:defaults){ ::DbAgile::Plugin::Defaults.new(nil, nil) }
   
   describe "When called with constant values" do
-    subject{ defaults.compute_defaults(nil, :name => "flexidb", :version => FlexiDB::VERSION) }
-    it { should == {:name => "flexidb", :version => FlexiDB::VERSION} }
+    subject{ defaults.compute_defaults(nil, :name => "flexidb", :version => DbAgile::VERSION) }
+    it { should == {:name => "flexidb", :version => DbAgile::VERSION} }
   end
   
   describe "When called with nil" do

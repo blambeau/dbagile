@@ -1,14 +1,14 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-describe "::FlexiDB::Adapter::Delegate" do
+describe "::DbAgile::Adapter::Delegate" do
   
   describe "methods should correctly be installed" do
-    subject{ Object.new.extend(::FlexiDB::Adapter::Delegate) }
+    subject{ Object.new.extend(::DbAgile::Adapter::Delegate) }
     it{ should respond_to(:dataset) }
   end
   
   describe "method should pass parameters correctly" do
     subject{ 
-      subject = Object.new.extend(::FlexiDB::Adapter::Delegate) 
+      subject = Object.new.extend(::DbAgile::Adapter::Delegate) 
       def subject.delegate
         o = Object.new
         def o.dataset(name)

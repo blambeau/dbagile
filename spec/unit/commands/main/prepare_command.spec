@@ -1,8 +1,8 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 require 'flexidb/commands'
-describe "::FlexiDB::Commands::Main#prepare_command" do
+describe "::DbAgile::Commands::Main#prepare_command" do
   
-  let(:command){ ::FlexiDB::Commands::Main.new }
+  let(:command){ ::DbAgile::Commands::Main.new }
   subject{ command.prepare_command(arguments.split) }
   
   context "when called without arguments" do
@@ -11,7 +11,7 @@ describe "::FlexiDB::Commands::Main#prepare_command" do
       subject.should == command
       command.file.should be_nil
       command.uri.should be_nil
-      command.env.should be_kind_of(FlexiDB::Engine::ConsoleEnvironment)
+      command.env.should be_kind_of(DbAgile::Engine::ConsoleEnvironment)
     }
   end
   
@@ -21,7 +21,7 @@ describe "::FlexiDB::Commands::Main#prepare_command" do
       subject.should == command
       command.file.should == "FILE"
       command.uri.should == "sqlite://test.db"
-      command.env.should be_kind_of(FlexiDB::Engine::FileEnvironment)
+      command.env.should be_kind_of(DbAgile::Engine::FileEnvironment)
     }
   end
   
@@ -32,7 +32,7 @@ describe "::FlexiDB::Commands::Main#prepare_command" do
         subject.should == command
         command.file.should be_nil
         command.uri.should == "sqlite://test.db"
-        command.env.should be_kind_of(FlexiDB::Engine::ConsoleEnvironment)
+        command.env.should be_kind_of(DbAgile::Engine::ConsoleEnvironment)
       }
     end
   end
@@ -44,7 +44,7 @@ describe "::FlexiDB::Commands::Main#prepare_command" do
         subject.should == command
         command.file.should == "file.fxdb"
         command.uri.should be_nil
-        command.env.should be_kind_of(FlexiDB::Engine::FileEnvironment)
+        command.env.should be_kind_of(DbAgile::Engine::FileEnvironment)
       }
     end
   end

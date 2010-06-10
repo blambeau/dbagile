@@ -1,5 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-describe "::FlexiDB::Adapter.has_column" do
+describe "::DbAgile::Adapter.has_column" do
   
   Fixtures::adapters_under_test.each do |adapter|
   

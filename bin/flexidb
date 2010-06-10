@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-#  FlexiDB - Flexible interface on top of SQL databases
+#  DbAgile - Flexible interface on top of SQL databases
 #        (see lib/flexidb/flexidb.rb for more information)
 #
 #  Copyright (c) 2010 Bernard Lambeau & University of Louvain, 
@@ -18,7 +18,7 @@ rescue LoadError
 end
 
 begin
-  r = FlexiDB::Commands::Main.new.run '.', ARGV
+  r = DbAgile::Commands::Main.new.run '.', ARGV
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

@@ -1,13 +1,13 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require 'flexidb/engine'
-describe "FlexiDB::Engine::Command" do
+describe "DbAgile::Engine::Command" do
   
   before do
-    class C1 < FlexiDB::Engine::Command; 
+    class C1 < DbAgile::Engine::Command; 
       names "c1"; 
       synopsis "synopsis of c1"
     end;  
-    class C2 < FlexiDB::Engine::Command; names "c2"; end;  
+    class C2 < DbAgile::Engine::Command; names "c2"; end;  
   end
   
   it "should allow specifying different names for different commands" do

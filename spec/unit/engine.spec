@@ -1,8 +1,8 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'flexidb/engine'
-describe 'FlexiDB::Engine' do
+describe 'DbAgile::Engine' do
   
-  FlexiDB::Engine.new(nil).each_command do |cmd|
+  DbAgile::Engine.new(nil).each_command do |cmd|
     context "#{cmd.class} is valid" do
       subject{ lambda{ cmd.class.check } }
       it{ should_not raise_error }

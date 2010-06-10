@@ -1,8 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-describe "::FlexiDB::Plugin#options" do
+describe "::DbAgile::Plugin#options" do
   
   let(:defplugin){ 
-    class DefPlugin < ::FlexiDB::Plugin
+    class DefPlugin < ::DbAgile::Plugin
       def default_options() {:default => 12} end
     end
     DefPlugin

@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-describe "::FlexiDB::Plugin#tuple_heading" do
+describe "::DbAgile::Plugin#tuple_heading" do
   
-  let(:plugin){ FlexiDB::Plugin.new(nil) }
+  let(:plugin){ DbAgile::Plugin.new(nil) }
   
   describe "When called on on a typical tuple" do
     subject{ plugin.send(:tuple_heading, :id => 1, :name => "flexidb") }

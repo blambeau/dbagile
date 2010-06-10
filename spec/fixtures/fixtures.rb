@@ -28,7 +28,7 @@ module Fixtures
   
   # Returns a Memory adapter on the test database
   def memory_testdb_adapter
-    adapter = ::FlexiDB::MemoryAdapter.new
+    adapter = ::DbAgile::MemoryAdapter.new
     install_default_db(adapter)
     adapter
   end
@@ -37,7 +37,7 @@ module Fixtures
   # Returns a SequelAdapter on the test database
   def sqlite_testdb_sequel_adapter
     FileUtils.rm_rf(sqlite_testdb_path)
-    adapter = FlexiDB::SequelAdapter.new(sqlite_testdb_uri)
+    adapter = DbAgile::SequelAdapter.new(sqlite_testdb_uri)
     install_default_db(adapter)
     adapter
   end
@@ -45,7 +45,7 @@ module Fixtures
   
   # Returns a Database instance on testdb sqlite adapter
   def sqlite_testdb
-    FlexiDB::Database.new(sqlite_testdb_sequel_adapter)
+    DbAgile::Database.new(sqlite_testdb_sequel_adapter)
   end
   module_function :sqlite_testdb
   

@@ -1,5 +1,5 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-describe "::FlexiDB::Adapter.direct_sql" do
+describe "::DbAgile::Adapter.direct_sql" do
   
   let(:adapter){ Fixtures::sqlite_testdb_sequel_adapter }
   

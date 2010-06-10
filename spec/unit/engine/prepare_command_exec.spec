@@ -1,8 +1,8 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 require 'flexidb/engine'
-describe "FlexiDB::Engine#prepare_command_exec" do
+describe "DbAgile::Engine#prepare_command_exec" do
   
-  let(:engine){ FlexiDB::Engine.new }
+  let(:engine){ DbAgile::Engine.new }
   
   context("when called on an unexisting command") do
     subject{ lambda{ engine.prepare_command_exec(:not_a_command, []) } }

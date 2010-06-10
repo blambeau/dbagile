@@ -1,5 +1,5 @@
 require File.expand_path('../../../spec_helper', __FILE__)
-describe "::FlexiDB::Adapter.create_table" do
+describe "::DbAgile::Adapter.create_table" do
   
   Fixtures::adapters_under_test.each do |adapter|
   

@@ -1,9 +1,9 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 require 'flexidb/engine'
-describe "FlexiDB::Engine::Command#check" do
+describe "DbAgile::Engine::Command#check" do
   
   let(:valid_command){
-    c = Class.new(FlexiDB::Engine::Command)
+    c = Class.new(DbAgile::Engine::Command)
     c.instance_eval{
       names "c1"
       signature{}
@@ -13,7 +13,7 @@ describe "FlexiDB::Engine::Command#check" do
   }
 
   let(:missing_name){
-    c = Class.new(FlexiDB::Engine::Command)
+    c = Class.new(DbAgile::Engine::Command)
     c.instance_eval{
       signature{}
       synopsis "synopsis"
@@ -22,7 +22,7 @@ describe "FlexiDB::Engine::Command#check" do
   }
 
   let(:missing_signature){
-    c = Class.new(FlexiDB::Engine::Command)
+    c = Class.new(DbAgile::Engine::Command)
     c.instance_eval{
       names "c1"
       synopsis "synopsis"
@@ -31,7 +31,7 @@ describe "FlexiDB::Engine::Command#check" do
   }
   
   let(:missing_synopsis){
-    c = Class.new(FlexiDB::Engine::Command)
+    c = Class.new(DbAgile::Engine::Command)
     c.instance_eval{
       names "c1"
       signature{}

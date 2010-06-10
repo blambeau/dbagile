@@ -1,12 +1,12 @@
 if RUBY_VERSION < "1.9"
   require File.expand_path('../../../spec_helper', __FILE__)
-  describe "FlexiDB::FlexibleDSL#with_object_extension" do
+  describe "DbAgile::FlexibleDSL#with_object_extension" do
   
-    let(:dsl){ FlexiDB::FlexibleDSL.new(nil) }
+    let(:dsl){ DbAgile::FlexibleDSL.new(nil) }
   
     specify "it correctly resolves constants" do
       dsl.with_object_extension do
-        FlexibleTable.should == ::FlexiDB::Plugin::FlexibleTable
+        FlexibleTable.should == ::DbAgile::Plugin::FlexibleTable
       end
     end
 

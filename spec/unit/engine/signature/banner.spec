@@ -1,8 +1,8 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 require 'flexidb/engine'
-describe "FlexiDB::Engine::Signature#banner" do
+describe "DbAgile::Engine::Signature#banner" do
   
-  let(:signature){ FlexiDB::Engine::Signature.new }
+  let(:signature){ DbAgile::Engine::Signature.new }
   
   describe "when called without any argument" do
     subject{ signature.banner("command_name") }
