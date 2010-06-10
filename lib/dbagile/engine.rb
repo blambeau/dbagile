@@ -1,7 +1,6 @@
 require 'dbagile/engine/errors'
 require 'dbagile/engine/environment'
 require 'dbagile/engine/console_environment'
-require 'dbagile/engine/file_environment'
 require 'dbagile/engine/dsl_environment'
 require 'dbagile/engine/signature'
 require 'dbagile/engine/command'

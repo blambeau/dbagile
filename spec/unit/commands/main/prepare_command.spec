@@ -2,6 +2,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 require 'dbagile/commands'
 describe "::DbAgile::Commands::Main#prepare_command" do
   
+  let(:source_file){ File.expand_path("../source_text.fxdb", __FILE__) }
   let(:command){ ::DbAgile::Commands::Main.new }
   subject{ command.prepare_command(arguments.split) }
   
@@ -16,12 +17,12 @@ describe "::DbAgile::Commands::Main#prepare_command" do
   end
   
   context "when called with all options" do
-    let(:arguments){ "--file=FILE --uri=sqlite://test.db" }
+    let(:arguments){ "--file=#{source_file} --uri=sqlite://test.db" }
     specify{
       subject.should == command
-      command.file.should == "FILE"
+      command.file.should == source_file
       command.uri.should == "sqlite://test.db"
-      command.env.should be_kind_of(DbAgile::Engine::FileEnvironment)
+      command.env.should be_kind_of(DbAgile::Engine::DslEnvironment)
     }
   end
   
@@ -37,14 +38,14 @@ describe "::DbAgile::Commands::Main#prepare_command" do
     end
   end
   
-  ["--file=file.fxdb", "file.fxdb"].each do |args|
+  ["--file=#{File.expand_path("../source_text.fxdb", __FILE__)}", "#{File.expand_path("../source_text.fxdb", __FILE__)}"].each do |args|
     context "when called with a file only #{args}" do
       let(:arguments){ args }
       specify{
         subject.should == command
-        command.file.should == "file.fxdb"
+        command.file.should == source_file
         command.uri.should be_nil
-        command.env.should be_kind_of(DbAgile::Engine::FileEnvironment)
+        command.env.should be_kind_of(DbAgile::Engine::DslEnvironment)
       }
     end
   end

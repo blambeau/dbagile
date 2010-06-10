@@ -52,7 +52,7 @@ module DbAgile
             exit(true)
         end
         if self.file
-          self.env = ::DbAgile::Engine::FileEnvironment.new(self.file)
+          self.env = ::DbAgile::Engine::DslEnvironment.new(File.read(self.file))
         else
           self.env = ::DbAgile::Engine::ConsoleEnvironment.new
         end

@@ -30,7 +30,14 @@ module DbAgile
           EOF
         end
         begin
-          dsl.instance_eval(&@dsl_block)
+          case @dsl_block
+            when Proc
+              dsl.instance_eval(&@dsl_block)
+            when String
+              dsl.instance_eval(@dsl_block)
+            else
+              raise ArgumentError, "Unable to use #{@dsl_block} as source text"
+          end
         rescue NameError => ex
           engine.no_such_command!(ex.name)
         end
