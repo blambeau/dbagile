@@ -15,7 +15,7 @@ class DbAgile::Engine::Command::Define < DbAgile::Engine::Command
   # Executes on main signature
   def execute_1(engine, table_name, heading)
     engine.connected!
-    engine.database.create_table(name, heading)
+    engine.database.create_table(table_name, heading)
   end
       
 end # class Quit

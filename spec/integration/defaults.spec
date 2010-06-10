@@ -4,8 +4,8 @@ Fixtures::adapters_under_test.each do |adapter|
   $id = 0
   db = DbAgile.connect(adapter) do
     use AgileTable, :create_table => true 
-    use Defaults,      :id   => lambda{ $id += 1 },
-                       :name => "dbagile"
+    use Defaults,  {:id   => lambda{ $id += 1 },
+                    :name => "dbagile"}
   end
   db.insert(:example, {})
   db.insert(:example, {})

@@ -55,7 +55,7 @@ module DbAgile
       
       # Inserts a tuple inside the table
       def insert(tuple)
-        raise KeyViolationError if keys.find{|key| !check_key(tuple, key)}
+        raise DbAgile::Adapter::KeyViolationError if keys.find{|key| !check_key(tuple, key)}
         tuples << tuple
         tuple
       end

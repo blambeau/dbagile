@@ -73,6 +73,20 @@ module DbAgile
       raise NoDatabaseError unless connected?
     end
     
+    # Asserts that a table exists. Raises a NoSuchTableError otherwise
+    # otherwise.
+    def table_exists!(table_name)
+      raise NoSuchTableError, "No such table #{table_name}" unless database.has_table?(table_name)
+    end
+    
+    # Asserts that a list of columns are valid for a given table. Raises a NoSuchColumnError 
+    # otherwise
+    def columns_exist!(table_name, columns)
+      table_exists!(table_name)
+      raise NoSuchColumnError, "No such columns #{table_name} :: #{columns.inspect}"\
+        unless (columns - database.column_names(table_name)).empty?
+    end
+    
     # Raises an NoSuchCommandError with a friendly message
     def no_such_command!(cmdname)
       raise NoSuchCommandError, "No such command: #{cmdname}"
@@ -133,6 +147,11 @@ module DbAgile
     # Delegated to env
     def say(something, color = nil)
       env.say(something, color)
+    end
+    
+    # Raises an error
+    def error(message)
+      raise EngineError, message
     end
     
     # Execution ####################################################################
