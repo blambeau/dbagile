@@ -62,6 +62,17 @@ module DbAgile
         nil
       end
       
+      # 
+      # Displays something.
+      #
+      # @param [Object] something to write on environment output
+      # @return [void]
+      #
+      def display(something)
+        writeline(something.inspect)
+        nil
+      end
+      
       #
       # Handles an error that occured during last command execution.
       #

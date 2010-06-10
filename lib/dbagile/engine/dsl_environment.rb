@@ -57,8 +57,8 @@ module DbAgile
         error
       end
       
-      # This one is silent
-      def writeline(something, color = nil)
+      # This one is silent on say
+      def say(something, color = nil)
       end
       
     end # class DslEnvironment

@@ -151,6 +151,11 @@ module DbAgile
       env.say(something, color)
     end
     
+    # Delegated to env
+    def display(something)
+      env.display(something)
+    end
+    
     # Raises an error
     def error(message)
       raise EngineError, message
@@ -171,7 +176,6 @@ module DbAgile
       @quit = false
       until @quit
         begin
-          @last_error = nil
           env.next_command("dbagile=# ") do |cmd|
             execute_command(*cmd) if cmd
           end

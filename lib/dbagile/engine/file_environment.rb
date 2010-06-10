@@ -28,6 +28,10 @@ module DbAgile
         end
       end
 
+      # This one is silent on say
+      def say(something, color = nil)
+      end
+      
     end # class FileEnvironment
   end # class Engine
 end # module DbAgile

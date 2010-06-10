@@ -20,9 +20,9 @@ class DbAgile::Engine::Command::Display < DbAgile::Engine::Command
   # Displays something
   def do_display(engine, what)
     if what.kind_of?(Enumerable)
-      what.each{|o| engine.say(o.inspect)}
+      what.each{|o| engine.display(o)}
     else
-      engine.say(what.inspect)
+      engine.display(what)
     end
     nil
   end

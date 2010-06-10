@@ -69,12 +69,14 @@ module DbAgile
       def execute_command
         engine = DbAgile::Engine.new(self.env)
         engine.connect(self.uri) if self.uri
-        engine.say("Welcome in dbagile #{::DbAgile::VERSION} interactive terminal.")
-        engine.say("\n")
-        engine.say('Type:  \c to connect a database')
-        engine.say('       \h for help')
-        engine.say('       \q to quit')
-        engine.say("\n")
+        if self.env.kind_of?(DbAgile::Engine::ConsoleEnvironment)
+          engine.say("Welcome in dbagile #{::DbAgile::VERSION} interactive terminal.")
+          engine.say("\n")
+          engine.say('Type:  \c to connect a database')
+          engine.say('       \h for help')
+          engine.say('       \q to quit')
+          engine.say("\n")
+        end
         engine.execute
       end
       
