@@ -9,11 +9,11 @@ module FlexiDB
 
       # Returns pending lines
       def lines
-        @lines ||= File.readlines(path)
+        @lines ||= File.readlines(@path)
       end
 
       # Asks something
-      def ask(what)
+      def next_command(what)
         until lines.empty?
           line = lines.shift.strip
           if line[0,1] == "#" or line.empty?
@@ -26,6 +26,12 @@ module FlexiDB
           end
         end
         [:quit, []]
+      end
+      
+      # Asks something to the use
+      def ask(what)
+        require 'readline'
+        Readline.readline(what, true)
       end
       
       # Says something

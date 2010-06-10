@@ -95,6 +95,11 @@ module FlexiDB
     # Environment ##################################################################
     
     # Delegated to @env
+    def next_command(what)
+      env.next_command(what)
+    end
+    
+    # Delegated to @env
     def ask(what)
       env.ask(what)
     end
@@ -116,7 +121,7 @@ module FlexiDB
       @quit = false
       until @quit
         begin
-          command, args = ask("flexidb=# ")
+          command, args = next_command("flexidb=# ")
           if command
             cmd, method, args = prepare_command_exec(command, args || [])
             res = cmd.send(method, *args.unshift(self))

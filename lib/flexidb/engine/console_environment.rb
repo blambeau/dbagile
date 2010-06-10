@@ -60,6 +60,7 @@ module FlexiDB
           [nil, nil]
         end
       end
+      alias :next_command :ask
       
       # Says something
       def say(what)
