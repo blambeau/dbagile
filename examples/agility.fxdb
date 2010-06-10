@@ -5,7 +5,7 @@ connect "sqlite://example.db"
 
 # We use some plugins in the chain
 use AgileTable
-use Defaults, {:now => lambda{Time.now}}
+use Defaults, {:now => Defaults::now}
 
 # Let insert some tuples in a tools table...
 insert :tools, {:name => "dbagile", :version => "0.0.1"}

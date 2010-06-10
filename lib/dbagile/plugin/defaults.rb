@@ -6,6 +6,11 @@ module DbAgile
     #
     class Defaults < Plugin
       
+      # Returns a proc that computes the current time
+      def self.now
+        lambda{ Time.now }
+      end
+      
       # Creates a plugin instance
       def initialize(delegate, defaults, options = {})
         super(delegate, options)
