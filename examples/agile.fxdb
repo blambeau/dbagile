@@ -4,8 +4,8 @@
 connect "sqlite://standard.db"
 
 # We create the three tables
+use AgileKeys, {:candidate => /[#]$/}
 use AgileTable
-use AutoKeys, /[#]$/
 
 # We insert the data now...
 insert :suppliers, [
@@ -25,7 +25,7 @@ insert :parts, [
   {:'p#' => 'P6', :name => 'Cog',   :color => 'Red',   :weight => 19.0, :city => 'London'}
 ]
 
-insert :suppliers, [
+insert :supplies, [
   {:'s#' => 'S1', :'p#' => 'P1', :quantity => 300},
   {:'s#' => 'S1', :'p#' => 'P2', :quantity => 200},
   {:'s#' => 'S1', :'p#' => 'P3', :quantity => 400},
@@ -42,4 +42,4 @@ insert :suppliers, [
 
 display :suppliers
 display :parts
-display :suppliers
+display :supplies
