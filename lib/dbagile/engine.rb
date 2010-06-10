@@ -1,3 +1,4 @@
+require 'dbagile/engine/errors'
 require 'dbagile/engine/environment'
 require 'dbagile/engine/console_environment'
 require 'dbagile/engine/file_environment'
@@ -30,6 +31,9 @@ module DbAgile
     # Current database on which this engine is connected
     attr_reader :database
     
+    # Keeps the last error
+    attr_reader :last_error
+    
     # Creates an engine instance on top of a database
     def initialize(env = ConsoleEnvironment.new)
       @env = env
@@ -61,6 +65,24 @@ module DbAgile
       @quit = true
     end
     
+    # Error support ################################################################
+    
+    # Asserts that a database is connected. Raises a NoDatabaseConnectedError 
+    # otherwise.
+    def connected!
+      raise NoDatabaseError unless connected?
+    end
+    
+    # Raises an NoSuchCommandError with a friendly message
+    def no_such_command!(cmdname)
+      raise NoSuchCommandError, "No such command: #{cmdname}"
+    end
+    
+    # Raises an InvalidCommandError with a friendly message
+    def invalid_command!(line)
+      raise InvalidCommandError, "Invalid command: #{line}"
+    end
+    
     # Commands #####################################################################
     
     #
@@ -73,7 +95,7 @@ module DbAgile
     #
     def find_command(name)
       cmd = COMMANDS.find{|c| c.names.include?(name.to_s)}
-      raise ArgumentError, "No such command #{name}" if cmd.nil?
+      no_such_command!(name) if cmd.nil?
       block_given? ? yield(cmd) : cmd
     end
     
@@ -97,7 +119,8 @@ module DbAgile
         new_args = s.match_to_args(hash_args)
         return [cmd, "execute_#{i+1}".to_sym, new_args]
       end
-      raise ArgumentError, "Signature mistmatch:\n#{cmd.banner.join('\n')}"
+      execute_command('help', [command_name])
+      nil
     end
 
     # Env delegate #################################################################
@@ -114,22 +137,25 @@ module DbAgile
     
     # Execution ####################################################################
     
+    # Executes a specific command
+    def execute_command(cmd, args)
+      cmd, method, args = prepare_command_exec(cmd, args || [])
+      return unless cmd
+      res = cmd.send(method, *args.unshift(self))
+      env.say(res.inspect) unless res.nil?
+    end
+    
     # Executes on a given environment
     def execute
       @quit = false
       until @quit
         begin
           env.next_command("dbagile=# ") do |cmd|
-            command, args = cmd
-            if command
-              cmd, method, args = prepare_command_exec(command, args || [])
-              res = cmd.send(method, *args.unshift(self))
-              env.say(res.inspect) unless res.nil?
-            end
+            execute_command(*cmd) if cmd
           end
-        rescue => ex
-          env.say("ERROR #{ex.message}", :red)
-          env.say(ex.backtrace.join("\n"))
+        rescue Exception => ex
+          @last_error = ex
+          env.say("ERROR: #{ex.message}", :red)
         end
       end
       env.save_history if env.respond_to?(:save_history)

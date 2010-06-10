@@ -29,11 +29,13 @@ class DbAgile::Engine::Command::Display < DbAgile::Engine::Command
   
   # Executes with a table name as argument
   def execute_1(engine, table_name)
+    engine.connected!
     do_display(engine, engine.database.dataset(table_name))
   end
       
   # Executes with a query as argument
   def execute_2(engine, query)
+    engine.connected!
     do_display(engine, engine.database.dataset(query))
   end
       

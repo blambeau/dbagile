@@ -17,6 +17,7 @@ class DbAgile::Engine::Command::Use < DbAgile::Engine::Command
             
   # Executes the command on the engine
   def execute_1(engine, plugin)
+    engine.connected!
     plugin = DbAgile::Plugin.const_get(plugin) if plugin.kind_of?(Symbol)
     engine.database.__insert_in_main_chain(plugin)
     true
@@ -24,6 +25,7 @@ class DbAgile::Engine::Command::Use < DbAgile::Engine::Command
         
   # Executes the command on the engine
   def execute_2(engine, plugin, options)
+    engine.connected!
     plugin = DbAgile::Plugin.const_get(plugin) if plugin.kind_of?(Symbol)
     engine.database.__insert_in_main_chain(plugin, options)
     true

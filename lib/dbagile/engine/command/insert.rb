@@ -14,6 +14,7 @@ class DbAgile::Engine::Command::Insert < DbAgile::Engine::Command
       
   # Executes the command on the engine
   def execute_1(engine, table_name, tuple)
+    engine.connected!
     engine.database.insert(table_name, tuple)
   end
         

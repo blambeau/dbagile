@@ -11,7 +11,7 @@ class DbAgile::Engine::Command::Disconnect < DbAgile::Engine::Command
       
   # Executes the command on the engine
   def execute_1(engine)
-    engine.disconnect
+    engine.disconnect if engine.connected?
   end
         
 end # class Quit

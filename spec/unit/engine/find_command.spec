@@ -6,7 +6,7 @@ describe "DbAgile::Engine#find_command" do
   
   context "when called on unexisting command" do
     subject{ lambda{ engine.find_command(:not_a_command) } }
-    it{ should raise_error(ArgumentError) }
+    it{ should raise_error(DbAgile::Engine::NoSuchCommandError) }
   end
   
   context "when called an existing command without block and a symbol" do

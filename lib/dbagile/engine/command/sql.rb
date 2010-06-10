@@ -16,11 +16,13 @@ class DbAgile::Engine::Command::Sql < DbAgile::Engine::Command
       
   # Executes a select query
   def execute_1(engine, query)
+    engine.connected!
     engine.database.dataset(query)
   end
         
   # Executes the command on the engine
   def execute_2(engine, cmd)
+    engine.connected!
     engine.database.direct_sql(cmd)
   end
         

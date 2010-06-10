@@ -75,10 +75,10 @@ module DbAgile
             cmd, args = $1, Kernel.eval("[#{$2}]").compact
             [cmd, args]
           rescue Exception => ex
-            error("Invalid command: #{line}")
+            engine.invalid_command!(line)
           end
         else
-          error("Invalid command: #{line}")
+          engine.invalid_command!(line)
         end
       end
 
@@ -108,16 +108,6 @@ module DbAgile
         STDOUT << something << "\n"
       end
 
-      #
-      # Raises an error with a specific message
-      #
-      # This method is an internal tool and is not part of the Environment
-      # contract per se.
-      #
-      def error(message)
-        raise message
-      end
-      
     end # class Environment
   end # class Engine
 end # module DbAgile

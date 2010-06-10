@@ -6,7 +6,7 @@ describe "DbAgile::Engine#prepare_command_exec" do
   
   context("when called on an unexisting command") do
     subject{ lambda{ engine.prepare_command_exec(:not_a_command, []) } }
-    specify{ subject.should raise_error(ArgumentError) }
+    specify{ subject.should raise_error(DbAgile::Engine::NoSuchCommandError) }
   end
   
   context("when called on an command without arguments") do
