@@ -4,6 +4,7 @@ module DbAgile
   #
   class Plugin
     include Adapter::Delegate
+    include DbAgile::Adapter::Tools
     
     # Plugin options
     attr_reader :options
@@ -22,15 +23,7 @@ module DbAgile
       {}
     end
     
-    # Returns the heading of a given tuple
-    def tuple_heading(tuple)
-      heading = {}
-      tuple.each_pair{|name, value| heading[name] = value.class unless value.nil?}
-      heading
-    end
-  
     private :default_options
-    private :tuple_heading
   end # class Plugin
 end # module DbAgile
 require 'dbagile/plugin/agile_table'

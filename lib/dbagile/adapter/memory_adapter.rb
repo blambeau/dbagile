@@ -8,8 +8,10 @@ module DbAgile
       include Enumerable
       attr_accessor :heading
       attr_accessor :tuples
+      attr_accessor :keys
       def initialize(heading, tuples = [])
         @heading = heading
+        @keys = []
         @tuples = []
       end
       def each(&block)
@@ -18,13 +20,20 @@ module DbAgile
           yield tuple
         }
       end
+      def add_key(columns)
+        keys << columns
+      end
       def column_names(sort = false)
         sort ?  heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s} : heading.keys
       end
       def add_columns(columns)
         heading.merge!(columns)
       end
+      def check_key(tuple, key)
+        tuples.find{}
+      end
       def insert(tuple)
+        keys.each{|key| check_key(tuple, key)}
         tuples << tuple
         tuple
       end
@@ -70,6 +79,12 @@ module DbAgile
     def create_table(name, columns)
       raise ArgumentError, "Table #{name} already exists" if has_table?(name)
       tables[name] = Table.new(columns)
+    end
+    
+    # Returns false
+    def key(table_name, columns)
+      raise ArgumentError, "No such table #{table}" unless has_table?(table_name)
+      tables[table_name].add_key(columns)
     end
     
     # Returns the list of column names for a given table

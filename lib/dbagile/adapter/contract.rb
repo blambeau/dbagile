@@ -5,6 +5,8 @@ module DbAgile
     #
     module Contract
       
+      ### ABOUT CONNECTIONS ########################################################
+      
       # 
       # Ping the SQL server, returns true if everything is fine. Raises an
       # error otherwise
@@ -24,6 +26,8 @@ module DbAgile
         Kernel.raise NotImplementedError
       end
     
+      ### ABOUT QUERIES ############################################################
+      
       #
       # Returns a dataset object for a given table (if a Symbol is given) or query 
       # (if a String is given). 
@@ -46,17 +50,7 @@ module DbAgile
         Kernel.raise NotImplementedError
       end
       
-      #
-      # Acquires a lock on the schema and yield the block with the adapter
-      # as first argument. 
-      #
-      # A default implementation is provided that simply yields the block.
-      #
-      # @return [...] the value returned by the block
-      #
-      def with_schema_lock
-        yield(self)
-      end
+      ### SCHEMA QUERIES ###########################################################
       
       #
       # Returns true if a given table exists in the database, false otherwise.
@@ -65,33 +59,6 @@ module DbAgile
       # @return true if the table exists, false otherwise
       #
       def has_table?(table_name)
-        Kernel.raise NotImplementedError
-      end
-      
-      #
-      # Creates a table with some columns. 
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Hash] columns column definitions
-      # @return [Boolean] true to indicate that everything is fine
-      #
-      # @pre the database does not contain a table with that name
-      # @post the database contains a table with specified columns
-      #
-      def create_table(table_name, columns)
-        Kernel.raise NotImplementedError
-      end
-      
-      #
-      # Returns the list of column names for a given table.
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Boolean] sort sort column by names?
-      # @return [Array<Symbol>] column names
-      #
-      # @pre the database contains a table with that name
-      #
-      def column_names(table_name, sort = false)
         Kernel.raise NotImplementedError
       end
       
@@ -111,6 +78,35 @@ module DbAgile
       end
       
       #
+      # Returns the list of column names for a given table.
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Boolean] sort sort column by names?
+      # @return [Array<Symbol>] column names
+      #
+      # @pre the database contains a table with that name
+      #
+      def column_names(table_name, sort = false)
+        Kernel.raise NotImplementedError
+      end
+      
+      ### SCHEMA UPDATES ###########################################################
+      
+      #
+      # Creates a table with some columns. 
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Hash] columns column definitions
+      # @return [Boolean] true to indicate that everything is fine
+      #
+      # @pre the database does not contain a table with that name
+      # @post the database contains a table with specified columns
+      #
+      def create_table(table_name, columns)
+        Kernel.raise NotImplementedError
+      end
+      
+      #
       # Adds some columns to a table
       #
       # @param [Symbol] table_name the name of a table
@@ -124,6 +120,23 @@ module DbAgile
       def add_columns(table_name, columns)
         Kernel.raise NotImplementedError
       end
+      
+      # 
+      # Make columns be a candidate key for the table.
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Array<Symbol>] columns column names
+      # @return [Boolean] true to indicate that everything is fine
+      #
+      # @pre the database contains a table with that name
+      # @pre the table contains all the columns
+      # @post the table has gained the candidate key
+      #
+      def key(table_name, columns)
+        Kernel.raise NotImplementedError
+      end
+      
+      ### DATA UPDATES #############################################################
       
       #
       # Inserts a tuple inside a given table
