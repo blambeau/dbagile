@@ -4,47 +4,6 @@ module DbAgile
   #
   class MemoryAdapter < Adapter
     
-    class Table
-      include Enumerable
-      attr_accessor :heading
-      attr_accessor :tuples
-      attr_accessor :keys
-      def initialize(heading, tuples = [])
-        @heading = heading
-        @keys = []
-        @tuples = []
-      end
-      def each(&block)
-        tuples.each {|tuple|
-          (heading.keys-tuple.keys).each{|k| tuple[k] = nil}
-          yield tuple
-        }
-      end
-      def add_key(columns)
-        keys << columns
-      end
-      def column_names(sort = false)
-        sort ?  heading.keys.sort{|k1, k2| k1.to_s <=> k2.to_s} : heading.keys
-      end
-      def add_columns(columns)
-        heading.merge!(columns)
-      end
-      def check_key(tuple, key)
-        tuples.find{}
-      end
-      def insert(tuple)
-        keys.each{|key| check_key(tuple, key)}
-        tuples << tuple
-        tuple
-      end
-      def count
-        tuples.size
-      end
-      def to_a
-        self.collect{|t| t}
-      end
-    end
-    
     # Table hash (name -> array of hash tuples)
     attr_reader :tables
     

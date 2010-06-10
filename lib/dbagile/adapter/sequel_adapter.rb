@@ -13,6 +13,8 @@ module DbAgile
       @uri = uri
     end
     
+    ### ABOUT CONNECTIONS ########################################################
+      
     # Pings the server
     def ping
       db.test_connection
@@ -28,6 +30,8 @@ module DbAgile
       @db ||= Sequel.connect(uri)
     end
     
+    ### ABOUT QUERIES ############################################################
+      
     # Returns a Dataset object for a given table
     def dataset(table)
       case table
@@ -39,11 +43,21 @@ module DbAgile
       end
     end
       
+    ### SCHEMA QUERIES ###########################################################
+      
     # Returns true if a table exists, false otherwise
     def has_table?(name)
       db.table_exists?(name)
     end
     
+    # Returns the list of column names for a given table
+    def column_names(table, sort_it_by_name = false)
+      raise ArgumentError, "No such table #{table}" unless has_table?(table)
+      sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
+    end
+    
+    ### SCHEMA UPDATES ###########################################################
+      
     # Creates a table with some attributes
     def create_table(name, columns)
       raise ArgumentError, "Table #{name} already exists" if has_table?(name)
@@ -51,12 +65,6 @@ module DbAgile
         columns.each_pair{|name, type| column name, type}
       end
       true
-    end
-    
-    # Returns the list of column names for a given table
-    def column_names(table, sort_it_by_name = false)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
-      sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
     end
     
     # Adds some columns to a table
@@ -68,6 +76,15 @@ module DbAgile
       true
     end
 
+    # 
+    # Make columns be a candidate key for the table.
+    #
+    def key(table_name, columns)
+      db.add_index(table_name, columns, :unique => true)
+    end
+      
+    ### DATA UPDATES #############################################################
+      
     # Inserts a tuple inside a given table
     def insert(table, tuple)
       raise ArgumentError, "No such table #{table}" unless has_table?(table)
