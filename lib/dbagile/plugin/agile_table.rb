@@ -4,7 +4,7 @@ module DbAgile
     # Makes a table flexible in the sense that new columns are automatically
     # added when not existing at insert time.
     #
-    class FlexibleTable < Plugin
+    class AgileTable < Plugin
       
       # Returns default brick options
       def default_options
@@ -30,6 +30,6 @@ module DbAgile
       end
       
       private :ensure_columns
-    end # class FlexibleTable
+    end # class AgileTable
   end # class Plugin
 end # module DbAgile

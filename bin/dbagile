@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-#  DbAgile - Flexible interface on top of SQL databases
+#  DbAgile - Agile interface on top of SQL databases
 #        (see lib/dbagile/dbagile.rb for more information)
 #
 #  Copyright (c) 2010 Bernard Lambeau & University of Louvain, 

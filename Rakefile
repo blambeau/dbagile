@@ -30,13 +30,13 @@ end
 gemspec = Gem::Specification.new do |s|
   s.name = 'dbagile'
   s.version = version
-  s.summary = "DbAgile - Flexible Interface on top of SQL Databases"
-  s.description = %{Flexible Interface on top of SQL Databases}
+  s.summary = "DbAgile - Agile Interface on top of SQL Databases"
+  s.description = %{Agile Interface on top of SQL Databases}
   s.files = Dir['lib/**/*'] + Dir['test/**/*']
   s.require_path = 'lib'
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.textile", "LICENCE.textile"]
-  s.rdoc_options << '--title' << 'DbAgile - Flexible Interface on top of SQL Databases' <<
+  s.rdoc_options << '--title' << 'DbAgile - Agile Interface on top of SQL Databases' <<
                     '--main' << 'README.textile' <<
                     '--line-numbers'  
   s.bindir = "bin"

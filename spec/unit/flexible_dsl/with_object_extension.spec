@@ -6,13 +6,13 @@ if RUBY_VERSION < "1.9"
   
     specify "it correctly resolves constants" do
       dsl.with_object_extension do
-        FlexibleTable.should == ::DbAgile::Plugin::FlexibleTable
+        AgileTable.should == ::DbAgile::Plugin::AgileTable
       end
     end
 
     specify "it cleans the object method after that" do
-      dsl.with_object_extension do FlexibleTable end
-      lambda{ FlexibleTable }.should raise_error(NameError)
+      dsl.with_object_extension do AgileTable end
+      lambda{ AgileTable }.should raise_error(NameError)
     end
   
   end
