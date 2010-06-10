@@ -24,12 +24,9 @@ module DbAgile
       def next_command(prompt, &continuation)
         while true
           line = readline(prompt).strip
-          if line[0,1] == "#" or line.empty?
-          elsif line =~ /^([^\s]+)\s*(.*)$/
-            cmd, args = $1, Kernel.eval("[#{$2}]").compact
-            return continuation.call([cmd, args])
-          else
-            error("Invalid command: #{line}")
+          unless line[0,1] == "#" or line.empty?
+            cmd = parse_command(line)
+            return continuation.call(cmd)
           end
         end
       end
@@ -58,13 +55,32 @@ module DbAgile
       # @return [void]
       #
       def say(something, color = nil)
-        writeline(something)
+        writeline(something, color)
         nil
       end
 
 
       # Protected section starts here ###################################################
       protected
+
+      # 
+      # Parses a command (line) and returns a [:command_name, args] pair.
+      #
+      # @param [String] line a command previously read with readline
+      # @return the parsed command pair [:command_name, args]
+      #
+      def parse_command(line)
+        if line =~ /^([^\s]+)\s*(.*)$/
+          begin
+            cmd, args = $1, Kernel.eval("[#{$2}]").compact
+            [cmd, args]
+          rescue Exception => ex
+            error("Invalid command: #{line}")
+          end
+        else
+          error("Invalid command: #{line}")
+        end
+      end
 
       # 
       # Reads a line on the abstract input buffer and returns it.
@@ -88,7 +104,7 @@ module DbAgile
       #
       # @param [String] something a message to display
       #
-      def writeline(something)
+      def writeline(something, color = nil)
         STDOUT << something << "\n"
       end
 

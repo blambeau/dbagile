@@ -1,11 +1,17 @@
 module DbAgile
   class Engine
-    class ConsoleEnvironment
+    #
+    # Specification of Environment for the main dbagile command line tool.
+    #
+    # This implementation relies on Readline and Highline (optional), maintains 
+    # the command history and so on.
+    #
+    class ConsoleEnvironment < Environment
       
       # Highline instance
       attr_reader :highline
       
-      # Creates a highline environment
+      # Creates an environment instance
       def initialize
         require 'readline'
         load_history
@@ -39,38 +45,25 @@ module DbAgile
         end
       end
       
+      # Reads a line on the abstract input buffer and returns it.
       # Stolen on http://bogojoker.com/readline/
-      def readline_with_hist_management(what)
-        line = Readline.readline(what, true)
-        return nil if line.nil?
+      def readline(prompt)
+        line = Readline.readline(prompt, true)
         if line =~ /^\s*$/ or Readline::HISTORY.to_a[-2] == line
           Readline::HISTORY.pop
         end
         line
       end
-
-      # Asks something
-      def ask(what)
-        line = readline_with_hist_management(what)
-        if line =~ /^([^\s]+)\s*(.*)$/
-          cmd, args = $1, Kernel.eval("[#{$2}]")
-          [cmd, args]
+      
+      # Writes a line on the abstract output buffer.
+      def writeline(something, color = nil)
+        if highline
+          something = something.to_s
+          something = highline.color(something, color) if color
+          highline.say(something)
         else
-          error("Unknown command: #{line}")
-          [nil, nil]
+          puts something.to_s
         end
-      end
-      alias :next_command :ask
-      
-      # Says something
-      def say(what)
-        highline ? highline.say(what.to_s) : puts(what.to_s)
-      end
-      
-      # Prints an error
-      def error(message)
-        message = "ERROR: #{message}"
-        highline ? highline.say(highline.color(message, :red)) : puts(message)
       end
       
     end # class HighlineEnvironment

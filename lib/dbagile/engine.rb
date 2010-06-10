@@ -37,6 +37,13 @@ module DbAgile
     
     # Basic commands start here ####################################################
     
+    # Returns true if a database is currently connected, false otherwise.
+    # Connected does not mean that the database pings, only that the underlying
+    # database instance variable is not nil.
+    def connected?
+      not(database.nil?)
+    end
+    
     # Connects to a database
     def connect(db)
       disconnect
@@ -93,26 +100,16 @@ module DbAgile
       raise ArgumentError, "Signature mistmatch:\n#{cmd.banner.join('\n')}"
     end
 
-    # Environment ##################################################################
+    # Env delegate #################################################################
     
-    # Delegated to @env
-    def next_command(what)
-      env.next_command(what)
+    # Delegated to env
+    def ask(prompt, &continuation)
+      env.ask(prompt, &continuation)
     end
     
-    # Delegated to @env
-    def ask(what)
-      env.ask(what)
-    end
-    
-    # Delegated to @env
-    def say(what)
-      env.say(what)
-    end
-    
-    # Delegated to @env
-    def error(message)
-      env.error(message)
+    # Delegated to env
+    def say(something, color = nil)
+      env.say(something, color)
     end
     
     # Execution ####################################################################
@@ -122,15 +119,17 @@ module DbAgile
       @quit = false
       until @quit
         begin
-          command, args = next_command("dbagile=# ")
-          if command
-            cmd, method, args = prepare_command_exec(command, args || [])
-            res = cmd.send(method, *args.unshift(self))
-            env.say(res.inspect) unless res.nil?
+          env.next_command("dbagile=# ") do |cmd|
+            command, args = cmd
+            if command
+              cmd, method, args = prepare_command_exec(command, args || [])
+              res = cmd.send(method, *args.unshift(self))
+              env.say(res.inspect) unless res.nil?
+            end
           end
         rescue => ex
-          error(ex.message)
-          error(ex.backtrace.join("\n"))
+          env.say("ERROR #{ex.message}", :red)
+          env.say(ex.backtrace.join("\n"))
         end
       end
       env.save_history if env.respond_to?(:save_history)

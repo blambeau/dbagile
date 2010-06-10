@@ -11,7 +11,11 @@ class DbAgile::Engine::Command::Ping < DbAgile::Engine::Command
       
   # Executes the command on the engine
   def execute_1(engine)
-    engine.database.adapter.ping
+    if engine.connected?
+      engine.database.adapter.ping
+    else
+      false
+    end
   end
         
 end # class Quit

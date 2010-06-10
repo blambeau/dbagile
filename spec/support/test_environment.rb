@@ -26,7 +26,7 @@ module DbAgile
       #
       # @param [String] something a message to display
       #
-      def writeline(something)
+      def writeline(something, color = nil)
         output_lines << something
       end
       
