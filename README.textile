@@ -1,6 +1,17 @@
-h2. DbAgile
+h1. DbAgile - Making our Databases Agile
 
-DbAgile provides a truly flexible interface on top of SQL databases!
+DbAgile aims at providing agile tools around databases, and relational/sql databases in particular. It can be used as:
+
+* a lightweight yet agile relational database server
+* an agile ruby architecture around SQL databases
+* a friendly command line tool for connecting/manipulating SQL databases
+
+h2. Main features
+
+* agile database schema: allow schema evolutions without issuing alter/create table commands
+* agile database types: allow user-defined types to be included in all tables
+
+h2. The command line tool
 
 <pre class="shell">
   bl@shell# dbagile --full-agile 
@@ -12,7 +23,7 @@ DbAgile provides a truly flexible interface on top of SQL databases!
          \q to quit
 
   dbagile=# \c sqlite://example.db
-  dbagile=# defaults {:now => Defaults::now}
+  dbagile=# use Defaults, {:now => Defaults::now}
   dbagile=# insert :tools, {:name => "dbagile", :version => "0.0.1"}
   dbagile=# display :tools
   
@@ -22,3 +33,7 @@ DbAgile provides a truly flexible interface on top of SQL databases!
   | dbagile      | 0.0.1           | Thu Jun 10 14:18:31 +0200 2010 |
   -------------------------------------------------------------------
 </pre>
+
+h2. Credits
+
+DbAgile (c) 2010 by Bernard Lambeau and the University of Louvain. DbAgile is distributed under the MIT licence. Please see the LICENCE.textile document for details.
