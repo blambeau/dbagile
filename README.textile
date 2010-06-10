@@ -3,7 +3,7 @@ h2. DbAgile
 DbAgile provides a truly flexible interface on top of SQL databases!
 
 <pre class="shell">
-  bl@shell# dbagile --full-agile sqlite://example.db
+  bl@shell# dbagile --full-agile 
 
   Welcome in dbagile interactive terminal.
 
@@ -11,6 +11,7 @@ DbAgile provides a truly flexible interface on top of SQL databases!
          \h for help
          \q to quit
 
+  dbagile=# \c sqlite://example.db
   dbagile=# defaults {:now => Defaults::now}
   dbagile=# insert :tools, {:name => "dbagile", :version => "0.0.1"}
   dbagile=# display :tools
