@@ -15,4 +15,8 @@ describe DbAgile do
     DbAgile.execute('connect "sqlite://test.db"').should be_kind_of(DbAgile::Database)
   end
   
+  it "should correctly resolve constants" do
+    lambda{ DbAgile::execute{ use Defaults } }.should_not raise_error
+  end
+  
 end

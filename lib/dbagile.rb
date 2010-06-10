@@ -35,3 +35,4 @@ end # module DbAgile
 require 'dbagile/adapter'
 require 'dbagile/plugin'
 require 'dbagile/database'
+require 'dbagile/ext/object'

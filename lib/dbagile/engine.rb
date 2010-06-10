@@ -157,7 +157,7 @@ module DbAgile
     
     # Raises an error
     def error(message)
-      raise EngineError, message
+      message.kind_of?(Exception) ? raise(message) : raise(EngineError, message)
     end
     
     # Execution ####################################################################

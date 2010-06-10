@@ -11,6 +11,13 @@ module DbAgile
       # DSL used 
       class DSL; 
         attr_accessor :lines
+        def self.const_missing(name)
+          if DbAgile::Plugin::const_defined?(name)
+            DbAgile::Plugin::const_get(name)
+          else
+            super
+          end
+        end
       end
       
       # Creates the environment instance
@@ -39,7 +46,12 @@ module DbAgile
               raise ArgumentError, "Unable to use #{@dsl_block} as source text"
           end
         rescue NameError => ex
-          engine.no_such_command!(ex.name)
+          case ex.name.to_s
+            when /^[a-z]/
+              engine.no_such_command!(ex.name)
+            else
+              engine.error(ex)
+          end
         end
         dsl.lines
       end
