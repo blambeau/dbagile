@@ -11,12 +11,13 @@ DbAgile provides a truly flexible interface on top of SQL databases!
          \h for help
          \q to quit
 
+  dbagile=# defaults {:now => Defaults::now}
   dbagile=# insert :tools, {:name => "dbagile", :version => "0.0.1"}
   dbagile=# display :tools
   
-  ----------------------------------
-  | name: String | version: String |
-  ----------------------------------
-  | dbagile      | 0.0.1           |
-  ----------------------------------
+  -------------------------------------------------------------------
+  | name: String | version: String | now: Time                      |
+  -------------------------------------------------------------------
+  | dbagile      | 0.0.1           | Thu Jun 10 14:18:31 +0200 2010 |
+  -------------------------------------------------------------------
 </pre>
