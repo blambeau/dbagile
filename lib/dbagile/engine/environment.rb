@@ -67,7 +67,7 @@ module DbAgile
       # Parses a command (line) and returns a [:command_name, args] pair.
       #
       # @param [String] line a command previously read with readline
-      # @return the parsed command pair [:command_name, args]
+      # @return [Array] the parsed command pair [:command_name, args]
       #
       def parse_command(line)
         if line =~ /^([^\s]+)\s*(.*)$/

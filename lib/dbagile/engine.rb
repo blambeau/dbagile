@@ -91,7 +91,7 @@ module DbAgile
     #
     # @param name [Symbol|String] a command name
     # @return the command when no block is given, block result otherwise.
-    # @raises ArgumentError if the command cannot be found
+    # @raise ArgumentError if the command cannot be found
     #
     def find_command(name)
       cmd = COMMANDS.find{|c| c.names.include?(name.to_s)}
@@ -109,7 +109,7 @@ module DbAgile
     # matching.
     #
     # @return [Command, Symbol, Array] a triple [cmd, execution_method, args]
-    # @raises ArgumentError if the command cannot be found or the signature does 
+    # @raise ArgumentError if the command cannot be found or the signature does 
     #         not match
     #  
     def prepare_command_exec(command_name, args)
