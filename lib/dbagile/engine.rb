@@ -1,3 +1,4 @@
+require 'dbagile/engine/environment'
 require 'dbagile/engine/console_environment'
 require 'dbagile/engine/file_environment'
 require 'dbagile/engine/signature'
