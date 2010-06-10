@@ -10,9 +10,6 @@ module FlexiDB
       # Show stack traces?
       attr_accessor :trace
       
-      # Database uri
-      attr_accessor :uri
-      
       # Creates an empty command instance
       def initialize
         @verbose = false
@@ -32,10 +29,6 @@ module FlexiDB
           opt.separator nil
           opt.separator "Options:"
     
-          opt.on("--uri=URI", "-u", "Database URI to use") do |value|
-            self.handler_uri = value
-          end
-        
           add_options(opt)
 
           opt.on("--trace", "Display stack trace on error?") do |value|
@@ -64,8 +57,9 @@ module FlexiDB
       # Runs the command
       def run(requester_file, argv)
         @requester_file = requester_file
-        check_command_policy
-        __run(requester_file, options.parse!(argv))
+        prepare_command(argv)
+        check_command
+        execute_command
       rescue OptionParser::InvalidOption => ex
         exit(ex.message)
       rescue SystemExit
@@ -92,6 +86,7 @@ module FlexiDB
       end
       
       def info(msg)
+        raise ArgumentError unless msg.kind_of?(String)
         @buffer << msg.gsub(/^[ \t]+/, '') << "\n"
       end
       alias :error :info
@@ -100,14 +95,29 @@ module FlexiDB
       def add_options(opt)
       end
       
+      # Prepares the command
+      def prepare_command(argv)
+        rest = options.parse!(argv)
+        normalize_pending_arguments(rest)
+        self
+      end
+      
+      # Normalizes the pending arguments
+      def normalize_pending_arguments(arguments)
+        exit
+      end
+      
+      # Checks the command and exit if any option problem is found
+      def check_command
+      end
+      
+      # Executes the command
+      def execute_command
+      end
+      
       # Returns the command banner
       def banner
         raise "Command.banner should be overriden by subclasses"
-      end
-      
-      # Checks that the command may be safely executed!
-      def check_command_policy
-        true
       end
       
       # Runs the sub-class defined command

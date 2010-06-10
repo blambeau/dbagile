@@ -30,9 +30,8 @@ module FlexiDB
     attr_reader :database
     
     # Creates an engine instance on top of a database
-    def initialize(env = ConsoleEnvironment.new, db = nil)
+    def initialize(env = ConsoleEnvironment.new)
       @env = env
-      connect(db) if db
     end
     
     # Basic commands start here ####################################################

@@ -5,13 +5,17 @@ module FlexiDB
       # Creates an environment instance
       def initialize(path)
         @path = path
-        @lines = File.readlines(path)
+      end
+
+      # Returns pending lines
+      def lines
+        @lines ||= File.readlines(path)
       end
 
       # Asks something
       def ask(what)
-        until @lines.empty?
-          line = @lines.shift.strip
+        until lines.empty?
+          line = lines.shift.strip
           if line[0,1] == "#" or line.empty?
             say(line)
           elsif line =~ /^([^\s]+)\s*(.*)$/
