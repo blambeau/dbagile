@@ -28,6 +28,9 @@ module DbAgile
     # The environment
     attr_reader :env
     
+    # Connection options
+    attr_reader :options
+    
     # Current database on which this engine is connected
     attr_reader :database
     
@@ -35,8 +38,8 @@ module DbAgile
     attr_reader :last_error
     
     # Creates an engine instance on top of a database
-    def initialize(env = ConsoleEnvironment.new)
-      @env = env
+    def initialize(env = ConsoleEnvironment.new, options = {})
+      @env, @options = env, options
       env.engine = self unless env.nil?
     end
     
@@ -52,7 +55,7 @@ module DbAgile
     # Connects to a database
     def connect(db)
       disconnect
-      @database = DbAgile::connect(db)
+      @database = DbAgile::connect(db, options)
       @database.adapter.ping
     end
     

@@ -5,7 +5,7 @@ describe "::DbAgile::Adapter.has_column" do
   
     describe "When called on non existing table" do
       subject{ lambda{ adapter.column_names(:no_such_table) } }
-      it{ should raise_error(ArgumentError) }
+      it{ should raise_error }
     end
   
     describe "When called with sorting option" do

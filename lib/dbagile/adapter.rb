@@ -9,4 +9,4 @@ module DbAgile
   end # class Adapter
 end # module DbAgile
 require 'dbagile/adapter/memory'
-require 'dbagile/adapter/sequel_adapter'
+require 'dbagile/adapter/sequel'

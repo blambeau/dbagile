@@ -5,7 +5,7 @@ describe "::DbAgile::Adapter.create_table" do
   
     describe "When called on an existing table" do
       subject{ lambda{ adapter.create_table(:dbagile, {:id => Integer}) } }
-      it{ should raise_error(ArgumentError) }
+      it{ should raise_error }
     end
 
     describe "When called on an unexisting table" do

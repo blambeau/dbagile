@@ -5,7 +5,7 @@ describe "::DbAgile::Adapter.add_columns" do
   
     describe "When called on a non existing table" do
       subject{ lambda{ adapter.add_columns(:no_such_table, {:id => Integer}) } }
-      it{ should raise_error(ArgumentError) }
+      it{ should raise_error }
     end
 
     describe "When called on an existing table" do

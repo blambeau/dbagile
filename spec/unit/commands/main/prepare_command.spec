@@ -50,4 +50,30 @@ describe "::DbAgile::Commands::Main#prepare_command" do
     end
   end
   
+  context "when called with a --trace-sql option" do
+    let(:arguments){"--trace-sql"}
+    specify{
+      subject.should == command
+      command.connection_options.should == {:trace_sql => true, :trace_only => false, :trace_buffer => STDOUT}
+    }
+  end
+  
+  context "when called with a --trace-only option" do
+    let(:arguments){"--trace-only"}
+    specify{
+      subject.should == command
+      command.connection_options.should == {:trace_sql => true, :trace_only => true, :trace_buffer => STDOUT}
+    }
+  end
+  
+  context "when called with --trace-sql and --output options" do
+    let(:arguments){"--trace-sql --output=#{source_file}"}
+    specify{
+      subject.should == command
+      command.connection_options[:trace_sql].should be_true
+      command.connection_options[:trace_only].should be_false
+      command.connection_options[:trace_buffer].should be_kind_of(IO)
+    }
+  end
+
 end

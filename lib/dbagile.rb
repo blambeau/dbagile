@@ -15,11 +15,11 @@ module DbAgile
   module_function :execute
   
   # Connects to a database and returns a Database instance
-  def connect(uri, &block)
+  def connect(uri, options = {}, &block)
     return uri if uri.kind_of?(DbAgile::Database)
     uri = case uri
       when String 
-        SequelAdapter.new(uri)
+        SequelAdapter.new(uri, options)
       when Adapter
         uri
       else

@@ -9,4 +9,12 @@ describe 'DbAgile::Engine' do
     end
   end
   
+  it "should pass connection options to the adapter" do
+    tracer = []
+    engine = DbAgile::Engine.new(nil, :trace_sql => true, :trace_buffer => tracer) 
+    engine.connect("sqlite://test.db")
+    engine.database.direct_sql("SELECT 'hello world'")
+    pending("pending due to bad sequel architecture about logging"){ tracer.should == ["SELECT 'hello world'"] }
+  end
+  
 end

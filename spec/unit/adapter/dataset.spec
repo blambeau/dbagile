@@ -5,7 +5,7 @@ describe "::DbAgile::Adapter.dataset" do
   
     describe "When called on non existing table" do
       subject{ lambda{ adapter.dataset(:no_such_table) } }
-      it{ should raise_error(ArgumentError) }
+      it{ should raise_error }
     end
   
     describe "When called on an existing table" do

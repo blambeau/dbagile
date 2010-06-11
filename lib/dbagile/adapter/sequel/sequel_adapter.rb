@@ -4,13 +4,24 @@ module DbAgile
   #
   class SequelAdapter < Adapter
     
+    # Default options of this adapter
+    DEFAULT_OPTIONS = {
+      :trace_sql    => false,
+      :trace_only   => false,
+      :trace_buffer => nil
+    }
+    
     # Underlying database URI
     attr_reader :uri
     
+    # Connection options 
+    attr_reader :options
+    
     # Creates an adapter with a given uri
-    def initialize(uri)
+    def initialize(uri, options = {})
       require('sequel')
       @uri = uri
+      @options = DEFAULT_OPTIONS.merge(options)
     end
     
     ### ABOUT CONNECTIONS ########################################################
@@ -28,7 +39,14 @@ module DbAgile
     
     # Returns the underlying Sequel::Database instance
     def db
-      @db ||= Sequel.connect(uri)
+      if @db.nil?
+        @db = Sequel.connect(uri)
+        if options[:trace_sql]
+          # puts "Creating a logger with #{options[:trace_buffer].inspect}"
+          @db.logger = SequelLogger.new(options[:trace_buffer]) 
+        end
+      end
+      @db
     end
     
     ### ABOUT QUERIES ############################################################
@@ -53,7 +71,6 @@ module DbAgile
     
     # Returns the list of column names for a given table
     def column_names(table, sort_it_by_name = false)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
       sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
     end
     
@@ -61,7 +78,6 @@ module DbAgile
       
     # Creates a table with some attributes
     def create_table(name, columns)
-      raise ArgumentError, "Table #{name} already exists" if has_table?(name)
       db.create_table(name) do 
         columns.each_pair{|name, type| column name, type}
       end
@@ -70,7 +86,6 @@ module DbAgile
     
     # Adds some columns to a table
     def add_columns(table, columns)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
       db.alter_table(table) do
         columns.each_pair{|name, type| add_column name, type}
       end
@@ -82,14 +97,12 @@ module DbAgile
     #
     def key(table_name, columns)
       db.add_index(table_name, columns, :unique => true)
-      true
     end
       
     ### DATA UPDATES #############################################################
       
     # Inserts a tuple inside a given table
     def insert(table, tuple)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
       db[table].insert(tuple)
       tuple
     end

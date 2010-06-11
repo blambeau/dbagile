@@ -4,15 +4,8 @@ module DbAgile
   module Commands
     class Command
       
-      # The verbose level
-      attr_accessor :verbose
-      
-      # Show stack traces?
-      attr_accessor :trace
-      
       # Creates an empty command instance
       def initialize
-        @verbose = false
         @buffer = STDOUT
       end
       
@@ -23,22 +16,13 @@ module DbAgile
           opt.version = DbAgile::VERSION
           opt.release = nil
           opt.summary_indent = ' ' * 4
-          banner = self.banner
-          opt.banner = banner.gsub(/^[ \t]+/, "")
+          opt.banner = self.banner.gsub(/^[ \t]+/, "")
     
           opt.separator nil
           opt.separator "Options:"
     
           add_options(opt)
 
-          opt.on("--trace", "Display stack trace on error?") do |value|
-            @trace = true
-          end
-          
-          opt.on("--verbose", "-v", "Display extra progress as we progress") do |value|
-            @verbose = true
-          end
-          
           # No argument, shows at tail.  This will print an options summary.
           # Try it and see!
           opt.on_tail("-h", "--help", "Show this message") do
@@ -66,16 +50,10 @@ module DbAgile
       rescue Exception => ex
         error <<-EOF
           A severe error occured. Please report this to the developers.
-          Try --trace if the trace does not appear
         
           #{ex.class}: #{ex.message}
         EOF
-        error ex.backtrace.join("\n") if trace
-      end
-      
-      def shell_exec(what)
-        info "shell: #{what}" if verbose
-        info `#{what}`
+        #error ex.backtrace.join("\n")
       end
       
       # Exits with a message, showing options if required
