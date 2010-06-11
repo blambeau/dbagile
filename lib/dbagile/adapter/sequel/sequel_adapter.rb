@@ -39,14 +39,7 @@ module DbAgile
     
     # Returns the underlying Sequel::Database instance
     def db
-      if @db.nil?
-        @db = Sequel.connect(uri)
-        if options[:trace_sql]
-          # puts "Creating a logger with #{options[:trace_buffer].inspect}"
-          @db.logger = SequelLogger.new(options[:trace_buffer]) 
-        end
-      end
-      @db
+      @db ||= Sequel.connect(uri)
     end
     
     ### ABOUT QUERIES ############################################################
@@ -78,9 +71,9 @@ module DbAgile
       
     # Creates a table with some attributes
     def create_table(name, columns)
-      db.create_table(name) do 
-        columns.each_pair{|name, type| column name, type}
-      end
+      db.create_table(name){ 
+        columns.each_pair{|name, type| column(name, type)} 
+      }
       true
     end
     
@@ -96,7 +89,7 @@ module DbAgile
     # Make columns be a candidate key for the table.
     #
     def key(table_name, columns)
-      db.add_index(table_name, columns, :unique => true)
+      db.add_index(table_name, columns, {:unique => true})
     end
       
     ### DATA UPDATES #############################################################
@@ -116,5 +109,24 @@ module DbAgile
       end
     end
 
+    ### ABOUT TRACING #############################################################
+    
+    # Does the adapter need to trace?
+    def trace?
+      options[:trace_sql] and options[:trace_buffer]
+    end
+    
+    # Traces a SQL statement. Returns true if trace_only, false
+    # otherwise
+    def trace(sql)
+      case out = options[:trace_buffer]
+        when Logger
+          out.info(sql)
+        else
+          out << "#{sql}\n"
+      end
+      options[:trace_only]
+    end
+    
   end # class SequelAdapter
 end # module DbAgile

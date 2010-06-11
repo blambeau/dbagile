@@ -14,7 +14,7 @@ describe 'DbAgile::Engine' do
     engine = DbAgile::Engine.new(nil, :trace_sql => true, :trace_buffer => tracer) 
     engine.connect("sqlite://test.db")
     engine.database.direct_sql("SELECT 'hello world'")
-    pending("pending due to bad sequel architecture about logging"){ tracer.should == ["SELECT 'hello world'"] }
+    pending(){ tracer.should == ["SELECT 'hello world'\n"] }
   end
   
 end
