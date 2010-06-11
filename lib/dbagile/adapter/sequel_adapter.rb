@@ -23,6 +23,7 @@ module DbAgile
     # Disconnect the adapter and frees all resources.
     def disconnect
       @db.disconnect if @db
+      true
     end
     
     # Returns the underlying Sequel::Database instance
@@ -81,6 +82,7 @@ module DbAgile
     #
     def key(table_name, columns)
       db.add_index(table_name, columns, :unique => true)
+      true
     end
       
     ### DATA UPDATES #############################################################

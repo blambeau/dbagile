@@ -4,6 +4,7 @@
 connect "sqlite://standard.db"
 
 # We create the three tables
+use Trace
 use AgileKeys, {:candidate => /[#]$/}
 use AgileTable
 
@@ -40,6 +41,6 @@ insert :supplies, [
   {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}
 ]
 
-display :suppliers
-display :parts
-display :supplies
+#display :suppliers
+#display :parts
+#display :supplies

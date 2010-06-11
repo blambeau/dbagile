@@ -28,4 +28,5 @@ module DbAgile
 end # module DbAgile
 require 'dbagile/plugin/agile_table'
 require 'dbagile/plugin/agile_keys'
+require 'dbagile/plugin/trace'
 require 'dbagile/plugin/defaults'
