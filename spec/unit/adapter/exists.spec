@@ -21,6 +21,23 @@ describe "::DbAgile::Adapter#exists?" do
       it{ should be_false }
     end
       
+    describe "When called with an emtpy projection on a non-empty table" do
+      before{ 
+        adapter.create_table(:example3, {:id => Integer}) 
+        adapter.insert(:example3, {:id => 1})
+      }
+      subject{ adapter.exists?(:example3, {}) }
+      it{ should be_true }
+    end
+      
+    describe "When called with an emtpy projection on an empty table" do
+      before{ 
+        adapter.create_table(:example4, {:id => Integer}) 
+      }
+      subject{ adapter.exists?(:example4, {}) }
+      it{ should be_false }
+    end
+      
   end
   
 end

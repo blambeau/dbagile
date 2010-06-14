@@ -8,11 +8,11 @@ describe DbAgile do
   it "should support executing code directly" do
     DbAgile.execute{
       connect "sqlite://test.db"
-    }.should be_kind_of(DbAgile::Database)
+    }.should be_nil
   end
   
   it "should support executing source directly" do
-    DbAgile.execute('connect "sqlite://test.db"').should be_kind_of(DbAgile::Database)
+    DbAgile.execute('connect "sqlite://test.db"').should be_nil
   end
   
   it "should correctly resolve constants" do
@@ -20,7 +20,7 @@ describe DbAgile do
       connect "sqlite://test.db"
       use AgileTable 
       insert :people, {:id => 1}
-    }.should be_kind_of(DbAgile::Database)
+    }.should be_nil
   end
   
 end

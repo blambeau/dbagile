@@ -40,11 +40,13 @@ module DbAgile
       disconnect
       @database = DbAgile::connect(db, options)
       @database.adapter.ping
+      @database
     end
     
     # Disconnects from the database
     def disconnect
       database.disconnect if database
+      @database = nil
     end
     
     # Flags the quit to true

@@ -103,10 +103,5 @@ module DbAgile
       true
     end
 
-    # Send SQL directly to the database SQL server
-    def direct_sql(sql)
-      raise NotImplementedError
-    end
-
   end # class SequelAdapter
 end # module DbAgile
