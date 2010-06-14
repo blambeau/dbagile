@@ -42,6 +42,7 @@ insert :supplies, [
   {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}
 ]
 
+(assert (exists? :suppliers, :name => 'Clark'))
 display :suppliers
 display :parts
 display :supplies

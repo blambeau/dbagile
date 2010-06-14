@@ -50,6 +50,20 @@ module DbAgile
         Kernel.raise NotImplementedError
       end
       
+      # 
+      # Checks if a (sub)-tuple exists inside a table.
+      #
+      # @param [Symbol | String] table_or_query name of a table or query string
+      # @param [Hash] subtuple a tuple or tuple projection for the result
+      # @return true if the projection of the query result on subtuple's heading contains
+      #         the subtuple itself, false otherwise.
+      #
+      # @pre if table_or_query is a Symbol, that table exists in the database.
+      #
+      def exists?(table_or_query, subtuple)
+        Kernel.raise NotImplementedError
+      end
+      
       ### SCHEMA QUERIES ###########################################################
       
       #

@@ -8,6 +8,8 @@ module DbAgile
     #
     class DslEnvironment < Environment
       
+      module ACommand; end
+      
       # DSL used 
       class DSL; 
         attr_accessor :lines
@@ -32,7 +34,9 @@ module DbAgile
         DbAgile::Engine::COMMANDS.each do |cmd|
           dsl.instance_eval <<-EOF
             def #{cmd.name}(*args)
-              self.lines << ["#{cmd.name}", args]
+              the_command = ["#{cmd.name}", args]
+              the_command.extend(ACommand)
+              self.lines << the_command
             end
           EOF
         end
