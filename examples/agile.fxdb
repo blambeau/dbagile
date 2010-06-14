@@ -1,4 +1,4 @@
-#!/usr/bin/env dbagile --full-agile
+#!/usr/bin/env dbagile
 
 # First, we connect a database
 connect "sqlite://standard.db"
@@ -7,6 +7,7 @@ connect "sqlite://standard.db"
 # use Trace
 use AgileKeys, {:candidate => /[#]$/}
 use AgileTable
+use Defaults,  {:now => Defaults::now}
 
 # We insert the data now...
 insert :suppliers, [
@@ -41,8 +42,6 @@ insert :supplies, [
   {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}
 ]
 
-
-sql "SELECT * FROM suppliers"
-#display :suppliers
-#display :parts
-#display :supplies
+display :suppliers
+display :parts
+display :supplies

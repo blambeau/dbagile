@@ -69,7 +69,11 @@ module DbAgile
       # @return [void]
       #
       def display(something)
-        writeline(something.inspect)
+        if something.kind_of?(String)
+          writeline(something)
+        else
+          writeline(something.inspect)
+        end
         nil
       end
       

@@ -20,7 +20,9 @@ class DbAgile::Engine::Command::Display < DbAgile::Engine::Command
   # Displays something
   def do_display(engine, what)
     if what.kind_of?(Enumerable)
-      what.each{|o| engine.display(o)}
+      ::DbAgile::PrettyTable::print(what, []).each{|line|
+        engine.display(line)
+      }
     else
       engine.display(what)
     end
