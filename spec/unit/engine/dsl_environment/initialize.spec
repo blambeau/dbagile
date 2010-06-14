@@ -5,7 +5,7 @@ describe "DbAgile::Engine::DslEnvironment#initialize" do
     let(:source) { lambda{ use :AgileTable } }
     subject{ DbAgile::Engine::DslEnvironment.new(source) }
     specify{
-      subject.load_lines.should == [['use', [:AgileTable]]]
+      subject.load_lines.should == [ CodeTree::parse{ (use :AgileTable) } ]
     }
   end
   
@@ -13,7 +13,7 @@ describe "DbAgile::Engine::DslEnvironment#initialize" do
     let(:source) { "use :AgileTable" }
     subject{ DbAgile::Engine::DslEnvironment.new(source) }
     specify{
-      subject.load_lines.should == [['use', [:AgileTable]]]
+      subject.load_lines.should == [ CodeTree::parse{ (use :AgileTable) } ]
     }
   end
   

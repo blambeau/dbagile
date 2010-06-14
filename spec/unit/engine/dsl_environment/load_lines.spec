@@ -9,7 +9,7 @@ describe "DbAgile::Engine::DslEnvironment#load_lines" do
     }
   }
   let(:env){ DbAgile::Engine::DslEnvironment.new(source) }
-  subject{ env.load_lines }
+  subject{ env.load_lines.collect{|node| [node.function.to_s, node.children.collect{|c| c.literal}]} }
   
   it{ should == [
     ['use',     [:AgileTable]],

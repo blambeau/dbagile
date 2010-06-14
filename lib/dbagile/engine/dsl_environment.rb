@@ -1,3 +1,5 @@
+require 'rubygems'
+require 'sbyc'
 module DbAgile
   class Engine
     # 
@@ -8,20 +10,6 @@ module DbAgile
     #
     class DslEnvironment < Environment
       
-      module ACommand; end
-      
-      # DSL used 
-      class DSL; 
-        attr_accessor :lines
-        def self.const_missing(name)
-          if DbAgile::Plugin::const_defined?(name)
-            DbAgile::Plugin::const_get(name)
-          else
-            super
-          end
-        end
-      end
-      
       # Creates the environment instance
       def initialize(dsl_block)
         @dsl_block = dsl_block
@@ -29,35 +17,7 @@ module DbAgile
       
       # Loads lines
       def load_lines
-        dsl = DSL.new
-        dsl.lines = []
-        DbAgile::Engine::COMMANDS.each do |cmd|
-          dsl.instance_eval <<-EOF
-            def #{cmd.name}(*args)
-              the_command = ["#{cmd.name}", args]
-              the_command.extend(ACommand)
-              self.lines << the_command
-            end
-          EOF
-        end
-        begin
-          case @dsl_block
-            when Proc
-              dsl.instance_eval(&@dsl_block)
-            when String
-              dsl.instance_eval(@dsl_block)
-            else
-              raise ArgumentError, "Unable to use #{@dsl_block} as source text"
-          end
-        rescue NameError => ex
-          case ex.name.to_s
-            when /^[a-z]/
-              engine.no_such_command!(ex.name)
-            else
-              engine.error(ex)
-          end
-        end
-        dsl.lines
+        ::CodeTree::parse(@dsl_block,:multiline => true)
       end
       
       # Returns the loaded lines
@@ -68,11 +28,18 @@ module DbAgile
       # Returns the next command
       def next_command(prompt, &continuation)
         cmd = if (lns = lines).empty?
-          ["quit", []]
+          [:quit, []]
         else
-          lns.shift
+          compile(lns.shift)
         end
         return continuation.call(cmd)
+      end
+      
+      # Compiles a CodeTree::AstNode expression
+      def compile(astnode)
+        cmd_name = astnode.function
+        cmd_args = astnode.children.collect{|c| c.literal}
+        [cmd_name, cmd_args]
       end
       
       # This one is silent
