@@ -4,24 +4,24 @@ module DbAgile
   #
   class SequelAdapter < Adapter
     
-    # Default options of this adapter
-    DEFAULT_OPTIONS = {
-      :trace_sql    => false,
-      :trace_only   => false,
-      :trace_buffer => nil
-    }
+    ### CLASS... ###################################################################
+    
+    # Overrided to add a SequelTracer instance if trace is on  
+    def self.new(uri, options = {})
+      if options[:trace_sql]
+        SequelTracer.new(super(uri), options)
+      else
+        super(uri)
+      end
+    end  
     
     # Underlying database URI
     attr_reader :uri
     
-    # Connection options 
-    attr_reader :options
-    
     # Creates an adapter with a given uri
-    def initialize(uri, options = {})
+    def initialize(uri)
       require('sequel')
       @uri = uri
-      @options = DEFAULT_OPTIONS.merge(options)
     end
     
     ### ABOUT CONNECTIONS ########################################################
@@ -109,24 +109,5 @@ module DbAgile
       end
     end
 
-    ### ABOUT TRACING #############################################################
-    
-    # Does the adapter need to trace?
-    def trace?
-      options[:trace_sql] and options[:trace_buffer]
-    end
-    
-    # Traces a SQL statement. Returns true if trace_only, false
-    # otherwise
-    def trace(sql)
-      case out = options[:trace_buffer]
-        when Logger
-          out.info(sql)
-        else
-          out << "#{sql}\n"
-      end
-      options[:trace_only]
-    end
-    
   end # class SequelAdapter
 end # module DbAgile
