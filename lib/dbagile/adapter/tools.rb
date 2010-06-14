@@ -16,7 +16,13 @@ module DbAgile
         proj
       end
       
-      
+      # Extract the key/value pairs that form a key on a tuple, given 
+      # keys information. Returns tuple if no such better tuple can be found.
+      def tuple_key(tuple, keys)
+        return tuple if keys.nil?
+        key = keys.find{|k| k.all?{|a| !tuple[a].nil? }}
+        key.nil? ? tuple : tuple_project(tuple, key)
+      end
       
     end # module Tools
   end # class Adapter

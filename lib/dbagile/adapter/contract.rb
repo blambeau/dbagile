@@ -101,15 +101,6 @@ module DbAgile
         Kernel.raise NotImplementedError
       end
       
-      # #
-      # # Returns a candidate key for a given table.
-      # #
-      # # The default implementation simply returns keys(table_name)[0].
-      # #
-      # def key(table_name)
-      #   keys(table_name)[0]
-      # end
-      
       ### SCHEMA UPDATES ###########################################################
       
       #
