@@ -8,6 +8,12 @@ module DbAgile
         true
       end
       
+      # Asserts that something is false or raises an error
+      def assert_false(something, msg = "Assertion failed")
+        raise(msg) if something
+        true
+      end
+      
       # Prints the backtrace of the last error
       def backtrace
         engine.last_error
@@ -20,8 +26,8 @@ module DbAgile
       end
       
       # Returns true if all args are equal, false otherwise
-      def equal?(*args)
-        args.uniq.size == 1
+      def equal?(arg1, arg2)
+        arg1 == arg2
       end
       
       # Displays an object
@@ -47,6 +53,16 @@ module DbAgile
       def quit
         engine.disconnect
         engine.quit
+      end
+      
+      # Converts something to an array
+      def to_a(what)
+        case what
+          when Symbol, String
+            to_a(sql(what))
+          else
+            what.to_a
+        end
       end
 
     end # module Basics

@@ -1,0 +1,4 @@
+(use AgileTable)
+(insert :tools, {:name => "agiledb"})
+(assert (table_exists? :tools), "The tools table has been created on agile insert")
+(assert (equal? (to_a :tools), [ {:name => "agiledb"} ]), "The tools table contains correct tuples")

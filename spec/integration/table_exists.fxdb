@@ -1,0 +1,4 @@
+(assert       (table_exists? :suppliers))
+(assert       (table_exists? :parts))
+(assert       (table_exists? :supplies))
+(assert_false (table_exists? :no_such_table))

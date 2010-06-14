@@ -2,6 +2,11 @@ module DbAgile
   class Engine
     module Schema
       
+      # Returns true if a table exists, false otherwise
+      def table_exists?(table_name)
+        database.has_table?(table_name)
+      end
+      
       # Executes on main signature
       def define(table_name, heading)
         database.create_table(table_name, heading)

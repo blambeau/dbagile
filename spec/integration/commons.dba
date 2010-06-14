@@ -1,0 +1,31 @@
+# We create the three tables
+define :suppliers, {:'s#' => Integer, :name => String, :status => Integer, :city => String}
+define :parts,     {:'p#' => Integer, :name => String, :color => String, :weight => Float, :city => String}
+define :supplies,  {:'s#' => Integer, :'p#' => Integer, :quantity => Integer}
+
+# We insert the data now...
+insert :suppliers, {:'s#' => 'S1', :name => 'Smith', :status => 20, :city => 'London'}
+insert :suppliers, {:'s#' => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'}
+insert :suppliers, {:'s#' => 'S3', :name => 'Blake', :status => 30, :city => 'Paris'}
+insert :suppliers, {:'s#' => 'S4', :name => 'Clark', :status => 20, :city => 'London'}
+insert :suppliers, {:'s#' => 'S5', :name => 'Adams', :status => 30, :city => 'Athens'}
+
+insert :parts, {:'p#' => 'P1', :name => 'Nut',   :color => 'Red',   :weight => 12.0, :city => 'London'}
+insert :parts, {:'p#' => 'P2', :name => 'Bolt',  :color => 'Green', :weight => 17.0, :city => 'Paris'}
+insert :parts, {:'p#' => 'P3', :name => 'Screw', :color => 'Blue',  :weight => 17.0, :city => 'Oslo'}
+insert :parts, {:'p#' => 'P4', :name => 'Screw', :color => 'Red',   :weight => 14.0, :city => 'London'}
+insert :parts, {:'p#' => 'P5', :name => 'Cam',   :color => 'Blue',  :weight => 12.0, :city => 'Paris'}
+insert :parts, {:'p#' => 'P6', :name => 'Cog',   :color => 'Red',   :weight => 19.0, :city => 'London'}
+
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P1', :quantity => 300}
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P2', :quantity => 200}
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P3', :quantity => 400}
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P4', :quantity => 200}
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P5', :quantity => 100}
+insert :supplies, {:'s#' => 'S1', :'p#' => 'P6', :quantity => 100}
+insert :supplies, {:'s#' => 'S2', :'p#' => 'P1', :quantity => 300}
+insert :supplies, {:'s#' => 'S2', :'p#' => 'P2', :quantity => 400}
+insert :supplies, {:'s#' => 'S3', :'p#' => 'P2', :quantity => 200}
+insert :supplies, {:'s#' => 'S4', :'p#' => 'P2', :quantity => 200}
+insert :supplies, {:'s#' => 'S4', :'p#' => 'P4', :quantity => 300}
+insert :supplies, {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}

@@ -9,10 +9,11 @@ module DbAgile
       
       # Sends a SQL query to the database
       def sql(str)
-        if str =~ /^\s*(SELECT|select)/
-          database.dataset(query)
-        else
-          database.direct_sql(cmd)
+        case str
+          when Symbol, /^[a-z]+$/, /^\s*(SELECT|select)/
+            database.dataset(str)
+          else
+            database.direct_sql(str)
         end
       end
       
