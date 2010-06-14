@@ -35,9 +35,13 @@ module DbAgile
     end
 
     # Checks if a (sub)-tuple exists inside a table.
-    def exists?(table_name, subtuple)
-      heading = subtuple.keys
-      tables[table_name].find{|t| tuple_project(t, heading) == subtuple}
+    def exists?(table_name, subtuple = {})
+      if subtuple.empty?
+        tables[table_name].count != 0
+      else
+        heading = subtuple.keys
+        !tables[table_name].find{|t| tuple_project(t, heading) == subtuple}.nil?
+      end
     end
       
     # Returns available keys for a given table as an array of column 

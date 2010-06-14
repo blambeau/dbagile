@@ -105,7 +105,11 @@ module DbAgile
       # Deletes a projection from a given table
       def delete(table_name, proj)
         if trace?
-          trace(delegate.db[table_name].where(proj).delete_sql) 
+          if proj.empty?
+            trace(delegate.db[table_name].delete_sql) 
+          else
+            trace(delegate.db[table_name].where(proj).delete_sql) 
+          end
         end
         return super unless trace_only?
         true

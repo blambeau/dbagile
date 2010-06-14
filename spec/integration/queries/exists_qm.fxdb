@@ -1,0 +1,12 @@
+(assert "Suppliers is not empty, it exists",
+  (exists? :suppliers))
+  
+(assert "Supplier named Clark exists!",
+  (exists? :suppliers, {:name => 'Clark'}))
+
+(assert_false "Supplier named Clark but living in Oslo does not exist",
+  (exists? :suppliers, {:name => 'Clark', :city => 'Oslo'}))
+  
+(assert_false "Supplier named DbAgile does not exist",
+  (exists? :suppliers, {:name => "DbAgile"}))
+  

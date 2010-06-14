@@ -13,6 +13,11 @@ module DbAgile
             end
         end
       end
+
+      # Inserts some tuples inside a table
+      def delete(table, proj = {})
+        database.delete(table, proj)
+      end
       
     end # module Data
   end # class Engine

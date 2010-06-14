@@ -56,8 +56,12 @@ module DbAgile
     end
       
     # Checks if a (sub)-tuple exists inside a table.
-    def exists?(table_or_query, subtuple)
-      !dataset(table_or_query).where(subtuple).empty?
+    def exists?(table_or_query, subtuple = {})
+      if subtuple.nil? or subtuple.empty?
+        !dataset(table_or_query).empty?
+      else
+        !dataset(table_or_query).where(subtuple).empty?
+      end
     end
     
     ### SCHEMA QUERIES ###########################################################

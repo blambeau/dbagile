@@ -23,7 +23,13 @@ module DbAgile
       
       # Executes on main signature
       def define(table_name, heading)
-        database.create_table(table_name, heading)
+        if table_exists?(table_name)
+          existing_columns = database.column_names(table_name)
+          missing_columns = heading.delete_if{|k,v| existing_columns.include?(k)}
+          database.add_columns(table_name, missing_columns) unless missing_columns.empty?
+        else
+          database.create_table(table_name, heading)
+        end
       end
       
       # Adds a candidate key to a given table

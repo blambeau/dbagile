@@ -60,7 +60,7 @@ module DbAgile
       #
       # @pre if table_or_query is a Symbol, that table exists in the database.
       #
-      def exists?(table_or_query, subtuple)
+      def exists?(table_or_query, subtuple = {})
         Kernel.raise NotImplementedError
       end
       
