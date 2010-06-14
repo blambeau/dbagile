@@ -1,0 +1,4 @@
+(define :my_table, {:id => Integer})
+
+(assert "A table exists just after being created",
+  (table_exists? :my_table))

@@ -1,2 +1,0 @@
-(define :my_table, {:id => Integer})
-(assert (table_exists? :my_table))

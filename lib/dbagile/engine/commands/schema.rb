@@ -2,10 +2,24 @@ module DbAgile
   class Engine
     module Schema
       
+      # ReadOnly methods ###########################################################
+      
       # Returns true if a table exists, false otherwise
       def table_exists?(table_name)
         database.has_table?(table_name)
       end
+      
+      # Returns true if a table exists, false otherwise
+      def keys(table_name)
+        database.keys(table_name)
+      end
+      
+      # Returns true if a table exists, false otherwise
+      def is_key?(table_name, columns)
+        keys(table_name).find{|key| (key -= columns).empty?}
+      end
+      
+      # Update methods #############################################################
       
       # Executes on main signature
       def define(table_name, heading)
@@ -18,6 +32,8 @@ module DbAgile
         engine.columns_exist!(table_name, columns)
         engine.database.key!(table_name, columns)
       end
+      
+      # To be moved methods ########################################################
       
       # Uses a given pluging in the main chain
       def use(plugin, options = {})

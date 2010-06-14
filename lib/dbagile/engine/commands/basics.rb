@@ -4,12 +4,18 @@ module DbAgile
       
       # Asserts that something is true or raises an error
       def assert(something, msg = "Assertion failed")
+        if something.kind_of?(String) and not(msg.kind_of?(String))
+          something, msg = msg, something 
+        end
         raise(msg) unless something
         true
       end
       
       # Asserts that something is false or raises an error
       def assert_false(something, msg = "Assertion failed")
+        if something.kind_of?(String) and not(msg.kind_of?(String))
+          something, msg = msg, something 
+        end
         raise(msg) if something
         true
       end
