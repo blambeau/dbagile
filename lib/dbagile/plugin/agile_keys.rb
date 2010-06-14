@@ -1,7 +1,7 @@
 module DbAgile
   class Plugin
     #
-    # Makes keys flexible by auto detecting and creating keys to create.
+    # Makes keys agile, i.e. auto detects and creates candidate and foreign keys.
     #
     class AgileKeys < Plugin
       
@@ -15,7 +15,7 @@ module DbAgile
         return unless match = options[:candidate]
         which = columns.select{|c| match =~ c.to_s}
         return if which.empty?
-        key(table_name, which)
+        key!(table_name, which)
       end
       
       # Creates a table with some columns. 

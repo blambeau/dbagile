@@ -5,7 +5,7 @@ describe "::DbAgile::Adapter.key" do
   
     describe "When called composite" do
       before(:all){ adapter.create_table(:example, :id => Integer, :name => String) }
-      subject{ adapter.key(:example, [:id, :name]) }
+      subject{ adapter.key!(:example, [:id, :name]) }
       specify{ 
         subject.should be_true
         adapter.insert(:example, :id => 1, :name => "dbagile")

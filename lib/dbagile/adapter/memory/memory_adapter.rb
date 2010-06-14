@@ -34,6 +34,12 @@ module DbAgile
       tables.key?(name)
     end
     
+    # Returns available keys for a given table as an array of column 
+    # names.
+    def keys(table_name)
+      tables[table_name].keys.sort{|a1, a2| a1.size <=> a2.size}
+    end
+
     # Creates a table with some attributes.
     def create_table(name, columns)
       raise ArgumentError, "Table #{name} already exists" if has_table?(name)
@@ -41,7 +47,7 @@ module DbAgile
     end
     
     # Returns false
-    def key(table_name, columns)
+    def key!(table_name, columns)
       raise ArgumentError, "No such table #{table}" unless has_table?(table_name)
       tables[table_name].add_key(columns)
     end

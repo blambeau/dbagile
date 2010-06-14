@@ -1,7 +1,7 @@
 module DbAgile
   class Plugin
     #
-    # Makes a table flexible in the sense that new columns are automatically
+    # Makes a table agile, i.e. ensuring that new columns are automatically
     # added when not existing at insert time.
     #
     class AgileTable < Plugin

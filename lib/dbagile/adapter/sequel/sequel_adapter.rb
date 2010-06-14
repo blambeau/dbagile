@@ -67,6 +67,11 @@ module DbAgile
       sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
     end
     
+    # Returns keys of a table
+    def keys(table_name)
+      db.indexes(table_name).values.select{|i| i[:unique] == true}.collect{|i| i[:columns]}.sort{|a1, a2| a1.size <=> a2.size}
+    end
+    
     ### SCHEMA UPDATES ###########################################################
       
     # Creates a table with some attributes
@@ -88,7 +93,7 @@ module DbAgile
     # 
     # Make columns be a candidate key for the table.
     #
-    def key(table_name, columns)
+    def key!(table_name, columns)
       db.add_index(table_name, columns, {:unique => true})
     end
       

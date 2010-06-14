@@ -90,6 +90,26 @@ module DbAgile
         Kernel.raise NotImplementedError
       end
       
+      #
+      # Returns available keys for a given table as an array of column 
+      # names.
+      #
+      # @param [Symbol] table_name the name of a table
+      # @return [Array<Array<Symbol>>] keys of the table
+      #
+      def keys(table_name)
+        Kernel.raise NotImplementedError
+      end
+      
+      # #
+      # # Returns a candidate key for a given table.
+      # #
+      # # The default implementation simply returns keys(table_name)[0].
+      # #
+      # def key(table_name)
+      #   keys(table_name)[0]
+      # end
+      
       ### SCHEMA UPDATES ###########################################################
       
       #
@@ -132,7 +152,7 @@ module DbAgile
       # @pre the table contains all the columns
       # @post the table has gained the candidate key
       #
-      def key(table_name, columns)
+      def key!(table_name, columns)
         Kernel.raise NotImplementedError
       end
       

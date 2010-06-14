@@ -101,7 +101,7 @@ module DbAgile
       # @pre the table contains all the columns
       # @post the table has gained the candidate key
       #
-      def key(table_name, columns)
+      def key!(table_name, columns)
         if trace?
           trace(alter_table_sql(table_name){ 
             add_index(columns, :unique => true)
