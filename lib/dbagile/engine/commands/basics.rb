@@ -70,6 +70,12 @@ module DbAgile
             what.to_a
         end
       end
+      
+      # Sorts an array of tuples by some attribute
+      def sort_on(tuples, attr1)
+        tuples = to_a(tuples)
+        tuples.sort{|t1,t2| t1[attr1] <=> t2[attr1]}
+      end
 
     end # module Basics
   end # class Engine

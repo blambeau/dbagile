@@ -2,3 +2,8 @@
 
 (assert "A table exists just after being created",
   (table_exists? :my_table))
+  
+(define :my_table, {:name => String})
+(assert "Defining an existing table is supported",
+  (equal? [:id, :name],
+          (colnames :my_table)))

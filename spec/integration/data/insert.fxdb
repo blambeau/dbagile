@@ -1,0 +1,13 @@
+(define :example, {:id => Integer})
+
+(insert :example, {:id => 1})
+(assert "Single tuple insertion is supported",
+  (equal? [ {:id => 1} ],
+          (to_a :example)
+  ))
+
+(insert :example, [{:id => 2}, {:id => 3}])
+(assert "Multiple tuple insertion is supported",
+  (equal? [ {:id => 1}, {:id => 2}, {:id => 3} ],
+          (to_a :example)
+  ))

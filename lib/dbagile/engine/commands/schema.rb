@@ -9,6 +9,11 @@ module DbAgile
         database.has_table?(table_name)
       end
       
+      # Returns the column names of a table
+      def colnames(table_name)
+        database.column_names(table_name, true)
+      end
+      
       # Returns true if a table exists, false otherwise
       def keys(table_name)
         database.keys(table_name)

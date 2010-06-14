@@ -1,0 +1,11 @@
+(define :example, {:id => Integer, :name => String})
+(insert :example, [
+  {:id => 1, :name => "dbagile"},
+  {:id => 2, :name => "sequel"}
+])
+
+(update :example, {:id => 1}, {:name => "DbAgile"})
+(assert "Update has been done on one tuple only",
+  (equal? [ {:id => 1, :name => "DbAgile"},
+            {:id => 2, :name => "sequel"} ],
+          (sort_on (to_a :example), :id)))
