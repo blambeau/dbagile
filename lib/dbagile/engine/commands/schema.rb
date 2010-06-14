@@ -21,7 +21,7 @@ module DbAgile
       
       # Returns true if a table exists, false otherwise
       def is_key?(table_name, columns)
-        keys(table_name).find{|key| (key -= columns).empty?}
+        !!keys(table_name).find{|key| (key -= columns).empty?}
       end
       
       # Update methods #############################################################
