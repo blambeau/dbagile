@@ -19,6 +19,11 @@ module DbAgile
         database.delete(table, proj)
       end
       
+      # Updates some tuples of a table
+      def update(table, proj = {}, update = {})
+        database.update(table, proj, update)
+      end
+      
     end # module Data
   end # class Engine
 end # module DbAgile
