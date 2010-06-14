@@ -10,6 +10,13 @@ module DbAgile
     #
     class Environment
       
+      # Defines the shortcut commands
+      SHORTCUTS = {
+        '\c' => 'connect',
+        '\h' => 'help',
+        '\q' => 'quit'
+      }
+      
       # The engine which is currently running
       attr_accessor :engine
       
@@ -98,16 +105,11 @@ module DbAgile
       # @return [Array] the parsed command pair [:command_name, args]
       #
       def parse_command(line)
-        if line =~ /^([^\s]+)\s*(.*)$/
-          begin
-            cmd, args = $1, Kernel.eval("[#{$2}]").compact
-            [cmd, args]
-          rescue Exception => ex
-            engine.invalid_command!(line)
-          end
-        else
-          engine.invalid_command!(line)
+        if line =~ /^\s*(\\[^\s]*)\s*(.*)$/
+          engine.no_such_command!(line) unless SHORTCUTS.key?($1)
+          line = "#{SHORTCUTS[$1]} #{$2}"
         end
+        CodeTree::parse(line)
       end
 
       # 

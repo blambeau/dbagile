@@ -2,26 +2,9 @@ require 'dbagile/engine/errors'
 require 'dbagile/engine/environment'
 require 'dbagile/engine/console_environment'
 require 'dbagile/engine/dsl_environment'
-require 'dbagile/engine/signature'
-require 'dbagile/engine/command'
+require 'dbagile/engine/runner'
 module DbAgile
   class Engine
-    
-    # Loading ######################################################################
-
-    # All commands defined 
-    COMMANDS = []
-    
-    # Install all commands now
-    DbAgile::Engine::Command::constants.each do |c|
-      # find the command, bypass non commands
-      c = DbAgile::Engine::Command::const_get(c)
-      next unless c.kind_of?(Class)
-      next unless c.superclass == Command
-      
-      # Adds the command instance now
-      COMMANDS << c.new
-    end
     
     # Class ########################################################################
 
@@ -101,46 +84,6 @@ module DbAgile
       raise InvalidCommandError, "Invalid command: #{line}"
     end
     
-    # Commands #####################################################################
-    
-    #
-    # Find a command by its name. Yields the block with found command if a block is
-    # given. 
-    #
-    # @param name [Symbol|String] a command name
-    # @return the command when no block is given, block result otherwise.
-    # @raise ArgumentError if the command cannot be found
-    #
-    def find_command(name)
-      cmd = COMMANDS.find{|c| c.names.include?(name.to_s)}
-      no_such_command!(name) if cmd.nil?
-      block_given? ? yield(cmd) : cmd
-    end
-    
-    # Yields the block with each command in turn
-    def each_command(sorted_by_name = false, &block)
-      sorted_by_name ? COMMANDS.sort{|cmd1,cmd2| cmd1.name.to_s <=> cmd2.name.to_s}.each(&block) : COMMANDS.each(&block)
-    end
-    
-    #
-    # Finds a command based on a name, find the execution method through signature
-    # matching.
-    #
-    # @return [Command, Symbol, Array] a triple [cmd, execution_method, args]
-    # @raise ArgumentError if the command cannot be found or the signature does 
-    #         not match
-    #  
-    def prepare_command_exec(command_name, args)
-      cmd = find_command(command_name)
-      cmd.signatures.each_with_index do |s, i|
-        next unless hash_args = s.match(args)
-        new_args = s.match_to_args(hash_args)
-        return [cmd, "execute_#{i+1}".to_sym, new_args]
-      end
-      execute_command('help', [command_name])
-      invalid_command!("#{command_name} #{args.inspect}")
-    end
-
     # Env delegate #################################################################
     
     # Delegated to env
@@ -167,11 +110,12 @@ module DbAgile
     
     # Executes a specific command
     def execute_command(cmd, args)
-      cmd, method, args = prepare_command_exec(cmd, args || [])
-      return unless cmd
-      res = cmd.send(method, *args.unshift(self))
-      env.say(res.inspect) unless res.nil?
-      res
+      if @runner.respond_to?(cmd.to_s.to_sym)
+        res = @runner.send(cmd, *args)
+        res
+      else
+        no_such_command!(cmd)
+      end
     end
     
     # Compiles an AstNode to a command with arguments
@@ -179,7 +123,7 @@ module DbAgile
       astnode.visit{|node, collected|
         case node.function
           when :'?'
-            no_such_command!(node.function)
+            execute_command(node.literal, [])
           when :'_'
             node.literal
           else
@@ -190,7 +134,7 @@ module DbAgile
     
     # Executes on a given environment
     def execute
-      @quit = false
+      @quit, @runner = false, Engine::Runner.new(self)
       until @quit
         begin
           env.next_command("dbagile=# ") do |cmd|
@@ -208,6 +152,7 @@ module DbAgile
           raise res unless res.nil?
         end
       end
+      @runner = nil
       env.save_history if env.respond_to?(:save_history)
     end
     

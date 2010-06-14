@@ -9,21 +9,14 @@ describe "DbAgile::Engine::Environment#ask" do
   context "when called with a command without argument" do
     before{ env.input_lines = ["quit"] }
     specify{ 
-      env.next_command("prompt> "){|cmd| cmd.should == ['quit', []] }
+      env.next_command("prompt> "){|cmd| cmd.should == CodeTree::parse('quit') }
     }
   end
   
   context "when called with a command with one argument" do
     before{ env.input_lines = ["display :table"] }
     specify{ 
-      env.next_command("prompt> "){|cmd| cmd.should == ['display', [:table]] }
-    }
-  end
-  
-  context "when called with a command with multiple arguments" do
-    before{ env.input_lines = ["insert :table, {:id => 12}"] }
-    specify{ 
-      env.next_command("prompt> "){|cmd| cmd.should == ['insert', [:table, {:id => 12}]] }
+      env.next_command("prompt> "){|cmd| cmd.should == CodeTree::parse('display :table') }
     }
   end
   
