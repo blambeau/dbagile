@@ -118,6 +118,7 @@ module DbAgile
             engine.execute
           rescue Exception => ex
             puts ex.message
+            puts ex.backtrace.join("\n")
           end
         end
       end

@@ -171,6 +171,21 @@ module DbAgile
       return unless cmd
       res = cmd.send(method, *args.unshift(self))
       env.say(res.inspect) unless res.nil?
+      res
+    end
+    
+    # Compiles an AstNode to a command with arguments
+    def compile_and_execute(astnode)
+      astnode.visit{|node, collected|
+        case node.function
+          when :'?'
+            no_such_command!(node.function)
+          when :'_'
+            node.literal
+          else
+            execute_command(node.function, collected)
+        end
+      }
     end
     
     # Executes on a given environment
@@ -179,7 +194,13 @@ module DbAgile
       until @quit
         begin
           env.next_command("dbagile=# ") do |cmd|
-            execute_command(*cmd) if cmd
+            case cmd
+              when NilClass
+              when Array
+                execute_command(*cmd)
+              when CodeTree::AstNode
+                compile_and_execute(cmd)
+            end
           end
         rescue Exception => ex
           @last_error = ex

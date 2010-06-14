@@ -35,7 +35,6 @@ module DbAgile
       columns ||= records.first.keys.sort_by{|x|x.to_s}
       sizes = column_sizes(records, columns)
       sep_line = separator_line(columns, sizes)
-      buffer = ""
       buffer << sep_line << "\n"
       buffer << header_line(columns, sizes) << "\n"
       buffer << sep_line << "\n"

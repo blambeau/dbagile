@@ -32,6 +32,11 @@ module DbAgile
   module_function :connect
   
 end # module DbAgile
+
+require 'rubygems'
+gem "sbyc", ">= 0.1.2"
+require 'sbyc'
+
 require 'dbagile/ext/object'
 require 'dbagile/utils'
 require 'dbagile/adapter'

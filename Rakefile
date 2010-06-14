@@ -44,6 +44,8 @@ gemspec = Gem::Specification.new do |s|
   s.author = "Bernard Lambeau"
   s.email = "blambeau@gmail.com"
   s.homepage = "http://github.com/blambeau/dbagile"
+  s.add_dependency('sbyc', '>= 0.1.2')
+  s.add_dependency('sequel', '>= 0.3.8')
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true

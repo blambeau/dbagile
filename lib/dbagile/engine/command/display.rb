@@ -19,10 +19,8 @@ class DbAgile::Engine::Command::Display < DbAgile::Engine::Command
   
   # Displays something
   def do_display(engine, what)
-    if what.kind_of?(Enumerable)
-      ::DbAgile::PrettyTable::print(what, []).each{|line|
-        engine.display(line)
-      }
+    if what.respond_to?(:each)
+      ::DbAgile::PrettyTable::print(what, []).each{|line| engine.display(line)}
     else
       engine.display(what)
     end

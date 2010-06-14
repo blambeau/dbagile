@@ -1,5 +1,3 @@
-require 'rubygems'
-require 'sbyc'
 module DbAgile
   class Engine
     # 
@@ -30,16 +28,9 @@ module DbAgile
         cmd = if (lns = lines).empty?
           [:quit, []]
         else
-          compile(lns.shift)
+          lns.shift
         end
         return continuation.call(cmd)
-      end
-      
-      # Compiles a CodeTree::AstNode expression
-      def compile(astnode)
-        cmd_name = astnode.function
-        cmd_args = astnode.children.collect{|c| c.literal}
-        [cmd_name, cmd_args]
       end
       
       # This one is silent
