@@ -36,6 +36,15 @@ module DbAgile
         @buffer ||= @options[:trace_buffer]
       end
       
+      ### UTILS ####################################################################
+      
+      # Returns SQL statement for a given alter table block
+      def alter_table_sql(table_name, &block)
+        generator = ::Sequel::Schema::AlterTableGenerator.new(self, &block)
+        sqls = delegate.db.send(:alter_table_sql_list, table_name, generator.operations).flatten
+        sqls.join("\n")
+      end
+      
       ### SCHEMA UPDATES ###########################################################
       
       #
@@ -50,11 +59,14 @@ module DbAgile
       #
       def create_table(table_name, columns)
         if trace?
-          gen = ::Sequel::Schema::Generator.new(self){columns.each_pair{|name, type| column(name, type)}}
+          gen = ::Sequel::Schema::Generator.new(self){
+            columns.each_pair{|name, type| column(name, type)}
+          }
           sql = delegate.db.send(:create_table_sql, table_name, gen, {})
           trace(sql)
         end
-        super unless trace_only?
+        return super unless trace_only?
+        nil
       end
       
       #
@@ -69,7 +81,13 @@ module DbAgile
       # @post the table has gained the additional columns
       #
       def add_columns(table_name, columns)
-        super unless trace_only?
+        if trace?
+          trace(alter_table_sql(table_name){ 
+            columns.each_pair{|name, type| add_column(name, type)}
+          })
+        end
+        return super unless trace_only?
+        nil
       end
       
       # 
@@ -84,7 +102,13 @@ module DbAgile
       # @post the table has gained the candidate key
       #
       def key(table_name, columns)
-        super unless trace_only?
+        if trace?
+          trace(alter_table_sql(table_name){ 
+            add_index(columns, :unique => true)
+          })
+        end
+        return super unless trace_only?
+        nil
       end
       
       ### DATA UPDATES #############################################################
@@ -101,7 +125,11 @@ module DbAgile
       # @post the record has been inserted.
       #
       def insert(table_name, record)
-        super unless trace_only?
+        if trace?
+          trace(delegate.db[table_name].insert_sql(record)) 
+        end
+        return super unless trace_only?
+        record
       end
       
       #
@@ -113,8 +141,11 @@ module DbAgile
       # @return [...] adapter defined
       #
       def direct_sql(sql)
-        trace(sql) if trace?
-        super unless trace_only?
+        if trace?
+          trace(sql)
+        end
+        return super unless trace_only?
+        nil
       end
     
       ### ABOUT TRACING ############################################################
