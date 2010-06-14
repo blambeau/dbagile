@@ -179,6 +179,22 @@ module DbAgile
       end
       
       #
+      # Updates all tuples whose projection equal _proj_ with values given by _update_ 
+      # inside a given table
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Hash] proj a projection of the table
+      # @return [Hash] update the new values for tuples
+      #
+      # @pre the database contains a table with that name
+      # @pre update and proj tuples are valid projections of the table
+      # @post all records have been updated.
+      #
+      def update(table_name, proj, update)
+        Kernel.raise NotImplementedError
+      end
+      
+      #
       # Send SQL directly to the database SQL server.
       #
       # Returned result is left opened to adapters.

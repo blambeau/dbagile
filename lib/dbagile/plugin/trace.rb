@@ -44,17 +44,7 @@ module DbAgile
         x
       end
       
-      # 
-      # Make columns be a candidate key for the table.
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Array<Symbol>] columns column names
-      # @return [Boolean] true to indicate that everything is fine
-      #
-      # @pre the database contains a table with that name
-      # @pre the table contains all the columns
-      # @post the table has gained the candidate key
-      #
+      # Makes columns be a candidate key for the table.
       def key!(table_name, columns)
         logger.info("Creating key #{table_name}::#{columns.inspect} : #{(x = super).inspect}")
         x
@@ -62,30 +52,20 @@ module DbAgile
       
       ### DATA UPDATES #############################################################
       
-      #
       # Inserts a tuple inside a given table
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Hash] record a record as a hash (column_name -> value)
-      # @return [Hash] inserted record as a hash
-      #
-      # @pre the database contains a table with that name
-      # @pre the record is valid for the table
-      # @post the record has been inserted.
-      #
       def insert(table_name, record)
         logger.debug("Inserting #{table_name}::#{record.inspect} : #{(x = super).inspect}")
         x
       end
       
-      #
-      # Send SQL directly to the database SQL server.
-      #
-      # Returned result is left opened to adapters.
-      #
-      # @param [String] sql a SQL query
-      # @return [...] adapter defined
-      #
+      # Updates all tuples whose projection equal _proj_ with values given by _update_ 
+      # inside a given table
+      def update(table_name, proj, update)
+        logger.debug("Updating #{table_name}::#{update.inspect} where #{proj.inspect} : #{(x = super).inspect}")
+        x
+      end
+      
+      # Sends SQL directly to the database SQL server.
       def direct_sql(sql)
         logger.debug("SQL direct #{sql}: #{(x = super).inspect}")
         x

@@ -110,6 +110,12 @@ module DbAgile
       tuple
     end
     
+    # Updates all tuples whose projection equal _proj_ with values given by _update_ 
+    # inside a given table
+    def update(table_name, proj, update)
+      db[table_name].where(proj).update(update)
+    end
+    
     # Send SQL directly to the database SQL server
     def direct_sql(sql)
       if /^\s*(select|SELECT)/ =~ sql

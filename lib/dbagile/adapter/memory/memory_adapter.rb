@@ -76,6 +76,16 @@ module DbAgile
       tables[table].insert(tuple)
     end
     
+    # Updates all tuples whose projection equal _proj_ with values given by _update_ 
+    # inside a given table
+    def update(table_name, proj, update)
+      heading = proj.keys
+      tables[table_name].tuples.each{|t|
+        t.merge!(update) if tuple_project(t, heading) == proj
+      }
+      true
+    end
+      
     # Send SQL directly to the database SQL server
     def direct_sql(sql)
       raise NotImplementedError

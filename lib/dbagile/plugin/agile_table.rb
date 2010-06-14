@@ -29,6 +29,12 @@ module DbAgile
         delegate.insert(table, tuple)
       end
       
+      # Makes an update inside a table
+      def update(table, proj, update)
+        ensure_columns(table, update)
+        delegate.update(table, proj, update)
+      end
+      
       private :ensure_columns
     end # class AgileTable
   end # class Plugin
