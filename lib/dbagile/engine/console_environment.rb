@@ -62,7 +62,7 @@ module DbAgile
           something = highline.color(something, color) if color
           highline.say(something)
         else
-          puts something.to_s
+          STDOUT << something.to_s
         end
       end
       

@@ -133,7 +133,7 @@ module DbAgile
       # @param [String] something a message to display
       #
       def writeline(something, color = nil)
-        STDOUT << something << "\n"
+        STDOUT << something
       end
 
     end # class Environment
