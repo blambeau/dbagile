@@ -60,6 +60,11 @@ module DbAgile
         tuple
       end
       
+      # Truncates the table
+      def truncate!
+        @tuples = []
+      end
+      
       # Counts the number of tuples
       def count
         tuples.size

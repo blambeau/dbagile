@@ -86,6 +86,19 @@ module DbAgile
       true
     end
       
+    # Deletes all tuples whose projection equal _proj_ inside a given table
+    def delete(table_name, proj)
+      if proj.empty?
+        tables[table_name].truncate!
+      else
+        heading = proj.keys
+        tables[table_name].tuples.reject!{|t|
+          tuple_project(t, heading) == proj
+        }
+      end
+      true
+    end
+
     # Send SQL directly to the database SQL server
     def direct_sql(sql)
       raise NotImplementedError

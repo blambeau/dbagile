@@ -116,6 +116,16 @@ module DbAgile
       db[table_name].where(proj).update(update)
     end
     
+    # Deletes all tuples whose projection equal _proj_ inside a given table
+    def delete(table_name, proj)
+      if proj.empty?
+        db[table_name].delete
+      else
+        db[table_name].where(proj).delete
+      end
+      true
+    end
+      
     # Send SQL directly to the database SQL server
     def direct_sql(sql)
       if /^\s*(select|SELECT)/ =~ sql

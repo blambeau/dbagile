@@ -183,7 +183,7 @@ module DbAgile
       # inside a given table
       #
       # @param [Symbol] table_name the name of a table
-      # @param [Hash] proj a projection of the table
+      # @param [Hash] proj a projection tuple
       # @return [Hash] update the new values for tuples
       #
       # @pre the database contains a table with that name
@@ -191,6 +191,20 @@ module DbAgile
       # @post all records have been updated.
       #
       def update(table_name, proj, update)
+        Kernel.raise NotImplementedError
+      end
+      
+      #
+      # Delete all tuples whose projection equal _proj_ inside a given table
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Hash] proj a projection tuple
+      #
+      # @pre the database contains a table with that name
+      # @pre projection tuple is a valid projection for the table
+      # @post all records have been updated.
+      #
+      def delete(table_name, proj)
         Kernel.raise NotImplementedError
       end
       

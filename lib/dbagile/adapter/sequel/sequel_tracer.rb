@@ -47,16 +47,7 @@ module DbAgile
       
       ### SCHEMA UPDATES ###########################################################
       
-      #
       # Creates a table with some columns. 
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Hash] columns column definitions
-      # @return [Boolean] true to indicate that everything is fine
-      #
-      # @pre the database does not contain a table with that name
-      # @post the database contains a table with specified columns
-      #
       def create_table(table_name, columns)
         if trace?
           gen = ::Sequel::Schema::Generator.new(self){
@@ -69,17 +60,7 @@ module DbAgile
         nil
       end
       
-      #
       # Adds some columns to a table
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Hash] columns column definitions
-      # @return [Boolean] true to indicate that everything is fine
-      #
-      # @pre the database contains a table with that name
-      # @pre the table does not contain any of the columns
-      # @post the table has gained the additional columns
-      #
       def add_columns(table_name, columns)
         if trace?
           trace(alter_table_sql(table_name){ 
@@ -90,17 +71,7 @@ module DbAgile
         nil
       end
       
-      # 
       # Make columns be a candidate key for the table.
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Array<Symbol>] columns column names
-      # @return [Boolean] true to indicate that everything is fine
-      #
-      # @pre the database contains a table with that name
-      # @pre the table contains all the columns
-      # @post the table has gained the candidate key
-      #
       def key!(table_name, columns)
         if trace?
           trace(alter_table_sql(table_name){ 
@@ -113,17 +84,7 @@ module DbAgile
       
       ### DATA UPDATES #############################################################
       
-      #
       # Inserts a tuple inside a given table
-      #
-      # @param [Symbol] table_name the name of a table
-      # @param [Hash] record a record as a hash (column_name -> value)
-      # @return [Hash] inserted record as a hash
-      #
-      # @pre the database contains a table with that name
-      # @pre the record is valid for the table
-      # @post the record has been inserted.
-      #
       def insert(table_name, record)
         if trace?
           trace(delegate.db[table_name].insert_sql(record)) 
@@ -132,14 +93,25 @@ module DbAgile
         record
       end
       
-      #
-      # Send SQL directly to the database SQL server.
-      #
-      # Returned result is left opened to adapters.
-      #
-      # @param [String] sql a SQL query
-      # @return [...] adapter defined
-      #
+      # Updates a project of a given table
+      def update(table_name, proj, update)
+        if trace?
+          trace(delegate.db[table_name].where(proj).update_sql(update)) 
+        end
+        return super unless trace_only?
+        true
+      end
+      
+      # Deletes a projection from a given table
+      def delete(table_name, proj)
+        if trace?
+          trace(delegate.db[table_name].where(proj).delete_sql) 
+        end
+        return super unless trace_only?
+        true
+      end
+      
+      # Sends SQL directly to the database SQL server.
       def direct_sql(sql)
         if trace?
           trace(sql)
