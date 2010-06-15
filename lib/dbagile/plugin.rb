@@ -9,9 +9,6 @@ module DbAgile
     # Plugin options
     attr_reader :options
     
-    # Next brick in the chain
-    attr_reader :delegate
-    
     # Creates a brick instance with a given delegate
     def initialize(delegate, options = {})
       @options = default_options.merge(options)

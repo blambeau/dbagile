@@ -12,9 +12,6 @@ module DbAgile
         :trace_buffer => nil
       }
       
-      # Delegation to SequelAdapter
-      attr_reader :delegate
-      
       # Creates a tracer instance
       def initialize(delegate, options)
         @delegate = delegate
