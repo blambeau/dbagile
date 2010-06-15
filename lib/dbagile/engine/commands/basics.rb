@@ -42,7 +42,7 @@ module DbAgile
           when Exception
             engine.display("#{what.message}\n" << what.backtrace.join("\n"))
           when ::Sequel::Dataset
-            ::DbAgile::PrettyTable::print(what, []).each{|line| engine.display(line)}
+            engine.display(::DbAgile::PrettyTable::print(what, []).join(""))
           when Symbol, String
             display(database.dataset(what))
           else
