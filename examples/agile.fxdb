@@ -3,14 +3,19 @@
 # First, we connect a database
 (connect "sqlite://standard.db")
 
-# We create the three tables
-# use Trace
+# Columns that end with '#' form a (composite) key 
 (use AgileKeys, {:candidate => /[#]$/})
+
+# Tables are automatically created and extended at insert and 
+# update time
 (use AgileTable)
+
+# The following columns are automatically added at insert time
+# on all tables
 (use Defaults,  {:now => Defaults::now})
 
-# We insert the data now...
-(insert :suppliers, [
+# Known facts about suppliers
+(fact! :suppliers, [
   {:'s#' => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
   {:'s#' => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'},
   {:'s#' => 'S3', :name => 'Blake', :status => 30, :city => 'Paris'},
@@ -18,7 +23,8 @@
   {:'s#' => 'S5', :name => 'Adams', :status => 30, :city => 'Athens'}
 ])
 
-(insert :parts, [
+# Known facts about parts
+(fact! :parts, [
   {:'p#' => 'P1', :name => 'Nut',   :color => 'Red',   :weight => 12.0, :city => 'London'},
   {:'p#' => 'P2', :name => 'Bolt',  :color => 'Green', :weight => 17.0, :city => 'Paris'},
   {:'p#' => 'P3', :name => 'Screw', :color => 'Blue',  :weight => 17.0, :city => 'Oslo'},
@@ -27,7 +33,8 @@
   {:'p#' => 'P6', :name => 'Cog',   :color => 'Red',   :weight => 19.0, :city => 'London'}
 ])
 
-(insert :supplies, [
+# Known facts about suppliers
+(fact! :supplies, [
   {:'s#' => 'S1', :'p#' => 'P1', :quantity => 300},
   {:'s#' => 'S1', :'p#' => 'P2', :quantity => 200},
   {:'s#' => 'S1', :'p#' => 'P3', :quantity => 400},
@@ -42,8 +49,7 @@
   {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}
 ])
 
-(assert (exists? :suppliers, :name => 'Clark'), "Clark supplier exists")
-
+# Display contents of the fact tables
 (display :suppliers)
 (display :parts)
 (display :supplies)
