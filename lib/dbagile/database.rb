@@ -4,7 +4,7 @@ module DbAgile
     
     # Creates a database instance with an underlying adapter
     def initialize(delegate)
-      @delegate = delegate
+      @delegate = DelegateChain.new(delegate)
     end
     
     # Disconnect from the database
@@ -13,8 +13,8 @@ module DbAgile
     end
     
     # Adds a brick inside the global chain
-    def __insert_in_main_chain(clazz, *args)
-      @delegate = clazz.new(@delegate, *args)
+    def unshift_delegate(clazz, *args)
+      delegate.unshift_delegate(clazz.new(delegate, *args))
     end
     
     # Starts an engine instance on this database and 

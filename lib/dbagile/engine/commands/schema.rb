@@ -49,7 +49,7 @@ module DbAgile
       # Uses a given pluging in the main chain
       def use(plugin, *args)
         plugin = DbAgile::Plugin.const_get(plugin) if plugin.kind_of?(Symbol)
-        database.__insert_in_main_chain(plugin, *args)
+        database.unshift_delegate(plugin, *args)
         true
       end
       
