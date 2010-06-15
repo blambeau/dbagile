@@ -18,8 +18,8 @@ module DbAgile
       end
       
       # Delegated to database
-      def dataset(query)
-        database.dataset(query)
+      def dataset(query, proj = nil)
+        database.dataset(query, proj)
       end
       
       # Sends a SQL query to the database
