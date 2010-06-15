@@ -24,9 +24,14 @@ module DbAgile
     end
     
     # Returns a Dataset object for a given table
-    def dataset(table)
+    def dataset(table, proj = nil)
       raise ArgumentError, "No such table #{table}" unless has_table?(table)
-      tables[table]
+      if proj.nil?
+        tables[table]
+      else
+        keys = proj.keys
+        tables[table].select{|t| tuple_project(t, keys) == proj}
+      end
     end
     
     # Returns true if a table exists, false otherwise

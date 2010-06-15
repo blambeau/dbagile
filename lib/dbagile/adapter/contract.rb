@@ -42,11 +42,12 @@ module DbAgile
       # - to_a: returns an array of hashes representing records
       #
       # @param [Symbol | String] table_or_query name of a table or query string
+      # @param [Hash | nil] a tuple projection for query restriction
       # @return [...] a dataset object with query (execution result)
       #
       # @pre if table_or_query is a Symbol, that table exists in the database.
       #
-      def dataset(table_or_query)
+      def dataset(table_or_query, proj = nil)
         Kernel.raise NotImplementedError
       end
       

@@ -45,13 +45,13 @@ module DbAgile
     ### ABOUT QUERIES ############################################################
       
     # Returns a Dataset object for a given table
-    def dataset(table)
+    def dataset(table, proj = nil)
       case table
         when Symbol
           raise ArgumentError, "No such table #{table}" unless has_table?(table)
-          db[table]
+          proj.nil? ? db[table] : db[table].where(proj)
         else
-          db[table]
+          proj.nil? ? db[table] : db[table].where(proj)
       end
     end
       

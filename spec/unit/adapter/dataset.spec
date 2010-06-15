@@ -23,6 +23,17 @@ describe "::DbAgile::Adapter.dataset" do
         adapter.dataset(:example).to_a.should == [{:id => 1}]
       }
     end
+
+    describe "When called with a pojection tuple" do
+      before{ 
+        adapter.create_table(:example2, :id => Integer) 
+        adapter.insert(:example2, :id => 1)
+      }
+      specify{
+        adapter.dataset(:example2, {:id => 1}).to_a.should == [{:id => 1}]
+        adapter.dataset(:example2, {:id => 2}).to_a.should be_empty
+      }
+    end
   
   end
   
