@@ -4,15 +4,16 @@
 (connect "sqlite://standard.db")
 
 # Columns that end with '#' form a (composite) key 
-(use AgileKeys, {:candidate => /[#]$/})
+(plug AgileKeys, {:candidate => /[#]$/})
 
 # Tables are automatically created and extended at insert and 
 # update time
-(use AgileTable)
+(plug AgileTable)
 
 # The following columns are automatically added at insert time
 # on all tables
-(use Defaults,  {:now => Defaults::now})
+(plug Defaults,  {:now => Defaults::now})
+(plug :supplies, Touch, {:last_update => Touch::now})
 
 # Known facts about suppliers
 (fact! :suppliers, [
