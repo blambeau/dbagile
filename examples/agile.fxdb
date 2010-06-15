@@ -1,7 +1,7 @@
 #!/usr/bin/env dbagile
 
 # First, we connect a database
-(connect "sqlite://standard.db")
+(connect "sqlite://suppliers.db")
 
 # Columns that end with '#' form a (composite) key 
 (plug AgileKeys, {:candidate => /[#]$/})

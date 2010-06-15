@@ -6,6 +6,9 @@ module DbAgile
     def initialize(delegate)
       @delegate = DbAgile::Adapter::DelegateChain.new(delegate)
       @table_chains = {}
+      unshift_table_delegate(:dbagile_sequences, 
+        Plugin::AgileKeys[:candidate => /[#]$/],
+        Plugin::AgileTable)
     end
     
     # Disconnect from the database
@@ -65,6 +68,23 @@ module DbAgile
       self
     end
     
+    ### SCHEMA UPDATES ###########################################################
+    
+    # Creates a table with some columns. 
+    def create_table(table_name, *args)
+      find_delegate(table_name).create_table(table_name, *args)
+    end
+    
+    # Adds some columns to a table
+    def add_columns(table_name, *args)
+      find_delegate(table_name).add_columns(table_name, *args)
+    end
+    
+    # Make columns be a candidate key for the table.
+    def key!(table_name, *args)
+      find_delegate(table_name).key!(table_name, *args)
+    end
+
     ### DATA UPDATES #############################################################
     
     # Inserts a tuple inside a given table
