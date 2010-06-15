@@ -53,6 +53,19 @@ module DbAgile
         true
       end
       
+      # Plugs something in the chain
+      def plug(*args)
+        tables = []
+        while args[0].kind_of?(Symbol)
+          tables << args.shift
+        end
+        if tables.empty?
+          database.unshift_main_delegate(*args)
+        else
+          tables.each{|t| database.unshift_table_delegate(t, *args)}
+        end
+      end
+      
     end # module Schema
   end # class Engine
 end # module DbAgile
