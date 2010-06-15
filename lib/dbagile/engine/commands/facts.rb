@@ -9,12 +9,17 @@ module DbAgile
       
       # Asserts that a fact exists
       def fact!(table, tuple)
-        define(table, tuple_heading(tuple))
-        key = tuple_key(tuple, keys(table))
-        if exists?(table, key)
-          update(table, key, tuple)
-        else
-          insert(table, tuple)
+        case tuple
+          when Array
+            tuple.each{|t| fact!(table, t) }
+          when Hash
+          define(table, tuple_heading(tuple))
+          key = tuple_key(tuple, keys(table))
+          if exists?(table, key)
+            update(table, key, tuple)
+          else
+            insert(table, tuple)
+          end
         end
       end
       
