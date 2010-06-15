@@ -9,6 +9,11 @@ module DbAgile
     # Plugin options
     attr_reader :options
     
+    # Returns an instance
+    def self.[](*args)
+      self.new(nil, *args)
+    end
+    
     # Creates a brick instance with a given delegate
     def initialize(delegate, options = {})
       @options = default_options.merge(options)

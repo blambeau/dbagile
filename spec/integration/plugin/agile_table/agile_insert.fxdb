@@ -1,4 +1,4 @@
-(use AgileTable)
+(plug AgileTable)
 
 (insert :tools, {:name => "agiledb"})
 (assert "The tools table has been created on agile insert",

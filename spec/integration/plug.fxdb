@@ -1,5 +1,5 @@
 (plug AgileTable)
-(plug :example, Defaults, {:now => "now"})
+(plug :example, Defaults[:now => "now"])
 
 (insert :example, :id => 1)
 (assert "Now is inserted in :example table", 

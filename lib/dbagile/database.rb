@@ -18,21 +18,42 @@ module DbAgile
       @table_chains[table_name] || @delegate
     end
     
+    # Build delegates from a set of arguments
+    def build_delegates(*args)
+      delegates = []
+      until args.empty?
+        case args[0]
+          when ::DbAgile::Plugin
+            delegates << args.shift
+          when Module
+            mod = args.shift
+            mod_args = []
+            until args.empty? or args[0].kind_of?(Module) or args[0].kind_of?(::DbAgile::Plugin)
+              mod_args << args.shift
+            end
+            delegates << mod.new(nil, *mod_args)
+        end
+      end
+      delegates
+    end
+    
     # Adds a brick inside the global chain
-    def unshift_main_delegate(clazz, *args)
-      newone = clazz.new(delegate.delegate, *args)
-      delegate.unshift_delegate(newone)
+    def unshift_main_delegate(*args)
+      build_delegates(*args).each{|newone|
+        delegate.unshift_delegate(newone)
+      }
     end
     
     # Unshifts a table delegate
-    def unshift_table_delegate(table, clazz, *args)
+    def unshift_table_delegate(table, *args)
       # 1) Force a chain delegate on main chain if no chain for that table
       @table_chains[table] = DbAgile::Adapter::DelegateChain.new(delegate)\
         unless @table_chains.key?(table)
 
       # 2) Install the newone now
-      newone = clazz.new(@table_chains[table].delegate, *args)
-      @table_chains[table].unshift_delegate(newone)
+      build_delegates(*args).each{|newone|
+        @table_chains[table].unshift_delegate(newone)
+      }
     end
     
     # Starts an engine instance on this database and 

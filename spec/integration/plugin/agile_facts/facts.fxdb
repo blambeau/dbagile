@@ -1,5 +1,4 @@
-(use AgileTable)
-(use AgileKeys, :candidate => /[#]$/)
+(plug AgileTable, AgileKeys[:candidate => /[#]$/])
 
 (fact! :people, {:'p#' => 1, :name => "blambeau"})
 
