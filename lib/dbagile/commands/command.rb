@@ -53,7 +53,7 @@ module DbAgile
         
           #{ex.class}: #{ex.message}
         EOF
-        #error ex.backtrace.join("\n")
+        error ex.backtrace.join("\n")
       end
       
       # Exits with a message, showing options if required

@@ -3,7 +3,7 @@ describe "::DbAgile::Plugin::AgileTable#insert" do
   
   let(:adapter){ DbAgile::MemoryAdapter.new }
   let(:options){ Hash.new }
-  let(:chain){ DbAgile::Utils::Chain[DbAgile::Plugin::AgileTable.new(options), adapter] }
+  let(:chain){ DbAgile::Core::Chain[DbAgile::Plugin::AgileTable.new(options), adapter] }
   
   describe "When called on an existing table with already existing columns" do
     before{ adapter.create_table(nil, :example, :id => Integer) }

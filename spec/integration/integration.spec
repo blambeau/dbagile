@@ -4,23 +4,18 @@ Dir[File.join(File.dirname(__FILE__), '**/*.fxdb')].each do |file|
   content = File.read(file)
   describe("Execution of #{file}") do
 
-    let(:database){ 
-      File.expand_path('../integration.db', __FILE__)
-    }
+    let(:database){  File.expand_path('../integration.db', __FILE__) }
+    let(:uri){ "sqlite://#{database}" }
 
-    before {
+    specify{ 
       FileUtils.rm_rf(database)
       schema = File.read(File.join(File.dirname(__FILE__), 'commons.dba'))
-      DbAgile::connect("sqlite://#{database}").execute(schema)
+      engine = ::DbAgile::Engine.new
+      engine.connect(uri).should be_kind_of(DbAgile::Core::Connection)
+      engine.execute(schema)
+      engine.connect(uri)
+      engine.execute(content)
     }
-
-    subject{
-      lambda{ 
-        db = DbAgile::connect("sqlite://#{database}")
-        db.execute(content)
-      }
-    }
-
-    it{ should_not raise_error }
   end
+
 end

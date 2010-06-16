@@ -6,17 +6,17 @@ module DbAgile
       
       # Returns true if a table exists, false otherwise
       def table_exists?(table_name)
-        database.has_table?(table_name)
+        connection.has_table?(table_name)
       end
       
       # Returns the column names of a table
       def colnames(table_name)
-        database.column_names(table_name, true)
+        connection.column_names(table_name, true)
       end
       
       # Returns true if a table exists, false otherwise
       def keys(table_name)
-        database.keys(table_name)
+        connection.keys(table_name)
       end
       
       # Returns true if a table exists, false otherwise
@@ -30,7 +30,7 @@ module DbAgile
       def define(table_name, heading)
         has_transaction!
         if table_exists?(table_name)
-          existing_columns = database.column_names(table_name)
+          existing_columns = connection.column_names(table_name)
           missing_columns = heading.delete_if{|k,v| existing_columns.include?(k)}
           transaction.add_columns(table_name, missing_columns) unless missing_columns.empty?
         else
@@ -50,15 +50,8 @@ module DbAgile
       
       # Plugs something in the chain
       def plug(*args)
-        tables = []
-        while args[0].kind_of?(Symbol)
-          tables << args.shift
-        end
-        if tables.empty?
-          database.plug(*args)
-        else
-          tables.each{|t| database.table_plug(t, *args)}
-        end
+        connection.plug(*args)
+        puts connection.inspect
       end
       
     end # module Schema

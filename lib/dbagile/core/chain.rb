@@ -1,7 +1,7 @@
 require 'delegate'
 require 'enumerator'
 module DbAgile
-  module Utils
+  module Core
     class Chain < Delegator
       
       # A participant in the chain
@@ -79,5 +79,5 @@ module DbAgile
       
       protected :__getobj__
     end # class Chain
-  end # module Utils
+  end # module Core
 end # module DbAgile

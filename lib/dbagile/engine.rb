@@ -14,16 +14,12 @@ module DbAgile
     # Connection options
     attr_reader :options
     
-    # Current database on which this engine is connected
-    attr_reader :database
-    
     # Keeps the last error
     attr_reader :last_error
     
     # Creates an engine instance on top of a database
-    def initialize(env = ConsoleEnvironment.new, options = {})
-      @env, @options = env, options
-      env.engine = self unless env.nil?
+    def initialize(options = {})
+      @options = options
     end
     
     # Basic commands start here ####################################################
@@ -32,26 +28,31 @@ module DbAgile
     # Connected does not mean that the database pings, only that the underlying
     # database instance variable is not nil.
     def connected?
-      not(database.nil?)
+      not(@connection.nil?)
     end
     
     # Connects to a database
-    def connect(db)
+    def connect(uri)
       disconnect
-      @database = DbAgile::connect(db, options)
-      @database.adapter.ping
-      @database
+      @connection = DbAgile::connect(uri, options)
+      @connection.ping
+      @connection
     end
     
     # Disconnects from the database
     def disconnect
-      database.disconnect if database
-      @database = nil
+      @connection.disconnect if @connection
+      @connection = nil
     end
     
     # Flags the quit to true
     def quit
       @quit = true
+    end
+    
+    # Returns the current connection
+    def connection
+      @connection
     end
     
     # Error support ################################################################
@@ -65,7 +66,7 @@ module DbAgile
     # Asserts that a table exists. Raises a NoSuchTableError otherwise
     # otherwise.
     def table_exists!(table_name)
-      raise NoSuchTableError, "No such table #{table_name}" unless database.has_table?(table_name)
+      raise NoSuchTableError, "No such table #{table_name}" unless @connection.has_table?(table_name)
     end
     
     # Asserts that a list of columns are valid for a given table. Raises a NoSuchColumnError 
@@ -73,7 +74,7 @@ module DbAgile
     def columns_exist!(table_name, columns)
       table_exists!(table_name)
       raise NoSuchColumnError, "No such columns #{table_name} :: #{columns.inspect}"\
-        unless (columns - database.column_names(table_name)).empty?
+        unless (columns - @connection.column_names(table_name)).empty?
     end
     
     # Raises an NoSuchCommandError with a friendly message
@@ -134,8 +135,15 @@ module DbAgile
       }
     end
     
+    # Executes
+    def execute(source, &block)
+      execute_on_env(DslEnvironment.new(source || block))
+    end
+    
     # Executes on a given environment
-    def execute
+    def execute_on_env(env)
+      @env = env
+      env.engine = self
       @quit, @runner = false, Engine::Runner.new(self)
       until @quit
         begin

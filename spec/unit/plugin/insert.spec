@@ -5,7 +5,7 @@ describe "::DbAgile::Plugin#insert" do
   before{ adapter.create_table(nil, :table_name, :id => Integer, :name => String)}
   
   describe "when call on last brick" do
-    let(:brick){ DbAgile::Utils::Chain[DbAgile::Plugin.new, adapter] }
+    let(:brick){ DbAgile::Core::Chain[DbAgile::Plugin.new, adapter] }
     specify {
       brick.insert(nil, :table_name, :id => 1, :name => "dbagile")
       adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "dbagile"}]
@@ -13,7 +13,7 @@ describe "::DbAgile::Plugin#insert" do
   end
   
   describe "when call on non-last brick" do
-    let(:brick){ DbAgile::Utils::Chain[DbAgile::Plugin.new, DbAgile::Plugin.new, adapter] }
+    let(:brick){ DbAgile::Core::Chain[DbAgile::Plugin.new, DbAgile::Plugin.new, adapter] }
     specify {
       brick.insert(nil, :table_name, :id => 1, :name => "dbagile")
       adapter.dataset(:table_name).to_a.should == [{:id => 1, :name => "dbagile"}]

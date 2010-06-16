@@ -1,5 +1,5 @@
 module DbAgile
-  module Utils
+  module Core
     class Connector
       
       # Main chain
@@ -9,9 +9,15 @@ module DbAgile
       attr_reader :table_chains
       
       # Creates an empty connector
-      def initialize(main = nil, tables = nil)
-        @main_chain = (main || DbAgile::Utils::Chain.new)
+      def initialize(main = nil, tables = nil, connected = false)
+        @main_chain = (main || DbAgile::Core::Chain.new)
         @table_chains = (tables || Hash.new)
+        @connected = connected
+      end
+      
+      # Is it a connected connector?
+      def connected?
+        @connected
       end
       
       # Plugs some components into the configuration
@@ -23,7 +29,11 @@ module DbAgile
         else
           tables.each{|t| 
             unless table_chains.key?(t)
-              table_chains[t] = DbAgile::Utils::Chain.new 
+              if connected?
+                table_chains[t] = DbAgile::Core::Chain.new 
+              else
+                table_chains[t] = DbAgile::Core::Chain[main_chain]
+              end
             end
             table_chains[t].plug(*args)
           }
@@ -42,10 +52,11 @@ module DbAgile
       
       # Connect with a last element
       def connect(last)
+        raise "Connector already connected" if connected?
         main = main_chain.connect(last)
         tables = {}
         table_chains.each_pair{|name, chain| tables[name] = chain.connect(main)}
-        Connector.new(main, tables)
+        Connector.new(main, tables, true)
       end
       
       # Returns an inspection string
@@ -58,5 +69,5 @@ module DbAgile
       end
       
     end # class Connector
-  end # module Utils
+  end # module Core
 end # module DbAgile

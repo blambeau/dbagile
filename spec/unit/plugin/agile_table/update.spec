@@ -3,7 +3,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   let(:adapter){ DbAgile::MemoryAdapter.new }
   let(:options){ Hash.new }
-  let(:chain){ DbAgile::Utils::Chain[DbAgile::Plugin::AgileTable.new(options), adapter] }
+  let(:chain){ DbAgile::Core::Chain[DbAgile::Plugin::AgileTable.new(options), adapter] }
   before{ 
     adapter.create_table(nil, :example, :id => Integer, :name => String) 
     adapter.insert(nil, :example, :id => 1, :name => "dbagile")

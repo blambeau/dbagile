@@ -103,23 +103,21 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        engine = DbAgile::Engine.new(self.env, connection_options)
+        engine = DbAgile::Engine.new(connection_options)
         engine.connect(self.uri) if self.uri
-        if self.env.kind_of?(DbAgile::Engine::ConsoleEnvironment)
-          engine.say("Welcome in dbagile #{::DbAgile::VERSION} interactive terminal.")
-          engine.say("\n")
-          engine.say('Type:  \c to connect a database')
-          engine.say('       \h for help')
-          engine.say('       \q to quit')
-          engine.say("\n")
-          engine.execute
-        else
-          begin
-            engine.execute
-          rescue Exception => ex
-            puts ex.message
-            puts ex.backtrace.join("\n")
-          end
+        if env.kind_of?(DbAgile::Engine::ConsoleEnvironment)
+          env.say("Welcome in dbagile #{::DbAgile::VERSION} interactive terminal.")
+          env.say("\n")
+          env.say('Type:  \c to connect a database')
+          env.say('       \h for help')
+          env.say('       \q to quit')
+          env.say("\n")
+        end
+        begin
+          engine.execute_on_env(env)
+        rescue Exception => ex
+          puts ex.message
+          puts ex.backtrace.join("\n")
         end
       end
       

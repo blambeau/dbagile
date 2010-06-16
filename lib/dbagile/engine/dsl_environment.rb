@@ -15,7 +15,7 @@ module DbAgile
       
       # Loads lines
       def load_lines
-        ::CodeTree::parse(@dsl_block,:multiline => true)
+        ::CodeTree::parse(@dsl_block, :multiline => true)
       end
       
       # Returns the loaded lines

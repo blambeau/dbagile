@@ -9,7 +9,7 @@ describe "::DbAgile::Plugin::Touch#__do_touch" do
     adapter
   }
   let(:values){ {:now => "now!!"} }
-  let(:touch){ DbAgile::Utils::Chain[DbAgile::Plugin::Touch.new(values, options), adapter] }
+  let(:touch){ DbAgile::Core::Chain[DbAgile::Plugin::Touch.new(values, options), adapter] }
 
   context("when called with at insert and no force") do
     let(:options){ {:at => :insert, :force => false} }

@@ -25,12 +25,6 @@ module DbAgile
         engine.last_error
       end
       
-      # Returns the current database
-      def database
-        engine.connected!
-        engine.database
-      end
-      
       # Returns true if all args are equal, false otherwise
       def equal?(arg1, arg2)
         arg1 == arg2
@@ -42,9 +36,9 @@ module DbAgile
           when Exception
             engine.display("#{what.message}\n" << what.backtrace.join("\n"))
           when ::Sequel::Dataset
-            engine.display(::DbAgile::PrettyTable::print(what, []).join(""))
+            engine.display(::DbAgile::Utils::PrettyTable::print(what, []).join(""))
           when Symbol, String
-            display(database.dataset(what))
+            display(connection.dataset(what))
           else
             engine.display(what.inspect)
         end

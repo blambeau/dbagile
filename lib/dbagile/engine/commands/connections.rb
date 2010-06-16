@@ -5,7 +5,7 @@ module DbAgile
       # Ping the current adapter
       def ping
         if engine.connected?
-          engine.database.adapter.ping
+          connection.ping
         else
           false
         end

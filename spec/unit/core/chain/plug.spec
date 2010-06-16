@@ -1,8 +1,8 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
-describe "DbAgile::Utils::Chain#plug" do
+describe "DbAgile::Core::Chain#plug" do
   
   context "when called on an empty chain" do
-    let(:chain){ DbAgile::Utils::Chain.new }
+    let(:chain){ DbAgile::Core::Chain.new }
     subject{ chain.plug("hello") }
     specify{
       subject.should == chain
@@ -11,7 +11,7 @@ describe "DbAgile::Utils::Chain#plug" do
   end
   
   context "when called on a non empty chain" do
-    let(:chain){ DbAgile::Utils::Chain.new("hello 1") }
+    let(:chain){ DbAgile::Core::Chain.new("hello 1") }
     subject{ chain.plug("hello 2") }
     specify{
       subject.should == chain
@@ -20,7 +20,7 @@ describe "DbAgile::Utils::Chain#plug" do
   end
 
   context "when called with multiple arguments" do
-    let(:chain){ DbAgile::Utils::Chain.new() }
+    let(:chain){ DbAgile::Core::Chain.new() }
     subject{ chain.plug("hello 1", "hello 2") }
     specify{
       subject.should == chain

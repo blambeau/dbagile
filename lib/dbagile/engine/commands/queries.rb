@@ -14,19 +14,19 @@ module DbAgile
       
       # Does a tuple exists in the database?
       def exists?(table, tuple = {})
-        database.exists?(table, tuple)
+        connection.exists?(table, tuple)
       end
       
       # Delegated to database
       def dataset(query, proj = nil)
-        database.dataset(query, proj)
+        connection.dataset(query, proj)
       end
       
       # Sends a SQL query to the database
       def sql(str)
         case str
           when Symbol, /^[a-z]+$/, /^\s*(SELECT|select)/
-            database.dataset(str)
+            connection.dataset(str)
           else
             has_transaction!
             transaction.direct_sql(str)

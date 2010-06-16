@@ -32,10 +32,16 @@ module DbAgile
           unless @transaction
       end
       
+      # Returns engine's connection
+      def connection
+        engine.connected!
+        engine.connection
+      end
+      
       # Starts transaction
       def start_transaction
         raise "Transaction already running" if @transaction
-        @transaction = engine.database.transaction
+        @transaction = connection.transaction
       end
       
       # Commits the current transaction
