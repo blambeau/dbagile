@@ -33,7 +33,7 @@ module DbAgile
           raise UnknownConfigurationError, "Unknown configuration #{uri}"
         end
       when String
-        DbAgile::Core::Configuration.new.connect(uri)
+        DbAgile::Core::Configuration.new.connect(uri, options)
       else
         raise ArgumentError, "Unable to use #{uri} for accessing database"
     end

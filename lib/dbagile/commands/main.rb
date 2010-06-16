@@ -1,4 +1,5 @@
 require 'dbagile/engine'
+require 'logger'
 module DbAgile
   module Commands
     class Main < Command
@@ -14,6 +15,9 @@ module DbAgile
       
       # Does only trace SQL?
       attr_accessor :trace_only
+      
+      # Sequel logger to use
+      attr_accessor :sequel_logger
       
       # Output of traces and engine display
       attr_accessor :output
@@ -31,6 +35,9 @@ module DbAgile
         end
         opt.on("--file=FILE", "-f", "Executes a given file on the engine") do |value|
           self.file = value
+        end
+        opt.on("--sequel-log", "Trace SQL statements through Sequel") do
+          self.sequel_logger = Logger.new(STDOUT)
         end
         opt.on("--trace-sql", "Trace SQL statements") do
           self.trace_sql = true
@@ -90,7 +97,8 @@ module DbAgile
         self.connection_options = {
           :trace_sql    => trace_sql, 
           :trace_only   => trace_only,
-          :trace_buffer => trace_sql ? output : nil
+          :trace_buffer => trace_sql ? output : nil,
+          :sequel_logger => sequel_logger
         }
       end
       

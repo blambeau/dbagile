@@ -11,7 +11,7 @@ module DbAgile
       if options[:trace_sql]
         SequelTracer.new(super(uri), options)
       else
-        super(uri)
+        super(uri, options)
       end
     end  
     
@@ -19,9 +19,9 @@ module DbAgile
     attr_reader :uri
     
     # Creates an adapter with a given uri
-    def initialize(uri)
+    def initialize(uri, options = {})
       require('sequel')
-      @uri = uri
+      @uri, @options = uri, options
     end
     
     ### ABOUT CONNECTIONS ########################################################
@@ -39,7 +39,11 @@ module DbAgile
     
     # Returns the underlying Sequel::Database instance
     def db
-      @db ||= Sequel.connect(uri)
+      unless @db
+        @db = Sequel.connect(uri)
+        @db.logger = @options[:sequel_logger]
+      end
+      @db
     end
     
     ### ABOUT QUERIES ############################################################
