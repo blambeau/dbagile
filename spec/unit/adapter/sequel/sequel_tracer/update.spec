@@ -5,8 +5,8 @@ describe "::DbAgile::SequelAdapter::SequelTracer#update" do
   let(:tracer) { DbAgile::SequelAdapter::SequelTracer.new(adapter, options) }
   let(:traced){ [] }
   let(:tuple){ {:id => 1, :version => DbAgile::VERSION} }
-  before{ adapter.insert(:dbagile, tuple) }
-  subject{ tracer.update(:dbagile, tuple, {:schema => "schema"}) }
+  before{ adapter.insert(nil, :dbagile, tuple) }
+  subject{ tracer.update(nil, :dbagile, tuple, {:schema => "schema"}) }
   
   describe "When called without trace option" do
     let(:options){ {:trace_sql => false, :trace_only => false, :trace_buffer => traced} }

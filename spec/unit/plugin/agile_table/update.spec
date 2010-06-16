@@ -3,12 +3,12 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   let(:adapter){ DbAgile::MemoryAdapter.new }
   before{ 
-    adapter.create_table(:example, :id => Integer, :name => String) 
-    adapter.insert(:example, :id => 1, :name => "dbagile")
+    adapter.create_table(nil, :example, :id => Integer, :name => String) 
+    adapter.insert(nil, :example, :id => 1, :name => "dbagile")
   }
   
   describe "When called on an existing table with already existing columns" do
-    subject{ DbAgile::Plugin::AgileTable.new(adapter).update(:example, {:id => 1}, {:name => "DbAgile"}) }
+    subject{ DbAgile::Plugin::AgileTable.new(adapter).update(nil, :example, {:id => 1}, {:name => "DbAgile"}) }
     specify{ 
       subject.should be_true
       adapter.column_names(:example, true).should == [:id, :name]
@@ -18,7 +18,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   describe "When called on an existing table with non existing columns" do
     subject{ 
-      DbAgile::Plugin::AgileTable.new(adapter).update(:example, {:id => 1}, :hello => "world") 
+      DbAgile::Plugin::AgileTable.new(adapter).update(nil, :example, {:id => 1}, :hello => "world") 
     }
     specify{ 
       subject.should be_true
@@ -29,7 +29,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   describe "When called on an existing table with a mix" do
     subject{ 
-      DbAgile::Plugin::AgileTable.new(adapter).update(:example, {:id => 1}, {:name => "DbAgile", :hello => "world"}) 
+      DbAgile::Plugin::AgileTable.new(adapter).update(nil, :example, {:id => 1}, {:name => "DbAgile", :hello => "world"}) 
     }
     specify{ 
       subject.should be_true

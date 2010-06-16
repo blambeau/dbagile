@@ -5,8 +5,8 @@ describe "::DbAgile::SequelAdapter::SequelTracer#direct_sql" do
   let(:tracer) { DbAgile::SequelAdapter::SequelTracer.new(adapter, options) }
   let(:traced){ [] }
   let(:tuple){ {:version => DbAgile::VERSION} }
-  before{ adapter.insert(:dbagile, tuple) }
-  subject{ tracer.key!(:dbagile, [:version]) }
+  before{ adapter.insert(nil, :dbagile, tuple) }
+  subject{ tracer.key!(nil, :dbagile, [:version]) }
   
   describe "When called without trace options" do
     let(:options){ {:trace_sql => false, :trace_only => false, :trace_buffer => traced} }
@@ -30,7 +30,7 @@ describe "::DbAgile::SequelAdapter::SequelTracer#direct_sql" do
     let(:options){ {:trace_sql => true, :trace_only => true, :trace_buffer => traced} }
     specify{ 
       subject.should be_nil
-      lambda{ adapter.insert(:dbagile, tuple) }.should_not raise_error
+      lambda{ adapter.insert(nil, :dbagile, tuple) }.should_not raise_error
       traced[0].should =~ /INDEX/
     }
   end

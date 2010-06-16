@@ -1,12 +1,14 @@
 (plug AgileTable)
 
-(insert :tools, {:name => "dbagile"})
+start_transaction
+  (insert :tools, {:name => "dbagile"})
 
-(assert "The tools table has been created on agile insert",
-  (table_exists? :tools))
+  (assert "The tools table has been created on agile insert",
+    (table_exists? :tools))
 
-(update :tools, {:name => "dbagile"}, {:version => DbAgile::VERSION})
+  (update :tools, {:name => "dbagile"}, {:version => DbAgile::VERSION})
 
-(assert "The column for version has been created on update",
-  (equal? [{:name => "dbagile", :version => DbAgile::VERSION}],
-          (to_a :tools)))
+  (assert "The column for version has been created on update",
+    (equal? [{:name => "dbagile", :version => DbAgile::VERSION}],
+            (to_a :tools)))
+commit

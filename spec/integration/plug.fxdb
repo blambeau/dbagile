@@ -1,12 +1,14 @@
 (plug AgileTable)
 (plug :example, Defaults[:now => "now"])
 
-(insert :example, :id => 1)
-(assert "Now is inserted in :example table", 
-  (equal? [{:id => 1, :now => "now"}],
-          (to_a :example)))
+start_transaction
+  (insert :example, :id => 1)
+  (assert "Now is inserted in :example table", 
+    (equal? [{:id => 1, :now => "now"}],
+            (to_a :example)))
 
-(insert :no_example, :id => 1)
-(assert "Now is not inserted in :no_example table", 
-  (equal? [{:id => 1}],
-          (to_a :no_example)))
+  (insert :no_example, :id => 1)
+  (assert "Now is not inserted in :no_example table", 
+    (equal? [{:id => 1}],
+            (to_a :no_example)))
+commit

@@ -5,8 +5,8 @@ describe "::DbAgile::Adapter#exists?" do
   
     describe "When called on existing tuples" do
       before{ 
-        adapter.create_table(:example, {:id => Integer}) 
-        adapter.insert(:example, {:id => 1})
+        adapter.create_table(nil,:example, {:id => Integer}) 
+        adapter.insert(nil,:example, {:id => 1})
       }
       subject{ adapter.exists?(:example, {:id => 1}) }
       it{ should be_true }
@@ -14,8 +14,8 @@ describe "::DbAgile::Adapter#exists?" do
       
     describe "When called on non existing tuples" do
       before{ 
-        adapter.create_table(:example2, {:id => Integer}) 
-        adapter.insert(:example2, {:id => 1})
+        adapter.create_table(nil,:example2, {:id => Integer}) 
+        adapter.insert(nil,:example2, {:id => 1})
       }
       subject{ adapter.exists?(:example2, {:id => 2}) }
       it{ should be_false }
@@ -23,8 +23,8 @@ describe "::DbAgile::Adapter#exists?" do
       
     describe "When called with an emtpy projection on a non-empty table" do
       before{ 
-        adapter.create_table(:example3, {:id => Integer}) 
-        adapter.insert(:example3, {:id => 1})
+        adapter.create_table(nil,:example3, {:id => Integer}) 
+        adapter.insert(nil,:example3, {:id => 1})
       }
       subject{ adapter.exists?(:example3, {}) }
       it{ should be_true }
@@ -32,7 +32,7 @@ describe "::DbAgile::Adapter#exists?" do
       
     describe "When called with an emtpy projection on an empty table" do
       before{ 
-        adapter.create_table(:example4, {:id => Integer}) 
+        adapter.create_table(nil,:example4, {:id => Integer}) 
       }
       subject{ adapter.exists?(:example4, {}) }
       it{ should be_false }

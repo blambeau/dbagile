@@ -5,12 +5,12 @@ describe "::DbAgile::Adapter.has_table" do
   
     describe "When called on existing tuple with #{adapter.class}" do
       before{  
-        adapter.create_table(:example, :id => Integer, :name => "dbagile") 
-        adapter.insert(:example, :id => 1, :name => "dbagile")
-        adapter.insert(:example, :id => 2, :name => "sequel")
+        adapter.create_table(nil, :example, :id => Integer, :name => "dbagile") 
+        adapter.insert(nil, :example, :id => 1, :name => "dbagile")
+        adapter.insert(nil, :example, :id => 2, :name => "sequel")
       }
       subject{ 
-        adapter.update(:example, {:id => 1}, :name => "DbAgile") 
+        adapter.update(nil, :example, {:id => 1}, :name => "DbAgile") 
       }
       specify{ 
         subject.should be_true

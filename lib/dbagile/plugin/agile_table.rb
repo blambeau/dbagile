@@ -12,27 +12,27 @@ module DbAgile
       end
       
       # Ensures the columns of some table
-      def ensure_columns(table, tuple)
+      def ensure_columns(transaction, table, tuple)
         heading = tuple_heading(tuple)
         if has_table?(table)
           existing_columns = column_names(table)
           missing_columns = heading.delete_if{|k,v| existing_columns.include?(k)}
-          add_columns(table, missing_columns) unless missing_columns.empty?
+          add_columns(transaction, table, missing_columns) unless missing_columns.empty?
         elsif options[:create_table]
-          create_table(table, heading)
+          create_table(transaction, table, heading)
         end
       end
       
       # Makes an insertion inside a table
-      def insert(table, tuple)
-        ensure_columns(table, tuple)
-        delegate.insert(table, tuple)
+      def insert(transaction, table, tuple)
+        ensure_columns(transaction, table, tuple)
+        delegate.insert(transaction, table, tuple)
       end
       
       # Makes an update inside a table
-      def update(table, proj, update)
-        ensure_columns(table, update)
-        delegate.update(table, proj, update)
+      def update(transaction, table, proj, update)
+        ensure_columns(transaction, table, update)
+        delegate.update(transaction, table, proj, update)
       end
       
       private :ensure_columns

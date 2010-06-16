@@ -4,7 +4,7 @@ describe "::DbAgile::SequelAdapter::SequelTracer#direct_sql" do
   let(:adapter){ Fixtures::sqlite_testdb_sequel_adapter }
   let(:tracer) { DbAgile::SequelAdapter::SequelTracer.new(adapter, options) }
   let(:traced){ [] }
-  subject{ tracer.create_table(:example, :id => Integer) }
+  subject{ tracer.create_table(nil, :example, :id => Integer) }
   
   describe "When called without trace options" do
     let(:options){ {:trace_sql => false, :trace_only => false, :trace_buffer => traced} }

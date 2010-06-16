@@ -45,7 +45,7 @@ module DbAgile
       ### SCHEMA UPDATES ###########################################################
       
       # Creates a table with some columns. 
-      def create_table(table_name, columns)
+      def create_table(transaction, table_name, columns)
         if trace?
           gen = ::Sequel::Schema::Generator.new(self){
             columns.each_pair{|name, type| column(name, type)}
@@ -58,7 +58,7 @@ module DbAgile
       end
       
       # Adds some columns to a table
-      def add_columns(table_name, columns)
+      def add_columns(transaction, table_name, columns)
         if trace?
           trace(alter_table_sql(table_name){ 
             columns.each_pair{|name, type| add_column(name, type)}
@@ -69,7 +69,7 @@ module DbAgile
       end
       
       # Make columns be a candidate key for the table.
-      def key!(table_name, columns)
+      def key!(transaction, table_name, columns)
         if trace?
           trace(alter_table_sql(table_name){ 
             add_index(columns, :unique => true)
@@ -82,7 +82,7 @@ module DbAgile
       ### DATA UPDATES #############################################################
       
       # Inserts a tuple inside a given table
-      def insert(table_name, record)
+      def insert(transaction, table_name, record)
         if trace?
           trace(delegate.db[table_name].insert_sql(record)) 
         end
@@ -91,7 +91,7 @@ module DbAgile
       end
       
       # Updates a project of a given table
-      def update(table_name, proj, update)
+      def update(transaction, table_name, proj, update)
         if trace?
           trace(delegate.db[table_name].where(proj).update_sql(update)) 
         end
@@ -100,7 +100,7 @@ module DbAgile
       end
       
       # Deletes a projection from a given table
-      def delete(table_name, proj)
+      def delete(transaction, table_name, proj)
         if trace?
           if proj.empty?
             trace(delegate.db[table_name].delete_sql) 
@@ -113,7 +113,7 @@ module DbAgile
       end
       
       # Sends SQL directly to the database SQL server.
-      def direct_sql(sql)
+      def direct_sql(transaction, sql)
         if trace?
           trace(sql)
         end

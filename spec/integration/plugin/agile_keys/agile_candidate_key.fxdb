@@ -1,17 +1,18 @@
 (plug AgileKeys, :candidate => /^id$|_id$/)
 
-(define :example, {:id => Integer})
-(assert (is_key? :example, [:id]))
+start_transaction
+  (define :example, {:id => Integer})
+  (assert (is_key? :example, [:id]))
 
-(define :example2, {:people_id => Integer})
-(assert (is_key? :example2, [:people_id]))
+  (define :example2, {:people_id => Integer})
+  (assert (is_key? :example2, [:people_id]))
 
-(define :example3, {:people_id => Integer, :role_id => Integer, :name => String})
-(assert\
-  (is_key? :example3, [:role_id, :people_id]))
-(assert_false\
-  (is_key? :example3, [:role_id, :name]))
-(assert_false\
-  (is_key? :example3, [:name]))
-
+  (define :example3, {:people_id => Integer, :role_id => Integer, :name => String})
+  (assert\
+    (is_key? :example3, [:role_id, :people_id]))
+  (assert_false\
+    (is_key? :example3, [:role_id, :name]))
+  (assert_false\
+    (is_key? :example3, [:name]))
+commit
 

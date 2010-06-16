@@ -33,19 +33,19 @@ module DbAgile
       ### SCHEMA UPDATES ###########################################################
       
       # Creates a table with some columns. 
-      def create_table(table_name, columns)
+      def create_table(transaction, table_name, columns)
         logger.info("Creating table #{table_name}::#{columns.inspect} : #{(x = super).inspect}")
         x
       end
       
       # Adds some columns to a table
-      def add_columns(table_name, columns)
+      def add_columns(transaction, table_name, columns)
         logger.info("Adding columns #{table_name}::#{columns.inspect} : #{(x = super).inspect}")
         x
       end
       
       # Makes columns be a candidate key for the table.
-      def key!(table_name, columns)
+      def key!(transaction, table_name, columns)
         logger.info("Creating key #{table_name}::#{columns.inspect} : #{(x = super).inspect}")
         x
       end
@@ -53,20 +53,26 @@ module DbAgile
       ### DATA UPDATES #############################################################
       
       # Inserts a tuple inside a given table
-      def insert(table_name, record)
+      def insert(transaction, table_name, record)
         logger.debug("Inserting #{table_name}::#{record.inspect} : #{(x = super).inspect}")
         x
       end
       
       # Updates all tuples whose projection equal _proj_ with values given by _update_ 
       # inside a given table
-      def update(table_name, proj, update)
+      def update(transaction, table_name, proj, update)
         logger.debug("Updating #{table_name}::#{update.inspect} where #{proj.inspect} : #{(x = super).inspect}")
         x
       end
       
+      # Deletes all tuples whose projection equal _proj_ from a given table
+      def delete(transaction, table_name, proj)
+        logger.debug("Deleting #{table_name} where #{proj.inspect} : #{(x = super).inspect}")
+        x
+      end
+      
       # Sends SQL directly to the database SQL server.
-      def direct_sql(sql)
+      def direct_sql(transaction, sql)
         logger.debug("SQL direct #{sql}: #{(x = super).inspect}")
         x
       end

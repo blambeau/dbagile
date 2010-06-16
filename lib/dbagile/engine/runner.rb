@@ -18,9 +18,38 @@ module DbAgile
       # The engine
       attr_reader :engine
       
+      # The current transaction
+      attr_reader :transaction
+      
       # Creates a runner instance
       def initialize(engine)
         @engine = engine
+      end
+      
+      # Asserts that a transaction has been started
+      def has_transaction!
+        raise NoPendingTransactionError, "No running transaction."\
+          unless @transaction
+      end
+      
+      # Starts transaction
+      def start_transaction
+        raise "Transaction already running" if @transaction
+        @transaction = engine.database.transaction
+      end
+      
+      # Commits the current transaction
+      def commit
+        has_transaction!
+        @transaction.commit
+        @transaction = nil
+      end
+      
+      # Rollbacks the current transaction
+      def rollback
+        has_transaction!
+        @transaction.commit
+        @transaction = nil
       end
       
     end # class Runner

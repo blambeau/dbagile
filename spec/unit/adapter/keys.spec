@@ -12,8 +12,8 @@ describe "::DbAgile::Adapter#keys" do
   
     describe "When called on a table with a single key" do
       before{ 
-        adapter.create_table(:example_1, {:id => Integer}) 
-        adapter.key!(:example_1, [:id])
+        adapter.create_table(nil, :example_1, {:id => Integer}) 
+        adapter.key!(nil, :example_1, [:id])
       }
       subject{ 
         adapter.keys(:example_1) 
@@ -25,9 +25,9 @@ describe "::DbAgile::Adapter#keys" do
   
     describe "When called on a table with multiple keys" do
       before{ 
-        adapter.create_table(:example_2, {:id => Integer, :name => String, :version => String}) 
-        adapter.key!(:example_2, [:id])
-        adapter.key!(:example_2, [:name, :version])        
+        adapter.create_table(nil, :example_2, {:id => Integer, :name => String, :version => String}) 
+        adapter.key!(nil, :example_2, [:id])
+        adapter.key!(nil, :example_2, [:name, :version])        
       }
       subject{ 
         adapter.keys(:example_2) 

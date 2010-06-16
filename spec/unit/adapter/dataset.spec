@@ -16,8 +16,8 @@ describe "::DbAgile::Adapter.dataset" do
     
     describe "When called on a given table, with records" do
       before{ 
-        adapter.create_table(:example, :id => Integer) 
-        adapter.insert(:example, :id => 1)
+        adapter.create_table(nil, :example, :id => Integer) 
+        adapter.insert(nil, :example, :id => 1)
       }
       specify{
         adapter.dataset(:example).to_a.should == [{:id => 1}]
@@ -26,8 +26,8 @@ describe "::DbAgile::Adapter.dataset" do
 
     describe "When called with a pojection tuple" do
       before{ 
-        adapter.create_table(:example2, :id => Integer) 
-        adapter.insert(:example2, :id => 1)
+        adapter.create_table(nil, :example2, :id => Integer) 
+        adapter.insert(nil, :example2, :id => 1)
       }
       specify{
         adapter.dataset(:example2, {:id => 1}).to_a.should == [{:id => 1}]

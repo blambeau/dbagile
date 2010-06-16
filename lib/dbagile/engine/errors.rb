@@ -4,6 +4,8 @@ module DbAgile
     class InvalidCommandError < StandardError; end
     class NoSuchCommandError < StandardError; end
 
+    class NoPendingTransactionError < StandardError; end
+    
     class NoSuchTableError < StandardError; end
     class NoSuchColumnError < StandardError; end
 

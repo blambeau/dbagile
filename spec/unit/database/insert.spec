@@ -9,11 +9,15 @@ describe "DbAgile::Database::insert" do
   }
   
   specify("Inserting in example leads to a now") do
-    database.insert(:example, {:id => 1}).should == {:id => 1, :now => "now"}
+    database.transaction do |t|
+      t.insert(:example, {:id => 1}).should == {:id => 1, :now => "now"}
+    end
   end
 
   specify("Inserting in no_example does not lead to a now") do
-    database.insert(:no_example, {:id => 1}).should == {:id => 1}
+    database.transaction do |t|
+      t.insert(:no_example, {:id => 1}).should == {:id => 1}
+    end
   end
 
 end

@@ -5,7 +5,9 @@ describe "DbAgile::Database::execute" do
   let(:database){ DbAgile::connect(adapter) }
   let(:source){ lambda{
     use :AgileTable
-    insert :people, {:id => 1}
+    start_transaction
+      insert :people, {:id => 1}
+    commit
   }}
   
   context "when called with a source object" do

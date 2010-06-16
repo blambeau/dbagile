@@ -1,24 +1,35 @@
 module DbAgile
   class Database
-    include DbAgile::Adapter::Delegate
+    
+    # About creation ###############################################################
     
     # Creates a database instance with an underlying adapter
-    def initialize(delegate)
-      @delegate = DbAgile::Adapter::DelegateChain.new(delegate)
+    def initialize(adapter)
+      @delegate = DbAgile::Adapter::DelegateChain.new(adapter)
       @table_chains = {}
       unshift_table_delegate(:dbagile_sequences, 
         Plugin::AgileKeys[:candidate => /[#]$/],
         Plugin::AgileTable)
     end
     
+    # About connections ############################################################
+    
     # Disconnect from the database
     def disconnect
-      delegate.disconnect
+      main_delegate.disconnect
     end
+    
+    # About delegate chains ########################################################
+    
+    # Returns the main delegate
+    def main_delegate
+      @delegate
+    end
+    alias :adapter :main_delegate
     
     # Finds the delegate to use for a given table
     def find_delegate(table_name)
-      @table_chains[table_name] || @delegate
+      @table_chains[table_name] || main_delegate
     end
     
     # Build delegates from a set of arguments
@@ -43,20 +54,73 @@ module DbAgile
     # Adds a brick inside the global chain
     def unshift_main_delegate(*args)
       build_delegates(*args).each{|newone|
-        delegate.unshift_delegate(newone)
+        main_delegate.unshift_delegate(newone)
       }
     end
     
     # Unshifts a table delegate
     def unshift_table_delegate(table, *args)
       # 1) Force a chain delegate on main chain if no chain for that table
-      @table_chains[table] = DbAgile::Adapter::DelegateChain.new(delegate)\
+      @table_chains[table] = DbAgile::Adapter::DelegateChain.new(main_delegate)\
         unless @table_chains.key?(table)
 
       # 2) Install the newone now
       build_delegates(*args).each{|newone|
         @table_chains[table].unshift_delegate(newone)
       }
+    end
+    
+    ### ABOUT QUERIES ##############################################################
+    
+    # @see Database#dataset
+    def dataset(table_or_query, proj = nil)
+      find_delegate(table_or_query).dataset(table_or_query, proj)
+    end
+    
+    # @see Database#exists?
+    def exists?(table_or_query, subtuple = {})
+      find_delegate(table_or_query).exists?(table_or_query, subtuple)
+    end
+    
+    ### SCHEMA QUERIES #############################################################
+    
+    # @see Database#has_table?
+    def has_table?(table_name)
+      find_delegate(table_name).has_table?(table_name)
+    end
+    
+    # @see Database#has_column?
+    def has_column?(table_name, column_name)
+      find_delegate(table_name).has_column?(table_name, column_name)
+    end
+    
+    # @see Database#column_names(table_name, sort)
+    def column_names(table_name, sort = false)
+      find_delegate(table_name).column_names(table_name, sort)
+    end
+    
+    # @see Database#keys
+    def keys(table_name)
+      find_delegate(table_name).keys(table_name)
+    end
+    
+    ### TRANSACTIONS AND WRITE ACCESSES ############################################
+    
+    # Starts a transaction. If a block is provided, yields it with the transaction 
+    # object, commits the transaction at the end and returns nil. Otherwise, returns
+    # the transaction object.
+    def transaction
+      t = Transaction.new(self)
+      if block_given?
+        begin
+          yield(t)
+          t.commit
+        rescue Exception
+          t.rollback
+        end
+      else
+        t
+      end
     end
     
     # Starts an engine instance on this database and 
@@ -68,41 +132,5 @@ module DbAgile
       self
     end
     
-    ### SCHEMA UPDATES ###########################################################
-    
-    # Creates a table with some columns. 
-    def create_table(table_name, *args)
-      find_delegate(table_name).create_table(table_name, *args)
-    end
-    
-    # Adds some columns to a table
-    def add_columns(table_name, *args)
-      find_delegate(table_name).add_columns(table_name, *args)
-    end
-    
-    # Make columns be a candidate key for the table.
-    def key!(table_name, *args)
-      find_delegate(table_name).key!(table_name, *args)
-    end
-
-    ### DATA UPDATES #############################################################
-    
-    # Inserts a tuple inside a given table
-    def insert(table_name, record)
-      find_delegate(table_name).insert(table_name, record)
-    end
-    
-    # Updates all tuples whose projection equal _proj_ with values given by _update_ 
-    # inside a given table
-    def update(table_name, proj, update)
-      find_delegate(table_name).update(table_name, proj, update)
-    end
-    
-    # Delete all tuples whose projection equal _proj_ inside a given table
-    def delete(table_name, proj)
-      find_delegate(table_name).delete(table_name, proj)
-    end
-      
-    alias :adapter :delegate
   end # class Database
 end # module DbAgile

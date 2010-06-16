@@ -1,4 +1,6 @@
+start_transaction
 (fact! :dbagile_sequences, {:'sequence#' => 'hello', :value => 10})
 (assert 'dbagile_sequences key is correctly infered',
   (equal? [ [:'sequence#'] ], 
           (keys :dbagile_sequences)))
+commit

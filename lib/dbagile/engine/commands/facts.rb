@@ -19,6 +19,7 @@ module DbAgile
       
       # Asserts that a fact exists
       def fact!(table, tuple)
+        has_transaction!
         case tuple
           when Array
             tuple.each{|t| fact!(table, t) }

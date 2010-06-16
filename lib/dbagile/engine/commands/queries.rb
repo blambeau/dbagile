@@ -28,7 +28,8 @@ module DbAgile
           when Symbol, /^[a-z]+$/, /^\s*(SELECT|select)/
             database.dataset(str)
           else
-            database.direct_sql(str)
+            has_transaction!
+            transaction.direct_sql(str)
         end
       end
       

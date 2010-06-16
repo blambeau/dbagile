@@ -84,7 +84,7 @@ module DbAgile
     ### SCHEMA UPDATES ###########################################################
       
     # Creates a table with some attributes
-    def create_table(name, columns)
+    def create_table(transaction, name, columns)
       db.create_table(name){ 
         columns.each_pair{|name, type| column(name, type)} 
       }
@@ -92,7 +92,7 @@ module DbAgile
     end
     
     # Adds some columns to a table
-    def add_columns(table, columns)
+    def add_columns(transaction, table, columns)
       db.alter_table(table) do
         columns.each_pair{|name, type| add_column name, type}
       end
@@ -102,26 +102,26 @@ module DbAgile
     # 
     # Make columns be a candidate key for the table.
     #
-    def key!(table_name, columns)
+    def key!(transaction, table_name, columns)
       db.add_index(table_name, columns, {:unique => true})
     end
       
     ### DATA UPDATES #############################################################
       
     # Inserts a tuple inside a given table
-    def insert(table, tuple)
+    def insert(transaction, table, tuple)
       db[table].insert(tuple)
       tuple
     end
     
     # Updates all tuples whose projection equal _proj_ with values given by _update_ 
     # inside a given table
-    def update(table_name, proj, update)
+    def update(transaction, table_name, proj, update)
       db[table_name].where(proj).update(update)
     end
     
     # Deletes all tuples whose projection equal _proj_ inside a given table
-    def delete(table_name, proj)
+    def delete(transaction, table_name, proj)
       if proj.empty?
         db[table_name].delete
       else
@@ -131,7 +131,7 @@ module DbAgile
     end
       
     # Send SQL directly to the database SQL server
-    def direct_sql(sql)
+    def direct_sql(transaction, sql)
       if /^\s*(select|SELECT)/ =~ sql
         db[sql]
       else

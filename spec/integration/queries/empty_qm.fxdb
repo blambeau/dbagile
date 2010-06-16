@@ -1,12 +1,13 @@
-(define :example, {:id => Integer})
-(assert "A table is empty after creation",
-  (empty? :example))
+start_transaction
+  (define :example, {:id => Integer})
+  (assert "A table is empty after creation",
+    (empty? :example))
 
-(insert :example, {:id => 12})
-(assert_false "A table is not empty after insert",
-  (empty? :example))
+  (insert :example, {:id => 12})
+  (assert_false "A table is not empty after insert",
+    (empty? :example))
 
-(delete :example)
-(assert "A table is empty after a delete all",
-  (empty? :example))
-  
+  (delete :example)
+  (assert "A table is empty after a delete all",
+    (empty? :example))
+commit

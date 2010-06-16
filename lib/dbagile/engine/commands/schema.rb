@@ -28,20 +28,22 @@ module DbAgile
       
       # Executes on main signature
       def define(table_name, heading)
+        has_transaction!
         if table_exists?(table_name)
           existing_columns = database.column_names(table_name)
           missing_columns = heading.delete_if{|k,v| existing_columns.include?(k)}
-          database.add_columns(table_name, missing_columns) unless missing_columns.empty?
+          transaction.add_columns(table_name, missing_columns) unless missing_columns.empty?
         else
-          database.create_table(table_name, heading)
+          transaction.create_table(table_name, heading)
         end
       end
       
       # Adds a candidate key to a given table
       def key!(table_name, columns)
         engine.connected!
+        has_transaction!
         engine.columns_exist!(table_name, columns)
-        engine.database.key!(table_name, columns)
+        transaction.key!(table_name, columns)
       end
       
       # To be moved methods ########################################################

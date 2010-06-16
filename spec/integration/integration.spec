@@ -15,7 +15,10 @@ Dir[File.join(File.dirname(__FILE__), '**/*.fxdb')].each do |file|
     }
 
     subject{
-      lambda{ DbAgile::connect("sqlite://#{database}").execute(content) }
+      lambda{ 
+        db = DbAgile::connect("sqlite://#{database}")
+        db.execute(content)
+      }
     }
 
     it{ should_not raise_error }

@@ -19,7 +19,9 @@ describe DbAgile do
     DbAgile::execute{ 
       connect "sqlite://test.db"
       use AgileTable 
-      insert :people, {:id => 1}
+      start_transaction
+        insert :people, {:id => 1}
+      commit
     }.should be_nil
   end
   

@@ -1,6 +1,8 @@
-(key! :suppliers, [:'s#'])
-(assert "Suppliers keys is ['s#'] at begining",
-  (equal? [ [:'s#'] ], (keys :suppliers)))
-(key! :suppliers, [:name, :city])
-(assert "Suppliers keys is now [[s#], [name, city]]",
-  (equal? [ [:'s#'], [:name, :city] ], (keys :suppliers)))
+start_transaction
+  (key! :suppliers, [:'s#'])
+  (assert "Suppliers keys is ['s#'] at begining",
+    (equal? [ [:'s#'] ], (keys :suppliers)))
+  (key! :suppliers, [:name, :city])
+  (assert "Suppliers keys is now [[s#], [name, city]]",
+    (equal? [ [:'s#'], [:name, :city] ], (keys :suppliers)))
+commit

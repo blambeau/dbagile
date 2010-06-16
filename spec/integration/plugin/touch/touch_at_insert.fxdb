@@ -2,16 +2,18 @@
 (use Touch, { :insert_force    => Kernel.lambda{|t| t[:id]*2} }, :at => :insert, :force => true)
 (use Touch, { :insert_no_force => Kernel.lambda{|t| t[:id]*2} }, :at => :insert, :force => false)
 
-(define :example, :id => Integer)
+start_transaction
+  (define :example, :id => Integer)
 
-(delete :example)
-(insert :example, {:id => 1})
-(assert "Tuple has been touched at first insert",
-  (equal? [{:id => 1, :insert_force => 2, :insert_no_force => 2}],
-          (to_a :example)))
+  (delete :example)
+  (insert :example, {:id => 1})
+  (assert "Tuple has been touched at first insert",
+    (equal? [{:id => 1, :insert_force => 2, :insert_no_force => 2}],
+            (to_a :example)))
           
-(delete :example)
-(insert :example, {:id => 1, :insert_force => 0, :insert_no_force => 0})
-(assert "Tuple has been touched at second insert",
-  (equal? [{:id => 1, :insert_force => 2, :insert_no_force => 0}],
-          (to_a :example)))
+  (delete :example)
+  (insert :example, {:id => 1, :insert_force => 0, :insert_no_force => 0})
+  (assert "Tuple has been touched at second insert",
+    (equal? [{:id => 1, :insert_force => 2, :insert_no_force => 0}],
+            (to_a :example)))
+commit
