@@ -23,7 +23,7 @@ h2. The command line tool
          \q to quit
 
   dbagile=# \c sqlite://example.db
-  dbagile=# use Defaults, {:now => Defaults::now}
+  dbagile=# plug Defaults, {:now => Defaults::now}
   dbagile=# insert :tools, {:name => "dbagile", :version => "0.0.1"}
   dbagile=# display :tools
   

@@ -4,7 +4,7 @@ describe "DbAgile::Database::execute" do
   let(:adapter){ DbAgile::MemoryAdapter.new }
   let(:database){ DbAgile::connect(adapter) }
   let(:source){ lambda{
-    use :AgileTable
+    plug AgileTable
     start_transaction
       insert :people, {:id => 1}
     commit

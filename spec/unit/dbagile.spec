@@ -18,7 +18,7 @@ describe DbAgile do
   it "should correctly resolve constants" do
     DbAgile::execute{ 
       connect "sqlite://test.db"
-      use AgileTable 
+      plug AgileTable 
       start_transaction
         insert :people, {:id => 1}
       commit

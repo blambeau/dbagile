@@ -48,13 +48,6 @@ module DbAgile
       
       # To be moved methods ########################################################
       
-      # Uses a given pluging in the main chain
-      def use(plugin, *args)
-        plugin = DbAgile::Plugin.const_get(plugin) if plugin.kind_of?(Symbol)
-        database.unshift_main_delegate(plugin, *args)
-        true
-      end
-      
       # Plugs something in the chain
       def plug(*args)
         tables = []
@@ -62,9 +55,9 @@ module DbAgile
           tables << args.shift
         end
         if tables.empty?
-          database.unshift_main_delegate(*args)
+          database.plug(*args)
         else
-          tables.each{|t| database.unshift_table_delegate(t, *args)}
+          tables.each{|t| database.table_plug(t, *args)}
         end
       end
       

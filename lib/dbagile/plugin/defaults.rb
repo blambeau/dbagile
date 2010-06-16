@@ -1,7 +1,7 @@
 module DbAgile
   class Plugin
     # 
-    # Shortcut for (use Touch, :at => :insert, :force => false)
+    # Shortcut for (plug Touch, :at => :insert, :force => false)
     #
     class Defaults < Touch
       

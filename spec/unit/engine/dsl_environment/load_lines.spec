@@ -3,7 +3,7 @@ describe "DbAgile::Engine::DslEnvironment#load_lines" do
   
   let(:source) {
     lambda{
-      use :AgileTable
+      plug AgileTable
       insert :table, {:id => 12}
       display :table
     }
@@ -12,7 +12,7 @@ describe "DbAgile::Engine::DslEnvironment#load_lines" do
   subject{ env.load_lines.collect{|node| [node.function.to_s, node.children.collect{|c| c.literal}]} }
   
   it{ should == [
-    ['use',     [:AgileTable]],
+    ['plug',     [AgileTable]],
     ['insert',  [:table, {:id => 12}]],
     ['display', [:table]]
   ]}

@@ -4,8 +4,8 @@ describe "DbAgile::Database::insert" do
   let(:adapter){ DbAgile::MemoryAdapter.new }
   let(:database){ DbAgile::connect(adapter) }
   before{
-    database.unshift_main_delegate(::DbAgile::Plugin::AgileTable)
-    database.unshift_table_delegate(:example, ::DbAgile::Plugin::Defaults, :now => "now")
+    database.plug(::DbAgile::Plugin::AgileTable)
+    database.table_plug(:example, ::DbAgile::Plugin::Defaults, :now => "now")
   }
   
   specify("Inserting in example leads to a now") do

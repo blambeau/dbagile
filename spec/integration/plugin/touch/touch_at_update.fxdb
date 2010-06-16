@@ -1,6 +1,6 @@
-(use AgileTable)
-(use Touch, { :update_force    => Kernel.lambda{|t| t[:id]*2} }, :at => :update, :force => true)
-(use Touch, { :update_no_force => Kernel.lambda{|t| t[:id]*2} }, :at => :update, :force => false)
+(plug AgileTable)
+(plug Touch, { :update_force    => Kernel.lambda{|t| t[:id]*2} }, :at => :update, :force => true)
+(plug Touch, { :update_no_force => Kernel.lambda{|t| t[:id]*2} }, :at => :update, :force => false)
 
 start_transaction
   (define :example, :id => Integer)

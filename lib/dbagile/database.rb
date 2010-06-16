@@ -7,7 +7,7 @@ module DbAgile
     def initialize(adapter)
       @delegate = DbAgile::Utils::Chain[adapter]
       @table_chains = {}
-      unshift_table_delegate(:dbagile_sequences, 
+      table_plug(:dbagile_sequences, 
         Plugin::AgileKeys[:candidate => /[#]$/],
         Plugin::AgileTable)
     end
@@ -33,12 +33,12 @@ module DbAgile
     end
     
     # Adds a brick inside the global chain
-    def unshift_main_delegate(*args)
+    def plug(*args)
       main_delegate.plug(*args)
     end
     
     # Unshifts a table delegate
-    def unshift_table_delegate(table, *args)
+    def table_plug(table, *args)
       # 1) Force a chain delegate on main chain if no chain for that table
       @table_chains[table] = DbAgile::Utils::Chain[main_delegate]\
         unless @table_chains.key?(table)
