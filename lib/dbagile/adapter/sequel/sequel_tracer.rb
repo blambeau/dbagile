@@ -12,6 +12,9 @@ module DbAgile
         :trace_buffer => nil
       }
       
+      # Adapter delegate 
+      attr_reader :delegate
+      
       # Creates a tracer instance
       def initialize(delegate, options)
         @delegate = delegate
