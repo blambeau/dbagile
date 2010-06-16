@@ -1,21 +1,6 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 describe "DbAgile::Utils::Chain" do
-  
-  class Fixtures::SayHello
-    def say_hello(who)
-      who
-    end
-  end
-  
-  class Fixtures::Capitalize
-    def initialize(method = :capitalize)
-      @method = method
-    end
-    def say_hello(who)
-      delegate.say_hello(who.send(@method))
-    end
-  end
-  
+
   context "When created with only one instance member" do
     let(:chain){ DbAgile::Utils::Chain.new(Fixtures::SayHello.new) }
     specify{ chain.say_hello("dbagile").should == "dbagile" }

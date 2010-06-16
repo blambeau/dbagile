@@ -11,7 +11,7 @@ module DbAgile
       end
       
       # Returns the delegator chain
-      attr :delegate_chain
+      attr_reader :delegate_chain
       
       # Creates a chain instance. Shortcut for Chain.new(*args)
       def self.[](*args)
@@ -61,6 +61,20 @@ module DbAgile
         @delegate_chain = __build_participants__(args) + delegate_chain
         __install_chain__
         self
+      end
+      
+      # Returns a connected version of self.
+      def connect(last)
+        chain = delegate_chain + [ last ]
+        Chain.new(*chain)
+      end
+      
+      # Inspects this chain
+      def inspect
+        debug = delegate_chain.collect{|c| 
+          c.kind_of?(Chain) ? c.inspect : c.class.name
+        }.join(', ')
+        "[#{debug}]"
       end
       
       protected :__getobj__

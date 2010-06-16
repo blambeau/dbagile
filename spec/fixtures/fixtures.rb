@@ -55,4 +55,33 @@ module Fixtures
   end
   module_function :adapters_under_test
   
+  class SayHello
+    def say_hello(who)
+      who
+    end
+  end
+  class Reverse
+    def say_hello(who)
+      delegate.say_hello(who.reverse)
+    end
+  end
+  class Upcase
+    def say_hello(who)
+      delegate.say_hello(who.upcase)
+    end
+  end
+  class Downcase
+    def say_hello(who)
+      delegate.say_hello(who.downcase)
+    end
+  end
+  class Capitalize
+    def initialize(method = :capitalize)
+      @method = method
+    end
+    def say_hello(who)
+      delegate.say_hello(who.send(@method))
+    end
+  end
+
 end # module Fixture
