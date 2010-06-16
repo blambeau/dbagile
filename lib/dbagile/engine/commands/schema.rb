@@ -53,6 +53,10 @@ module DbAgile
         connection.plug(*args)
       end
       
+      def debug
+        engine.say(connection.inspect)
+      end
+      
     end # module Schema
   end # class Engine
 end # module DbAgile

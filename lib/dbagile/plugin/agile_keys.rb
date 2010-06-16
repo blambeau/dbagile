@@ -12,6 +12,7 @@ module DbAgile
       
       # Finds and create candidate keys for the table
       def create_candidate_key(transaction, table_name, columns)
+        puts "Will create a candidate key #{table_name} for #{columns.inspect}"
         return unless match = options[:candidate]
         which = columns.select{|c| match =~ c.to_s}
         return if which.empty?
@@ -20,6 +21,7 @@ module DbAgile
       
       # Creates a table with some columns. 
       def create_table(transaction, table_name, columns)
+        puts "Create table on AgileKeys"
         res = delegate.create_table(transaction, table_name, columns)
         create_candidate_key(transaction, table_name, columns.keys)
         res

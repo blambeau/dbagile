@@ -17,9 +17,9 @@ module DbAgile
         if has_table?(table)
           existing_columns = column_names(table)
           missing_columns = heading.delete_if{|k,v| existing_columns.include?(k)}
-          add_columns(transaction, table, missing_columns) unless missing_columns.empty?
+          transaction.add_columns(table, missing_columns) unless missing_columns.empty?
         elsif options[:create_table]
-          create_table(transaction, table, heading)
+          transaction.create_table(table, heading)
         end
       end
       
