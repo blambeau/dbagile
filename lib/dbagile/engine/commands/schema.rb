@@ -51,7 +51,6 @@ module DbAgile
       # Plugs something in the chain
       def plug(*args)
         connection.plug(*args)
-        puts connection.inspect
       end
       
     end # module Schema

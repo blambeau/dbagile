@@ -6,7 +6,6 @@ describe "DbAgile::Core::Connector" do
     connector.plug(::Fixtures::Reverse)
     connector.plug(:upcased, ::Fixtures::Upcase)
     connector.plug(:capitalized, ::Fixtures::Capitalize)
-    connector.connected?.should be_false
   }
   
   specify("it should behave correctly") {
@@ -22,7 +21,6 @@ describe "DbAgile::Core::Connector" do
     conn = connector.connect(::Fixtures::SayHello)
     conn.connected?.should be_true
     conn.plug(:basic, ::Fixtures::Upcase)
-    puts conn.inspect
     conn.find_delegate(:basic).say_hello("dbagile").should == "ELIGABD"
   }
 

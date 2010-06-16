@@ -30,9 +30,9 @@ module DbAgile
           tables.each{|t| 
             unless table_chains.key?(t)
               if connected?
-                table_chains[t] = DbAgile::Core::Chain.new 
-              else
                 table_chains[t] = DbAgile::Core::Chain[main_chain]
+              else
+                table_chains[t] = DbAgile::Core::Chain.new 
               end
             end
             table_chains[t].plug(*args)
@@ -55,7 +55,9 @@ module DbAgile
         raise "Connector already connected" if connected?
         main = main_chain.connect(last)
         tables = {}
-        table_chains.each_pair{|name, chain| tables[name] = chain.connect(main)}
+        table_chains.each_pair{|name, chain| 
+          tables[name] = chain.connect(main)
+        }
         Connector.new(main, tables, true)
       end
       
