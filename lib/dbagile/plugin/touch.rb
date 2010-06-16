@@ -11,8 +11,8 @@ module DbAgile
       end
       
       # Creates a plugin instance
-      def initialize(delegate, values, options = {})
-        super(delegate, options)
+      def initialize(values, options = {})
+        super(options)
         @values = values
       end
       

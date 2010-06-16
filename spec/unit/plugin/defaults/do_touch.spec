@@ -2,7 +2,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::Defaults#__do_touch" do
   
   before{ ::DbAgile::Plugin::Defaults.instance_eval{public :__do_touch} }
-  let(:defaults){ ::DbAgile::Plugin::Defaults.new(nil, nil) }
+  let(:defaults){ ::DbAgile::Plugin::Defaults.new(nil) }
   
   describe "When called with constant values" do
     subject{ defaults.__do_touch({}, :name => "dbagile", :version => DbAgile::VERSION) }

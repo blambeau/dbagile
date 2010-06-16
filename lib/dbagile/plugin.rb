@@ -11,13 +11,12 @@ module DbAgile
     
     # Returns an instance
     def self.[](*args)
-      self.new(nil, *args)
+      self.new(*args)
     end
     
     # Creates a brick instance with a given delegate
-    def initialize(delegate, options = {})
+    def initialize(options = {})
       @options = default_options.merge(options)
-      @delegate = delegate
     end
     
     # Returns default brick options

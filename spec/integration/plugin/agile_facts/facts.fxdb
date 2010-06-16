@@ -1,4 +1,4 @@
-(plug AgileTable, AgileKeys[:candidate => /[#]$/])
+(plug AgileTable[], AgileKeys[:candidate => /[#]$/])
 
 start_transaction
   (fact! :people, {:'p#' => 1, :name => "blambeau"})

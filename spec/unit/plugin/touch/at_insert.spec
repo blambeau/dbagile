@@ -1,7 +1,7 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::Touch#at_insert?" do
   
-  let(:touch){ DbAgile::Plugin::Touch.new(nil, nil, options) }
+  let(:touch){ DbAgile::Plugin::Touch.new(nil, options) }
   subject{ touch.at_insert? }
   
   context "when called on default options" do

@@ -1,7 +1,6 @@
 require 'dbagile/adapter/errors'
 require 'dbagile/adapter/contract'
 require 'dbagile/adapter/delegate'
-require 'dbagile/adapter/delegate_chain'
 require 'dbagile/adapter/tools'
 module DbAgile
   class Adapter
