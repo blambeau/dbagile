@@ -81,10 +81,12 @@ module DbAgile
         t = Transaction.new(self)
         if block_given?
           begin
-            yield(t)
+            res = yield(t)
             t.commit
+            res
           rescue Exception
             t.rollback
+            Kernel::raise
           end
         else
           t
