@@ -26,50 +26,9 @@ module DbAgile
         @connector.find_delegate(name)
       end
       
-      # About connections ############################################################
-      
-      # Pings the connection
-      def ping
-        main_delegate.ping
-      end
-    
-      # Disconnect from the database
-      def disconnect
-        main_delegate.disconnect
-      end
-    
-      ### ABOUT QUERIES ##############################################################
-    
-      # @see Database#dataset
-      def dataset(table_or_query, proj = nil)
-        find_delegate(table_or_query).dataset(table_or_query, proj)
-      end
-    
-      # @see Database#exists?
-      def exists?(table_or_query, subtuple = {})
-        find_delegate(table_or_query).exists?(table_or_query, subtuple)
-      end
-    
-      ### SCHEMA QUERIES #############################################################
-    
-      # @see Database#has_table?
-      def has_table?(table_name)
-        find_delegate(table_name).has_table?(table_name)
-      end
-    
-      # @see Database#has_column?
-      def has_column?(table_name, column_name)
-        find_delegate(table_name).has_column?(table_name, column_name)
-      end
-    
-      # @see Database#column_names(table_name, sort)
-      def column_names(table_name, sort = false)
-        find_delegate(table_name).column_names(table_name, sort)
-      end
-    
-      # @see Database#keys
-      def keys(table_name)
-        find_delegate(table_name).keys(table_name)
+      # Delegated to the connector
+      def inspect
+        @connector.inspect
       end
     
       ### TRANSACTIONS AND WRITE ACCESSES ############################################
@@ -93,9 +52,24 @@ module DbAgile
         end
       end
       
-      # Delegated to the connector
-      def inspect
-        @connector.inspect
+      ### DELEGATE PATTERN #########################################################
+
+      # Automatically install methods of the ConnectionDriven contract
+      DbAgile::Contract::ConnectionDriven.instance_methods(false).each do |method|
+        self.module_eval <<-EOF
+          def #{method}(*args)
+            main_delegate.#{method}(*args)  
+          end
+        EOF
+      end
+    
+      # Automatically install methods of the TableDriven contract
+      DbAgile::Contract::TableDriven.instance_methods(false).each do |method|
+        self.module_eval <<-EOF
+          def #{method}(*args)
+            find_delegate(args[0]).#{method}(*args)  
+          end
+        EOF
       end
     
     end # class Connection

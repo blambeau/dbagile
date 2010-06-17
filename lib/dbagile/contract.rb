@@ -1,0 +1,5 @@
+require 'dbagile/contract/connection_driven'
+require 'dbagile/contract/table_driven'
+require 'dbagile/contract/transaction_driven'
+require 'dbagile/contract/delegate'
+require 'dbagile/contract/full'

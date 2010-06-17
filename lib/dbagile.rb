@@ -60,6 +60,7 @@ gem "sequel", ">= 3.8.0"
 require 'sbyc'
 require 'sequel'
 
+require 'dbagile/contract'
 require 'dbagile/errors'
 require 'dbagile/ext/object'
 require 'dbagile/utils'

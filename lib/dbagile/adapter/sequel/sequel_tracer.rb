@@ -1,7 +1,7 @@
 module DbAgile
   class SequelAdapter
     class SequelTracer
-      include DbAgile::Adapter::Delegate
+      include DbAgile::Contract::Delegate
     
       ### INIT AND OPTIONS #########################################################
     
