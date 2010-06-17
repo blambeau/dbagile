@@ -56,6 +56,9 @@ module Fixtures
   module_function :adapters_under_test
   
   class SayHello
+    def del_to_block
+      yield
+    end
     def say_hello(who)
       who
     end

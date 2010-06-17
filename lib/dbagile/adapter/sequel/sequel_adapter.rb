@@ -40,7 +40,9 @@ module DbAgile
     # Yields the block inside a transaction
     def transaction(&block)
       raise ArgumentError, "Missing transaction block" unless block
-      db.transaction(&block)
+      db.transaction do
+        block.call(self)
+      end
     end
       
     # Returns the underlying Sequel::Database instance

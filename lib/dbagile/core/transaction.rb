@@ -28,7 +28,7 @@ module DbAgile
     
       # Rollbacks the transaction
       def rollback
-        raise AbordTransactionError
+        raise DbAgile::Adapter::AbordTransactionError
       end
     
       ### DELEGATE PATTERN #########################################################

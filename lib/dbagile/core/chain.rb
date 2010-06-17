@@ -2,7 +2,7 @@ require 'delegate'
 require 'enumerator'
 module DbAgile
   module Core
-    class Chain < Delegator
+    class Chain
       
       # A participant in the chain
       module Participant
@@ -25,6 +25,15 @@ module DbAgile
         __install_chain__
       end
       
+      # Handles the magic of delegation through \_\_getobj\_\_.
+      def method_missing(m, *args, &block)
+        target = self.__getobj__
+        unless target.respond_to?(m)
+          super
+        end
+        target.__send__(m, *args, &block)
+      end
+
       # Builds some participants
       def __build_participants__(args)
         delegates = []
