@@ -14,12 +14,18 @@ module DbAgile
     
       ### ABOUT TRANSACTION MANAGEMENT #############################################
     
+      # Executes a block
+      def execute(&block)
+        block.call(self) if block
+      end
+    
       # Commits the transaction
       def commit
       end
     
       # Rollbacks the transaction
       def rollback
+        raise AbordTransactionError
       end
     
       ### DELEGATE PATTERN #########################################################
@@ -51,6 +57,7 @@ module DbAgile
         EOF
       end
 
+      private :connection
     end # class Transaction
   end # module Core
 end # module DbAgile

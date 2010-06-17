@@ -33,23 +33,9 @@ module DbAgile
     
       ### TRANSACTIONS AND WRITE ACCESSES ############################################
     
-      # Starts a transaction. If a block is provided, yields it with the transaction 
-      # object, commits the transaction at the end and returns nil. Otherwise, returns
-      # the transaction object.
-      def transaction
-        t = Transaction.new(self)
-        if block_given?
-          begin
-            res = yield(t)
-            t.commit
-            res
-          rescue Exception
-            t.rollback
-            Kernel::raise
-          end
-        else
-          t
-        end
+      # Executes the block inside a transaction.
+      def transaction(&block)
+        Transaction.new(self).execute(&block)
       end
       
       ### DELEGATE PATTERN #########################################################

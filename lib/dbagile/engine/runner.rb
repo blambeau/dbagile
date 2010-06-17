@@ -41,7 +41,7 @@ module DbAgile
       # Starts transaction
       def start_transaction
         raise "Transaction already running" if @transaction
-        @transaction = connection.transaction
+        @transaction = connection.transaction{|t| t}
       end
       
       # Commits the current transaction

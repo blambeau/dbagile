@@ -15,6 +15,8 @@
 (plug Defaults,  {:now => Defaults::now})
 (plug :supplies, Touch, {:last_update => Touch::now})
 
+start_transaction 
+
 # Known facts about suppliers
 (fact! :suppliers, [
   {:'s#' => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
@@ -49,6 +51,8 @@
   {:'s#' => 'S4', :'p#' => 'P4', :quantity => 300},
   {:'s#' => 'S4', :'p#' => 'P5', :quantity => 400}
 ])
+
+commit
 
 # Display contents of the fact tables
 (display :suppliers)
