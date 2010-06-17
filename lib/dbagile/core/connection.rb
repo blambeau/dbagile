@@ -35,6 +35,7 @@ module DbAgile
     
       # Executes the block inside a transaction.
       def transaction(&block)
+        raise ArgumentError, "Missing transaction block" unless block
         Transaction.new(self).execute(&block)
       end
       
@@ -43,8 +44,8 @@ module DbAgile
       # Automatically install methods of the ConnectionDriven contract
       DbAgile::Contract::ConnectionDriven.instance_methods(false).each do |method|
         self.module_eval <<-EOF
-          def #{method}(*args)
-            main_delegate.#{method}(*args)  
+          def #{method}(*args, &block)
+            main_delegate.#{method}(*args, &block)  
           end
         EOF
       end
@@ -52,8 +53,8 @@ module DbAgile
       # Automatically install methods of the TableDriven contract
       DbAgile::Contract::TableDriven.instance_methods(false).each do |method|
         self.module_eval <<-EOF
-          def #{method}(*args)
-            find_delegate(args[0]).#{method}(*args)  
+          def #{method}(*args, &block)
+            find_delegate(args[0]).#{method}(*args, &block)  
           end
         EOF
       end

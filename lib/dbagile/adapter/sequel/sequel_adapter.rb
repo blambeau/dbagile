@@ -37,6 +37,12 @@ module DbAgile
       true
     end
     
+    # Yields the block inside a transaction
+    def transaction(&block)
+      raise ArgumentError, "Missing transaction block" unless block
+      db.transaction(&block)
+    end
+      
     # Returns the underlying Sequel::Database instance
     def db
       unless @db

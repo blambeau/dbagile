@@ -8,7 +8,7 @@ module DbAgile
       # @return [...] block's result
       #
       def transaction(&block)
-        block.call
+        Kernel.raise NotImplementedError
       end
       
     end # module TransactionSupport

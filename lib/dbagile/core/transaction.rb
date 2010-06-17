@@ -16,7 +16,10 @@ module DbAgile
     
       # Executes a block
       def execute(&block)
-        block.call(self) if block
+        raise ArgumentError, "Missing transaction block" unless block
+        connection.main_delegate.transaction do
+          block.call(self)
+        end
       end
     
       # Commits the transaction
