@@ -1,42 +1,47 @@
 require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::AgileTable#update" do
   
-  let(:adapter){ DbAgile::MemoryAdapter.new }
-  let(:options){ Hash.new }
-  let(:chain){ DbAgile::Core::Chain[DbAgile::Plugin::AgileTable.new(options), adapter] }
+  let(:db){
+    DbAgile::config{ (plug AgileTable) }.connect("memory://test.db")
+  }
+  
   before{ 
-    adapter.create_table(nil, :example, :id => Integer, :name => String) 
-    adapter.insert(nil, :example, :id => 1, :name => "dbagile")
+    db.transaction do |t|
+      t.create_table(:example, :id => Integer, :name => String) 
+      t.insert(:example, :id => 1, :name => "dbagile")
+    end
   }
   
   describe "When called on an existing table with already existing columns" do
-    subject{ chain.update(nil, :example, {:id => 1}, {:name => "DbAgile"}) }
+    subject{ 
+      db.transaction{|t| t.update(:example, {:id => 1}, {:name => "DbAgile"}) }
+    }
     specify{ 
       subject.should be_true
-      adapter.column_names(:example, true).should == [:id, :name]
-      adapter.dataset(:example).to_a.should == [{:id => 1, :name => "DbAgile"}]
+      db.column_names(:example, true).should == [:id, :name]
+      db.dataset(:example).to_a.should == [{:id => 1, :name => "DbAgile"}]
     }
   end
   
   describe "When called on an existing table with non existing columns" do
     subject{ 
-      chain.update(nil, :example, {:id => 1}, :hello => "world") 
+      db.transaction{|t| t.update(:example, {:id => 1}, {:hello => "world"}) }
     }
     specify{ 
       subject.should be_true
-      adapter.column_names(:example, true).should == [:hello, :id, :name]
-      adapter.dataset(:example).to_a.should == [{:id => 1, :name => "dbagile", :hello => "world"}]
+      db.column_names(:example, true).should == [:hello, :id, :name]
+      db.dataset(:example).to_a.should == [{:id => 1, :name => "dbagile", :hello => "world"}]
     }
   end
   
   describe "When called on an existing table with a mix" do
     subject{ 
-      chain.update(nil, :example, {:id => 1}, {:name => "DbAgile", :hello => "world"}) 
+      db.transaction{|t| t.update(:example, {:id => 1}, {:name => "DbAgile", :hello => "world"}) }
     }
     specify{ 
       subject.should be_true
-      adapter.column_names(:example, true).should == [:hello, :id, :name]
-      adapter.dataset(:example).to_a.should == [ {:id => 1, :name => "DbAgile", :hello => "world"} ]
+      db.column_names(:example, true).should == [:hello, :id, :name]
+      db.dataset(:example).to_a.should == [ {:id => 1, :name => "DbAgile", :hello => "world"} ]
     }
   end
     

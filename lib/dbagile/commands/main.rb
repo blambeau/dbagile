@@ -97,9 +97,9 @@ module DbAgile
         self.connection_options = {
           :trace_sql    => trace_sql, 
           :trace_only   => trace_only,
-          :trace_buffer => trace_sql ? output : nil,
-          :sequel_logger => sequel_logger
+          :trace_buffer => trace_sql ? output : nil
         }
+        self.connection_options.merge(:sequel_logger => sequel_logger) if sequel_logger
       end
       
       # Checks the arguments
