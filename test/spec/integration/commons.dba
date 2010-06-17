@@ -1,8 +1,8 @@
 start_transaction
   # We create the three tables
-  define :suppliers, {:'s#' => Integer, :name => String, :status => Integer, :city => String}
-  define :parts,     {:'p#' => Integer, :name => String, :color => String, :weight => Float, :city => String}
-  define :supplies,  {:'s#' => Integer, :'p#' => Integer, :quantity => Integer}
+  define :suppliers, {:'s#' => String, :name => String, :status => Integer, :city => String}
+  define :parts,     {:'p#' => String, :name => String, :color => String, :weight => Float, :city => String}
+  define :supplies,  {:'s#' => String, :'p#' => String, :quantity => Integer}
 
   # We insert the data now...
   insert :suppliers, {:'s#' => 'S1', :name => 'Smith', :status => 20, :city => 'London'}
