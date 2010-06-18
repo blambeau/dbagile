@@ -3,7 +3,7 @@ module DbAgile
   # Defines common contract of all plugins inside the adapter chain
   #
   class Plugin
-    include Adapter::Delegate
+    include DbAgile::Contract::Delegate
     include DbAgile::Adapter::Tools
     
     # Plugin options

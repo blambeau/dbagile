@@ -1,8 +1,8 @@
 module DbAgile
-  class Adapter
+  module Contract
     module Delegate
       
-      ::DbAgile::Adapter::Contract.instance_methods(false).each do |meth|
+      DbAgile::Contract::Full.instance_methods(true).each do |meth|
         module_eval <<-EOF
           def #{meth}(*args, &block)
             delegate.#{meth}(*args, &block)
@@ -11,5 +11,5 @@ module DbAgile
       end
     
     end # module Delegate
-  end # class Adapter
+  end # module Contract
 end # module DbAgile

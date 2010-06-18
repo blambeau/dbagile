@@ -25,6 +25,11 @@ module DbAgile
       true
     end
     
+    # Transaction
+    def transaction
+      yield(self)
+    end
+    
     ### ABOUT QUERIES ############################################################
       
     # Returns a Dataset object for a given table

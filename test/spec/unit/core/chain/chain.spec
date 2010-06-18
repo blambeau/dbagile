@@ -47,4 +47,11 @@ describe "DbAgile::Core::Chain" do
     }
   end
 
+  context "When blocks are used" do
+    let(:chain){ DbAgile::Core::Chain.new(Fixtures::SayHello.new) }
+    specify{ 
+      chain.del_to_block{ "hello" }.should == "hello" 
+    }
+  end
+
 end
