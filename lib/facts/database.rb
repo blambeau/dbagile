@@ -1,8 +1,11 @@
 require 'facts/database/implementation'
 module Facts
   class Database
-    include Facts::Database::Implementation
+    private
+      include Facts::Database::Implementation
     
+    public 
+
     # Underlying dbagile connection
     attr_reader :connection
     
@@ -40,9 +43,9 @@ module Facts
     end
     
     # Retrieve a fact from the database
-    def fact(name, projection_with_key, keys, default = nil)
+    def fact(name, projection_with_key, keys, default = nil, &block)
       if has_structural_fact?(name, projection_with_key)
-        retrieve_fact(name, projection_with_key, keys, default)
+        retrieve_fact(name, projection_with_key, keys, default, &block)
       else
         default
       end

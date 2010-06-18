@@ -2,9 +2,6 @@ module Facts
   class Database
     module Implementation
       
-      ### All section is private
-      private
-      
       # Returns relational utils
       def relutils
         unless @relutils
@@ -61,36 +58,44 @@ module Facts
           raise "Projection #{projection_key.inspect} is not a key for facts collection #{name}\n"
         end
         if tuple = tuple.first
-          build_fact(tuple, keys, default || block)
+          build_fact(tuple, keys, default, &block)
         else
-          build_default_fact(keys, default || block)
+          build_default_fact(keys, default, &block)
         end
       end
       
       # Builds a fact from a tuple
-      def build_fact(tuple, keys, default)
+      def build_fact(tuple, keys, default = nil, &block)
+        default = default.nil? ? block : default
+        build_default_fact(keys){|k|
+          value = tuple[k]
+          value = get_default_value(k, default) if value.nil?
+          value
+        }
+      end
+      
+      # Builds a default fact
+      def build_default_fact(keys, default = nil, &block)
+        default = default.nil? ? block : default
         if keys.kind_of?(Symbol)
-          build_fact(tuple, [ keys ], default)[keys]
+          build_default_fact([ keys ], default)[keys]
         else
           fact = {}
           keys.each{|k| 
-            value = tuple[k]
-            value = default[k] if value.nil? && !default.nil?
-            fact[k] = value
+            value = get_default_value(k, default)
+            fact[k] = value unless value.nil?
           }
           fact
         end
       end
       
-      # Builds a default fact
-      def build_default_fact(keys, default)
-        return nil if default.nil?
-        if keys.kind_of?(Symbol)
-          build_default_fact([ keys ])[keys]
-        else
-          fact = {}
-          keys.each{|k| fact[k] = default[k]}
-          fact
+      # Returns a default value given a key, a default and a block
+      def get_default_value(key, default)
+        case default
+          when Hash, Proc
+            default[key]
+          else
+            default
         end
       end
       
