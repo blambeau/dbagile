@@ -83,6 +83,20 @@ module DbAgile
       end
       
       #
+      # Checks if an array of column names for a key for a given table.
+      #
+      # @param [Symbol] table_name the name of a table
+      # @param [Array<Symbol>] columns column names, in any order
+      # @return [Boolean] true if the table contains such a unique key, 
+      #         false otherwise
+      #
+      # @pre the database contains a table with that name
+      #
+      def is_key?(table_name, columns)
+        keys(table_name).include?(columns)
+      end
+      
+      #
       # Returns available keys for a given table as an array of column 
       # names.
       #
