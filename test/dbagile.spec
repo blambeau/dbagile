@@ -1,7 +1,15 @@
-require File.expand_path('../spec_helper', __FILE__)
-require 'fileutils'
+$LOAD_PATH.unshift(File.expand_path('../', __FILE__))
+$LOAD_PATH.unshift(File.expand_path('../fixtures', __FILE__))
+$LOAD_PATH.unshift(File.expand_path('../support', __FILE__))
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
-Dir[File.join(File.dirname(__FILE__), "highlevel/**/*.spec")].each{|f| load(f)}
+require 'rubygems'
+require 'fileutils'
+require 'dbagile'
+require 'spec'
+require 'spec/autorun'
+
+Dir[File.join(File.dirname(__FILE__), "dbagile/**/*.spec")].each{|f| load(f)}
 
 describe "DbAgile" do
 
