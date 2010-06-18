@@ -1,4 +1,4 @@
-it "should support rollbacking transactions explicitely" do
+it "should support rollbacking transactions explicitely without raising any error" do
 
   # Create the schema
   conn.transaction do |t|
@@ -12,10 +12,11 @@ it "should support rollbacking transactions explicitely" do
       t.insert(:example, {:id => 1})
       t.dataset(:example).to_a.should == [{ :id => 1 }]
       t.rollback
+      "No code executed after rollback".should be_nil
     end
-    true.should be_false
-  rescue DbAgile::Adapter::AbordTransactionError
-    conn.dataset(:example).to_a.should == [ ]
+  rescue Exception => ex
+    "No exception raised".should be_nil
   end
+  conn.dataset(:example).to_a.should == [ ]
 
 end

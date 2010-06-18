@@ -3,7 +3,10 @@ module DbAgile
     module TransactionSupport
       
       #
-      # Yields the block inside a transaction
+      # Yields the block inside a transaction. 
+      #
+      # Adapters are expected to catch the DbAgile::Errors::AbordTransactionError
+      # and to rollback the transaction without re-raising the error.
       #
       # @return [...] block's result
       #

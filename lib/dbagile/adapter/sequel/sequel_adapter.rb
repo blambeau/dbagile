@@ -40,8 +40,12 @@ module DbAgile
     # Yields the block inside a transaction
     def transaction(&block)
       raise ArgumentError, "Missing transaction block" unless block
-      db.transaction do
-        block.call(self)
+      begin
+        db.transaction do
+          block.call(self)
+        end
+      rescue DbAgile::Adapter::AbordTransactionError
+        nil
       end
     end
       
