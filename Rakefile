@@ -46,6 +46,7 @@ gemspec = Gem::Specification.new do |s|
   s.homepage = "http://github.com/blambeau/dbagile"
   s.add_dependency('sbyc', '>= 0.1.2')
   s.add_dependency('sequel', '>= 0.3.8')
+  s.add_dependency('rack', '>= 1.1.0')
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true

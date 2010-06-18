@@ -16,3 +16,4 @@ module Facts
   
 end # module Facts
 require 'facts/database'
+require 'facts/restful'
