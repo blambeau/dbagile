@@ -3,6 +3,7 @@ gem "rack", ">= 1.1.0"
 require 'rack'
 require 'uri'
 require 'cgi'
+require 'json'
 
 module Facts
   module Restful

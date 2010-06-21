@@ -27,7 +27,8 @@ describe "Facts" do
     specify{ 
       server = ::Facts::Restful::Server.start(uri)
       client = ::Facts::Restful::Client.new
-      client.fact(:supplier, {:'#' => 1, :name => "hello"}).should_not be_nil
+      client.fact!(:tools, {:'#' => 1, :name => "facts", :version => Facts::VERSION}).should be_kind_of(Hash)
+      client.fact(:tools, {:'#' => 1}).should be_kind_of(Hash)
       server.kill
     }
   }

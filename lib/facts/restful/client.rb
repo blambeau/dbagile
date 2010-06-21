@@ -21,6 +21,17 @@ module Facts
         res = Net::HTTP.start(server_uri.host, server_uri.port) {|http|
           http.request(req)
         }
+        JSON::parse(res.body)
+      end
+      
+      # Facts assertion
+      def fact!(name, attributes)
+        req = Net::HTTP::Post.new("#{server_uri.path}#{name.to_s}/")
+        req.set_form_data(attributes)
+        res = Net::HTTP.start(server_uri.host, server_uri.port) {|http|
+          http.request(req)
+        }
+        JSON::parse(res.body)
       end
       
     end # class Client

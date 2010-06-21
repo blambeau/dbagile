@@ -8,7 +8,7 @@ module Facts
       def self.start(dburi, options = Restful::DEFAULT_RACK_OPTIONS)
         rack_server  = Rack::Handler.default
         rack_app     = Rack::Builder.new{ run Facts::Restful::Server.new(dburi) }
-        thread       = Thread.new(rack_server, rack_app, options){|s,a,o| s.run(a, o) }
+        thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| s.run(a, o) }
         
         # Wait until the server is loaded
         try, ok, res = 0, false, nil
@@ -32,7 +32,7 @@ module Facts
       
       # Returns the facts database
       def db
-        @db ||= Facts::connect(uri)
+        @db ||= Facts::connect(@uri)
       end
       
       # Methodizes keys of a hash
@@ -42,32 +42,45 @@ module Facts
         m
       end
       
+      # Decodes a request
+      def decode(req)
+        method = req.request_method.downcase.to_sym
+        path, params = req.path, hash_methodize(req.params)
+        if req.path.strip == '/'
+          [:get, :system, {:version => ::Facts::VERSION}]
+        elsif /([a-z]+)/ =~ path
+          [method, $1.to_sym, params]
+        else 
+          nil
+        end
+      end
+      
       # Rack handler
       def call(env)
-        req = Rack::Request.new(env)
-        method, path, params = req.request_method, req.path, hash_methodize(req.params)
-        case method
-          when "GET"
-            do_get(path, params)
-          when "POST"
-            do_post(env)
-          when "PUT"
-            do_put(env)
-          when "DELETE"
-            do_delete(env)
+        method, path, params = decode(Rack::Request.new(env))
+        if method
+          self.send(method, path, params)
+        else
+          [404, {}, ["404 not found"]]  
         end
-        [200, {}, ["hello"]]
       end
       
-      def do_get(path, params)
-        puts "GET: #{path} :: #{params.inspect}"
+      # Encodes a result as json
+      def json_result(res)
+        [200, {'Content-Type' => 'application/json'}, ::JSON.generate(res)]
       end
       
-      def do_post(env)
+      def get(name, params)
+        json_result(db.fact(name, params) || {})
       end
-      alias :do_put :do_post
       
-      def do_delete(env)
+      def post(name, params)
+        json_result(db.fact!(name, params))
+      end
+      alias :put :post
+      
+      def delete(name, params)
+        json_result(db.nofact!(name, params))
       end
       
     end # class Server
