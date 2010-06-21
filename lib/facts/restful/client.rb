@@ -7,7 +7,7 @@ module Facts
       
       # Creates a Client instance that send request
       # to the server located to a given uri
-      def initialize(uri)
+      def initialize(uri = Restful::server_uri(Restful::DEFAULT_RACK_OPTIONS))
         require('net/http')
         require('uri')
         require('cgi')
@@ -16,8 +16,8 @@ module Facts
       
       # Facts retrieval
       def fact(name, proj)
-        query = params.collect{|k,v| '#{k}=#{CGI::escape(v.to_s)}'}.reverse.join('&')
-        req = Net::HTTP::Get.new("#{url.path}?#{query}")
+        query = proj.collect{|k,v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.reverse.join('&')
+        req = Net::HTTP::Get.new("#{server_uri.path}#{name.to_s}/?#{query}")
         res = Net::HTTP.start(server_uri.host, server_uri.port) {|http|
           http.request(req)
         }
