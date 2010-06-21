@@ -65,9 +65,7 @@ module Facts
       
       def do_post(env)
       end
-      
-      def do_put(env)
-      end
+      alias :do_put :do_post
       
       def do_delete(env)
       end
