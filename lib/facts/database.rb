@@ -42,6 +42,15 @@ module Facts
       has_structural_fact?(name, projection) && has_data_fact?(name, projection)
     end
     
+    # Retrieves a collection of facts
+    def facts(name, projection = nil, keys = nil, default = nil, &block)
+      if projection.nil? or projection.empty? or has_structural_fact?(name, projection)
+        retrieve_facts(name, projection, keys, default, &block)
+      else
+        default
+      end
+    end
+    
     # Retrieve a fact from the database
     def fact(name, projection_with_key, keys = nil, default = nil, &block)
       if has_structural_fact?(name, projection_with_key)

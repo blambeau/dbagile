@@ -64,6 +64,13 @@ module Facts
         end
       end
       
+      # Retrieves a given fact
+      def retrieve_facts(name, projection, keys, default = nil, transaction = connection, &block)
+        tuples = transaction.dataset(name, projection).to_a
+        tuples = tuples.collect{|t| build_fact(t, keys, default, &block)}
+        tuples
+      end
+      
       # Builds a fact from a tuple
       def build_fact(tuple, keys, default = nil, &block)
         default = default.nil? ? block : default
