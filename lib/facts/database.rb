@@ -43,7 +43,7 @@ module Facts
     end
     
     # Retrieve a fact from the database
-    def fact(name, projection_with_key, keys, default = nil, &block)
+    def fact(name, projection_with_key, keys = nil, default = nil, &block)
       if has_structural_fact?(name, projection_with_key)
         retrieve_fact(name, projection_with_key, keys, default, &block)
       else
