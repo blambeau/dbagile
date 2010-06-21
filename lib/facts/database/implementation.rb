@@ -67,7 +67,7 @@ module Facts
       # Builds a fact from a tuple
       def build_fact(tuple, keys, default = nil, &block)
         default = default.nil? ? block : default
-        build_default_fact(keys){|k|
+        build_default_fact(keys.nil? ? tuple.keys : keys){|k|
           value = tuple[k]
           value = get_default_value(k, default) if value.nil?
           value
@@ -80,6 +80,7 @@ module Facts
         if keys.kind_of?(Symbol)
           build_default_fact([ keys ], default)[keys]
         else
+          return {} if keys.nil? or keys.empty?
           fact = {}
           keys.each{|k| 
             value = get_default_value(k, default)
