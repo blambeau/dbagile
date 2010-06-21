@@ -24,11 +24,14 @@ describe "Facts" do
   describe("Facts - restful interface"){
     let(:sqlite_file){ File.expand_path('../facts.db', __FILE__)                   }
     let(:uri)        { "sqlite://#{sqlite_file}"                                   }
+    before           { FileUtils.rm_rf(sqlite_file)                                }
+    after            { FileUtils.rm_rf(sqlite_file)                                }
     specify{ 
       server = ::Facts::Restful::Server.start(uri)
       client = ::Facts::Restful::Client.new
       client.fact!(:tools, {:'#' => 1, :name => "facts", :version => Facts::VERSION}).should be_kind_of(Hash)
       client.fact(:tools, {:'#' => 1}).should be_kind_of(Hash)
+      client.fact?(:tools, {:'#' => 1}).should be_true
       server.kill
     }
   }

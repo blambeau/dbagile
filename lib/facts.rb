@@ -8,8 +8,9 @@ module Facts
   def self.connect(uri)
     conn = DbAgile::config{
       plug DbAgile::Plugin::AgileKeys[:candidate => /[#]$/]
-      # plug DbAgile::Plugin::Defaults[:fact_created_at => DbAgile::Plugin::Touch::now]
-      # plug DbAgile::Plugin::Touch[:fact_updated_at => DbAgile::Plugin::Touch::now]
+      plug DbAgile::Plugin::AgileTable
+      plug DbAgile::Plugin::Defaults[:fact_created_at => DbAgile::Plugin::Touch::now]
+      plug DbAgile::Plugin::Touch[:fact_updated_at => DbAgile::Plugin::Touch::now]
     }.connect(uri)
     Facts::Database.new(conn)
   end

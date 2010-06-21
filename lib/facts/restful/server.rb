@@ -35,17 +35,10 @@ module Facts
         @db ||= Facts::connect(@uri)
       end
       
-      # Methodizes keys of a hash
-      def hash_methodize(hash)
-        m = {}
-        hash.each_pair{|k,v| m[k.to_s.to_sym] = v}
-        m
-      end
-      
       # Decodes a request
       def decode(req)
         method = req.request_method.downcase.to_sym
-        path, params = req.path, hash_methodize(req.params)
+        path, params = req.path, Restful::hash_methodize(req.params)
         if req.path.strip == '/'
           [:get, :system, {:version => ::Facts::VERSION}]
         elsif /([a-z]+)/ =~ path
@@ -63,24 +56,36 @@ module Facts
         else
           [404, {}, ["404 not found"]]  
         end
+      rescue Exception => ex
+        [500, {}, [ex.message]]
+      end
+      
+      # Returns json HTTP headers
+      def json_header
+        {'Content-Type' => 'application/json'}
       end
       
       # Encodes a result as json
-      def json_result(res)
-        [200, {'Content-Type' => 'application/json'}, ::JSON.generate(res)]
+      def json_result(status, res)
+        [status, json_header, Restful::json_encode(res)]
       end
       
       def get(name, params)
-        json_result(db.fact(name, params) || {})
+        case fact = db.fact(name, params, nil, 404)
+          when 404
+            json_result(404, "No such fact")
+          else
+            json_result(200, fact)
+        end
       end
       
       def post(name, params)
-        json_result(db.fact!(name, params))
+        json_result(200, db.fact!(name, params))
       end
       alias :put :post
       
       def delete(name, params)
-        json_result(db.nofact!(name, params))
+        json_result(200, db.nofact!(name, params))
       end
       
     end # class Server

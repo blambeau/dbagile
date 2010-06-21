@@ -17,6 +17,26 @@ module Facts
     end
     module_function :server_uri
     
+    # Methodizes keys of a hash
+    def hash_methodize(hash)
+      m = {}
+      hash.each_pair{|k,v| m[k.to_s.to_sym] = v}
+      m
+    end
+    module_function :hash_methodize
+    
+    # Encodes a fact using JSON
+    def json_encode(fact)
+      ::JSON.generate(fact)
+    end
+    module_function :json_encode
+    
+    # Decodes a fact using JSON
+    def json_decode(fact)
+      hash_methodize(JSON::parse(fact))
+    end
+    module_function :json_decode
+    
   end # module Restful
 end # module Facts
 require 'facts/restful/client'
