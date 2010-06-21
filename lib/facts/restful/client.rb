@@ -78,7 +78,7 @@ module Facts
       
       # Returns a fact URI
       def fact_path_and_query(fact, params = nil)
-        uri = "#{server_uri.path}/#{fact}"
+        uri = "#{server_uri.path}#{fact}"
         uri += "?#{hash_to_urlquery(params)}" unless params.nil?
         uri
       end

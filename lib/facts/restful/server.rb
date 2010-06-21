@@ -57,7 +57,7 @@ module Facts
           [404, {}, ["404 not found"]]  
         end
       rescue Exception => ex
-        [500, {}, [ex.message]]
+        [500, {}, [ex.message] + ex.backtrace]
       end
       
       # Returns json HTTP headers
@@ -71,9 +71,10 @@ module Facts
       end
       
       def get(name, params)
-        case fact = db.fact(name, params, nil, 404)
+        fact = db.fact(name, params, nil, 404)
+        case fact
           when 404
-            json_result(404, "No such fact")
+            json_result(404, {:message => "No such fact"})
           else
             json_result(200, fact)
         end
