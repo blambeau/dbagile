@@ -9,8 +9,8 @@ describe "Facts::Restful::Server::Utils#decode_path" do
   end
   
   it "should support tuple-inspired paths" do
-    utils.decode_path('/people/12').should == [:people, {:'#' => '12'}]
-    utils.decode_path('/people/12/').should == [:people, {:'#' => '12'}]
+    utils.decode_path('/people/12').should == [:people, {:'#' => 12}]
+    utils.decode_path('/people/12/').should == [:people, {:'#' => 12}]
   end
   
   ['/people/and/other'].each do |path|

@@ -35,12 +35,10 @@ describe "Facts::Restful::Server#get" do
   context "when called with known tuple fact" do 
     let(:path){ "tools/1" }
     specify{
-      pending("Relation heading should be implemented in order to support this requirement"){
-        subject.status.should == 200
-        tuple = Facts::Restful::json_decode(subject.body)
-        tuple.should be_kind_of(Hash)
-        tuple[:name].should == "facts"
-      }
+      subject.status.should == 200
+      tuple = Facts::Restful::json_decode(subject.body)
+      tuple.should be_kind_of(Hash)
+      tuple[:name].should == "facts"
     }
   end
   

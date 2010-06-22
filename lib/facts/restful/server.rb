@@ -1,10 +1,12 @@
 require 'facts/restful/server/utils'
 require 'facts/restful/server/get'
+require 'facts/restful/server/post'
 module Facts
   module Restful
     class Server
       include Utils
       include Get
+      include Post
       
       ### Class methods ############################################################
       

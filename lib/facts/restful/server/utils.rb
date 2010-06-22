@@ -24,7 +24,9 @@ module Facts
             when 1
               [parts[0].to_sym, {}]
             when 2
-              [parts[0].to_sym, {:'#' => parts[1]}]
+              value = parts[1]
+              value = value.to_i if value =~ /^\d+$/
+              [parts[0].to_sym, {:'#' => value}]
             else
               raise UnexpectedPathError, "Unexpected path #{path}"
           end
