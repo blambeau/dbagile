@@ -32,6 +32,12 @@ module Facts
         ::Facts::Restful::json_decode(res.body)
       end
       
+      # Facts retrieval, plural form
+      def facts(name, attributes = {})
+        res = RestClient.get(to_uri(name, {}), :params => attributes)
+        ::Facts::Restful::json_decode(res.body)
+      end
+      
       # Facts assertion
       def fact!(name, attributes)
         res = RestClient.post(to_uri(name, attributes), attributes.to_json, :content_type => :json, :accept => :json)

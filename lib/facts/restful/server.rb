@@ -20,7 +20,9 @@ module Facts
         myself       = self
         rack_server  = Rack::Handler.default
         rack_app     = Rack::Builder.new{ run myself }
-        thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| s.run(a, o) }
+        thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| 
+          s.run(a, o){|server| @server = server}
+        }
         
         # Wait until the server is loaded
         try, ok, res = 0, false, nil
@@ -31,14 +33,12 @@ module Facts
           sleep 0.3
         end until (ok or (try += 1)>10)
         raise "Unable to connect to server" if try >= 10
-
-        @server_thread = thread
       end
       
       # Stops the server
       def stop
-        @server_thread.kill if @server_thread
-        @server_thread = nil
+        @server.shutdown if @server.respond_to?(:shutdown)
+        @server = nil
       end
       
       ### Instance methods #########################################################
@@ -56,7 +56,9 @@ module Facts
       # Rack handler
       def call(env)
         result = self.send(env['REQUEST_METHOD'].downcase.to_sym, env)
-        json_result(*result)
+        res = json_result(*result)
+        raise "Third in Rack response should respond to :each;\n#{res.inspect}" unless res[2].respond_to?(:each)
+        res
       rescue Exception => ex
         puts ex.message
         puts ex.backtrace.join("\n")

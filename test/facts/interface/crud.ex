@@ -9,18 +9,16 @@ it "should support standard CRUD scheme" do
   int.fact?(:tools, {:'#' => 2}).should == false
    
   # Update
-  pending("Seems that a bug exists in dbagile#update") do
-    fact = int.fact!(:tools, {:'#' => 1, :great => true})
-    fact[:great].should be_true
-  end
+  fact = int.fact!(:tools, {:'#' => 1, :great => true})
+  fact[:great].should be_true
 
-  # # Read
-  # fact = int.fact(:tools, {:'#' => 1})
-  # fact[:great].should be_true
-  # 
-  # # Read all
-  # facts = int.facts(:tools)
-  # facts.should be_kind_of(Array)
-  # facts[0][:great].should be_true
+  # Read
+  fact = int.fact(:tools, {:'#' => 1})
+  fact[:great].should be_true
+
+  # Read all
+  facts = int.facts(:tools)
+  facts.should be_kind_of(Array)
+  facts[0][:great].should be_true
   
 end

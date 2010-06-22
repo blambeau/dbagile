@@ -10,7 +10,7 @@ module Facts
       
         # Encodes a result as json
         def json_result(status, heading, res)
-          [status, heading.merge(json_header), Restful::json_encode(res || {})]
+          [status, heading.merge(json_header), [ Restful::json_encode(res || {}) ]]
         end
 
         #
