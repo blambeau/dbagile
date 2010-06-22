@@ -44,6 +44,7 @@ module Facts
         else
           transaction.insert(name, attributes)
         end
+        retrieve_fact(name, tuple_key, nil)
       end
       
       # Removes all facts
