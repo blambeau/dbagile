@@ -1,6 +1,10 @@
+require 'facts/restful/server/utils'
+require 'facts/restful/server/get'
 module Facts
   module Restful
     class Server
+      include Utils
+      include Get
       
       ### Class methods ############################################################
       
@@ -47,58 +51,14 @@ module Facts
         @db ||= Facts::connect(@uri)
       end
       
-      # Decodes a request
-      def decode(req)
-        method = req.request_method.downcase.to_sym
-        path, params = req.path, Restful::hash_methodize(req.params)
-        if req.path.strip == '/'
-          [:get, :system, {:version => ::Facts::VERSION}]
-        elsif /([a-z]+)/ =~ path
-          [method, $1.to_sym, params]
-        else 
-          nil
-        end
-      end
-      
       # Rack handler
       def call(env)
-        method, path, params = decode(Rack::Request.new(env))
-        if method
-          self.send(method, path, params)
-        else
-          [404, {}, ["404 not found"]]  
-        end
+        result = self.send(env['REQUEST_METHOD'].downcase.to_sym, env)
+        json_result(*result)
       rescue Exception => ex
+        puts ex.message
+        puts ex.backtrace.join("\n")
         [500, {}, [ex.message] + ex.backtrace]
-      end
-      
-      # Returns json HTTP headers
-      def json_header
-        {'Content-Type' => 'application/json'}
-      end
-      
-      # Encodes a result as json
-      def json_result(status, res)
-        [status, json_header, Restful::json_encode(res)]
-      end
-      
-      def get(name, params)
-        fact = db.fact(name, params, nil, 404)
-        case fact
-          when 404
-            json_result(404, {:message => "No such fact"})
-          else
-            json_result(200, fact)
-        end
-      end
-      
-      def post(name, params)
-        json_result(200, db.fact!(name, params))
-      end
-      alias :put :post
-      
-      def delete(name, params)
-        json_result(200, db.nofact!(name, params))
       end
       
     end # class Server

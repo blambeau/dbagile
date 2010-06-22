@@ -33,11 +33,20 @@ module Facts
     
     # Decodes a fact using JSON
     def json_decode(fact)
-      hash_methodize(JSON::parse(fact))
+      obj = JSON::parse(fact)
+      case obj
+        when Hash 
+          hash_methodize(obj)
+        when Array
+          obj.collect{|i| i.kind_of?(Hash) ? hash_methodize(i) : i}
+        else
+          obj
+      end
     end
     module_function :json_decode
     
   end # module Restful
 end # module Facts
 require 'facts/restful/client'
+require 'facts/restful/errors'
 require 'facts/restful/server'

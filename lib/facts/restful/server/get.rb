@@ -5,9 +5,11 @@ module Facts
         
         # Implements GET access of the restful interface
         def get(env)
-          env_to_fact_access do |name, proj|
-            if proj.nil?
-              db.facts(name)
+          kind, name, projection = decode(env)
+          if db.fact?(name, projection)
+            [200, {}, kind == :relation ? db.facts(name, projection) : db.fact(name, projection)]
+          else
+            [404, {}, ["No such fact"]]
           end
         end
         
