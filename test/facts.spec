@@ -9,6 +9,7 @@ require 'spec'
 require 'spec/autorun'
 require 'net/http'
 require 'uri'
+require 'rest_client'
 Dir["#{File.dirname(__FILE__)}/facts/**/*.spec"].each{|f| Kernel::load(f)}
 
 describe "Facts" do
@@ -24,16 +25,11 @@ describe "Facts" do
   describe("Facts - restful interface"){
     let(:sqlite_file){ File.expand_path('../facts.db', __FILE__)                   }
     let(:uri)        { "sqlite://#{sqlite_file}"                                   }
-    before           { FileUtils.rm_rf(sqlite_file)                                }
-    after            { FileUtils.rm_rf(sqlite_file)                                }
-    specify{ 
-      server = ::Facts::Restful::Server.start(uri)
-      client = ::Facts::Restful::Client.new
-      client.fact!(:tools, {:'#' => 1, :name => "facts", :version => Facts::VERSION}).should be_kind_of(Hash)
-      client.fact(:tools, {:'#' => 1}).should be_kind_of(Hash)
-      client.fact?(:tools, {:'#' => 1}).should be_true
-      server.kill
-    }
+    let(:server)     { Facts::Restful::Server.new(uri)                             }
+    let(:resturi)    { "http://127.0.0.1:8711"                                     }
+    before           { FileUtils.rm_rf(sqlite_file); server.start                  }
+    after            { server.stop; FileUtils.rm_rf(sqlite_file)                   }
+    it_should_behave_like "Restful interface" 
   }
   
 end

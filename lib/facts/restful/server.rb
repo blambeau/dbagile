@@ -6,8 +6,14 @@ module Facts
       
       # Starts a server instance 
       def self.start(dburi, options = Restful::DEFAULT_RACK_OPTIONS)
+        Server.new(dburi).start
+      end
+
+      # Starts the server inside a thread
+      def start(options = Restful::DEFAULT_RACK_OPTIONS)
+        myself       = self
         rack_server  = Rack::Handler.default
-        rack_app     = Rack::Builder.new{ run Facts::Restful::Server.new(dburi) }
+        rack_app     = Rack::Builder.new{ run myself }
         thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| s.run(a, o) }
         
         # Wait until the server is loaded
@@ -20,9 +26,15 @@ module Facts
         end until (ok or (try += 1)>10)
         raise "Unable to connect to server" if try >= 10
 
-        thread
+        @server_thread = thread
       end
-
+      
+      # Stops the server
+      def stop
+        @server_thread.kill if @server_thread
+        @server_thread = nil
+      end
+      
       ### Instance methods #########################################################
       
       # Creates a server instance
