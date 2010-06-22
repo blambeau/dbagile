@@ -53,6 +53,7 @@ module Facts
       
       # Retrieves a given fact
       def retrieve_fact(name, projection_key, keys, default = nil, transaction = connection, &block)
+        projection_key = nil if projection_key.nil? or projection_key.empty?
         tuple = transaction.dataset(name, projection_key).to_a
         if tuple.size > 1
           raise "Projection #{projection_key.inspect} is not a key for facts collection #{name}\n"
@@ -66,6 +67,7 @@ module Facts
       
       # Retrieves a given fact
       def retrieve_facts(name, projection, keys, default = nil, transaction = connection, &block)
+        projection = nil if projection.nil? or projection.empty?
         tuples = transaction.dataset(name, projection).to_a
         tuples = tuples.collect{|t| build_fact(t, keys, default, &block)}
         tuples
