@@ -7,6 +7,7 @@ it "should support standard CRUD scheme" do
     # Read
     t.fact?(:tools, {:'#' => 1}).should be_true
     t.fact(:tools, {:'#' => 1}, :great).should == false
+    t.facts(:tools, nil, [ :name ]).should == [ {:name => "facts"} ]
 
     # Update
     t.fact!(:tools, {:'#' => 1, :great => true})
