@@ -27,9 +27,11 @@ describe "Facts" do
     let(:uri)        { "sqlite://#{sqlite_file}"                                   }
     let(:server)     { Facts::Restful::Server.new(uri)                             }
     let(:resturi)    { "http://127.0.0.1:8711"                                     }
+    let(:int)        { Facts::Restful::Client.new                                  }
     before           { FileUtils.rm_rf(sqlite_file); server.start                  }
     after            { server.stop; FileUtils.rm_rf(sqlite_file)                   }
     it_should_behave_like "Restful interface" 
+    it_should_behave_like "Facts interface" 
   }
   
 end
