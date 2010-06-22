@@ -33,6 +33,8 @@ module Facts
           sleep 0.3
         end until (ok or (try += 1)>10)
         raise "Unable to connect to server" if try >= 10
+        
+        thread
       end
       
       # Stops the server
@@ -62,7 +64,7 @@ module Facts
       rescue Exception => ex
         puts ex.message
         puts ex.backtrace.join("\n")
-        [500, {}, [ex.message] + ex.backtrace]
+        [500, {}, [ex.message]]
       end
       
     end # class Server
