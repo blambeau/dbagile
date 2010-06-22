@@ -2,7 +2,7 @@ it "should support creating SQL databases the standard way" do
 
   # Create the schema
   conn.transaction do |t|
-    t.create_table(:example, :id => Integer)
+    t.create_table(:example, :id => Integer, :name => String)
     t.key!(:example, [ :id ])
   end
 
@@ -12,9 +12,9 @@ it "should support creating SQL databases the standard way" do
 
   # Make some insertions
   conn.transaction do |t|
-    t.insert(:example, {:id => 1})
-    t.dataset(:example).to_a.should == [{ :id => 1 }]
+    t.insert(:example, {:id => 1, :name => "dbagile"})
+    t.dataset(:example).to_a.should == [{ :id => 1, :name => "dbagile" }]
   end
-  conn.dataset(:example).to_a.should == [{ :id => 1 }]
-
+  conn.dataset(:example).to_a.should == [{ :id => 1, :name => "dbagile" }]
+  
 end
