@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+require 'facts'
+
+unless ARGV.size == 1
+  puts "Usage: facts db-uri"
+  exit(-1)
+end
+
+thread = ::Facts::Restful::Server.start(ARGV[0])
+thread.join
