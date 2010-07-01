@@ -36,7 +36,7 @@ module DbAgile
       
       def info(msg)
         raise ArgumentError unless msg.kind_of?(String)
-        @buffer << msg.gsub(/^[ \t]+/, '') << "\n"
+        @buffer << msg << "\n"
       end
       alias :error :info
       

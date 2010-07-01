@@ -4,8 +4,20 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba [--version] [--help]"\
-        "       dba command [options] ARGS"
+        "usage: dba [--version] [--help]\n       dba COMMAND [OPTIONS] [ARGS]"
+      end
+
+      # Shows the help
+      def show_help
+        info banner
+        info ""
+        info "Available DbAgile commands are:"
+        info "  help       Show help of a specific command"
+        info "  use        Sets the database handler to use for next commands"
+        info "  list       List available databases (found in ~/.dbagile)"
+        info "  show       Show the content of a table/view/query"
+        info "  cvs        Flush table/view/query content in a CSV file"
+        info ""
       end
 
       # Contribute to options
@@ -13,7 +25,8 @@ module DbAgile
         # No argument, shows at tail.  This will print an options summary.
         # Try it and see!
         opt.on_tail("-h", "--help", "Show this message") do
-          exit(nil, true)
+          show_help
+          exit(nil, false)
         end
 
         # Another typical switch to print the version.
@@ -24,7 +37,8 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit
+        show_help
+        exit(nil, false)
       end
       
       # Checks the command and exit if any option problem is found
