@@ -4,6 +4,11 @@ module DbAgile
   module Commands
     class Command
       
+      # Current configuration as a class-level instance variable
+      class << self
+        attr_accessor :current_config
+      end
+      
       # Creates an empty command instance
       def initialize
         @buffer = STDOUT
@@ -57,6 +62,20 @@ module DbAgile
           #{ex.class}: #{ex.message}
         EOF
         error ex.backtrace.join("\n")
+      end
+      
+      # Loads the user configuration file
+      def load_user_config_file(file = File.join(ENV['HOME'], '.dbagile'))
+        if File.exists? and File.readable?(file)
+          begin
+            Kernel.eval(File.read(file))
+          rescue Exception => ex
+            raise
+          end
+          true
+        else
+          false
+        end
       end
       
       # Returns the command banner
