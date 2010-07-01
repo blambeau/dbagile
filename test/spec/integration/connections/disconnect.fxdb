@@ -1,6 +1,0 @@
-(connect "sqlite://integration.db")
-(assert "The database pings after connection",
-  (ping))
-(disconnect)
-(assert_false "The database does not ping after disconnect",
-  (ping))

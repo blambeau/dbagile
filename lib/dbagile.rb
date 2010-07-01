@@ -41,17 +41,6 @@ module DbAgile
   end
   module_function :connect
   
-  #
-  # Starts an engine and executes source (which is expected to start with a 
-  # connect command)
-  #
-  def execute(source = nil, &block)
-    engine = DbAgile::Engine.new(DbAgile::Engine::DslEnvironment.new(source || block))
-    engine.execute
-    engine.database
-  end
-  module_function :execute
-  
 end # module DbAgile
 
 require 'rubygems'

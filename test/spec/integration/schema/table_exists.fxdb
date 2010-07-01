@@ -1,8 +1,0 @@
-(assert "The suppliers table exists",
-  (table_exists? :suppliers))
-(assert "The parts table exists",
-  (table_exists? :parts))
-(assert "The supplies table exists",
-  (table_exists? :supplies))
-(assert_false "no_such_table does not exists",
-  (table_exists? :no_such_table))

@@ -1,9 +1,0 @@
-start_transaction
-  (key! :suppliers, [:'s#'])
-
-  (assert "supplier's key is [s#] after creation",
-    (equal? [[:'s#']], (keys :suppliers)))
-
-  (assert "suppliers/s# is a key just after key definition",
-    (is_key? :suppliers, [:'s#']))
-commit

@@ -1,9 +1,0 @@
-# SELECT SQL queries
-(assert "SELECT * FROM suppliers is the same as dataset(:suppliers)",
-  (equal? (to_a (dataset :suppliers)),
-          (to_a (sql "SELECT * FROM suppliers"))
-  ))
-
-(assert "dataset supports a projection tuple",
-  (equal? (to_a (sql "SELECT * FROM suppliers WHERE city='Paris'")),
-          (to_a (dataset :suppliers, {:city => 'Paris'}))))
