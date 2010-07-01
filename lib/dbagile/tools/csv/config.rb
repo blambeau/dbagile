@@ -6,6 +6,18 @@ module DbAgile
         # Outputs the header?
         attr_accessor :include_header
         
+        # Column separator, ';' by default
+        attr_accessor :col_sep
+        
+        # Quote character, '"' by default
+        attr_accessor :quote_char
+        
+        # Force quoting ?
+        attr_accessor :force_quotes
+        
+        # Skip blanks?
+        attr_accessor :skip_blanks
+        
         # Queries as a hash from names to SQL queries
         attr_accessor :queries
         
@@ -19,6 +31,10 @@ module DbAgile
         def initialize
           @queries = {}
           @include_header = false
+          @col_sep = ';'
+          @quote_char = '"'
+          @force_quotes = false
+          @skip_blanks = false
         end
         
         # Yields the block with an IO object for a given query

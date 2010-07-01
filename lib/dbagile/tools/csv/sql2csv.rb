@@ -30,6 +30,18 @@ module DbAgile
           opt.on("--include-header", "-h", "Flush columns names as first line") do
             self.config.include_header = true
           end
+          opt.on("--separator=C", "Use C as columns separator character") do |value|
+            self.config.col_sep = value
+          end
+          opt.on("--quote=C", "Use C as quoting character") do |value|
+            self.config.quote_char = value
+          end
+          opt.on("--force-quotes", "Force quoting?") do 
+            self.config.force_quotes = true
+          end 
+          opt.on("--skip-blanks", "Skip blank lines?") do 
+            self.config.skip_blanks = true
+          end 
         end
 
         # Returns the command banner
@@ -50,7 +62,7 @@ module DbAgile
         # Executes the command
         def execute_command
           conn = DbAgile::connect(uri)
-          to_csv(conn, config)
+          csvout(conn, config)
         rescue Sequel::Error => ex
           exit(ex.message, false)
         end    
