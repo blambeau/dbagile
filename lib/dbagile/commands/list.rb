@@ -34,7 +34,7 @@ module DbAgile
 
       # Contribute to options
       def add_options(opt)
-        opt.on("--verbose", "-v", "Displays full content of ~/.dbagile file") do |value|
+        opt.on("--verbose", "-v", "Displays full contents of ~/.dbagile file") do |value|
           self.verbose = true
         end
       end
@@ -54,22 +54,25 @@ module DbAgile
       
       # Executes the command
       def execute_command
+        config_file = DbAgile::load_user_config_file
         if verbose
-          file = user_config_file
-          if File.exists?(file)
-            info File.read(file)
-          end 
+          info config_file.inspect
         else
-          load_user_config_file
-          unless DbAgile::CONFIGURATIONS.empty?
+          unless config_file.empty?
             info("Available databases are:")
-            DbAgile::CONFIGURATIONS.each_pair do |name, config|
-              info("  #{align(name,15)} #{config.uri}")
+            config_file.each do |config|
+              msg = config_file.current?(config) ? "  -> " : " "*5
+              msg += align(config.name,15)
+              msg += " "
+              msg += config.uri
+              info(msg)
             end
           else
             info("No database configuration found. Checks ~/.dbagile")
           end
         end
+      rescue ::DbAgile::Error => ex
+        exit(ex.message, false)
       end
       
     end # class List

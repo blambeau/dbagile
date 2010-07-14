@@ -6,6 +6,37 @@ module DbAgile
   # Installed configurations
   CONFIGURATIONS = {}
   
+  # Force use of a specific user configuration file
+  def user_config_file=(file)
+    @user_config_file = file
+  end
+  module_function :user_config_file=
+
+  # Returns default user configuration file
+  def user_config_file
+    @user_config_file || File.join(ENV['HOME'], '.dbagile')
+  end
+  module_function :user_config_file
+  
+  #
+  # Loads a configuration file and returns a DbAgile::Core::ConfigFile 
+  # instance. 
+  #
+  # @param [String] file path of the configuration file to load
+  # @raise CorruptedConfigFileError if something is wrong.
+  # @raise NoConfigFileError if the file cannot be found.
+  #
+  def load_user_config_file(file = user_config_file)
+    raise NoConfigFileError, "No such config file #{file}" unless File.exists?(file)
+    raise CorruptedConfigFileError, "Corrupted config file #{file}" unless File.file?(file) and File.readable?(file)
+    begin
+      ::DbAgile::Core::ConfigFile.new(file)
+    rescue Exception => ex
+      raise CorruptedConfigFileError, "Corrupted config file #{file}", ex
+    end
+  end
+  module_function :load_user_config_file
+  
   #
   # When a block if given, creates a configuration instance and saves it 
   # under _name_ (if name is given).

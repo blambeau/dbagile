@@ -6,14 +6,16 @@ module DbAgile
       
       # Current configuration as a class-level instance variable
       class << self
-        attr_accessor :current_config
-
+        
+        # Tracks subclasses for printing list of command
+        # and delegating execution to them.
         def inherited(subclass) 
           super
           @subclasses ||= [] 
           @subclasses << subclass 
         end 
 
+        # Returns known command sub-classes
         def subclasses 
           @subclasses 
         end 

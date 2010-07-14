@@ -4,6 +4,7 @@ module DbAgile
     # Implements user configuration files
     #
     class ConfigFile
+      include Enumerable
       
       # Path to the actual file
       attr_reader :file
@@ -12,7 +13,7 @@ module DbAgile
       attr_reader :configurations
       
       # Current configuration (its name, i.e. a Symbol)
-      attr_accessor :current_config
+      attr_accessor :current_config_name
       
       #############################################################################################
       ### Class-level utils
@@ -33,22 +34,17 @@ module DbAgile
         
         # Sets the current configuration
         def current_config(name)
-          @config_file.current_config = name
+          @config_file.current_config_name = name
         end
         
       end # class DSL
-      
-      # Returns path to the default user configuration file.
-      def self.user_config_file
-        File.join(ENV['HOME'], '.dbagile')
-      end
       
       #############################################################################################
       ### Initialization and parsing
       #############################################################################################
       
       # Creates a config file instance, by parsing content of file.
-      def initialize(file = ConfigFile.user_config_file)
+      def initialize(file = DbAgile.user_config_file)
         @file = file
         @configurations = []
         if File.exists?(file)
@@ -72,6 +68,16 @@ module DbAgile
       ### Queries
       #############################################################################################
       
+      # Checks if at least one configuration exists
+      def empty?
+        configurations.empty?
+      end
+      
+      # Yields the block with each configuration in turn
+      def each(*args, &block)
+        configurations.each(*args, &block)
+      end
+      
       # Returns a configuration by name. Returns nil if no such configuration
       def config(name)
         configurations.find{|c| c.name == name}
@@ -80,6 +86,19 @@ module DbAgile
       # Checks if a configuration exists
       def has_config?(name)
         !config(name).nil?
+      end
+      
+      # Checks if a name/configuration is the current one
+      def current?(name_or_config)
+        case name_or_config
+          when Symbol
+            return nil unless has_config?(name_or_config)
+            self.current_config_name == name_or_config
+          when Configuration
+            self.current_config_name == name_or_config.name
+          else
+            raise ArgumentError, "Symbol or Configuration expected, #{name_or_config.inspect} found."
+        end
       end
       
       #############################################################################################
@@ -99,7 +118,7 @@ module DbAgile
       def inspect
         buffer = ""
         configurations.each{|cfg| buffer << cfg.inspect << "\n"}
-        buffer << "current_config " << current_config.inspect
+        buffer << "current_config " << current_config_name.inspect unless current_config_name.nil?
         buffer
       end
       
