@@ -37,7 +37,13 @@ module DbAgile
        
       # Creates an empty command instance
       def initialize
-        @buffer = STDOUT
+        begin
+          require 'highline'
+          @buffer = HighLine.new
+        rescue LoadError
+          @buffer = STDOUT
+          info("dba works better with highline... try 'gem install highline'")
+        end
       end
       
       # Parses commandline options provided as an array of Strings.
@@ -61,7 +67,11 @@ module DbAgile
       
       def info(msg)
         raise ArgumentError unless msg.kind_of?(String)
-        @buffer << msg << "\n"
+        if @buffer.kind_of?(HighLine)
+          @buffer.say(msg)
+        else
+          @buffer << msg << "\n"
+        end
       end
       alias :error :info
       

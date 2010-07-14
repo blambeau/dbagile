@@ -73,12 +73,12 @@ module DbAgile
       # Format the value so it takes up exactly size characters
       def self.format_cell(size, v) # :nodoc:
         case v
-        when Bignum, Fixnum
-          "%#{size}d" % v
-        when Float
-          "%#{size}g" % v
-        else
-          "%-#{size}s" % v.to_s
+          when Bignum, Fixnum
+            "%#{size}d" % v
+          when Float
+            "%#{size}g" % v
+          else
+            "%-#{size}s" % v.to_s
         end
       end
     
