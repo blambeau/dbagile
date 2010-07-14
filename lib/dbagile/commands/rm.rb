@@ -45,23 +45,18 @@ module DbAgile
       def execute_command
         # load the configuration file
         config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        
-        # Find the configuration
-        config = config_file.config(self.match)
-        if config
-          # Move the current one if it was it
-          if config_file.current?(config)
-            config_file.current_config_name = nil
-          end
-        
-          # Removes it from file
-          config_file.remove(config)
-        
-          # Flush the configuration file
-          config_file.flush!
-        else
-          info("No such configuration.")
+        config = has_config!(config_file, self.match)
+
+        # Move the current one if it was it
+        if config_file.current?(config)
+          config_file.current_config_name = nil
         end
+      
+        # Removes it from file
+        config_file.remove(config)
+      
+        # Flush the configuration file
+        config_file.flush!
 
         # List available databases now
         DbAgile::Commands::List.new.run(nil, [])

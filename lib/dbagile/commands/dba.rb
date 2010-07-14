@@ -12,13 +12,8 @@ module DbAgile
         info banner
         info ""
         info "Available DbAgile commands are:"
-        # info "  help       Show help of a specific command"
-        # info "  use        Sets the database handler to use for next commands"
-        # info "  list       List available databases (found in ~/.dbagile)"
-        # info "  show       Show the content of a table/view/query"
-        # info "  cvs        Flush table/view/query content in a CSV file"
-        ::DbAgile::Commands::Command.subclasses.each do |subclass|
-          info "  #{align(command_name_of(subclass),10)} #{subclass.new.short_help}" unless subclass == DbA
+        Command.subclasses.each do |subclass|
+          info "  #{align(Command.command_name_of(subclass),10)} #{subclass.new.short_help}" unless subclass == DbA
         end
         info ""
       end
@@ -40,15 +35,14 @@ module DbAgile
         end
         
         # Command execution
-        command_name = argv.shift
-        command = command_for(command_name)
-        if command.nil?
-          info("No such command #{command_name}")
-          show_help
-          exit(nil, false)
-        else
+        if argv.size >= 1
+          command = has_command!(argv.shift)
           command.run(requester_file, argv)
+        else
+          show_help
         end
+      rescue ::DbAgile::Error => ex
+        exit(ex.message, false)
       end
 
     end # class DbA

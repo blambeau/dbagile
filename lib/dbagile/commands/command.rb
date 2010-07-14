@@ -3,6 +3,7 @@ require 'fileutils'
 module DbAgile
   module Commands
     class Command
+      include ::DbAgile::Commands::Robust
       
       # Current configuration as a class-level instance variable
       class << self
@@ -19,6 +20,18 @@ module DbAgile
         def subclasses 
           @subclasses 
         end 
+        
+        # Returns the command name of a given class
+        def command_name_of(clazz)
+          /::([A-Za-z0-9]+)$/ =~ clazz.name
+          $1.downcase
+        end
+      
+        # Returns a command for a given name, returns nil if it cannot be found
+        def command_for(name)
+          subclass = subclasses.find{|subclass| command_name_of(subclass) == name}
+          subclass.nil? ? nil : subclass.new
+        end
 
       end # class << self
        
@@ -93,20 +106,6 @@ module DbAgile
       def align(string, size = nil)
         return string if size.nil?
         string.to_s + " "*(size - string.to_s.length)
-      end
-
-      # Returns the command name of a given class
-      def command_name_of(clazz)
-        /::([A-Za-z0-9]+)$/ =~ clazz.name
-        $1.downcase
-      end
-      
-      # Returns a command for a given name, returns nil if it cannot be found
-      def command_for(name)
-        DbAgile::Commands::Command.subclasses.each do |subclass|
-          return subclass.new if command_name_of(subclass) == name
-        end
-        nil
       end
 
       # Contribute to options

@@ -34,9 +34,9 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        command = command_for(self.command)
-        puts command.short_help.to_s
-        puts command.options.to_s
+        command = has_command!(self.command)
+        info(command.short_help.to_s)
+        info(command.options.to_s)
       end
       
     end # class List

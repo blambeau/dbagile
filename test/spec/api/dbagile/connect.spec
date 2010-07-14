@@ -17,7 +17,7 @@ describe "DbAgile's API" do
   end
   
   it "should raise an error when unknown configuration" do
-    lambda{ DbAgile::connect(:no_such_one) }.should raise_error(DbAgile::UnknownConfigurationError)
+    lambda{ DbAgile::connect(:no_such_one) }.should raise_error(DbAgile::UnknownConfigError)
   end
   
 end

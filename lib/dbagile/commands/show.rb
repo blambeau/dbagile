@@ -48,20 +48,14 @@ module DbAgile
       def execute_command
         # load the configuration file
         config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
+        config = has_config!(config_file)
         
-        # Find the configuration
-        config = config_file.current_config
-        
-        # Make the job
-        if config
-          begin
-            ds = config.connect.dataset(self.dataset)
-            DbAgile::Utils::PrettyTable::print(ds, @buffer)
-          rescue Exception => ex
-            exit(ex.message, false)
-          end
-        else
-          info("No default configuration selected (try 'dba use ...')")
+        # Make the job now
+        begin
+          ds = config.connect.dataset(self.dataset)
+          DbAgile::Utils::PrettyTable::print(ds, @buffer)
+        rescue Exception => ex
+          exit(ex.message, false)
         end
       end
       

@@ -49,23 +49,12 @@ module DbAgile
       def execute_command
         # load the configuration file
         config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        
-        # Find the configuration
-        config = if self.match.nil?
-          config_file.current_config
-        else 
-          config_file.config(self.match)
-        end
-        
-        if config
-          begin
-            config.connect.ping
-            info "Ping ok (#{config.uri})"
-          rescue Sequel::Error => ex
-            exit("Ping KO (#{config.uri}): #{ex.message}", false)
-          end
-        else
-          info(self.match.nil? ? "No default configuration selected" : "No such configuration #{self.match}")
+        config = has_config!(config_file, self.match)
+        begin
+          config.connect.ping
+          info "Ping ok (#{config.uri})"
+        rescue Sequel::Error => ex
+          exit("Ping KO (#{config.uri}): #{ex.message}", false)
         end
       end
       

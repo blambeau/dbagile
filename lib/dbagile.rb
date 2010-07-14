@@ -65,7 +65,7 @@ module DbAgile
         if c = config(uri)
           c.connect(nil, options)
         else
-          raise UnknownConfigurationError, "Unknown configuration #{uri}"
+          raise UnknownConfigError, "Unknown configuration #{uri}"
         end
       when String
         DbAgile::Core::Configuration.new.connect(uri, options)
