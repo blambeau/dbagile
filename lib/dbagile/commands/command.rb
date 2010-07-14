@@ -75,11 +75,6 @@ module DbAgile
         error ex.backtrace.join("\n")
       end
       
-      # Returns path to the user configuration file
-      def user_config_file
-        File.join(ENV['HOME'], '.dbagile')
-      end
-      
       # Loads the user configuration file
       def load_user_config_file(file = user_config_file)
         if File.exists?(file) and File.readable?(file)
@@ -115,7 +110,6 @@ module DbAgile
         end
         nil
       end
-
 
       # Contribute to options
       def add_options(opt)

@@ -12,9 +12,9 @@ module DbAgile
   #
   # When no block is given, returns a configuration by name
   # 
-  def config(name = nil, &block)
+  def config(name = :noname, &block)
     if block
-      config = DbAgile::Core::Configuration.new(&block)
+      config = DbAgile::Core::Configuration.new(name, &block)
       (CONFIGURATIONS[name] = config) if name
       config
     else

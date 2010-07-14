@@ -1,0 +1,5 @@
+DbAgile::config(:complex1){
+  uri "memory://test.db"
+  plug DbAgile::Plugin::AgileTable
+  plug DbAgile::Plugin::AgileKeys
+}
