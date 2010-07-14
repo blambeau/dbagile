@@ -40,7 +40,7 @@ gemspec = Gem::Specification.new do |s|
                     '--main' << 'README.textile' <<
                     '--line-numbers'  
   s.bindir = "bin"
-  s.executables = ['dbagile']
+  s.executables = ['dba']
   s.author = "Bernard Lambeau"
   s.email = "blambeau@gmail.com"
   s.homepage = "http://github.com/blambeau/dbagile"

@@ -27,7 +27,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Add a new configuration"
+        "Add a new database configuration"
       end
       
       # Shows the help

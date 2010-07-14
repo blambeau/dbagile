@@ -20,7 +20,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Remove a configuration"
+        "Remove a database configuration"
       end
       
       # Shows the help

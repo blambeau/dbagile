@@ -21,7 +21,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "List available databases (found in ~/.dbagile)"
+        "List available database configurations (found in ~/.dbagile)"
       end
       
       # Shows the help
