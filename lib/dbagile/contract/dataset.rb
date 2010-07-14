@@ -8,6 +8,8 @@ module DbAgile
       # @return [...] the buffer itself
       #
       def to_csv(buffer = "", options = {})
+        require 'faster_csv'
+        
         # normalize options
         options[:headers] = true if options[:write_headers]
         
