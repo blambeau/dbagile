@@ -1,0 +1,4 @@
+DbAgile::config(:complex3){
+  uri "memory://test.db"
+  plug DbAgile::Plugin::Defaults, {:now=>DbAgile::Plugin::Defaults::now}
+}

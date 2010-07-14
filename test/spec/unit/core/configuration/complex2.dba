@@ -1,0 +1,4 @@
+DbAgile::config(:complex2){
+  uri "memory://test.db"
+  plug DbAgile::Plugin::Defaults, {:hello=>"world"}
+}

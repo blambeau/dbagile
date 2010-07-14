@@ -1,3 +1,0 @@
-(connect "sqlite://integration.db")
-(assert "The database pings after connection",
-  (ping))

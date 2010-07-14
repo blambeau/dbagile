@@ -3,7 +3,38 @@ require 'fileutils'
 module DbAgile
   module Commands
     class Command
+      include ::DbAgile::Commands::Robust
       
+      # Current configuration as a class-level instance variable
+      class << self
+        
+        # Tracks subclasses for printing list of command
+        # and delegating execution to them.
+        def inherited(subclass) 
+          super
+          @subclasses ||= [] 
+          @subclasses << subclass 
+        end 
+
+        # Returns known command sub-classes
+        def subclasses 
+          @subclasses 
+        end 
+        
+        # Returns the command name of a given class
+        def command_name_of(clazz)
+          /::([A-Za-z0-9]+)$/ =~ clazz.name
+          $1.downcase
+        end
+      
+        # Returns a command for a given name, returns nil if it cannot be found
+        def command_for(name)
+          subclass = subclasses.find{|subclass| command_name_of(subclass) == name}
+          subclass.nil? ? nil : subclass.new
+        end
+
+      end # class << self
+       
       # Creates an empty command instance
       def initialize
         @buffer = STDOUT
@@ -17,33 +48,32 @@ module DbAgile
           opt.release = nil
           opt.summary_indent = ' ' * 4
           opt.banner = self.banner.gsub(/^[ \t]+/, "")
-    
-          opt.separator nil
-          opt.separator "Options:"
-    
           add_options(opt)
-
-          # No argument, shows at tail.  This will print an options summary.
-          # Try it and see!
-          opt.on_tail("-h", "--help", "Show this message") do
-            exit(nil, true)
-          end
-
-          # Another typical switch to print the version.
-          opt.on_tail("--version", "Show version") do
-            exit(opt.program_name << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau", false)
-          end
-    
-          opt.separator nil
         end
       end
 
+      # Exits with a message, showing options if required
+      def exit(msg = nil, show_options=true)
+        info msg if msg
+        puts options if show_options
+        Kernel.exit(-1)
+      end
+      
+      def info(msg)
+        raise ArgumentError unless msg.kind_of?(String)
+        @buffer << msg << "\n"
+      end
+      alias :error :info
+      
       # Runs the command
       def run(requester_file, argv)
         @requester_file = requester_file
-        prepare_command(argv)
+        rest = options.parse!(argv)
+        normalize_pending_arguments(rest)
         check_command
         execute_command
+      rescue ::DbAgile::Error => ex
+        exit(ex.message, false)
       rescue OptionParser::InvalidOption => ex
         exit(ex.message)
       rescue SystemExit
@@ -56,33 +86,38 @@ module DbAgile
         error ex.backtrace.join("\n")
       end
       
-      # Exits with a message, showing options if required
-      def exit(msg = nil, show_options=true)
-        info msg if msg
-        puts options if show_options
-        Kernel.exit(-1)
+      # Loads the user configuration file
+      def load_user_config_file(file = user_config_file)
+        if File.exists?(file) and File.readable?(file)
+          Kernel.eval(File.read(file))
+          true
+        else
+          false
+        end
       end
       
-      def info(msg)
-        raise ArgumentError unless msg.kind_of?(String)
-        @buffer << msg.gsub(/^[ \t]+/, '') << "\n"
+      # Returns the command banner
+      def banner
+        raise "Command.banner should be overriden by subclasses"
       end
-      alias :error :info
       
+      # Aligns a string by appending whitespaces up to size.
+      # This method has not effect if size is nil
+      def align(string, size = nil)
+        return string if size.nil?
+        string.to_s + " "*(size - string.to_s.length)
+      end
+
       # Contribute to options
       def add_options(opt)
       end
       
-      # Prepares the command
-      def prepare_command(argv)
-        rest = options.parse!(argv)
-        normalize_pending_arguments(rest)
-        self
-      end
-      
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit
+        unless arguments.empty?
+          show_help
+          exit(nil, false)
+        end
       end
       
       # Checks the command and exit if any option problem is found
@@ -93,16 +128,6 @@ module DbAgile
       def execute_command
       end
       
-      # Returns the command banner
-      def banner
-        raise "Command.banner should be overriden by subclasses"
-      end
-      
-      # Runs the sub-class defined command
-      def __run(requester_file, arguments)
-        raise "Command._run should be overriden"
-      end
-
     end # class Command
   end # module Commands
 end # module DbAgile

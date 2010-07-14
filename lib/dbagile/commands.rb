@@ -1,2 +1,11 @@
+require 'dbagile/commands/robust'
 require 'dbagile/commands/command'
-require 'dbagile/commands/main'
+require 'dbagile/commands/dba'
+require 'dbagile/commands/help'
+require 'dbagile/commands/list'
+require 'dbagile/commands/add'
+require 'dbagile/commands/rm'
+require 'dbagile/commands/use'
+require 'dbagile/commands/ping'
+require 'dbagile/commands/show'
+
