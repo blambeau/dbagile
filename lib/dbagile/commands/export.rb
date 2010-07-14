@@ -14,14 +14,14 @@ module DbAgile
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
-      # Options for CSV output
-      attr_accessor :csv_options
+      # Options for CSV/JSON output
+      attr_accessor :output_options
       
       # Creates a command instance
       def initialize
         super
         self.format = 'csv'
-        self.csv_options = {}
+        self.output_options = {}
       end
       
       # Returns the command banner
@@ -61,19 +61,24 @@ module DbAgile
         opt.separator nil
         opt.separator "CSV options:"
         opt.on("--include-header", "-h", "Flush columns names as first line") do
-          self.csv_options[:write_headers] = true
+          self.output_options[:write_headers] = true
         end
         opt.on("--separator=C", "Use C as columns separator character") do |value|
-          self.csv_options[:col_sep] = value
+          self.output_options[:col_sep] = value
         end
         opt.on("--quote=C", "Use C as quoting character") do |value|
-          self.csv_options[:quote_char] = value
+          self.output_options[:quote_char] = value
         end
         opt.on("--force-quotes", "Force quoting?") do 
-          self.csv_options[:force_quotes] = true
+          self.output_options[:force_quotes] = true
         end 
         opt.on("--skip-blanks", "Skip blank lines?") do 
-          self.csv_options[:skip_blanks] = true
+          self.output_options[:skip_blanks] = true
+        end 
+        opt.separator nil
+        opt.separator "JSON options:"
+        opt.on("--pretty", "Generate a pretty JSON document") do 
+          self.output_options[:pretty] = true
         end 
       end
       
@@ -105,9 +110,16 @@ module DbAgile
         
         # Make the job now
         begin
+          ds = config.connect.dataset(self.dataset)
           with_io{|io|
-            ds = config.connect.dataset(self.dataset)
-            ds.to_csv(io, csv_options)
+            case self.format
+              when 'csv'
+                ds.to_csv(io, output_options)
+              when 'json'
+                ds.to_json(io, output_options)
+              when 'ruby'
+                ds.to_ruby(io, output_options)
+            end
           }
         rescue Exception => ex
           puts ex.message

@@ -29,6 +29,37 @@ module DbAgile
         buffer
       end
       
+      # 
+      # Outputs this dataset as a JSON string
+      #
+      # @return [...] the buffer itself
+      #
+      def to_json(buffer = "", options = {})
+        require "json"
+        if options[:pretty]
+          buffer << JSON::pretty_generate(self.to_a)
+        else
+          buffer << JSON::fast_generate(self.to_a)
+        end
+        buffer
+      end
+      
+      # 
+      # Outputs this dataset as a Ruby Array of hashes
+      #
+      # @return [...] the buffer itself
+      #
+      def to_ruby(buffer = "", options = {})
+        buffer << "["
+        first = true
+        each{|t| 
+          buffer << (first ? "\n  " : ",\n  ")
+          buffer << t.inspect
+          first = false
+        }
+        buffer << "\n]"
+      end
+      
     end # module Dataset
   end # module Contract
 end # module DbAgile
