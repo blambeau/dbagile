@@ -10,7 +10,6 @@ require 'spec'
 require 'spec/autorun'
 
 require 'fixtures'
-Dir[File.expand_path('../support/**/*.rb', __FILE__)].each { |f| require f }
 
 Spec::Runner.configure do |config|
 end
