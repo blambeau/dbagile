@@ -65,6 +65,8 @@ module DbAgile
         normalize_pending_arguments(rest)
         check_command
         execute_command
+      rescue ::DbAgile::Error => ex
+        exit(ex.message, false)
       rescue OptionParser::InvalidOption => ex
         exit(ex.message)
       rescue SystemExit
@@ -119,7 +121,10 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit
+        unless arguments.empty?
+          show_help
+          exit(nil, false)
+        end
       end
       
       # Checks the command and exit if any option problem is found

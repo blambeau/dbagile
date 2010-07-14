@@ -39,19 +39,6 @@ module DbAgile
         end
       end
       
-      # Normalizes the pending arguments
-      def normalize_pending_arguments(arguments)
-        unless arguments.empty?
-          show_help
-          exit(nil, false)
-        end
-      end
-      
-      # Checks the command and exit if any option problem is found
-      def check_command
-        true
-      end
-      
       # Executes the command
       def execute_command
         config_file = DbAgile::load_user_config_file
@@ -71,8 +58,6 @@ module DbAgile
             info("No database configuration found. Checks ~/.dbagile")
           end
         end
-      rescue ::DbAgile::Error => ex
-        exit(ex.message, false)
       end
       
     end # class List

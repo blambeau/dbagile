@@ -1,0 +1,67 @@
+module DbAgile
+  module Commands
+    #
+    # Updates the current configuration to use
+    #
+    class Use < ::DbAgile::Commands::Command
+      
+      # Name of the configuration to use
+      attr_accessor :match
+      
+      # Creates a command instance
+      def initialize
+        super
+      end
+      
+      # Returns the command banner
+      def banner
+        "usage: dba use NAME"
+      end
+
+      # Short help
+      def short_help
+        "Updates the current database configuration to use"
+      end
+      
+      # Shows the help
+      def show_help
+        info banner
+        info ""
+        info short_help
+        info ""
+      end
+
+      # Contribute to options
+      def add_options(opt)
+      end
+      
+      # Normalizes the pending arguments
+      def normalize_pending_arguments(arguments)
+        exit(nil, true) unless arguments.size == 1
+        self.match = arguments.shift
+      end
+      
+      # Executes the command
+      def execute_command
+        # load the configuration file
+        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
+        
+        # Find the configuration
+        config = config_file.config(self.match)
+        if config
+          # Makes it the current one
+          config_file.current_config_name = config.name
+        
+          # Flush the configuration file
+          config_file.flush!
+        else
+          info("No such configuration.")
+        end
+
+        # List available databases now
+        DbAgile::Commands::List.new.run(nil, [])
+      end
+      
+    end # class List
+  end # module Commands
+end # module DbAgile

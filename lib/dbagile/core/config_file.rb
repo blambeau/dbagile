@@ -78,9 +78,19 @@ module DbAgile
         configurations.each(*args, &block)
       end
       
-      # Returns a configuration by name. Returns nil if no such configuration
-      def config(name)
-        configurations.find{|c| c.name == name}
+      # Returns a configuration by match. Returns nil if no such configuration
+      def config(match)
+        return match if match.kind_of?(::DbAgile::Core::Configuration)
+        configurations.find{|c| 
+          case match
+            when Symbol
+              c.name == match
+            when String
+              c.uri == match
+            when Regexp
+              match =~ c.uri
+          end
+        }
       end
       
       # Checks if a configuration exists
@@ -102,16 +112,36 @@ module DbAgile
       end
       
       #############################################################################################
+      ### Updates
+      #############################################################################################
+      
+      # Adds a configuration instance
+      def <<(config)
+        self.configurations << config
+      end
+      
+      # Removes a configuration from this config file
+      def remove(config)
+        config = self.config(config)
+        config.nil? ? nil : configurations.delete(config)
+      end
+      
+      #############################################################################################
       ### Inspection and output
       #############################################################################################
       
-      # Flushes the configuration into a given file, the source file by default
-      def flush(output_file = file)
+      # Flushes the configuration into a given file
+      def flush(output_file)
         if output_file.kind_of?(IO)
           output_file << self.inspect
         else
           File.open(output_file, 'w'){|io| flush(io)}
         end
+      end
+      
+      # Flushes the configuration into the source file
+      def flush!
+        flush(self.file)
       end
       
       # Inspects this configuration file

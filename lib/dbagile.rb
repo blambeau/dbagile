@@ -26,7 +26,11 @@ module DbAgile
   # @raise CorruptedConfigFileError if something is wrong.
   # @raise NoConfigFileError if the file cannot be found.
   #
-  def load_user_config_file(file = user_config_file)
+  def load_user_config_file(file = user_config_file, create_new = false)
+    if create_new and not(File.exists?(file))
+      require 'fileutils'
+      FileUtils.touch(file) 
+    end
     raise NoConfigFileError, "No such config file #{file}" unless File.exists?(file)
     raise CorruptedConfigFileError, "Corrupted config file #{file}" unless File.file?(file) and File.readable?(file)
     begin
