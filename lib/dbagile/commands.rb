@@ -8,4 +8,5 @@ require 'dbagile/commands/rm'
 require 'dbagile/commands/use'
 require 'dbagile/commands/ping'
 require 'dbagile/commands/show'
+require 'dbagile/commands/export'
 
