@@ -40,9 +40,9 @@ module DbAgile
       
       # Inspects this configuration, returning a ruby chunk of code
       # whose evaluation leads to a configuration instance
-      def inspect
+      def inspect(prefix = "")
         buffer = ""
-        buffer << "DbAgile::config(#{name.inspect}){" << "\n"
+        buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
         if plugs and not(plugs.empty?)
           plugs.each{|plug| 
