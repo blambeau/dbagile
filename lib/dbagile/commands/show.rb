@@ -15,12 +15,12 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba show TABLE"
+        "usage: dba show DATASET"
       end
 
       # Short help
       def short_help
-        "Displays content of a table/view/query"
+        "Display content of a table/view/query"
       end
       
       # Shows the help

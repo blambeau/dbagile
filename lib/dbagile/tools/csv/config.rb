@@ -45,7 +45,10 @@ module DbAgile
           elsif output_folder.nil?
             block.call(STDOUT)
           else
-            File.open(File.join(output_folder, "#{name}.csv"), "w", &block)
+            require 'fileutils'
+            file = File.join(output_folder, "#{name}.csv")
+            FileUtils.mkdir_p(File.dirname(file))
+            File.open(file, "w", &block)
           end
         end
         

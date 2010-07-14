@@ -10,6 +10,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
 require 'dbagile'
 require 'dbagile/commands'
+require 'dbagile/tools/csv'
 
 begin
   r = DbAgile::Commands::DbA.new.run '.', ARGV

@@ -1,11 +1,8 @@
 module DbAgile
   module Tools
     module CSV
-      class SQL2CSV < DbAgile::Commands::Command
+      class CSVOut < DbAgile::Commands::Command
         include DbAgile::Tools::CSV::Methods
-        
-        # Database URI to use
-        attr_accessor :uri
         
         # Configuration instance
         attr_accessor :config
@@ -18,9 +15,6 @@ module DbAgile
         
         # Contribute to options
         def add_options(opt)
-          opt.on("--uri=URI", "-u", "Database URI to use") do |value|
-            self.uri = value
-          end
           opt.on("--output-folder=FOLDER", "-o", "Generate files into folder") do |value|
             self.config.output_folder = value
           end
@@ -46,13 +40,17 @@ module DbAgile
 
         # Returns the command banner
         def banner
-          "sql2csv [options] table"
+          "dba csvout [OPTIONS] DATASET1, ..."
+        end
+      
+        # Returns the short_help message  
+        def short_help
+          "Output dataset(s) as CSV file(s)"
         end
       
         # Normalizes arguments
         def normalize_pending_arguments(arguments)
-          exit("Missing database uri", true) if self.uri.nil?
-          exit("Missing table name", true) if arguments.empty?
+          exit("Missing DATASET", true) if arguments.empty?
           if config.output_io.nil? and config.output_folder.nil?
             config.output_folder = File.expand_path('.')
           end
@@ -61,10 +59,14 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          conn = DbAgile::connect(uri)
+          # load the configuration file
+          config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
+          dbconfig = has_config!(config_file)
+          
+          # Make the job now
+          conn = dbconfig.connect
           csvout(conn, config)
-        rescue Sequel::Error => ex
-          exit(ex.message, false)
+          conn.disconnect
         end    
         
       end # class SQL2CSV

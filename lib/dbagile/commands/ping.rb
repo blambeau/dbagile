@@ -50,12 +50,10 @@ module DbAgile
         # load the configuration file
         config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
         config = has_config!(config_file, self.match)
-        begin
-          config.connect.ping
-          info "Ping ok (#{config.uri})"
-        rescue Sequel::Error => ex
-          exit("Ping KO (#{config.uri}): #{ex.message}", false)
-        end
+        
+        # Make the job now
+        config.connect.ping
+        info "Ping ok (#{config.uri})"
       end
       
     end # class List

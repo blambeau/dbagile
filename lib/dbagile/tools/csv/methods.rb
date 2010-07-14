@@ -32,7 +32,7 @@ module DbAgile
               dataset.each do |row|
                 csv << columns.collect{|c| row[c]}
               end
-              csv.close
+              csv.close unless io==STDOUT
             end
             
           end # for each query

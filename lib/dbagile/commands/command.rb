@@ -74,6 +74,8 @@ module DbAgile
         execute_command
       rescue ::DbAgile::Error => ex
         exit(ex.message, false)
+      rescue Sequel::Error => ex
+        exit(ex.message, false)
       rescue OptionParser::InvalidOption => ex
         exit(ex.message)
       rescue SystemExit
