@@ -13,6 +13,7 @@ it "should support creating SQL databases the standard way" do
   # Make some insertions
   conn.transaction do |t|
     t.insert(:example, {:id => 1, :name => "dbagile"})
+    t.dataset(:example).should be_kind_of(::DbAgile::Contract::Dataset)
     t.dataset(:example).to_a.should == [{ :id => 1, :name => "dbagile" }]
   end
   conn.dataset(:example).to_a.should == [{ :id => 1, :name => "dbagile" }]

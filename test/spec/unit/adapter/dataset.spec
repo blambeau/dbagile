@@ -15,8 +15,11 @@ describe "::DbAgile::Adapter.dataset" do
   
     describe "When called on an existing table" do
       subject{ adapter.dataset(:dbagile) }
-      it{ should be_kind_of(Enumerable) }
-      it{ should respond_to(:to_a) }
+      specify {
+        subject.should be_kind_of(Enumerable) 
+        subject.should be_kind_of(::DbAgile::Contract::Dataset)
+        subject.should respond_to(:to_a)
+      }
     end
     
     describe "When called on a given table, with records" do

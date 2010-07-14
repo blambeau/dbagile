@@ -62,12 +62,14 @@ module DbAgile
       
     # Returns a Dataset object for a given table
     def dataset(table, proj = nil)
-      case table
+      result = case table
         when Symbol
           proj.nil? ? db[table] : db[table].where(proj)
         else
           proj.nil? ? db[table] : db[table].where(proj)
       end
+      result.extend(::DbAgile::Contract::Dataset)
+      result
     end
       
     # Checks if a (sub)-tuple exists inside a table.
@@ -148,7 +150,7 @@ module DbAgile
     # Send SQL directly to the database SQL server
     def direct_sql(transaction, sql)
       if /^\s*(select|SELECT)/ =~ sql
-        db[sql]
+        dataset(sql)
       else
         db << sql
       end

@@ -35,12 +35,14 @@ module DbAgile
     # Returns a Dataset object for a given table
     def dataset(table, proj = nil)
       raise ArgumentError, "No such table #{table}" unless has_table?(table)
-      if proj.nil?
+      result = if proj.nil?
         tables[table]
       else
         keys = proj.keys
         tables[table].select{|t| tuple_project(t, keys) == proj}
       end
+      result.extend(::DbAgile::Contract::Dataset)
+      result
     end
     
     # Checks if a (sub)-tuple exists inside a table.
