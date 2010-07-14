@@ -27,7 +27,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Adds a new configuration in the user configuration file"
+        "Add a new configuration"
       end
       
       # Shows the help
@@ -40,6 +40,8 @@ module DbAgile
 
       # Contribute to options
       def add_options(opt)
+        opt.separator nil
+        opt.separator "Options:"
         opt.on("--no-current", "Don't make the new config the current one") do
           self.current = false
         end

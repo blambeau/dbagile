@@ -34,6 +34,8 @@ module DbAgile
 
       # Contribute to options
       def add_options(opt)
+        opt.separator nil
+        opt.separator "Options:"
         opt.on("--verbose", "-v", "Displays full contents of ~/.dbagile file") do |value|
           self.verbose = true
         end

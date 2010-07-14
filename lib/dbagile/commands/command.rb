@@ -35,13 +35,7 @@ module DbAgile
           opt.release = nil
           opt.summary_indent = ' ' * 4
           opt.banner = self.banner.gsub(/^[ \t]+/, "")
-    
-          opt.separator nil
-          opt.separator "Options:"
-    
           add_options(opt)
-
-          opt.separator nil
         end
       end
 

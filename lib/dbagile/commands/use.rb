@@ -20,7 +20,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Updates the current database configuration to use"
+        "Set the current database configuration to use"
       end
       
       # Shows the help
@@ -38,7 +38,7 @@ module DbAgile
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
         exit(nil, true) unless arguments.size == 1
-        self.match = arguments.shift
+        self.match = arguments.shift.to_sym
       end
       
       # Executes the command
