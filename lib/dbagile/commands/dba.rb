@@ -43,6 +43,7 @@ module DbAgile
         command_name = argv.shift
         command = command_for(command_name)
         if command.nil?
+          info("No such command #{command_name}")
           show_help
           exit(nil, false)
         else

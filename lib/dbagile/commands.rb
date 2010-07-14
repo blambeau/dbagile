@@ -5,4 +5,5 @@ require 'dbagile/commands/list'
 require 'dbagile/commands/add'
 require 'dbagile/commands/rm'
 require 'dbagile/commands/use'
+require 'dbagile/commands/ping'
 

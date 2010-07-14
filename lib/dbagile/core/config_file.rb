@@ -73,6 +73,24 @@ module DbAgile
         configurations.empty?
       end
       
+      # Checks if a configuration exists
+      def has_config?(name)
+        !config(name).nil?
+      end
+      
+      # Checks if a name/configuration is the current one
+      def current?(name_or_config)
+        case name_or_config
+          when Symbol
+            return nil unless has_config?(name_or_config)
+            self.current_config_name == name_or_config
+          when Configuration
+            self.current_config_name == name_or_config.name
+          else
+            raise ArgumentError, "Symbol or Configuration expected, #{name_or_config.inspect} found."
+        end
+      end
+      
       # Yields the block with each configuration in turn
       def each(*args, &block)
         configurations.each(*args, &block)
@@ -93,22 +111,9 @@ module DbAgile
         }
       end
       
-      # Checks if a configuration exists
-      def has_config?(name)
-        !config(name).nil?
-      end
-      
-      # Checks if a name/configuration is the current one
-      def current?(name_or_config)
-        case name_or_config
-          when Symbol
-            return nil unless has_config?(name_or_config)
-            self.current_config_name == name_or_config
-          when Configuration
-            self.current_config_name == name_or_config.name
-          else
-            raise ArgumentError, "Symbol or Configuration expected, #{name_or_config.inspect} found."
-        end
+      # Returns the current configuration
+      def current_config
+        config(current_config_name)
       end
       
       #############################################################################################
