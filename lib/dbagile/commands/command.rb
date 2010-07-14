@@ -7,8 +7,19 @@ module DbAgile
       # Current configuration as a class-level instance variable
       class << self
         attr_accessor :current_config
-      end
-      
+
+        def inherited(subclass) 
+          super
+          @subclasses ||= [] 
+          @subclasses << subclass 
+        end 
+
+        def subclasses 
+          @subclasses 
+        end 
+
+      end # class << self
+       
       # Creates an empty command instance
       def initialize
         @buffer = STDOUT
@@ -64,14 +75,15 @@ module DbAgile
         error ex.backtrace.join("\n")
       end
       
+      # Returns path to the user configuration file
+      def user_config_file
+        File.join(ENV['HOME'], '.dbagile')
+      end
+      
       # Loads the user configuration file
-      def load_user_config_file(file = File.join(ENV['HOME'], '.dbagile'))
-        if File.exists? and File.readable?(file)
-          begin
-            Kernel.eval(File.read(file))
-          rescue Exception => ex
-            raise
-          end
+      def load_user_config_file(file = user_config_file)
+        if File.exists?(file) and File.readable?(file)
+          Kernel.eval(File.read(file))
           true
         else
           false
@@ -82,6 +94,28 @@ module DbAgile
       def banner
         raise "Command.banner should be overriden by subclasses"
       end
+      
+      # Aligns a string by appending whitespaces up to size.
+      # This method has not effect if size is nil
+      def align(string, size = nil)
+        return string if size.nil?
+        string.to_s + " "*(size - string.to_s.length)
+      end
+
+      # Returns the command name of a given class
+      def command_name_of(clazz)
+        /::([A-Za-z0-9]+)$/ =~ clazz.name
+        $1.downcase
+      end
+      
+      # Returns a command for a given name, returns nil if it cannot be found
+      def command_for(name)
+        DbAgile::Commands::Command.subclasses.each do |subclass|
+          return subclass.new if command_name_of(subclass) == name
+        end
+        nil
+      end
+
 
       # Contribute to options
       def add_options(opt)
