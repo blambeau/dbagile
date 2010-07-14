@@ -60,10 +60,10 @@ module DbAgile
         end
         opt.separator nil
         opt.separator "CSV options:"
-        opt.on("--include-header", "-h", "Flush columns names as first line") do
+        opt.on("--include-header", "-h", "Flush column names as first line") do
           self.output_options[:write_headers] = true
         end
-        opt.on("--separator=C", "Use C as columns separator character") do |value|
+        opt.on("--separator=C", "Use C as column separator character") do |value|
           self.output_options[:col_sep] = value
         end
         opt.on("--quote=C", "Use C as quoting character") do |value|
