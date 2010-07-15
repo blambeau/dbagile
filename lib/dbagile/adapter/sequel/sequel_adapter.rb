@@ -138,7 +138,7 @@ module DbAgile
     end
     
     # Deletes all tuples whose projection equal _proj_ inside a given table
-    def delete(transaction, table_name, proj)
+    def delete(transaction, table_name, proj = {})
       if proj.empty?
         db[table_name].delete
       else

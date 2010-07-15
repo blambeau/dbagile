@@ -9,7 +9,7 @@ module DbAgile
       DEFAULT_OPTIONS = {
         :trace_sql    => false,
         :trace_only   => false,
-        :trace_buffer => nil
+        :trace_buffer => STDERR
       }
       
       # Adapter delegate 
@@ -103,7 +103,7 @@ module DbAgile
       end
       
       # Deletes a projection from a given table
-      def delete(transaction, table_name, proj)
+      def delete(transaction, table_name, proj = {})
         if trace?
           if proj.empty?
             trace(delegate.db[table_name].delete_sql) 
@@ -118,6 +118,7 @@ module DbAgile
       # Sends SQL directly to the database SQL server.
       def direct_sql(transaction, sql)
         if trace?
+          puts "Here: #{sql}"
           trace(sql)
         end
         return super unless trace_only?

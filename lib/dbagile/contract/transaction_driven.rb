@@ -98,7 +98,7 @@ module DbAgile
       # @pre projection tuple is a valid projection for the table
       # @post all records have been updated.
       #
-      def delete(transaction, table_name, proj)
+      def delete(transaction, table_name, proj = {})
         Kernel.raise NotImplementedError
       end
       

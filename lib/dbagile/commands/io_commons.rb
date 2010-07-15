@@ -40,8 +40,8 @@ module DbAgile
       
       # Adds the CSV options
       def add_csv_options(opt)
-        opt.on("--include-header", "-h", "Read/Write column names on first line") do
-          csv_options[:write_headers] = true
+        opt.on("--headers", "-h", "Read/Write column names on first line") do
+          csv_options[:headers] = true
         end
         opt.on("--separator=C", "Use C as column separator character") do |value|
           csv_options[:col_sep] = value
@@ -60,6 +60,7 @@ module DbAgile
             when 'ruby'
               require 'sbyc/type_system/ruby'
               csv_options[:type_system] = SByC::TypeSystem::Ruby
+              csv_options[:headers] = true unless csv_options.key?(:headers)
               csv_options[:quote_char] = "'" unless csv_options.key?(:quote_char)
               csv_options[:force_quotes] = true unless csv_options.key?(:force_quotes)
             else
