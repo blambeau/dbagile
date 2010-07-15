@@ -117,6 +117,14 @@ module DbAgile
         raise "Command.banner should be overriden by subclasses"
       end
       
+      # Shows the help
+      def show_help
+        info banner
+        info ""
+        info short_help
+        info ""
+      end
+
       # Aligns a string by appending whitespaces up to size.
       # This method has not effect if size is nil
       def align(string, size = nil)

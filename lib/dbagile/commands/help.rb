@@ -18,14 +18,6 @@ module DbAgile
         "Show help for a specific command"
       end
       
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
         exit(nil, true) unless arguments.size == 1

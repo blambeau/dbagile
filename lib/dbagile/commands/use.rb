@@ -8,11 +8,6 @@ module DbAgile
       # Name of the configuration to use
       attr_accessor :match
       
-      # Creates a command instance
-      def initialize
-        super
-      end
-      
       # Returns the command banner
       def banner
         "usage: dba use NAME"
@@ -21,18 +16,6 @@ module DbAgile
       # Short help
       def short_help
         "Set the current database configuration to use"
-      end
-      
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
-      # Contribute to options
-      def add_options(opt)
       end
       
       # Normalizes the pending arguments

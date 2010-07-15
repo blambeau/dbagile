@@ -8,11 +8,6 @@ module DbAgile
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
-      # Creates a command instance
-      def initialize
-        super
-      end
-      
       # Returns the command banner
       def banner
         "usage: dba show DATASET"
@@ -21,18 +16,6 @@ module DbAgile
       # Short help
       def short_help
         "Display content of a table/view/query"
-      end
-      
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
-      # Contribute to options
-      def add_options(opt)
       end
       
       # Normalizes the pending arguments

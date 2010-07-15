@@ -24,14 +24,6 @@ module DbAgile
         "List available database configurations (found in ~/.dbagile)"
       end
       
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
       # Contribute to options
       def add_options(opt)
         opt.separator nil

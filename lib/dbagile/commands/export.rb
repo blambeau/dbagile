@@ -10,9 +10,6 @@ module DbAgile
       # Output file to use
       attr_accessor :output_file
       
-      # Dataset whose contents must be shown
-      attr_accessor :dataset
-      
       # Creates a command instance
       def initialize
         super
@@ -29,14 +26,6 @@ module DbAgile
         "Export contents of a table/view/query as ruby/csv/json"
       end
       
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
       # Contribute to options
       def add_options(opt)
         # Main output options

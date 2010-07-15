@@ -14,6 +14,9 @@ module DbAgile
       # Options for Ruby input/output
       attr_accessor :ruby_options
 
+      # Dataset whose contents must be shown
+      attr_accessor :dataset
+      
       # Builds default configuration
       def install_default_configuration
         self.format = 'csv'
@@ -24,20 +27,20 @@ module DbAgile
 
       # Adds the format options
       def add_io_format_options(opt)
-        opt.on("--csv", "Output dataset as csv string (default)") do
+        opt.on("--csv", "Read/Write dataset as csv string (default)") do
           self.format = 'csv'
         end
-        opt.on("--json", "Output dataset as json string") do
+        opt.on("--json", "Read/Write dataset as json string") do
           self.format = 'json'
         end
-        opt.on("--ruby", "Output dataset as ruby code (array of hashes)") do
+        opt.on("--ruby", "Read/Write dataset as ruby code (array of hashes)") do
           self.format = 'ruby'
         end
       end
       
       # Adds the CSV options
       def add_csv_options(opt)
-        opt.on("--include-header", "-h", "Flush/Read column names on first line") do
+        opt.on("--include-header", "-h", "Read/Write column names on first line") do
           csv_options[:write_headers] = true
         end
         opt.on("--separator=C", "Use C as column separator character") do |value|
@@ -52,7 +55,7 @@ module DbAgile
         opt.on("--skip-blanks", "Skip blank lines?") do 
           csv_options[:skip_blanks] = true
         end 
-        opt.on("--type-system=X", "Use SByC::TypeSystem::X for flushing/reading type-safe values (ruby)") do |value|
+        opt.on("--type-system=X", "Use SByC::TypeSystem::X when reading/writing type-safe values (ruby)") do |value|
           case value
             when 'ruby'
               require 'sbyc/type_system/ruby'
