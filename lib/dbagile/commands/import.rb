@@ -10,6 +10,9 @@ module DbAgile
       # Input file to use
       attr_accessor :input_file
       
+      # Connection options
+      attr_accessor :conn_options
+      
       # Drop table?
       attr_accessor :drop_table
       
@@ -23,6 +26,7 @@ module DbAgile
       def initialize
         super
         install_default_configuration
+        @conn_options = {}
       end
       
       # Returns the command banner
@@ -42,6 +46,8 @@ module DbAgile
         opt.on("--input=FILE", "-i", "Read input from FILE (stdin by default)") do |value|
           self.input_file = value
         end
+
+        opt.separator "\nSQL options:"
         opt.on("--create-table", "-c", "Create table before inserting values") do |value|
           self.drop_table = true
           self.create_table = true
@@ -54,6 +60,13 @@ module DbAgile
         end
         opt.on("--truncate", "-t", "Truncate table before inserting values") do |value|
           self.truncate_table = true
+        end
+        opt.on('--trace-sql', "Trace SQL statements on STDOUT (but executes them)") do |value|
+          self.conn_options[:trace_sql] = true
+        end
+        opt.on('--dry-run', "Trace SQL statements on STDOUT only, do nothing on the database") do |value|
+          self.conn_options[:trace_sql] = true
+          self.conn_options[:trace_only] = true
         end
 
         opt.separator "\nRecognized format options:"
@@ -107,8 +120,7 @@ module DbAgile
         
         # Make the job now
         begin
-#          config.connect(nil, :trace_sql => true, :trace_only => true).transaction do |t|
-          config.connect.transaction do |t|
+          config.connect(nil, conn_options).transaction do |t|
             first = true
             with_emitter do |tuple|
               make_the_job(t, tuple, first)

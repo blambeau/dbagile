@@ -118,7 +118,6 @@ module DbAgile
       # Sends SQL directly to the database SQL server.
       def direct_sql(transaction, sql)
         if trace?
-          puts "Here: #{sql}"
           trace(sql)
         end
         return super unless trace_only?
