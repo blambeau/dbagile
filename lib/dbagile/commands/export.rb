@@ -1,12 +1,11 @@
+require 'dbagile/commands/io_commons'
 module DbAgile
   module Commands
     #
     # Exports the content of a table in different formats
     #
     class Export < ::DbAgile::Commands::Command
-      
-      # Output format [ruby, csv, json]
-      attr_accessor :format
+      include ::DbAgile::Commands::IOCommons
       
       # Output file to use
       attr_accessor :output_file
@@ -14,14 +13,10 @@ module DbAgile
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
-      # Options for CSV/JSON output
-      attr_accessor :output_options
-      
       # Creates a command instance
       def initialize
         super
-        self.format = 'csv'
-        self.output_options = {}
+        install_default_configuration
       end
       
       # Returns the command banner
@@ -44,53 +39,22 @@ module DbAgile
 
       # Contribute to options
       def add_options(opt)
-        opt.separator nil
-        opt.separator "Output options:"
+        # Main output options
+        opt.separator "\nOutput options:"
         opt.on("--output=FILE", "-o", "Flush output in FILE (stdout by default)") do |value|
           self.output_file = value
         end
-        opt.on("--csv", "Output dataset as csv string (default)") do
-          self.format = 'csv'
-        end
-        opt.on("--json", "Output dataset as json string") do
-          self.format = 'json'
-        end
-        opt.on("--ruby", "Output dataset as ruby code (array of hashes)") do
-          self.format = 'ruby'
-        end
-        opt.separator nil
-        opt.separator "CSV options:"
-        opt.on("--include-header", "-h", "Flush column names as first line") do
-          self.output_options[:write_headers] = true
-        end
-        opt.on("--separator=C", "Use C as column separator character") do |value|
-          self.output_options[:col_sep] = value
-        end
-        opt.on("--quote=C", "Use C as quoting character") do |value|
-          self.output_options[:quote_char] = value
-        end
-        opt.on("--force-quotes", "Force quoting?") do 
-          self.output_options[:force_quotes] = true
-        end 
-        opt.on("--skip-blanks", "Skip blank lines?") do 
-          self.output_options[:skip_blanks] = true
-        end 
-        opt.on("--type-system=X", "Use SByC::TypeSystem::X for generating type-safe values (only ruby is available for now)") do |value|
-          case value
-            when 'ruby'
-              require 'sbyc/type_system/ruby'
-              self.output_options[:type_system] = SByC::TypeSystem::Ruby
-              self.output_options[:quote_char] = "'" unless self.output_options.key?(:quote_char)
-              self.output_options[:force_quotes] = true unless self.output_options.key?(:force_quotes)
-            else
-              exit("Unknown type system #{value}", false)
-          end
-        end
-        opt.separator nil
-        opt.separator "JSON options:"
-        opt.on("--pretty", "Generate a pretty JSON document") do 
-          self.output_options[:pretty] = true
-        end 
+
+        opt.separator "\nRecognized format options:"
+        add_io_format_options(opt)
+
+        # CSV output options
+        opt.separator "\nCSV options:"
+        add_csv_output_options(opt)
+
+        # JSON output options
+        opt.separator "\nJSON options:"
+        add_json_output_options(opt)
       end
       
       # Normalizes the pending arguments
@@ -125,11 +89,11 @@ module DbAgile
           with_io{|io|
             case self.format
               when 'csv'
-                ds.to_csv(io, output_options)
+                ds.to_csv(io, csv_options)
               when 'json'
-                ds.to_json(io, output_options)
+                ds.to_json(io, json_options)
               when 'ruby'
-                ds.to_ruby(io, output_options)
+                ds.to_ruby(io, ruby_options)
             end
           }
         rescue Exception => ex
