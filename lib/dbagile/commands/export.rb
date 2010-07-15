@@ -75,6 +75,17 @@ module DbAgile
         opt.on("--skip-blanks", "Skip blank lines?") do 
           self.output_options[:skip_blanks] = true
         end 
+        opt.on("--type-system=X", "Use SByC::TypeSystem::X for generating type-safe values (only ruby is available for now)") do |value|
+          case value
+            when 'ruby'
+              require 'sbyc/type_system/ruby'
+              self.output_options[:type_system] = SByC::TypeSystem::Ruby
+              self.output_options[:quote_char] = "'" unless self.output_options.key?(:quote_char)
+              self.output_options[:force_quotes] = true unless self.output_options.key?(:force_quotes)
+            else
+              exit("Unknown type system #{value}", false)
+          end
+        end
         opt.separator nil
         opt.separator "JSON options:"
         opt.on("--pretty", "Generate a pretty JSON document") do 

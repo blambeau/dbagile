@@ -17,15 +17,20 @@ module DbAgile
         cs = self.columns
         
         # Creates a CSV outputter with options
-        csv = FasterCSV.new(buffer, options)
+        csv_options = options.dup.delete_if{|key,value| !FasterCSV::DEFAULT_OPTIONS.key?(key)}
+        csv = FasterCSV.new(buffer, csv_options)
         
         # Write header if required
         csv << columns if options[:write_headers]
         
         # Write tuples now
-        each do |row|
-          csv << columns.collect{|c| row[c]}
+        if ts = options[:type_system]
+          each{|row| csv << columns.collect{|c| ts.to_literal(row[c])}}
+        else
+          each{|row| csv << columns.collect{|c| row[c]}}
         end
+        
+        # Return buffer
         buffer
       end
       
@@ -50,11 +55,12 @@ module DbAgile
       # @return [...] the buffer itself
       #
       def to_ruby(buffer = "", options = {})
+        require 'sbyc/type_system/ruby'
         buffer << "["
         first = true
         each{|t| 
           buffer << (first ? "\n  " : ",\n  ")
-          buffer << t.inspect
+          buffer << SByC::TypeSystem::Ruby::to_literal(t)
           first = false
         }
         buffer << "\n]"
