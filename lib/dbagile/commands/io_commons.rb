@@ -19,7 +19,7 @@ module DbAgile
       
       # Builds default configuration
       def install_default_configuration
-        self.format = 'csv'
+        self.format = :csv
         self.csv_options = {}
         self.json_options = {}
         self.ruby_options = {}
@@ -27,14 +27,18 @@ module DbAgile
 
       # Adds the format options
       def add_io_format_options(opt)
+        opt.on('--format=X', [:csv, :json, :ruby],
+               "Read/Write dataset as (csv, json, ruby) string") do |value|
+          self.format = value
+        end
         opt.on("--csv", "Read/Write dataset as csv string (default)") do
-          self.format = 'csv'
+          self.format = :csv
         end
         opt.on("--json", "Read/Write dataset as json string") do
-          self.format = 'json'
+          self.format = :json
         end
         opt.on("--ruby", "Read/Write dataset as ruby code (array of hashes)") do
-          self.format = 'ruby'
+          self.format = :ruby
         end
       end
       
@@ -55,9 +59,10 @@ module DbAgile
         opt.on("--skip-blanks", "Skip blank lines?") do 
           csv_options[:skip_blanks] = true
         end 
-        opt.on("--type-system=X", "Use SByC::TypeSystem::X when reading/writing type-safe values (ruby)") do |value|
+        opt.on("--type-system=X", [:ruby], 
+               "Read/Write type-safe values for (ruby)") do |value|
           case value
-            when 'ruby'
+            when :ruby
               require 'sbyc/type_system/ruby'
               csv_options[:type_system] = SByC::TypeSystem::Ruby
               csv_options[:headers] = true unless csv_options.key?(:headers)

@@ -76,7 +76,7 @@ module DbAgile
         exit(ex.message, false)
       rescue Sequel::Error => ex
         exit(ex.message, false)
-      rescue OptionParser::InvalidOption => ex
+      rescue OptionParser::InvalidOption, OptionParser::InvalidArgument => ex
         exit(ex.message)
       rescue SystemExit
       rescue Exception => ex

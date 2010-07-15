@@ -91,10 +91,10 @@ module DbAgile
       def with_emitter(&block)
         with_io{|io|
           case self.format
-            when 'csv'
+            when :csv
               DbAgile::IO::CSV::from_csv(io, csv_options, &block)
-            when 'json'
-            when 'ruby'
+            when :json
+            when :ruby
           end
         }
       end

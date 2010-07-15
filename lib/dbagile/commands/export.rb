@@ -77,11 +77,11 @@ module DbAgile
           ds = config.connect.dataset(self.dataset)
           with_io{|io|
             case self.format
-              when 'csv'
+              when :csv
                 ds.to_csv(io, csv_options)
-              when 'json'
+              when :json
                 ds.to_json(io, json_options)
-              when 'ruby'
+              when :ruby
                 ds.to_ruby(io, ruby_options)
             end
           }
