@@ -8,7 +8,6 @@ module DbAgile
         tuple.each_pair{|name, value| heading[name] = value.class unless value.nil?}
         heading
       end
-      module_function :tuple_heading
       
       # Projects a tuple over some columns
       def tuple_project(tuple, columns)

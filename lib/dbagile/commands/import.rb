@@ -6,6 +6,7 @@ module DbAgile
     #
     class Import < ::DbAgile::Commands::Command
       include ::DbAgile::Commands::IOCommons
+      include ::DbAgile::Adapter::Tools
       
       # Input file to use
       attr_accessor :input_file
@@ -147,7 +148,7 @@ module DbAgile
           t.direct_sql("DROP TABLE #{self.dataset}") if t.has_table?(self.dataset)
         end
         if create_table
-          heading = ::DbAgile::Adapter::Tools::tuple_heading(tuple)
+          heading = tuple_heading(tuple)
           t.create_table(self.dataset, heading)
         end
         if truncate_table
