@@ -38,8 +38,12 @@ module DbAgile
       # Creates an empty command instance
       def initialize
         begin
+          gem 'highline', ">= 1.5.3"
           require 'highline'
-          @buffer = HighLine.new
+          h = HighLine.new
+          h.wrap_at = :auto
+          h.page_at = h.output_rows-2
+          @buffer = h
         rescue LoadError
           @buffer = STDOUT
           info("dba works better with highline... try 'gem install highline'")
