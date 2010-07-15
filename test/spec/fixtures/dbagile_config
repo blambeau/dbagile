@@ -1,0 +1,6 @@
+config(:sqlite){
+  uri "sqlite://#{File.expand_path('../values_sqlite.db', __FILE__)}"
+}
+config(:postgres){
+  uri "postgres://dbagile@localhost/dbagile"
+}

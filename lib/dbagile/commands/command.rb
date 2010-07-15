@@ -35,6 +35,9 @@ module DbAgile
 
       end # class << self
        
+      # Buffer used for all messages
+      attr_accessor :buffer 
+       
       # Creates an empty command instance
       def initialize
         @buffer = STDOUT

@@ -11,5 +11,7 @@ require 'spec/autorun'
 
 require 'fixtures'
 
+DbAgile::user_config_file = Fixtures::dbagile_config_path
+
 Spec::Runner.configure do |config|
 end
