@@ -109,6 +109,7 @@ module DbAgile
               DbAgile::IO::CSV::from_csv(io, csv_options, &block)
             when :json
             when :ruby
+              DbAgile::IO::Ruby::from_ruby(io, ruby_options, &block)
           end
         }
       end

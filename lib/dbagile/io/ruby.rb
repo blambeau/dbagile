@@ -20,6 +20,22 @@ module DbAgile
       end
       module_function :to_ruby
       
+      #
+      # Interprets io as ruby code that returns an array of tuples 
+      # (Hash instance). If a block if given, yields it with each tuple in 
+      # turn. Otherwise returns it.
+      #
+      def from_ruby(io, options = {}, &block)
+        tuples = Kernel.eval(io.read)
+        if block
+          tuples.each(&block)
+          nil
+        else
+          tuples
+        end
+      end
+      module_function :from_ruby
+      
     end # module Ruby
   end # module IO
 end # module DbAgile
