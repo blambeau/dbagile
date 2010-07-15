@@ -9,4 +9,5 @@ require 'dbagile/commands/use'
 require 'dbagile/commands/ping'
 require 'dbagile/commands/show'
 require 'dbagile/commands/export'
+require 'dbagile/commands/import'
 

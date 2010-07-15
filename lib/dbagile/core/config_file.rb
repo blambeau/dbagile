@@ -137,7 +137,7 @@ module DbAgile
       
       # Flushes the configuration into a given file
       def flush(output_file)
-        if output_file.kind_of?(IO)
+        if output_file.kind_of?(::IO)
           output_file << self.inspect
         else
           File.open(output_file, 'w'){|io| flush(io)}
