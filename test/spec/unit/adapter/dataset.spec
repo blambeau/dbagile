@@ -6,10 +6,7 @@ describe "::DbAgile::Adapter.dataset" do
     describe "When called on non existing table" do
       subject{ lambda{ adapter.dataset(:no_such_table) } }
       specify {
-        pending("Conflicting requirement so far...") {
-          subject.should raise_error 
-          raise
-        }
+        subject.should raise_error 
       }
     end
   

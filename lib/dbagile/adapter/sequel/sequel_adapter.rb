@@ -64,6 +64,7 @@ module DbAgile
     def dataset(table, proj = nil)
       result = case table
         when Symbol
+          raise ArgumentError, "No such table #{table}" unless has_table?(table)
           proj.nil? ? db[table] : db[table].where(proj)
         else
           proj.nil? ? db[table] : db[table].where(proj)
