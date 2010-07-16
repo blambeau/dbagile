@@ -72,10 +72,10 @@ module DbAgile
       def normalize_pending_arguments(arguments)
         case arguments.size
           when 1
-            self.dataset = valid_argument_list!(arguments, String)
+            self.dataset = valid_argument_list!(arguments, Symbol)
           when 2
             raise OptionParser::AmbiguousArgument, '--input-file=#{self.input_file}' if self.input_file
-            self.dataset, self.input_file = valid_argument_list!(arguments, String, String)
+            self.dataset, self.input_file = valid_argument_list!(arguments, Symbol, String)
           else
             bad_argument_list!(arguments)
         end
@@ -105,9 +105,7 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        with_config_file do |config_file|
-
-          config = has_config!(config_file)
+        with_current_config do |config|
         
           # Make the job now
           config.connect(nil, conn_options).transaction do |t|
