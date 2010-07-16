@@ -1,6 +1,5 @@
 require File.expand_path('../../spec_helper.rb', __FILE__)
-require 'dbagile/commands'
-dbagile = DbAgile::Commands::API
+dbagile = DbAgile::Command::API
 dbagile.use %w{sqlite}
 dbagile.import %{--ruby --create-table --input=#{Fixtures::join_path('ruby_values_source.rb')} ruby_values}
 dbagile.show %{ruby_values}, STDOUT

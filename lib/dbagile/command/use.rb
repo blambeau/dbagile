@@ -1,9 +1,9 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # Updates the current configuration to use
     #
-    class Use < ::DbAgile::Commands::Command
+    class Use < Command
       
       # Name of the configuration to use
       attr_accessor :match
@@ -37,9 +37,9 @@ module DbAgile
         config_file.flush!
 
         # List available databases now
-        DbAgile::Commands::API.list([], environment)
+        DbAgile::Command::API.list([], environment)
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

@@ -1,9 +1,9 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # List available database handler listed in ~/.dbagile file
     #
-    class List < ::DbAgile::Commands::Command
+    class List < Command
       
       # Verbose ?
       attr_accessor :verbose
@@ -54,5 +54,5 @@ module DbAgile
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

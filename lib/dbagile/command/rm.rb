@@ -1,9 +1,9 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # Removes a configuration in ~/.dbagile
     #
-    class Rm < ::DbAgile::Commands::Command
+    class Rm < Command
       
       # Name of the configuration to add
       attr_accessor :match
@@ -42,9 +42,9 @@ module DbAgile
         config_file.flush!
 
         # List available databases now
-        DbAgile::Commands::List.new.run(nil, [])
+        DbAgile::Command::List.new.run(nil, [])
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

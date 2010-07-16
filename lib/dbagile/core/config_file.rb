@@ -159,5 +159,5 @@ module DbAgile
       
       private :parse_file, :parse
     end # class ConfigFile
-  end # module Commands
+  end # module Core
 end # module DbAgile

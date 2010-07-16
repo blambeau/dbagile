@@ -1,9 +1,9 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # Pings a configuration
     #
-    class Ping < ::DbAgile::Commands::Command
+    class Ping < Command
       
       # Name of the configuration to ping
       attr_accessor :match
@@ -40,5 +40,5 @@ module DbAgile
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

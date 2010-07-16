@@ -1,7 +1,6 @@
 require 'dbagile'
-require 'dbagile/commands'
 module DbAgile
-  module Commands
+  class Command
     module API
       
       # Builds a command instance for a specific class
@@ -25,15 +24,15 @@ module DbAgile
       module_function :build_options
       
       # Creates an API method for each subclass
-      DbAgile::Commands::Command::subclasses.each do |subclass|
-        command_name = DbAgile::Commands::Command::command_name_of(subclass)
+      DbAgile::Command::subclasses.each do |subclass|
+        command_name = DbAgile::Command::command_name_of(subclass)
         instance_eval <<-EOF
-          def #{command_name}(options = [], env = DbAgile::Commands::Command::DEFAULT_ENVIRONMENT_CLASS.new)
+          def #{command_name}(options = [], env = DbAgile::Command::DEFAULT_ENVIRONMENT_CLASS.new)
             build_command(#{subclass.name}, env).run(__FILE__, build_options(options))
           end
         EOF
       end
       
     end # module API
-  end # module Commands
+  end # class Command
 end # module DbAgile

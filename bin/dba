@@ -9,10 +9,9 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rubygems'
 require 'dbagile'
-require 'dbagile/commands'
 
 begin
-  r = DbAgile::Commands::DbA.new.run '.', ARGV
+  r = DbAgile::Command::DbA.new.run '.', ARGV
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

@@ -1,11 +1,11 @@
-require 'dbagile/commands/io_commons'
+require 'dbagile/command/io_commons'
 module DbAgile
-  module Commands
+  class Command
     #
     # Exports the content of a table in different formats
     #
-    class Export < ::DbAgile::Commands::Command
-      include ::DbAgile::Commands::IOCommons
+    class Export < Command
+      include ::DbAgile::Command::IOCommons
       
       # Output file to use
       attr_accessor :output_file
@@ -109,5 +109,5 @@ module DbAgile
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

@@ -1,5 +1,5 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # Defines the contract to be an environment for dbagile commands.
     #
@@ -122,5 +122,5 @@ module DbAgile
       end
 
     end # class Environment
-  end # module Commands
+  end # class Command
 end # module DbAgile

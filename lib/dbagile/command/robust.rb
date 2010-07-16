@@ -1,5 +1,5 @@
 module DbAgile
-  module Commands
+  class Command
     module Robust
       
       # Raises an OptionParser::InvalidArgument
@@ -51,10 +51,10 @@ module DbAgile
       #
       # Asserts that a command exists or raises a NoSuchCommandError.
       # 
-      # @return [DbAgile::Commands::Command] the command instance
+      # @return [DbAgile::Command] the command instance
       #
       def has_command!(name)
-        cmd = DbAgile::Commands::Command.command_for(name)
+        cmd = DbAgile::Command.command_for(name)
         if cmd.nil?
           raise DbAgile::NoSuchCommandError, "No such command #{name.inspect}" 
         else
@@ -84,5 +84,5 @@ module DbAgile
       end
       
     end # module Robust
-  end # module Commands 
+  end # class Command 
 end # module DbAgile

@@ -5,7 +5,6 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
 require 'rubygems'
 require 'dbagile'
-require 'dbagile/commands'
 require 'spec'
 require 'spec/autorun'
 

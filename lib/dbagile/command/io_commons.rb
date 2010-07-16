@@ -1,5 +1,5 @@
 module DbAgile
-  module Commands
+  class Command
     module IOCommons
       
       # Output/input format [ruby, csv, json]
@@ -129,5 +129,5 @@ module DbAgile
       end
        
     end # module CSVOptions
-  end # module Commands
+  end # class Command
 end # module DbAgile

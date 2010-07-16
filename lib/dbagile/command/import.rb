@@ -1,11 +1,11 @@
-require 'dbagile/commands/io_commons'
+require 'dbagile/command/io_commons'
 module DbAgile
-  module Commands
+  class Command
     #
     # Imports the content of a table in different formats
     #
-    class Import < ::DbAgile::Commands::Command
-      include ::DbAgile::Commands::IOCommons
+    class Import < Command
+      include ::DbAgile::Command::IOCommons
       include ::DbAgile::Adapter::Tools
       
       # Input file to use
@@ -148,5 +148,5 @@ module DbAgile
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile

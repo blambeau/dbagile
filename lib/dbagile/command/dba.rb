@@ -1,6 +1,6 @@
 module DbAgile
-  module Commands
-    class DbA < ::DbAgile::Commands::Command
+  class Command
+    class DbA < Command
       
       # Returns the command banner
       def banner
@@ -46,5 +46,5 @@ module DbAgile
       end
 
     end # class DbA
-  end # module Commands
+  end # class Command
 end # module DbAgile

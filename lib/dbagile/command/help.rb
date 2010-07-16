@@ -1,9 +1,9 @@
 module DbAgile
-  module Commands
+  class Command
     #
     # Show help of a given command
     #
-    class Help < ::DbAgile::Commands::Command
+    class Help < Command
       
       # Name of the configuration to add
       attr_accessor :command
@@ -32,5 +32,5 @@ module DbAgile
       end
       
     end # class List
-  end # module Commands
+  end # class Command
 end # module DbAgile
