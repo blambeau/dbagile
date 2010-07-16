@@ -40,6 +40,24 @@ module DbAgile
         subclass.nil? ? nil : subclass.new
       end
 
+      # Builds a command instance for a specific class
+      def build_command(clazz, env)
+        command = clazz.new(env)
+        command
+      end
+      
+      # Builds options
+      def build_command_options(options)
+        case options
+          when Array
+            options
+          when String
+            options.split
+          else
+            raise ArgumentError, "Invalid options #{options}"
+        end
+      end
+      
     end # class << self
      
     ##############################################################################
@@ -188,6 +206,8 @@ module DbAgile
     
   end # class Command
 end # module DbAgile
+
+# Load all commands now
 require 'dbagile/command/dba'
 require 'dbagile/command/help'
 require 'dbagile/command/list'
@@ -198,4 +218,17 @@ require 'dbagile/command/ping'
 require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
-require 'dbagile/command/api'
+
+class DbAgile::Command
+  
+  # Add API methods to Command class
+  DbAgile::Command::subclasses.each do |subclass|
+    command_name = DbAgile::Command::command_name_of(subclass)
+    instance_eval <<-EOF
+      def #{command_name}(options = [], env = DbAgile::default_environment)
+        build_command(#{subclass.name}, env).run(__FILE__, build_command_options(options))
+      end
+    EOF
+  end
+
+end

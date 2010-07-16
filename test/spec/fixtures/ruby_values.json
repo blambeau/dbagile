@@ -1,1 +1,1 @@
-[{"neg_bignum":-4294967296,"date":"2010-07-16","true_value":true,"false_value":false,"name":"Standard values","pos_fixnum":1,"now":"Fri Jul 16 00:09:56 +0200 2010","neg_fixnum":-1,"id":1,"pos_bignum":4294967296}]
+[{"neg_fixnum":-1,"pos_bignum":4294967296,"date":"2010-07-16","neg_bignum":-4294967296,"name":"Standard values","true_value":true,"now":"Fri Jul 16 00:09:56 +0200 2010","false_value":false,"id":1,"pos_fixnum":1}]

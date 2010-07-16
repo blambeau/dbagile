@@ -27,6 +27,7 @@ module DbAgile
       # Executes the command
       def execute_command
         with_config_file do |config_file|
+          raise unless DbAgile::Core::ConfigFile === config_file
           config = has_config!(config_file, self.match)
 
           # Makes it the current one
@@ -37,7 +38,7 @@ module DbAgile
         end
 
         # List available databases now
-        DbAgile::Command::API.list([], environment)
+        DbAgile::Command::list([], environment)
       end
       
     end # class List

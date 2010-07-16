@@ -8,6 +8,12 @@ module DbAgile
     @environment ||= ::DbAgile::Environment.new
   end
   module_function :default_environment
+
+  # Sets the default environment to use.
+  def default_environment=(env)
+    @environment = env
+  end
+  module_function :default_environment=
   
   #
   # If a block is given, creates a new configuration, save it in environment 

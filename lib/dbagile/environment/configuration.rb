@@ -18,7 +18,7 @@ module DbAgile
       # Sets the path to the .dbagile file
       #
       def config_file_path=(path)
-        @config_file = path
+        @config_file_path = path
       end
       
       # 
