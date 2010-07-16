@@ -76,31 +76,32 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        config = has_config!(config_file)
+        with_config_file do |config_file|
+          # load the configuration file
+          config = has_config!(config_file)
         
-        # Prepare the dataset
-        ds = config.connect.dataset(self.dataset)
-        if self.select
-          ds = ds.select(*self.select)
-        elsif self.allbut
-          ds = ds.allbut(*self.allbut)
-        end
-        
-        # Export it
-        with_io{|io|
-          case self.format
-            when :csv
-              ds.to_csv(io, csv_options)
-            when :json
-              ds.to_json(io, json_options)
-            when :ruby
-              ds.to_ruby(io, ruby_options)
-            when :text
-              ds.to_text(io, text_options)
+          # Prepare the dataset
+          ds = config.connect.dataset(self.dataset)
+          if self.select
+            ds = ds.select(*self.select)
+          elsif self.allbut
+            ds = ds.allbut(*self.allbut)
           end
-        }
+        
+          # Export it
+          with_io{|io|
+            case self.format
+              when :csv
+                ds.to_csv(io, csv_options)
+              when :json
+                ds.to_json(io, json_options)
+              when :ruby
+                ds.to_ruby(io, ruby_options)
+              when :text
+                ds.to_text(io, text_options)
+            end
+          }
+        end
       end
       
     end # class List

@@ -34,22 +34,25 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        config_file = DbAgile::load_user_config_file
-        if verbose
-          display(config_file.inspect)
-        else
-          unless config_file.empty?
-            say("Available databases are:")
-            config_file.each do |config|
-              msg = config_file.current?(config) ? "  -> " : " "*5
-              msg += align(config.name,15)
-              msg += " "
-              msg += config.uri
-              display(msg)
-            end
+        with_config_file do |config_file|
+
+          if verbose
+            display(config_file.inspect)
           else
-            say("No database configuration found. Checks ~/.dbagile")
+            unless config_file.empty?
+              say("Available databases are:")
+              config_file.each do |config|
+                msg = config_file.current?(config) ? "  -> " : " "*5
+                msg += align(config.name,15)
+                msg += " "
+                msg += config.uri
+                display(msg)
+              end
+            else
+              say("No database configuration found. Checks ~/.dbagile")
+            end
           end
+
         end
       end
       

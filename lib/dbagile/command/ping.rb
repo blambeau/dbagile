@@ -30,17 +30,19 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        config = has_config!(config_file, self.match)
+        with_config_file do |config_file|
         
-        # Make the job now
-        begin
-          config.connect.ping
-          say("Ping ok (#{config.uri})")
-        rescue => ex
-          say("Ping KO (#{config.uri})", :red)
-          display(ex.message)
+          config = has_config!(config_file, self.match)
+        
+          # Make the job now
+          begin
+            config.connect.ping
+            say("Ping ok (#{config.uri})")
+          rescue => ex
+            say("Ping KO (#{config.uri})", :red)
+            display(ex.message)
+          end
+          
         end
       end
       

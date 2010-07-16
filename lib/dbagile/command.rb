@@ -78,6 +78,12 @@ module DbAgile
     def input_buffer
       environment.input_buffer
     end
+    
+    # Yields the block with the ConfigFile instance to use
+    def with_config_file
+      raise ArgumentError, "Missing block" unless block_given?
+      yield(DbAgile::load_user_config_file(DbAgile::user_config_file, true))
+    end
 
     ##############################################################################
     ### About options
@@ -169,16 +175,6 @@ module DbAgile
     def align(string, size = nil)
       return string if size.nil?
       string.to_s + " "*(size - string.to_s.length)
-    end
-
-    # Loads the user configuration file
-    def load_user_config_file(file = user_config_file)
-      if File.exists?(file) and File.readable?(file)
-        Kernel.eval(File.read(file))
-        true
-      else
-        false
-      end
     end
     
   end # class Command

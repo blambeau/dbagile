@@ -26,21 +26,21 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        config = has_config!(config_file, self.match)
+        with_config_file do |config_file|
+          config = has_config!(config_file, self.match)
 
-        # Move the current one if it was it
-        if config_file.current?(config)
-          config_file.current_config_name = nil
+          # Move the current one if it was it
+          if config_file.current?(config)
+            config_file.current_config_name = nil
+          end
+      
+          # Removes it from file
+          config_file.remove(config)
+      
+          # Flush the configuration file
+          config_file.flush!
+
         end
-      
-        # Removes it from file
-        config_file.remove(config)
-      
-        # Flush the configuration file
-        config_file.flush!
-
         # List available databases now
         DbAgile::Command::List.new.run(nil, [])
       end

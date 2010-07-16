@@ -105,17 +105,19 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        config = has_config!(config_file)
+        with_config_file do |config_file|
+
+          config = has_config!(config_file)
         
-        # Make the job now
-        config.connect(nil, conn_options).transaction do |t|
-          first = true
-          with_emitter do |tuple|
-            make_the_job(t, tuple, first)
-            first = false
+          # Make the job now
+          config.connect(nil, conn_options).transaction do |t|
+            first = true
+            with_emitter do |tuple|
+              make_the_job(t, tuple, first)
+              first = false
+            end
           end
+          
         end
       end
       

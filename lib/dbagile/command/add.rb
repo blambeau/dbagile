@@ -51,20 +51,20 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
+        with_config_file do |config_file|
         
-        # Create the configuration and adds it
-        config = ::DbAgile::Core::Configuration.new(self.name)
-        config.uri(self.uri)
-        config_file << config
+          # Create the configuration and adds it
+          config = ::DbAgile::Core::Configuration.new(self.name)
+          config.uri(self.uri)
+          config_file << config
         
-        # Makes it the current one if requested
-        config_file.current_config_name = config.name if self.current
+          # Makes it the current one if requested
+          config_file.current_config_name = config.name if self.current
         
-        # Flush the configuration file
-        config_file.flush!
+          # Flush the configuration file
+          config_file.flush!
         
+        end
         # List available databases now
         DbAgile::Command::List.new.run(nil, [])
       end
