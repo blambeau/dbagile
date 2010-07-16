@@ -1,5 +1,8 @@
 module DbAgile
   class Environment
+    # 
+    # Environment's robustness contract.
+    #
     module Robustness
       
       #

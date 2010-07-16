@@ -3,76 +3,45 @@ module DbAgile
   # Version of the DbAgile interface
   VERSION = "0.0.1".freeze
   
-  # Installed configurations
-  CONFIGURATIONS = {}
-  
-  # Force use of a specific user configuration file
-  def user_config_file=(file)
-    @user_config_file = file
+  # Returns the default environment to use.
+  def default_environment
+    @environment ||= ::DbAgile::Environment.new
   end
-  module_function :user_config_file=
-
-  # Returns default user configuration file
-  def user_config_file
-    @user_config_file || File.join(ENV['HOME'], '.dbagile')
-  end
-  module_function :user_config_file
+  module_function :default_environment
   
   #
-  # Loads a configuration file and returns a DbAgile::Core::ConfigFile 
-  # instance. 
+  # If a block is given, creates a new configuration, save it in environment 
+  # and returns the block. Otherwise, returns a confguration by name.
   #
-  # @param [String] file path of the configuration file to load
-  # @raise CorruptedConfigFileError if something is wrong.
-  # @raise NoConfigFileError if the file cannot be found.
-  #
-  def load_user_config_file(file = user_config_file, create_new = false)
-    if create_new and not(File.exists?(file))
-      require 'fileutils'
-      FileUtils.touch(file) 
-    end
-    raise NoConfigFileError, "No such config file #{file}" unless File.exists?(file)
-    raise CorruptedConfigFileError, "Corrupted config file #{file}" unless File.file?(file) and File.readable?(file)
-    begin
-      ::DbAgile::Core::ConfigFile.new(file)
-    rescue Exception => ex
-      raise CorruptedConfigFileError, "Corrupted config file #{file}", ex
-    end
-  end
-  module_function :load_user_config_file
-  
-  #
-  # When a block if given, creates a configuration instance and saves it 
-  # under _name_ (if name is given).
-  #
-  # When no block is given, returns a configuration by name
+  # @param [Symbol] name configuration name
+  # @param [Proc] block configuration block dsl (optional)
+  # @return [DbAgile::Core::Configuration] a database configuration instance.
   # 
-  def config(name = :noname, &block)
-    if block
-      config = DbAgile::Core::Configuration.new(name, &block)
-      (CONFIGURATIONS[name] = config) if name
-      config
-    else
-      CONFIGURATIONS[name]
+  def config(name, &block)
+    default_environment.with_config_file(true) do |config_file|
+      if block_given?
+        config = DbAgile::Core::Configuration.new(name, &block)
+        config_file << config
+        config
+      else
+        config_file.config(name)
+      end
     end
   end
   module_function :config
   
   # Connects to a database and returns a Database instance
   def connect(uri, options = {}, &block)
-    connection = case uri
+    case uri
       when Symbol
-        if c = config(uri)
-          c.connect(nil, options)
-        else
-          raise UnknownConfigError, "Unknown configuration #{uri}"
-        end
+        config = config(uri)
+        raise UnknownConfigError, "No such configuration #{uri}" unless config
+        config.connect(options)
       when String
         DbAgile::Core::Configuration.new.connect(uri, options)
       else
-        raise ArgumentError, "Unable to use #{uri} for accessing database"
+        raise ArgumentError, "Unable to use #{uri} to connect a database"
     end
-    connection
   end
   module_function :connect
   

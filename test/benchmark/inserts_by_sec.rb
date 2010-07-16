@@ -43,7 +43,7 @@ puts "Inserts done in #{t2-t1} sec, i.e. #{n/(t2.to_f-t1.to_f)} inserts by secon
 
 drop_table(file, uri)
 puts "Making #{n} inserts with DbAgile and agile plugins"
-db = DbAgile::config{
+db = DbAgile::config(:test){
   plug AgileKeys[:candidate => /^id$/], AgileTable.new
 }.connect(uri, {:sequel_logger => Logger.new(STDOUT)})
 db.transaction do |t|

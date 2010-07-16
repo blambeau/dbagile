@@ -44,7 +44,7 @@ module DbAgile
       #############################################################################################
       
       # Creates a config file instance, by parsing content of file.
-      def initialize(file = DbAgile.user_config_file)
+      def initialize(file)
         @file = file
         @configurations = []
         if File.exists?(file)

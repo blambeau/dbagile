@@ -60,29 +60,28 @@ module DbAgile
     ##############################################################################
     
     # Delegated to environment
-    def say(message, color = nil)
-      environment.say(message.to_s, color) unless message.nil?
+    def say(*args, &block)
+      environment.say(*args, &block)
     end
     
     # Delegated to environment
-    def display(something)
-      environment.display(something) unless something.nil?
+    def display(*args, &block)
+      environment.display(*args, &block)
     end
     
     # Delegated to environment
-    def output_buffer
-      environment.output_buffer
+    def output_buffer(*args, &block)
+      environment.output_buffer(*args, &block)
     end
     
     # Delegated to environment
-    def input_buffer
-      environment.input_buffer
+    def input_buffer(*args, &block)
+      environment.input_buffer(*args, &block)
     end
     
-    # Yields the block with the ConfigFile instance to use
-    def with_config_file
-      raise ArgumentError, "Missing block" unless block_given?
-      yield(DbAgile::load_user_config_file(DbAgile::user_config_file, true))
+    # Delegated to environment
+    def with_config_file(*args, &block)
+      environment.with_config_file(*args, &block)
     end
 
     ##############################################################################
