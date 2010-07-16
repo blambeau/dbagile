@@ -32,22 +32,50 @@ module DbAgile
     module PrettyTable
     
       # Prints nice-looking plain-text tables
-      def self.print(records, buffer = "", columns = nil) # records is an array of hashes
+      def self.print(records, buffer = "", options = {}) # records is an array of hashes
+        # investigate arguments
         columns ||= records.first.keys.sort_by{|x|x.to_s}
         sizes = column_sizes(records, columns)
-        sep_line = separator_line(columns, sizes)
+        sep_line = normalize_line(separator_line(columns, sizes), options)
+
+        # start generation now
         buffer << sep_line << "\n"
-        buffer << header_line(columns, sizes) << "\n"
+        buffer << normalize_line(header_line(columns, sizes),options) << "\n"
         buffer << sep_line << "\n"
         records.each {|r| 
-          buffer << data_line(columns, sizes, r) << "\n"
+          buffer << normalize_line(data_line(columns, sizes, r),options) << "\n"
         }
         buffer << sep_line << "\n"
         buffer
       end
 
       ### Private Module Methods ###
+      
+      # Normalize the line according to options
+      def self.normalize_line(line, options)
+        line = line_wrap(line, options[:wrap_at]) if options[:wrap_at]
+        if options[:truncate_at] and line.length > options[:truncate_at]
+          ellipse = options[:append_with] || '...'
+          line = line[0..(options[:truncate_at]-ellipse.length)] 
+          line += ellipse
+        end
+        line
+      end
 
+      #
+      # Wraps a line at a given width
+      #
+      # Taken from Ruby Facets
+      # Copyright (c) 2004-2006 Thomas Sawyer
+      # Distributed under the terms of the Ruby license.
+      #
+      def self.line_wrap(width, tabs=2)
+        s = gsub(/\t/,' ' * tabs) # tabs default to 2 spaces
+        s = s.gsub(/\n/,' ')
+        r = s.scan( /.{1,#{width}}/ )
+        r.join("\n") << "\n"
+      end
+  
       # Hash of the maximum size of the value for each column 
       def self.column_sizes(records, columns) # :nodoc:
         sizes = Hash.new {0}
