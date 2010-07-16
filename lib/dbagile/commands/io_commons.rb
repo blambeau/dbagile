@@ -14,6 +14,9 @@ module DbAgile
       # Options for Ruby input/output
       attr_accessor :ruby_options
 
+      # Options for Text output
+      attr_accessor :text_options
+
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
@@ -23,23 +26,30 @@ module DbAgile
         self.csv_options = {}
         self.json_options = {}
         self.ruby_options = {}
+        self.text_options = {}
       end
 
-      # Adds the format options
-      def add_io_format_options(opt)
-        opt.on('--format=X', [:csv, :json, :ruby],
-               "Read/Write dataset as (csv, json, ruby) string") do |value|
+      # Adds the format options for output
+      def add_output_format_options(opt)
+        opt.on('--format=X', [:csv, :text, :json, :ruby],
+               "Export dataset in (csv, text, json, ruby)") do |value|
           self.format = value
         end
-        opt.on("--csv", "Read/Write dataset as csv string (default)") do
-          self.format = :csv
+        opt.on("--csv",  "Export dataset in csv (default)"){ self.format = :csv }
+        opt.on("--text", "Export dataset as a plain text table"){ self.format = :text }
+        opt.on("--json", "Export dataset in json"){ self.format = :json }
+        opt.on("--ruby", "Export dataset as ruby code (Array of Hash(es))"){ self.format = :ruby }
+      end
+      
+      # Adds the format options for input
+      def add_input_format_options(opt)
+        opt.on('--format=X', [:csv, :json, :ruby],
+               "Import dataset from (csv, json, ruby)") do |value|
+          self.format = value
         end
-        opt.on("--json", "Read/Write dataset as json string") do
-          self.format = :json
-        end
-        opt.on("--ruby", "Read/Write dataset as ruby code (array of hashes)") do
-          self.format = :ruby
-        end
+        opt.on("--csv",  "Import dataset from csv (default)"){ self.format = :csv }
+        opt.on("--json", "Import dataset from json"){ self.format = :json }
+        opt.on("--ruby", "Import dataset from ruby code (Array of Hash(es))"){ self.format = :ruby }
       end
       
       # Adds the CSV options
@@ -81,6 +91,19 @@ module DbAgile
         opt.on("--pretty", "Generate a pretty JSON document") do 
           json_options[:pretty] = true
         end 
+      end
+       
+      # Adds output TEXT options 
+      def add_text_output_options(opt)
+        opt.on("--wrap-at=X", Integer,
+               "Wraps table after X's character (no wrap by default)") do |x|
+          text_options[:wrap_at] = x
+        end
+        opt.on("--truncate-at=X", Integer,
+               "Truncate row lines at X character") do |x|
+          text_options[:truncate_at] = x
+          text_options[:append_with] = '...'
+        end
       end
        
     end # module CSVOptions

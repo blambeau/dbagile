@@ -71,7 +71,7 @@ module DbAgile
         end
 
         opt.separator "\nRecognized format options:"
-        add_io_format_options(opt)
+        add_input_format_options(opt)
 
         # CSV output options
         opt.separator "\nCSV options:"

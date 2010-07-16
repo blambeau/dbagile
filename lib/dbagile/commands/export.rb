@@ -18,7 +18,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba export [OPTIONS] DATASET"
+        "usage: dba export [OPTIONS] DATASET [FILE]"
       end
 
       # Short help
@@ -35,11 +35,15 @@ module DbAgile
         end
 
         opt.separator "\nRecognized format options:"
-        add_io_format_options(opt)
+        add_output_format_options(opt)
 
         # CSV output options
         opt.separator "\nCSV options:"
         add_csv_output_options(opt)
+
+        # CSV output options
+        opt.separator "\nTEXT options:"
+        add_text_output_options(opt)
 
         # JSON output options
         opt.separator "\nJSON options:"
@@ -48,8 +52,16 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit(nil, true) unless arguments.size == 1
-        self.dataset = arguments.shift.strip
+        case arguments.size
+          when 1
+            self.dataset = arguments.shift.strip
+          when 2
+            exit("Ambigous output file options", true) if self.output_file
+            self.dataset = arguments.shift.strip
+            self.output_file = arguments.shift.strip
+          else
+            exit(nil, true)
+        end
         unless /select|SELECT/ =~ self.dataset
           self.dataset = self.dataset.to_sym
         end
@@ -83,6 +95,8 @@ module DbAgile
                 ds.to_json(io, json_options)
               when :ruby
                 ds.to_ruby(io, ruby_options)
+              when :text
+                ds.to_text(io, text_options)
             end
           }
         rescue Exception => ex

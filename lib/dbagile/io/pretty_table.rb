@@ -52,12 +52,12 @@ module DbAgile
       
       # Normalize the line according to options
       def self.normalize_line(line, options)
-        line = line_wrap(line, options[:wrap_at]) if options[:wrap_at]
         if options[:truncate_at] and line.length > options[:truncate_at]
           ellipse = options[:append_with] || '...'
           line = line[0..(options[:truncate_at]-ellipse.length)] 
           line += ellipse
         end
+        line = line_wrap(line, options[:wrap_at]) if options[:wrap_at]
         line
       end
 
@@ -68,8 +68,8 @@ module DbAgile
       # Copyright (c) 2004-2006 Thomas Sawyer
       # Distributed under the terms of the Ruby license.
       #
-      def self.line_wrap(width, tabs=2)
-        s = gsub(/\t/,' ' * tabs) # tabs default to 2 spaces
+      def self.line_wrap(line, width, tabs=2)
+        s = line.gsub(/\t/,' ' * tabs) # tabs default to 2 spaces
         s = s.gsub(/\n/,' ')
         r = s.scan( /.{1,#{width}}/ )
         r.join("\n") << "\n"
