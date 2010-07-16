@@ -20,13 +20,12 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit(nil, true) unless arguments.size == 1
-        self.command = arguments.shift
+        self.command = valid_argument_list!(arguments, Symbol)
+        self.command = has_command!(self.command)
       end
       
       # Executes the command
       def execute_command
-        command = has_command!(self.command)
         display(command.short_help)
         display(command.options)
       end

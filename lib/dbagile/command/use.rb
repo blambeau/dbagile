@@ -10,7 +10,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba use NAME"
+        "usage: dba use CONFIG"
       end
 
       # Short help
@@ -20,8 +20,8 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit(nil, true) unless arguments.size == 1
-        self.match = arguments.shift.to_sym
+        self.match = valid_argument_list!(arguments, Symbol)
+        self.match = valid_configuration_name!(self.match)
       end
       
       # Executes the command

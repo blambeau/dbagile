@@ -10,9 +10,11 @@ module DbAgile
       #
       def on_error(command, error)
         case error
-          when OptionParser::ParseError, DbAgile::Error, Sequel::Error
+          when OptionParser::ParseError
             say(error.message, :red)
             display(command.options.to_s)
+          when DbAgile::Error, Sequel::Error
+            say(error.message, :red)
           else
             say("ERROR: #{error.message}", :red)
             display(error.backtrace.join("\n"))

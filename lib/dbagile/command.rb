@@ -36,7 +36,7 @@ module DbAgile
     
       # Returns a command for a given name, returns nil if it cannot be found
       def command_for(name)
-        subclass = subclasses.find{|subclass| command_name_of(subclass) == name}
+        subclass = subclasses.find{|subclass| command_name_of(subclass).to_s == name.to_s}
         subclass.nil? ? nil : subclass.new
       end
 
@@ -133,7 +133,6 @@ module DbAgile
     def run(requester_file, argv)
       unsecure_run(requester_file, argv)
       environment
-    rescue SystemExit
     rescue Exception => ex
       environment.on_error(self, ex)
       environment
@@ -153,7 +152,7 @@ module DbAgile
       bad_argument_list!(arguments) unless arguments.empty?
     end
     
-    # Checks the command and exit if any option problem is found
+    # Checks the command
     def check_command
     end
     
@@ -180,13 +179,6 @@ module DbAgile
       else
         false
       end
-    end
-    
-    # Exits with a message, showing options if required
-    def exit(msg = nil, show_options=true)
-      display(msg)
-      display(options) if show_options
-      Kernel.exit(-1)
     end
     
   end # class Command

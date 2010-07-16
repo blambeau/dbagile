@@ -24,14 +24,12 @@ module DbAgile
         
         # Basic features
         case argv[0]
-          when "--help"
-            show_help
-            exit(nil, false)
           when "--version"
-            exit("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau", false)
-          when /^--/
+            say("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau")
+            return
+          when "--help", /^--/
             show_help
-            exit(nil, false)
+            return
         end
         
         # Command execution
@@ -41,8 +39,9 @@ module DbAgile
         else
           show_help
         end
-      rescue ::DbAgile::Error => ex
-        exit(ex.message, false)
+      rescue Exception => ex
+        environment.on_error(self, ex)
+        environment
       end
 
     end # class DbA

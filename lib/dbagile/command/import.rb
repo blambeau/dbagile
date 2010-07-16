@@ -72,13 +72,12 @@ module DbAgile
       def normalize_pending_arguments(arguments)
         case arguments.size
           when 1
-            self.dataset = arguments.shift.strip.to_sym
+            self.dataset = valid_argument_list!(arguments, String)
           when 2
-            exit("Ambigous input file options", true) if self.input_file
-            self.dataset = arguments.shift.strip.to_sym
-            self.input_file = arguments.shift.strip
+            raise OptionParser::AmbiguousArgument, '--input-file=#{self.input_file}' if self.input_file
+            self.dataset, self.input_file = valid_argument_list!(arguments, String, String)
           else
-            exit(nil, true)
+            bad_argument_list!(arguments)
         end
       end
       
@@ -111,18 +110,12 @@ module DbAgile
         config = has_config!(config_file)
         
         # Make the job now
-        begin
-          config.connect(nil, conn_options).transaction do |t|
-            first = true
-            with_emitter do |tuple|
-              make_the_job(t, tuple, first)
-              first = false
-            end
+        config.connect(nil, conn_options).transaction do |t|
+          first = true
+          with_emitter do |tuple|
+            make_the_job(t, tuple, first)
+            first = false
           end
-        rescue Exception => ex
-          puts ex.message
-          puts ex.backtrace.join("\n")
-          exit(ex.message, false)
         end
       end
       

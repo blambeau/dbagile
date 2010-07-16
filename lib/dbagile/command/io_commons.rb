@@ -101,7 +101,7 @@ module DbAgile
               csv_options[:quote_char] = "'" unless csv_options.key?(:quote_char)
               csv_options[:force_quotes] = true unless csv_options.key?(:force_quotes)
             else
-              exit("Unknown type system #{value}", false)
+              raise ArgumentError, "Unknown type system #{value}"
           end
         end
       end

@@ -11,7 +11,7 @@ module DbAgile
       # types.size arguments, and convert them to types.
       def valid_argument_list!(rest, *types)
         if rest.size == types.size
-          rest.zip(types).collect do |arg, type|
+          result = rest.zip(types).collect do |arg, type|
             if String == type
               arg.to_s
             elsif Symbol == type
@@ -20,6 +20,7 @@ module DbAgile
               raise OptionParser::InvalidArgument, arg
             end
           end
+          result.size == 1 ? result[0] : result
         elsif rest.size < types.size
           raise OptionParser::MissingArgument
         else
