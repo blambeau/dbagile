@@ -27,7 +27,7 @@ module DbAgile
       DbAgile::Command::subclasses.each do |subclass|
         command_name = DbAgile::Command::command_name_of(subclass)
         instance_eval <<-EOF
-          def #{command_name}(options = [], env = DbAgile::Command::DEFAULT_ENVIRONMENT_CLASS.new)
+          def #{command_name}(options = [], env = DbAgile::current_environment)
             build_command(#{subclass.name}, env).run(__FILE__, build_options(options))
           end
         EOF
