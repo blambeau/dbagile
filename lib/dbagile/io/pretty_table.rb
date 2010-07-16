@@ -24,7 +24,7 @@
 
 #
 module DbAgile
-  module Utils
+  module IO
     #
     # Helper to create pretty tables (very much inspired from Sequel's PrettyTable,
     # see file licence header for details).
@@ -32,9 +32,8 @@ module DbAgile
     module PrettyTable
     
       # Prints nice-looking plain-text tables
-      def self.print(records, buffer = "", options = {}) # records is an array of hashes
+      def self.print(records, columns, buffer = "", options = {}) # records is an array of hashes
         # investigate arguments
-        columns ||= records.first.keys.sort_by{|x|x.to_s}
         sizes = column_sizes(records, columns)
         sep_line = normalize_line(separator_line(columns, sizes), options)
 
@@ -121,6 +120,7 @@ module DbAgile
       end
 
       private_class_method :column_sizes, :data_line, :format_cell, :header_line, :separator_line
+      private_class_method :line_wrap, :normalize_line
     end # module PrettyTable
-  end # module Utils
+  end # module IO
 end # module DbAgile

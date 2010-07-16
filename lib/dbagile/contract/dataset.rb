@@ -29,6 +29,15 @@ module DbAgile
         DbAgile::IO::Ruby::to_ruby(self, buffer, options)
       end
       
+      # 
+      # Outputs this dataset as plain text
+      #
+      # @return [...] the buffer itself
+      #
+      def to_text(buffer = "", options = {})
+        DbAgile::IO::Text::to_text(self, self.columns, buffer, options)
+      end
+      
     end # module Dataset
   end # module Contract
 end # module DbAgile

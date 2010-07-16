@@ -68,7 +68,7 @@ module DbAgile
         # Make the job now
         begin
           ds = config.connect.dataset(self.dataset)
-          DbAgile::Utils::PrettyTable::print(ds, buffer, infer_pretty_options)
+          ds.to_text(buffer, infer_pretty_options)
         rescue Exception => ex
           exit(ex.message, false)
         end
