@@ -2,6 +2,12 @@ module DbAgile
   module Contract
     module Dataset
       
+      # Makes an allbut selection
+      def allbut(*cs)
+        arr = self.columns - cs.flatten
+        select(*arr)
+      end
+      
       #
       # Outputs this dataset as a CSV string.
       #

@@ -34,6 +34,9 @@ module DbAgile
           self.output_file = value
         end
 
+        opt.separator "\nRelational options:"
+        add_select_options(opt)
+
         opt.separator "\nRecognized format options:"
         add_output_format_options(opt)
 
@@ -87,6 +90,11 @@ module DbAgile
         # Make the job now
         begin
           ds = config.connect.dataset(self.dataset)
+          if self.select
+            ds = ds.select(*self.select)
+          elsif self.allbut
+            ds = ds.allbut(*self.allbut)
+          end
           with_io{|io|
             case self.format
               when :csv

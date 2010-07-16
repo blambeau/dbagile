@@ -20,6 +20,12 @@ module DbAgile
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
+      # Columns to select
+      attr_accessor :select
+      
+      # Columns to allbut
+      attr_accessor :allbut
+      
       # Builds default configuration
       def install_default_configuration
         self.format = :csv
@@ -27,6 +33,18 @@ module DbAgile
         self.json_options = {}
         self.ruby_options = {}
         self.text_options = {}
+      end
+      
+      # Adds the select/allbut options
+      def add_select_options(opt)
+        opt.on('--select x,y,z', Array,
+               "Select x, y, z columns only") do |value|
+          self.select = value.collect{|c| c.to_sym}
+        end
+        opt.on('--allbut x,y,z', Array,
+               "Select all but x, y, z columns") do |value|
+          self.allbut = value.collect{|c| c.to_sym}
+        end
       end
 
       # Adds the format options for output
