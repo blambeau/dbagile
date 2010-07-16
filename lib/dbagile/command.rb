@@ -1,6 +1,5 @@
 require 'optparse'
 require 'fileutils'
-require 'dbagile/command/environment'
 require 'dbagile/command/robust'
 module DbAgile
   class Command
@@ -11,7 +10,7 @@ module DbAgile
     ##############################################################################
     
     # Environment class to use by default
-    DEFAULT_ENVIRONMENT_CLASS = DbAgile::Command::Environment
+    DEFAULT_ENVIRONMENT_CLASS = DbAgile::Environment
     
     # Current configuration as a class-level instance variable
     class << self
@@ -121,6 +120,7 @@ module DbAgile
     def run(requester_file, argv)
       unsecure_run(requester_file, argv)
       environment
+    rescue SystemExit
     rescue Exception => ex
       environment.on_error(self, ex)
       environment

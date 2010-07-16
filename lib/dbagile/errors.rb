@@ -1,4 +1,5 @@
 module DbAgile
+  
   # Main class of all DbAgile errors
   class Error < StandardError; end
   
@@ -23,4 +24,4 @@ module DbAgile
   # Raised when no default configuration is set
   class NoDefaultConfigError < DbAgile::Error; end
   
-end
+end # module DbAgile

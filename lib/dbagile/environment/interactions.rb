@@ -1,26 +1,21 @@
 module DbAgile
-  class Command
+  class Environment
+    # 
+    # Environment's interactions contract.
     #
-    # Defines the contract to be an environment for dbagile commands.
-    #
-    # This class already implements a basic contract on top of readline,
-    # therefore expecting an interactive console environment. It may be 
-    # reimplemented from scratch for other situations. In such a case only 
-    # public methods need to be implemented.
-    #
-    class Environment
+    module Interactions
       
       # The output buffer to use for user requests
       attr_reader :input_buffer
-      
+    
       # The output buffer to use for display
       attr_reader :output_buffer
-      
+    
       # Creates an Environment instance with two buffers
       def initialize(input_buffer = STDIN, output_buffer = STDOUT)
         @input_buffer, @output_buffer = input_buffer, output_buffer
       end
-      
+    
       #
       # Asks something to the user/oracle. If a continuation block is given
       # yields it with result returns block result. Simply returns the value 
@@ -40,7 +35,7 @@ module DbAgile
           readline(prompt)
         end
       end
-      
+    
       # 
       # Prints an information message. An optional color may be provided if the 
       # environment supports colors.
@@ -53,7 +48,7 @@ module DbAgile
         writeline(something, color)
         nil
       end
-      
+    
       # 
       # Displays something.
       #
@@ -66,30 +61,11 @@ module DbAgile
         elsif something.kind_of?(Enumerable)
           something.each{|v| display(v)}
         else
-          writeline(something.inspect)
+          writeline(something.to_s)
         end
         nil
       end
-      
-      #
-      # Handles an error that occured during command execution.
-      #
-      # @param [Exception] error the error that was raised
-      # @return nil to continue execution, an error to raise otherwise
-      #
-      def on_error(command, error)
-        case error
-          when OptionParser::ParseError, DbAgile::Error, Sequel::Error
-            say(error.message, :red)
-            display(command.options.to_s)
-          else
-            say("ERROR: #{error.message}", :red)
-            display(error.backtrace.join("\n"))
-        end
-        error
-      end
-
-
+    
       # Protected section starts here ###################################################
       protected
 
@@ -106,7 +82,7 @@ module DbAgile
         require 'readline'
         Readline.readline(prompt)
       end
-      
+    
       # 
       # Writes a line on the abstract output buffer.
       #
@@ -121,6 +97,6 @@ module DbAgile
         output_buffer << something
       end
 
-    end # class Environment
-  end # class Command
+    end # module Interactions
+  end # class Environment
 end # module DbAgile
