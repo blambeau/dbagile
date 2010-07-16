@@ -5,26 +5,14 @@ module DbAgile
     #
     class Show < ::DbAgile::Commands::Command
       
-      # Dataset whose contents must be shown
-      attr_accessor :dataset
-      
-      # Makes pretty output?
-      attr_accessor :pretty
-      
-      # Creates a command instance
-      def initialize
-        super
-        @pretty = true
-      end
-      
       # Returns the command banner
       def banner
-        "usage: dba show DATASET"
+        "usage: dba show [OPTIONS] DATASET"
       end
 
       # Short help
       def short_help
-        "Display content of a table/view/query"
+        "Display content of a table/view/query (shortcut for 'export --text ...')"
       end
       
       # Contribute to options
@@ -37,41 +25,33 @@ module DbAgile
         end
       end
       
-      # Normalizes the pending arguments
-      def normalize_pending_arguments(arguments)
-        exit(nil, true) unless arguments.size == 1
-        self.dataset = arguments.shift.strip
-        unless /select|SELECT/ =~ self.dataset
-          self.dataset = self.dataset.to_sym
-        end
-      end
-      
-      # Infer pretty options
-      def infer_pretty_options
-        return {} unless pretty
+      # Infers pretty options though highline
+      def infer_terminal_cols
         begin
           gem 'highline', '>= 1.5.2'
           require 'highline'
-          {:truncate_at => HighLine.new.output_cols-3, :append_with => '...'}
+          HighLine.new.output_cols-3
         rescue LoadError
           info("Console output is pretty with highline. Try 'gem install highline'")
-          {}
+          80
         end
       end
       
-      # Executes the command
-      def execute_command
-        # load the configuration file
-        config_file = DbAgile::load_user_config_file(DbAgile::user_config_file, true)
-        config = has_config!(config_file)
-        
-        # Make the job now
-        begin
-          ds = config.connect.dataset(self.dataset)
-          ds.to_text(buffer, infer_pretty_options)
-        rescue Exception => ex
-          exit(ex.message, false)
+      # Infer options
+      def infer_options(argv)
+        argv = ["--text"] + argv
+        if argv.include?("--no-pretty")
+          argv.delete("--no-pretty")
+        else
+          argv += ["--truncate-at", infer_terminal_cols.to_s]
         end
+        argv
+      end
+      
+      # Override to avoid pending options to be rejected
+      def unsecure_run(requester_file, argv)
+        @requester_file = requester_file
+        ::DbAgile::Commands::API::export(infer_options(argv), buffer)
       end
       
     end # class List

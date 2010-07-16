@@ -70,11 +70,7 @@ module DbAgile
       
       # Runs the command
       def run(requester_file, argv)
-        @requester_file = requester_file
-        rest = options.parse!(argv)
-        normalize_pending_arguments(rest)
-        check_command
-        execute_command
+        unsecure_run(requester_file, argv)
       rescue ::DbAgile::Error => ex
         exit(ex.message, false)
       rescue Sequel::Error => ex
@@ -83,12 +79,17 @@ module DbAgile
         exit(ex.message)
       rescue SystemExit
       rescue Exception => ex
-        error <<-EOF
-          A severe error occured. Please report this to the developers.
-        
-          #{ex.class}: #{ex.message}
-        EOF
+        error "A severe error occured. Please report this to the developers.\n\n#{ex.class}: #{ex.message}"
         error ex.backtrace.join("\n")
+      end
+      
+      # Runs the command without catching any error
+      def unsecure_run(requester_file, argv)
+        @requester_file = requester_file
+        rest = options.parse!(argv)
+        normalize_pending_arguments(rest)
+        check_command
+        execute_command
       end
       
       # Loads the user configuration file
