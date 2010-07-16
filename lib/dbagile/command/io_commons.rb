@@ -20,6 +20,9 @@ module DbAgile
       # Options for Text output
       attr_accessor :text_options
 
+      # Options for YAML output
+      attr_accessor :yaml_options
+
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
@@ -35,6 +38,7 @@ module DbAgile
         self.conn_options = {}
         self.csv_options = {}
         self.json_options = {}
+        self.yaml_options = {}
         self.ruby_options = {}
         self.text_options = {}
       end
@@ -53,13 +57,14 @@ module DbAgile
 
       # Adds the format options for output
       def add_output_format_options(opt)
-        opt.on('--format=X', [:csv, :text, :json, :ruby],
-               "Export dataset in (csv, text, json, ruby)") do |value|
+        opt.on('--format=X', [:csv, :text, :json, :yaml, :ruby],
+               "Export dataset in (csv, text, json, yaml, ruby)") do |value|
           self.format = value
         end
         opt.on("--csv",  "Export dataset in csv (default)"){ self.format = :csv }
         opt.on("--text", "Export dataset as a plain text table"){ self.format = :text }
         opt.on("--json", "Export dataset in json"){ self.format = :json }
+        opt.on("--yaml", "Export dataset in yaml"){ self.format = :yaml }
         opt.on("--ruby", "Export dataset as ruby code (Array of Hash(es))"){ self.format = :ruby }
       end
       

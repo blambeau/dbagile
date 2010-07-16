@@ -92,6 +92,8 @@ module DbAgile
                 ds.to_csv(io, csv_options)
               when :json
                 ds.to_json(io, json_options)
+              when :yaml
+                ds.to_yaml(io, yaml_options)
               when :ruby
                 ds.to_ruby(io, ruby_options)
               when :text

@@ -27,6 +27,15 @@ module DbAgile
       end
       
       # 
+      # Outputs this dataset as a YAML string
+      #
+      # @return [...] the buffer itself
+      #
+      def to_yaml(buffer = "", options = {})
+        DbAgile::IO::YAML::to_yaml(self.to_a, buffer, options)
+      end
+      
+      # 
       # Outputs this dataset as a Ruby Array of hashes string
       #
       # @return [...] the buffer itself
