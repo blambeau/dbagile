@@ -84,6 +84,16 @@ module DbAgile
       environment.with_config_file(*args, &block)
     end
 
+    # Delegated to environment
+    def with_config(*args, &block)
+      environment.with_config(*args, &block)
+    end
+
+    # Delegated to environment
+    def with_current_config(*args, &block)
+      environment.with_current_config(*args, &block)
+    end
+
     ##############################################################################
     ### About options
     ##############################################################################

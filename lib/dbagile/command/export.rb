@@ -76,10 +76,7 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        with_config_file do |config_file|
-          # load the configuration file
-          config = has_config!(config_file)
-        
+        with_current_config do |config|
           # Prepare the dataset
           ds = config.connect.dataset(self.dataset)
           if self.select

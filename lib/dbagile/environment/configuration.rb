@@ -47,10 +47,45 @@ module DbAgile
       # about parameters and exceptions.
       #
       # @return [...] result of the block execution
+      # @raise ArgumentError if no block is provided
       #
       def with_config_file(create = true)
         raise ArgumentError, "Missing block" unless block_given?
         yield(config_file(create))
+      end
+      
+      #
+      # Yields the block with a Configuration instance found by name in config 
+      # file. 
+      #
+      # As this method relies on config_file, it shares its exception contract.
+      #
+      # @raise ArgumentError if no block is provided
+      # @raise UnknownConfigError if the configuration cannot be found.
+      # @return block execution result
+      #
+      def with_config(name)
+        raise ArgumentError, "Missing block" unless block_given?
+        config = config_file.config(name)
+        raise UnknownConfigError if config.nil?
+        yield(config)
+      end
+      
+      # 
+      # Yields the block with a Configuration instance for the current 
+      # configuration found in condif file.
+      # 
+      # As this method relies on config_file, it shares its exception contract.
+      #
+      # @raise ArgumentError if no block is provided
+      # @raise NoDefaultConfigError if the configuration cannot be found.
+      # @return block execution result
+      #
+      def with_current_config
+        raise ArgumentError, "Missing block" unless block_given?
+        config = config_file.current_config
+        raise NoDefaultConfigError if config.nil?
+        yield(config)
       end
       
       # Protected section starts here ###################################################
