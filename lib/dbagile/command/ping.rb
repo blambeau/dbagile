@@ -10,7 +10,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba ping [NAME]"
+        "usage: dba ping [CONFIG]"
       end
 
       # Short help
@@ -35,8 +35,13 @@ module DbAgile
         config = has_config!(config_file, self.match)
         
         # Make the job now
-        config.connect.ping
-        info "Ping ok (#{config.uri})"
+        begin
+          config.connect.ping
+          say("Ping ok (#{config.uri})")
+        rescue => ex
+          say("Ping KO (#{config.uri})", :red)
+          display(ex.message)
+        end
       end
       
     end # class List

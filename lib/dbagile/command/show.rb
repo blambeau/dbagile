@@ -32,7 +32,7 @@ module DbAgile
           require 'highline'
           HighLine.new.output_cols-3
         rescue LoadError
-          info("Console output is pretty with highline. Try 'gem install highline'")
+          say("Console output is pretty with highline. Try 'gem install highline'")
           80
         end
       end

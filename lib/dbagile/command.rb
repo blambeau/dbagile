@@ -60,11 +60,24 @@ module DbAgile
     ##############################################################################
     
     # Delegated to environment
+    def say(message, color = nil)
+      environment.say(message.to_s, color) unless message.nil?
+    end
+    
+    # Delegated to environment
     def display(something)
       environment.display(something) unless something.nil?
     end
-    alias :say  :display
-    alias :info :display
+    
+    # Delegated to environment
+    def output_buffer
+      environment.output_buffer
+    end
+    
+    # Delegated to environment
+    def input_buffer
+      environment.input_buffer
+    end
 
     ##############################################################################
     ### About options

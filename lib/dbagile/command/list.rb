@@ -36,19 +36,19 @@ module DbAgile
       def execute_command
         config_file = DbAgile::load_user_config_file
         if verbose
-          info config_file.inspect
+          display(config_file.inspect)
         else
           unless config_file.empty?
-            info("Available databases are:")
+            say("Available databases are:")
             config_file.each do |config|
               msg = config_file.current?(config) ? "  -> " : " "*5
               msg += align(config.name,15)
               msg += " "
               msg += config.uri
-              info(msg)
+              display(msg)
             end
           else
-            info("No database configuration found. Checks ~/.dbagile")
+            say("No database configuration found. Checks ~/.dbagile")
           end
         end
       end
