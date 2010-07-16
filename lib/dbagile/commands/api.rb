@@ -5,9 +5,8 @@ module DbAgile
     module API
       
       # Builds a command instance for a specific class
-      def build_command(clazz, buffer = "")
-        command = clazz.new
-        command.buffer = buffer
+      def build_command(clazz, env)
+        command = clazz.new(env)
         command
       end
       module_function :build_command
@@ -27,10 +26,10 @@ module DbAgile
       
       # Creates an API method for each subclass
       DbAgile::Commands::Command::subclasses.each do |subclass|
+        command_name = DbAgile::Commands::Command::command_name_of(subclass)
         instance_eval <<-EOF
-          def #{DbAgile::Commands::Command::command_name_of(subclass)}(options = [], buffer = "")
-            build_command(#{subclass.name}, buffer).run(__FILE__, build_options(options))
-            buffer
+          def #{command_name}(options = [], env = DbAgile::Commands::Command::DEFAULT_ENVIRONMENT_CLASS.new)
+            build_command(#{subclass.name}, env).run(__FILE__, build_options(options))
           end
         EOF
       end

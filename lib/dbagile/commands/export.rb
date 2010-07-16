@@ -10,12 +10,6 @@ module DbAgile
       # Output file to use
       attr_accessor :output_file
       
-      # Creates a command instance
-      def initialize
-        super
-        install_default_configuration
-      end
-      
       # Returns the command banner
       def banner
         "usage: dba export [OPTIONS] DATASET [FILE]"

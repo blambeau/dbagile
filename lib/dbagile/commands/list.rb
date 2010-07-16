@@ -8,12 +8,6 @@ module DbAgile
       # Verbose ?
       attr_accessor :verbose
       
-      # Creates a command instance
-      def initialize
-        super
-        @verbose = false
-      end
-      
       # Returns the command banner
       def banner
         "usage: dba list"
@@ -22,6 +16,11 @@ module DbAgile
       # Short help
       def short_help
         "List available database configurations (found in ~/.dbagile)"
+      end
+      
+      # Sets the default options
+      def set_default_options
+        @verbose = false
       end
       
       # Contribute to options

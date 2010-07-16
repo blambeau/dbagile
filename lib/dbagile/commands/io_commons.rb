@@ -5,6 +5,9 @@ module DbAgile
       # Output/input format [ruby, csv, json]
       attr_accessor :format
       
+      # Connection options
+      attr_accessor :conn_options
+      
       # Options for CSV input/output
       attr_accessor :csv_options
       
@@ -27,8 +30,9 @@ module DbAgile
       attr_accessor :allbut
       
       # Builds default configuration
-      def install_default_configuration
+      def set_default_options
         self.format = :csv
+        self.conn_options = {}
         self.csv_options = {}
         self.json_options = {}
         self.ruby_options = {}

@@ -2,6 +2,52 @@ module DbAgile
   module Commands
     module Robust
       
+      # Raises an OptionParser::InvalidArgument
+      def bad_argument_list!(rest)
+        raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
+      end
+      
+      # Parses pending arguments, assert that it contains exactly
+      # types.size arguments, and convert them to types.
+      def valid_argument_list!(rest, *types)
+        if rest.size == types.size
+          rest.zip(types).collect do |arg, type|
+            if String == type
+              arg.to_s
+            elsif Symbol == type
+              arg.to_sym
+            else
+              raise OptionParser::InvalidArgument, arg
+            end
+          end
+        elsif rest.size < types.size
+          raise OptionParser::MissingArgument
+        else
+          raise OptionParser::NeedlessArgument, rest
+        end
+      end
+      
+      # Asserts that a configuration name is valid or raises
+      # a InvalidConfigurationName error
+      def valid_configuration_name!(name)
+        raise DbAgile::InvalidConfigurationName, "Invalid configuration name #{name}"\
+          unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
+        name
+      end
+      
+      # Asserts that a database uri is valid or raises
+      # a InvalidDatabaseUri error
+      def valid_database_uri!(uri)
+        require 'uri'
+        got = URI::parse(uri)
+        if got.scheme.nil?
+          raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}" 
+        end
+        uri
+      rescue URI::InvalidURIError
+        raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}"
+      end
+        
       #
       # Asserts that a command exists or raises a NoSuchCommandError.
       # 

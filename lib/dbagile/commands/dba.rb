@@ -9,13 +9,13 @@ module DbAgile
 
       # Shows the help
       def show_help
-        info banner
-        info "\n"
-        info "Available DbAgile commands are:"
+        display banner
+        display "\n"
+        display "Available DbAgile commands are:"
         Command.subclasses.each do |subclass|
-          info "  #{align(Command.command_name_of(subclass),10)} #{subclass.new.short_help}" unless subclass == DbA
+          display "  #{align(Command.command_name_of(subclass),10)} #{subclass.new.short_help}" unless subclass == DbA
         end
-        info ""
+        display ""
       end
       
       # Runs the command

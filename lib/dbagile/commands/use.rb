@@ -37,7 +37,7 @@ module DbAgile
         config_file.flush!
 
         # List available databases now
-        DbAgile::Commands::API.list([], buffer)
+        DbAgile::Commands::API.list([], environment)
       end
       
     end # class List

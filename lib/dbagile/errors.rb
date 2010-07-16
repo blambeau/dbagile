@@ -2,6 +2,12 @@ module DbAgile
   # Main class of all DbAgile errors
   class Error < StandardError; end
   
+  # Raised when a configuration name is not valid
+  class InvalidConfigurationName < DbAgile::Error; end
+  
+  # Raised when a database URI is not valid
+  class InvalidDatabaseUri < DbAgile::Error; end
+  
   # Raised when a command does not exists (dba command line tool)
   class NoSuchCommandError < DbAgile::Error; end
   

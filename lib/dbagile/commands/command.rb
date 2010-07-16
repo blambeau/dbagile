@@ -5,6 +5,13 @@ module DbAgile
     class Command
       include ::DbAgile::Commands::Robust
       
+      ##############################################################################
+      ### Class level constructions
+      ##############################################################################
+      
+      # Environment class to use by default
+      DEFAULT_ENVIRONMENT_CLASS = DbAgile::Commands::Environment
+      
       # Current configuration as a class-level instance variable
       class << self
         
@@ -35,13 +42,33 @@ module DbAgile
 
       end # class << self
        
-      # Buffer used for all messages
-      attr_accessor :buffer 
+      ##############################################################################
+      ### Instance variables and construction
+      ##############################################################################
+      
+      # Command execution environment
+      attr_reader :environment
        
       # Creates an empty command instance
-      def initialize
-        @buffer = STDOUT
+      def initialize(env = DEFAULT_ENVIRONMENT_CLASS.new)
+        @environment = env
+        set_default_options
       end
+      
+      ##############################################################################
+      ### Environment delegation
+      ##############################################################################
+      
+      # Delegated to environment
+      def display(something)
+        environment.display(something) unless something.nil?
+      end
+      alias :say  :display
+      alias :info :display
+
+      ##############################################################################
+      ### About options
+      ##############################################################################
       
       # Parses commandline options provided as an array of Strings.
       def options
@@ -54,33 +81,48 @@ module DbAgile
           add_options(opt)
         end
       end
-
-      # Exits with a message, showing options if required
-      def exit(msg = nil, show_options=true)
-        info msg if msg
-        puts options if show_options
-        Kernel.exit(-1)
+      
+      # Sets the default options
+      def set_default_options
       end
       
-      def info(msg)
-        raise ArgumentError unless msg.kind_of?(String)
-        @buffer << msg << "\n"
+      # Contribute to options
+      def add_options(opt)
       end
-      alias :error :info
+      
+      ##############################################################################
+      ### Command info/help and so on.
+      ##############################################################################
+      
+      # Returns the command banner
+      def banner
+        raise "Command.banner should be overriden by subclasses"
+      end
+      
+      # Returns a one line help
+      def short_help
+        raise "Command.banner should be overriden by subclasses"
+      end
+      
+      # Shows the help
+      def show_help
+        display banner
+        display ""
+        display short_help
+        display ""
+      end
+
+      ##############################################################################
+      ### Run logic
+      ##############################################################################
       
       # Runs the command
       def run(requester_file, argv)
         unsecure_run(requester_file, argv)
-      rescue ::DbAgile::Error => ex
-        exit(ex.message, false)
-      rescue Sequel::Error => ex
-        exit(ex.message, false)
-      rescue OptionParser::InvalidOption, OptionParser::InvalidArgument => ex
-        exit(ex.message)
-      rescue SystemExit
+        environment
       rescue Exception => ex
-        error "A severe error occured. Please report this to the developers.\n\n#{ex.class}: #{ex.message}"
-        error ex.backtrace.join("\n")
+        environment.on_error(self, ex)
+        environment
       end
       
       # Runs the command without catching any error
@@ -92,6 +134,30 @@ module DbAgile
         execute_command
       end
       
+      # Normalizes the pending arguments
+      def normalize_pending_arguments(arguments)
+        bad_argument_list!(arguments) unless arguments.empty?
+      end
+      
+      # Checks the command and exit if any option problem is found
+      def check_command
+      end
+      
+      # Executes the command
+      def execute_command
+      end
+      
+      ##############################################################################
+      ### Deprecated or should be moved
+      ##############################################################################
+      
+      # Aligns a string by appending whitespaces up to size.
+      # This method has not effect if size is nil
+      def align(string, size = nil)
+        return string if size.nil?
+        string.to_s + " "*(size - string.to_s.length)
+      end
+
       # Loads the user configuration file
       def load_user_config_file(file = user_config_file)
         if File.exists?(file) and File.readable?(file)
@@ -102,44 +168,11 @@ module DbAgile
         end
       end
       
-      # Returns the command banner
-      def banner
-        raise "Command.banner should be overriden by subclasses"
-      end
-      
-      # Shows the help
-      def show_help
-        info banner
-        info ""
-        info short_help
-        info ""
-      end
-
-      # Aligns a string by appending whitespaces up to size.
-      # This method has not effect if size is nil
-      def align(string, size = nil)
-        return string if size.nil?
-        string.to_s + " "*(size - string.to_s.length)
-      end
-
-      # Contribute to options
-      def add_options(opt)
-      end
-      
-      # Normalizes the pending arguments
-      def normalize_pending_arguments(arguments)
-        unless arguments.empty?
-          show_help
-          exit(nil, false)
-        end
-      end
-      
-      # Checks the command and exit if any option problem is found
-      def check_command
-      end
-      
-      # Executes the command
-      def execute_command
+      # Exits with a message, showing options if required
+      def exit(msg = nil, show_options=true)
+        display(msg)
+        display(options) if show_options
+        Kernel.exit(-1)
       end
       
     end # class Command

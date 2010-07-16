@@ -1,3 +1,4 @@
+require 'dbagile/commands/environment'
 require 'dbagile/commands/robust'
 require 'dbagile/commands/command'
 require 'dbagile/commands/dba'

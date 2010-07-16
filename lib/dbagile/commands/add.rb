@@ -14,12 +14,6 @@ module DbAgile
       # Makes it the current configuration
       attr_accessor :current
       
-      # Creates a command instance
-      def initialize
-        super
-        @current = true
-      end
-      
       # Returns the command banner
       def banner
         "usage: dba add NAME URI"
@@ -30,20 +24,29 @@ module DbAgile
         "Add a new database configuration"
       end
       
+      # Sets the default options
+      def set_default_options
+        @current = true
+      end
+      
       # Contribute to options
       def add_options(opt)
         opt.separator nil
         opt.separator "Options:"
-        opt.on("--no-current", "Don't make the new config the current one") do
+        opt.on("--[no-]current", "Set as current configuration when created (see use)") do |value|
           self.current = false
         end
       end
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        exit(nil, true) unless arguments.size == 2
-        self.name = arguments.shift.to_sym
-        self.uri = arguments.shift
+        self.name, self.uri = valid_argument_list!(arguments, Symbol, String)
+      end
+      
+      # Checks command 
+      def check_command
+        valid_configuration_name!(self.name)
+        valid_database_uri!(self.uri)
       end
       
       # Executes the command

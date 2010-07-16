@@ -11,9 +11,6 @@ module DbAgile
       # Input file to use
       attr_accessor :input_file
       
-      # Connection options
-      attr_accessor :conn_options
-      
       # Drop table?
       attr_accessor :drop_table
       
@@ -22,13 +19,6 @@ module DbAgile
       
       # Truncate table?
       attr_accessor :truncate_table
-      
-      # Creates a command instance
-      def initialize
-        super
-        install_default_configuration
-        @conn_options = {}
-      end
       
       # Returns the command banner
       def banner
