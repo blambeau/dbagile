@@ -36,6 +36,15 @@ module DbAgile
       end
       
       # 
+      # Outputs this dataset as a XML string
+      #
+      # @return [...] the buffer itself
+      #
+      def to_xml(buffer = "", options = {})
+        DbAgile::IO::XML::to_xml(self, buffer, options)
+      end
+      
+      # 
       # Outputs this dataset as a Ruby Array of hashes string
       #
       # @return [...] the buffer itself

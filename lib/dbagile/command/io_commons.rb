@@ -23,6 +23,9 @@ module DbAgile
       # Options for YAML output
       attr_accessor :yaml_options
 
+      # Options for XML output
+      attr_accessor :xml_options
+
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
@@ -39,6 +42,7 @@ module DbAgile
         self.csv_options = {}
         self.json_options = {}
         self.yaml_options = {}
+        self.xml_options = {}
         self.ruby_options = {}
         self.text_options = {}
       end
@@ -65,6 +69,7 @@ module DbAgile
         opt.on("--text", "Export dataset as a plain text table"){ self.format = :text }
         opt.on("--json", "Export dataset in json"){ self.format = :json }
         opt.on("--yaml", "Export dataset in yaml"){ self.format = :yaml }
+        opt.on("--xml",  "Export dataset in xml"){ self.format = :xml }
         opt.on("--ruby", "Export dataset as ruby code (Array of Hash(es))"){ self.format = :ruby }
       end
       

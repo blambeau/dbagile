@@ -94,6 +94,8 @@ module DbAgile
                 ds.to_json(io, json_options)
               when :yaml
                 ds.to_yaml(io, yaml_options)
+              when :xml
+                ds.to_xml(io, xml_options)
               when :ruby
                 ds.to_ruby(io, ruby_options)
               when :text
