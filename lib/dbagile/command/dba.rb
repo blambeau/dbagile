@@ -13,7 +13,10 @@ module DbAgile
         display "\n"
         display "Available DbAgile commands are:"
         Command.subclasses.each do |subclass|
-          display "  #{align(Command.command_name_of(subclass),10)} #{subclass.new.short_help}" unless subclass == DbA
+          next if subclass == DbA
+          name = Command::command_name_of(subclass)
+          help = Command::command_for(name, environment).short_help
+          display "  #{align(name,10)} #{help}" 
         end
         display ""
       end

@@ -1,2 +1,2 @@
-'date','pos_bignum','neg_bignum','name','true_value','now','false_value','pos_fixnum','id','neg_fixnum'
-'Date::parse("2010-07-16")','4294967296','-4294967296','"Standard values"','true','Time::parse("Fri Jul 16 00:09:56 +0200 2010")','false','1','1','-1'
+'pos_fixnum','date','neg_fixnum','pos_bignum','name','neg_bignum','now','true_value','id','false_value'
+'1','Date::parse("2010-07-16")','-1','4294967296','"Standard values"','-4294967296','Time::parse("Fri Jul 16 00:09:56 +0200 2010")','true','1','false'
