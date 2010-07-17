@@ -3,9 +3,11 @@ env = DbAgile::default_environment
 env.config_file_path = Fixtures::dbagile_config_path
 DbAgile::default_environment = env
 dbagile = DbAgile::Command
+file = Fixtures::join_path('ruby_values')
+
 dbagile.use %w{sqlite}
-dbagile.import %{--ruby --create-table --input=#{Fixtures::join_path('ruby_values_source.rb')} ruby_values}
-dbagile.show %{ruby_values}
-dbagile.export %{--csv --type-system=ruby --output=#{Fixtures::join_path('ruby_values.csv')} ruby_values}
-dbagile.export %{--json --output=#{Fixtures::join_path('ruby_values.json')} ruby_values}
-dbagile.export %{--ruby --output=#{Fixtures::join_path('ruby_values.rb')} ruby_values}
+dbagile.import %{--ruby --create-table --input=#{file}_source.rb ruby_values}
+dbagile.export %{--csv --type-system=ruby --output=#{file}.csv ruby_values}
+dbagile.export %{--json --output=#{file}.json ruby_values}
+dbagile.export %{--yaml --output=#{file}.yaml ruby_values}
+dbagile.export %{--ruby --output=#{file}.rb ruby_values}
