@@ -1,37 +1,80 @@
-h1. DbAgile - Making our Databases Agile
+h1. DbAgile - SQL Databases with Agility
 
-DbAgile aims at providing agile tools around databases, and relational/sql databases in particular. It can be used as:
+DbAgile aims at providing agile tools around databases, and relational/sql databases in particular.
 
-* a lightweight yet agile relational database server
-* an agile ruby architecture around SQL databases
-* a friendly command line tool for connecting/manipulating SQL databases
+h2. Command line tool
 
-h2. Main features
-
-* agile database schema: allow schema evolutions without issuing alter/create table commands
-* agile database types: allow user-defined types to be included in all tables
-
-h2. The command line tool
+DbAgile installs a 'dba' command line tool whose aim is to support database administrators for simple but very common tasks, as illustrated below.
 
 <pre class="shell">
-  bl@shell# dbagile --full-agile 
+  dba --help
 
-  Welcome in dbagile interactive terminal.
+  usage: dba [--version] [--help]
+         dba help <subcommand>
+         dba <subcommand> [OPTIONS] [ARGS]
 
-  Type:  \c to connect a database
-         \h for help
-         \q to quit
+  Main commands:
+    help       Show help for a specific command
+    history    Display dba command history
+    replay     Replay a previous history command (last one by default)
 
-  dbagile=# \c sqlite://example.db
-  dbagile=# plug Defaults, {:now => Defaults::now}
-  dbagile=# insert :tools, {:name => "dbagile", :version => "0.0.1"}
-  dbagile=# display :tools
-  
-  -------------------------------------------------------------------
-  | name: String | version: String | now: Time                      |
-  -------------------------------------------------------------------
-  | dbagile      | 0.0.1           | Thu Jun 10 14:18:31 +0200 2010 |
-  -------------------------------------------------------------------
+  Configuration management:
+    list       List available database configurations (found in ~/.dbagile)
+    ping       Ping a configuration (current one by default)
+    use        Set the current database configuration to use
+    add        Add a new database configuration
+    rm         Remove a database configuration
+
+  Import/Export management:
+    show       Display content of a table/view/query (shortcut for 'export --text ...')
+    export     Export contents of a table/view/query to (csv, json, yaml, ruby, xml)
+    import     Import contents of a table from (csv, json, yaml, ruby)
+</pre>
+
+h3. Getting started
+
+'dba' works with its own ~/.dbagile and ~/.dbagile_history files for managing connection configurations and command history, respectively. Assuming an existing postgresql database named 'contacts' on your machine (adapt all parameters, of course) and an existing 'people' table inside the database, try the following commands in a shell:
+
+<pre class="shell">
+  dba add contacts postgres://user:password@localhost/contacts
+  dba list
+  dba ping
+  dba show --pretty people
+  dba export --csv people
+</pre>
+
+h2. Command line API
+
+All subcommands of 'dba' are easily accessible through a simple ruby API:
+
+<pre>
+  DbAgile::Command::add %w{contacts postgres://user:password@localhost/contacts}
+  DbAgile::Command::list
+  DbAgile::Command::ping
+  DbAgile::Command::show %w{--pretty people}
+  DbAgile::Command::export %w{--csv people}
+</pre>
+
+h2. Installation
+
+Required dependencies:
+
+* sbyc >= 0.1.2
+* sequel >= 3.8.0
+
+Optional dependencies (according to your needs):
+
+* mysql, pg, sqlite, ... (according to your sql database needs)
+* json                   (only if you use json import/export)
+* fastercsv              (only if you use csv import/export)
+* yaml                   (only if you use yaml import/export)
+* builder                (only if you use xml export)
+* highline               (only if you want friendly command line tools)
+
+To install dbagile (required dependencies are automatically installed):
+
+<pre>
+  gem install dbagile
 </pre>
 
 h2. Credits

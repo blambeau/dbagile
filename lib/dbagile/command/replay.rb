@@ -20,7 +20,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Replays a previous history command (last one by default)"
+        "Replay a previous history command (last one by default)"
       end
       
       # Overrided to avoid parsing options (otherwise -1, -2 will not work)
