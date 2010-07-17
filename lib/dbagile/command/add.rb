@@ -6,7 +6,7 @@ module DbAgile
     class Add < Command
       
       # Name of the configuration to add
-      attr_accessor :name
+      attr_accessor :config_name
       
       # Database URI of the configuration to add
       attr_accessor :uri
@@ -17,6 +17,11 @@ module DbAgile
       # Returns the command banner
       def banner
         "usage: dba add NAME URI"
+      end
+      
+      # Returns command's category
+      def category
+        :configuration
       end
 
       # Short help
@@ -40,12 +45,12 @@ module DbAgile
       
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
-        self.name, self.uri = valid_argument_list!(arguments, Symbol, String)
+        self.config_name, self.uri = valid_argument_list!(arguments, Symbol, String)
       end
       
       # Checks command 
       def check_command
-        valid_configuration_name!(self.name)
+        valid_configuration_name!(self.config_name)
         valid_database_uri!(self.uri)
       end
       
@@ -54,7 +59,7 @@ module DbAgile
         with_config_file do |config_file|
         
           # Create the configuration and adds it
-          config = ::DbAgile::Core::Configuration.new(self.name)
+          config = ::DbAgile::Core::Configuration.new(self.config_name)
           config.uri(self.uri)
           config_file << config
         

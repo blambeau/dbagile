@@ -5,6 +5,11 @@ module DbAgile
     #
     class Show < Command
       
+      # Returns command's category
+      def category
+        :io
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba show [OPTIONS] DATASET"

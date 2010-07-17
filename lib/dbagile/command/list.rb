@@ -8,6 +8,11 @@ module DbAgile
       # Verbose ?
       attr_accessor :verbose
       
+      # Returns command's category
+      def category
+        :configuration
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba list"

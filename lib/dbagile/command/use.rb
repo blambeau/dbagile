@@ -8,6 +8,11 @@ module DbAgile
       # Name of the configuration to use
       attr_accessor :match
       
+      # Returns command's category
+      def category
+        :configuration
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba use CONFIG"

@@ -64,6 +64,11 @@ module DbAgile
       set_default_options
     end
     
+    # Returns command name
+    def command_name
+      Command::command_name_of(self.class)
+    end
+    
     ##############################################################################
     ### Environment delegation
     ##############################################################################
@@ -130,7 +135,12 @@ module DbAgile
     ##############################################################################
     ### Command info/help and so on.
     ##############################################################################
-    
+      
+    # Returns commands category
+    def category
+      raise "Command.category should be overriden by subclasses"
+    end
+      
     # Returns the command banner
     def banner
       raise "Command.banner should be overriden by subclasses"
@@ -197,19 +207,23 @@ module DbAgile
   end # class Command
 end # module DbAgile
 
-# Load all commands now
+# :dba category
 require 'dbagile/command/dba'
 require 'dbagile/command/help'
+require 'dbagile/command/history'
+require 'dbagile/command/replay'
+
+# :configuration category
 require 'dbagile/command/list'
+require 'dbagile/command/ping'
+require 'dbagile/command/use'
 require 'dbagile/command/add'
 require 'dbagile/command/rm'
-require 'dbagile/command/use'
-require 'dbagile/command/ping'
+
+# :io category
 require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
-require 'dbagile/command/history'
-require 'dbagile/command/replay'
 
 class DbAgile::Command
   

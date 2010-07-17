@@ -8,6 +8,11 @@ module DbAgile
       # Name of the configuration to add
       attr_accessor :command
       
+      # Returns command's category
+      def category
+        :dba
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba help COMMAND"

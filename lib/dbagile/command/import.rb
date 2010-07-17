@@ -19,6 +19,11 @@ module DbAgile
       
       # Truncate table?
       attr_accessor :truncate_table
+            
+      # Returns command's category
+      def category
+        :io
+      end
       
       # Returns the command banner
       def banner

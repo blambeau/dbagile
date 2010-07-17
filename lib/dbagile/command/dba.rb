@@ -1,7 +1,12 @@
 module DbAgile
   class Command
     class DbA < Command
-      
+
+      # Returns command's category
+      def category
+        :dba
+      end
+
       # Returns the command banner
       def banner
         "usage: dba [--version] [--help]\n       dba help <subcommand>\n       dba <subcommand> [OPTIONS] [ARGS]"
@@ -9,14 +14,29 @@ module DbAgile
 
       # Shows the help
       def show_help
-        display banner
-        display "\n"
-        display "Available DbAgile commands are:"
+        commands_by_categ = Hash.new{|h,k| h[k] = []}
         Command.subclasses.each do |subclass|
           next if subclass == DbA
-          name = Command::command_name_of(subclass)
-          help = Command::command_for(name, environment).short_help
-          display "  #{align(name,10)} #{help}" 
+          name    = Command::command_name_of(subclass)
+          command = Command::command_for(name, environment)
+          commands_by_categ[command.category] << command
+        end
+        
+        display banner
+        display "\n"
+        display "Main commands:"
+        commands_by_categ[:dba].each do |command|
+          display "  #{align(command.command_name,10)} #{command.short_help}" 
+        end
+        display ""
+        display "Configuration management:"
+        commands_by_categ[:configuration].each do |command|
+          display "  #{align(command.command_name,10)} #{command.short_help}" 
+        end
+        display ""
+        display "Import/Export management:"
+        commands_by_categ[:io].each do |command|
+          display "  #{align(command.command_name,10)} #{command.short_help}" 
         end
         display ""
       end

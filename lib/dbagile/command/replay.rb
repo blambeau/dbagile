@@ -8,6 +8,11 @@ module DbAgile
       # Command number to replay
       attr_accessor :number
       
+      # Returns command's category
+      def category
+        :dba
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba replay [NUMBER]"

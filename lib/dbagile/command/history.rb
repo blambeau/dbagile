@@ -5,6 +5,11 @@ module DbAgile
     #
     class History < Command
       
+      # Returns command's category
+      def category
+        :dba
+      end
+      
       # Returns the command banner
       def banner
         "usage: dba history"

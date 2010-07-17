@@ -10,6 +10,11 @@ module DbAgile
       # Output file to use
       attr_accessor :output_file
       
+      # Returns command's category
+      def category
+        :io
+      end
+
       # Returns the command banner
       def banner
         "usage: dba export [OPTIONS] DATASET [FILE]"
