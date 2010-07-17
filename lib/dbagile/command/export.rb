@@ -17,7 +17,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Export contents of a table/view/query as ruby/csv/json"
+        "Export contents of a table/view/query to (csv, json, yaml, ruby, xml)"
       end
       
       # Contribute to options
