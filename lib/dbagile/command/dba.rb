@@ -20,7 +20,7 @@ module DbAgile
       
       # Runs the command
       def run(requester_file, argv)
-        @requester_file = requester_file
+        environment.load_history
         
         # Basic features
         case argv[0]
@@ -32,6 +32,9 @@ module DbAgile
             return
         end
         
+        # Save command in history 
+        environment.push_in_history(argv)
+        
         # Command execution
         if argv.size >= 1
           command = has_command!(argv.shift)
@@ -42,6 +45,8 @@ module DbAgile
       rescue Exception => ex
         environment.on_error(self, ex)
         environment
+      ensure
+        environment.save_history if environment.manage_history?
       end
 
     end # class DbA

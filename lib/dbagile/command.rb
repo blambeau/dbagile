@@ -173,7 +173,6 @@ module DbAgile
     
     # Runs the command without catching any error
     def unsecure_run(requester_file, argv)
-      @requester_file = requester_file
       rest = options.parse!(argv)
       normalize_pending_arguments(rest)
       check_command
@@ -218,6 +217,7 @@ require 'dbagile/command/ping'
 require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
+require 'dbagile/command/history'
 
 class DbAgile::Command
   

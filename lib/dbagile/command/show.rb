@@ -50,7 +50,6 @@ module DbAgile
       
       # Override to avoid pending options to be rejected
       def unsecure_run(requester_file, argv)
-        @requester_file = requester_file
         ::DbAgile::Command::export(infer_options(argv), environment)
       end
       

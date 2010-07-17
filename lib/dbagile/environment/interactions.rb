@@ -79,8 +79,9 @@ module DbAgile
       # @return [String] line that has been read
       #
       def readline(prompt)
-        require 'readline'
-        Readline.readline(prompt)
+        line = Readline.readline(prompt, false)
+        push_in_history(line) if manage_history?
+        line
       end
     
       # 
