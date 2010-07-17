@@ -33,11 +33,13 @@ module DbAgile
         end
         
         # Save command in history 
-        environment.push_in_history(argv)
+        unless ['replay', 'history'].include?(argv[0])
+          environment.push_in_history(argv) 
+        end
         
         # Command execution
         if argv.size >= 1
-          command = has_command!(argv.shift)
+          command = has_command!(argv.shift, environment)
           command.run(requester_file, argv)
         else
           show_help

@@ -16,6 +16,8 @@ module DbAgile
               arg.to_s
             elsif Symbol == type
               arg.to_sym
+            elsif Integer
+              arg.to_i
             else
               raise OptionParser::InvalidArgument, arg
             end
@@ -54,8 +56,8 @@ module DbAgile
       # 
       # @return [DbAgile::Command] the command instance
       #
-      def has_command!(name)
-        cmd = DbAgile::Command.command_for(name)
+      def has_command!(name, env)
+        cmd = DbAgile::Command.command_for(name, env)
         if cmd.nil?
           raise DbAgile::NoSuchCommandError, "No such command #{name.inspect}" 
         else

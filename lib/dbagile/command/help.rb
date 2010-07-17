@@ -21,7 +21,7 @@ module DbAgile
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
         self.command = valid_argument_list!(arguments, Symbol)
-        self.command = has_command!(self.command)
+        self.command = has_command!(self.command, environment)
       end
       
       # Executes the command

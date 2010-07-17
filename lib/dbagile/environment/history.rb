@@ -113,26 +113,30 @@ module DbAgile
       #
       # Loads dbagile's history.
       #
+      # This method has no effect if history has already been loaded.
+      #
       # This methods expects history_file_path to be set, a precondition states that
       # history management is enabled. This method is not defensive about it (i.e. no
       # check is done).
       #
       def load_history
-        if RUBY_VERSION <= "1.9.0" and Readline::HISTORY.empty?
-          # There a but in some ruby versions: the first line is not kept by
-          # the HISTORY variable. We push two times if it was empty
-          Readline::HISTORY.push('')
-        end
+        unless history_loaded?
+          if RUBY_VERSION <= "1.9.0" and Readline::HISTORY.empty?
+            # There a but in some ruby versions: the first line is not kept by
+            # the HISTORY variable. We push two times if it was empty
+            Readline::HISTORY.push('')
+          end
         
-        # Read history file if it exists
-        if File.exists?(history_file_path)
-          File.readlines(history_file_path).each{|c| 
-            Readline::HISTORY.push(c.strip)
-          }
-        end
+          # Read history file if it exists
+          if File.exists?(history_file_path)
+            File.readlines(history_file_path).each{|c| 
+              Readline::HISTORY.push(c.strip)
+            }
+          end
 
-        # Mark it as loaded now
-        @history_loaded = true
+          # Mark it as loaded now
+          @history_loaded = true
+        end
       end
       
       #

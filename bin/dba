@@ -11,7 +11,7 @@ require 'rubygems'
 require 'dbagile'
 
 begin
-  r = DbAgile::Command::DbA.new.run '.', ARGV
+  r = DbAgile::Command::DbA.new(DbAgile::default_environment).run '.', ARGV
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

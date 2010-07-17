@@ -9,9 +9,6 @@ module DbAgile
     ### Class level constructions
     ##############################################################################
     
-    # Environment class to use by default
-    DEFAULT_ENVIRONMENT_CLASS = DbAgile::Environment
-    
     # Current configuration as a class-level instance variable
     class << self
       
@@ -35,17 +32,11 @@ module DbAgile
       end
     
       # Returns a command for a given name, returns nil if it cannot be found
-      def command_for(name)
+      def command_for(name, env)
         subclass = subclasses.find{|subclass| command_name_of(subclass).to_s == name.to_s}
-        subclass.nil? ? nil : subclass.new
+        subclass.nil? ? nil : subclass.new(env)
       end
 
-      # Builds a command instance for a specific class
-      def build_command(clazz, env)
-        command = clazz.new(env)
-        command
-      end
-      
       # Builds options
       def build_command_options(options)
         case options
@@ -68,7 +59,7 @@ module DbAgile
     attr_reader :environment
      
     # Creates an empty command instance
-    def initialize(env = DEFAULT_ENVIRONMENT_CLASS.new)
+    def initialize(env)
       @environment = env
       set_default_options
     end
@@ -218,6 +209,7 @@ require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
 require 'dbagile/command/history'
+require 'dbagile/command/replay'
 
 class DbAgile::Command
   
@@ -226,7 +218,7 @@ class DbAgile::Command
     command_name = DbAgile::Command::command_name_of(subclass)
     instance_eval <<-EOF
       def #{command_name}(options = [], env = DbAgile::default_environment)
-        build_command(#{subclass.name}, env).run(__FILE__, build_command_options(options))
+        command_for(#{command_name.inspect}, env).run(__FILE__, build_command_options(options))
       end
     EOF
   end
