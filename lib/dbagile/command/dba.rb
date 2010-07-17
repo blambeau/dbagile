@@ -17,9 +17,12 @@ module DbAgile
         commands_by_categ = Hash.new{|h,k| h[k] = []}
         Command.subclasses.each do |subclass|
           next if subclass == DbA
-          name    = Command::command_name_of(subclass)
-          command = Command::command_for(name, environment)
-          commands_by_categ[command.category] << command
+          name     = Command::command_name_of(subclass)
+          command  = Command::command_for(name, environment)
+          category = command.category
+          raise "Unknown command category #{category}"\
+            unless [:dba, :configuration, :io].include?(category)
+          commands_by_categ[category] << command
         end
         
         display banner
