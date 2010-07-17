@@ -24,4 +24,7 @@ module DbAgile
   # Raised when no default configuration is set
   class NoDefaultConfigError < DbAgile::Error; end
   
+  # Raised when input parsing of data fails for some reason
+  class InvalidFormatError < DbAgile::Error; end
+  
 end # module DbAgile

@@ -70,18 +70,19 @@ module DbAgile
         opt.on("--json", "Export dataset in json"){ self.format = :json }
         opt.on("--yaml", "Export dataset in yaml"){ self.format = :yaml }
         opt.on("--xml",  "Export dataset in xml"){ self.format = :xml }
-        opt.on("--ruby", "Export dataset as ruby code (Array of Hash(es))"){ self.format = :ruby }
+        opt.on("--ruby", "Export dataset as ruby code"){ self.format = :ruby }
       end
       
       # Adds the format options for input
       def add_input_format_options(opt)
-        opt.on('--format=X', [:csv, :json, :ruby],
-               "Import dataset from (csv, json, ruby)") do |value|
+        opt.on('--format=X', [:csv, :json, :yaml, :ruby],
+               "Import dataset from (csv, json, yaml, ruby)") do |value|
           self.format = value
         end
         opt.on("--csv",  "Import dataset from csv (default)"){ self.format = :csv }
         opt.on("--json", "Import dataset from json"){ self.format = :json }
-        opt.on("--ruby", "Import dataset from ruby code (Array of Hash(es))"){ self.format = :ruby }
+        opt.on("--ruby", "Import dataset from ruby code"){ self.format = :ruby }
+        opt.on("--yaml", "Import dataset from yaml"){ self.format = :yaml }
       end
       
       # Adds the CSV options
