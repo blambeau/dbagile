@@ -34,4 +34,8 @@ describe "DbAgile::Command through API" do
     it_should_behave_like "The use command" 
   end
   
+  describe "The ping command" do
+    it_should_behave_like "The ping command" 
+  end
+  
 end

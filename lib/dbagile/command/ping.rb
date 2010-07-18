@@ -35,7 +35,7 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        with_config_file do |config_file|
+        cf = with_config_file do |config_file|
         
           config = has_config!(config_file, self.match)
         
@@ -43,12 +43,15 @@ module DbAgile
           begin
             config.connect.ping
             say("Ping ok (#{config.uri})")
+            config
           rescue => ex
             say("Ping KO (#{config.uri})", :red)
             display(ex.message)
+            nil
           end
           
         end
+        cf
       end
       
     end # class List
