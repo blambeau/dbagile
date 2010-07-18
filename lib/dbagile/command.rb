@@ -142,5 +142,8 @@ require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
 
+# :restful category
+require 'dbagile/command/restful'
+
 # Build Command API now
 require 'dbagile/command/api'

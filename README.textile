@@ -62,6 +62,7 @@ Optional dependencies (according to your needs):
 * yaml                   (only if you use yaml import/export)
 * builder                (only if you use xml export)
 * highline               (only if you want friendly command line tools)
+* rack >= 1.1.0          (only if you use the restful server)
 
 h2. Credits
 
