@@ -8,24 +8,9 @@ module DbAgile
       # Connection options
       attr_accessor :conn_options
       
-      # Options for CSV input/output
-      attr_accessor :csv_options
+      # Input/output options
+      attr_accessor :io_options
       
-      # Options for JSON input/output
-      attr_accessor :json_options
-      
-      # Options for Ruby input/output
-      attr_accessor :ruby_options
-
-      # Options for Text output
-      attr_accessor :text_options
-
-      # Options for YAML output
-      attr_accessor :yaml_options
-
-      # Options for XML output
-      attr_accessor :xml_options
-
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
@@ -39,12 +24,7 @@ module DbAgile
       def set_default_options
         self.format = :csv
         self.conn_options = {}
-        self.csv_options = {}
-        self.json_options = {}
-        self.yaml_options = {}
-        self.xml_options = {}
-        self.ruby_options = {}
-        self.text_options = {}
+        self.io_options = Hash.new{|h,k| h[k] = {}}
       end
       
       # Adds the select/allbut options
@@ -88,29 +68,29 @@ module DbAgile
       # Adds the CSV options
       def add_csv_options(opt)
         opt.on("--headers", "-h", "Read/Write column names on first line") do
-          csv_options[:headers] = true
+          io_options[:csv][:headers] = true
         end
         opt.on("--separator=C", "Use C as column separator character") do |value|
-          csv_options[:col_sep] = value
+          io_options[:csv][:col_sep] = value
         end
         opt.on("--quote=C", "Use C as quoting character") do |value|
-          csv_options[:quote_char] = value
+          io_options[:csv][:quote_char] = value
         end
         opt.on("--force-quotes", "Force quoting?") do 
-          csv_options[:force_quotes] = true
+          io_options[:csv][:force_quotes] = true
         end 
         opt.on("--skip-blanks", "Skip blank lines?") do 
-          csv_options[:skip_blanks] = true
+          io_options[:csv][:skip_blanks] = true
         end 
         opt.on("--type-system=X", [:ruby], 
                "Read/Write type-safe values for (ruby)") do |value|
           case value
             when :ruby
               require 'sbyc/type_system/ruby'
-              csv_options[:type_system] = SByC::TypeSystem::Ruby
-              csv_options[:headers] = true unless csv_options.key?(:headers)
-              csv_options[:quote_char] = "'" unless csv_options.key?(:quote_char)
-              csv_options[:force_quotes] = true unless csv_options.key?(:force_quotes)
+              io_options[:csv][:type_system] = SByC::TypeSystem::Ruby
+              io_options[:csv][:headers] = true unless io_options[:csv].key?(:headers)
+              io_options[:csv][:quote_char] = "'" unless io_options[:csv].key?(:quote_char)
+              io_options[:csv][:force_quotes] = true unless io_options[:csv].key?(:force_quotes)
             else
               raise ArgumentError, "Unknown type system #{value}"
           end
@@ -121,8 +101,8 @@ module DbAgile
       
       # Adds output JSON options 
       def add_json_output_options(opt)
-        opt.on("--pretty", "Generate a pretty JSON document") do 
-          json_options[:pretty] = true
+        opt.on("--[no-]pretty", "Generate a pretty JSON document") do |value|
+          io_options[:json][:pretty] = value
         end 
       end
        
@@ -130,12 +110,12 @@ module DbAgile
       def add_text_output_options(opt)
         opt.on("--wrap-at=X", Integer,
                "Wraps table after X's character (no wrap by default)") do |x|
-          text_options[:wrap_at] = x
+          io_options[:text][:wrap_at] = x
         end
         opt.on("--truncate-at=X", Integer,
                "Truncate row lines at X character") do |x|
-          text_options[:truncate_at] = x
-          text_options[:append_with] = '...'
+          io_options[:text][:truncate_at] = x
+          io_options[:text][:append_with] = '...'
         end
       end
        

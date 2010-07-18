@@ -5,28 +5,28 @@ module DbAgile
   
   # 
   # Builds a DbAgile::Command::API instance and yields the block with the
-  # environment and the api instance.
+  # api instance.
   #
   # A fresh new default environement is created if no one is given.
   #
   # Example
-  #   DbAgile::command do |env, dba|
+  #   DbAgile::dba do |dba|
   #     # Override environment default values (~/.dbagile, ...)
-  #     env.config_file_path  = ...    # your application own config file
-  #     env.history_file_path = nil    # no history
-  #     env.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
+  #     dba.config_file_path  = ...    # your application own config file
+  #     dba.history_file_path = nil    # no history
+  #     dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   # 
   #     # Start using dbagile commands
   #     dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
   #     dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
   # end
   #
-  def command(environment = nil)
+  def dba(environment = nil)
     env = environment || ::DbAgile::Environment.new
     api = DbAgile::Command::API.new(env)
-    yield(env, api)
+    yield(api)
   end
-  module_function :command
+  module_function :dba
   
   # Returns the default environment to use.
   def default_environment

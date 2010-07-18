@@ -91,22 +91,23 @@ module DbAgile
         if self.input_file
           File.open(self.input_file, "r", &block)
         else
-          block.call(STDIN)
+          block.call(environment.input_buffer)
         end
       end
       
       # Yields the block with each emitted tuple 
       def with_emitter(&block)
         with_io{|io|
+          options = io_options[self.format]
           case self.format
             when :csv
-              DbAgile::IO::CSV::from_csv(io, csv_options, &block)
+              DbAgile::IO::CSV::from_csv(io, options, &block)
             when :json
-              DbAgile::IO::JSON::from_json(io, ruby_options, &block)
+              DbAgile::IO::JSON::from_json(io, options, &block)
             when :yaml
-              DbAgile::IO::YAML::from_yaml(io, ruby_options, &block)
+              DbAgile::IO::YAML::from_yaml(io, options, &block)
             when :ruby
-              DbAgile::IO::Ruby::from_ruby(io, ruby_options, &block)
+              DbAgile::IO::Ruby::from_ruby(io, options, &block)
           end
         }
       end

@@ -1,4 +1,5 @@
 require 'readline'
+require 'dbagile/environment/delegator'
 require 'dbagile/environment/interactions'
 require 'dbagile/environment/robustness'
 require 'dbagile/environment/configuration'

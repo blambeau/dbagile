@@ -14,9 +14,14 @@ module DbAgile
       env
     end
     
+    # Returns the path to the table/basic_values.rb file
+    def basic_values_path
+      File.expand_path('../fixtures/tables/basic_values.rb', __FILE__)
+    end
+    
     # Yields the block with each table file in turn
     def each_table_file
-      files = Dir[File.expand_path('../tables/*.rb', __FILE__)].each{|file| 
+      Dir[File.expand_path('../fixtures/tables/*.rb', __FILE__)].each{|file| 
         name = File.basename(file, ".rb")
         yield(name, file)
       }
@@ -52,21 +57,30 @@ module DbAgile
     # Creates logical fixtures
     def create_fixtures
       ensure_physical_databases!
-      DbAgile::command(environment) do |env, dba|
-        env.config_file.each do |config|
-          if dba.ping(config.name).kind_of?(StandardError)
-            puts "Skipping fixture database #{config.name.inspect} (no ping)"
-          else
+      DbAgile::dba(environment) do |dba|
+        dba.config_file.each do |config|
+          if config.ping?
             puts "Installing fixture database on #{config.name.inspect}"
             dba.use(config.name)
             each_table_file{|name, file|
               dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
+          else
+            puts "Skipping fixture database #{config.name.inspect} (no ping)"
           end
         end
       end
     end
     
+    # Adds class methods now
     extend Fixtures
+    
+    # Provide helpers to get the contents of the tables
+    each_table_file do |name, file|
+      define_method name do
+        Kernel.eval(File.read(file))
+      end
+    end
+    
   end # module Fixtures
 end # module DbAgile

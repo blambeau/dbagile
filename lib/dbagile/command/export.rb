@@ -91,21 +91,11 @@ module DbAgile
           end
         
           # Export it
-          with_io{|io|
-            case self.format
-              when :csv
-                ds.to_csv(io, csv_options)
-              when :json
-                ds.to_json(io, json_options)
-              when :yaml
-                ds.to_yaml(io, yaml_options)
-              when :xml
-                ds.to_xml(io, xml_options)
-              when :ruby
-                ds.to_ruby(io, ruby_options)
-              when :text
-                ds.to_text(io, text_options)
-            end
+          with_io{|io| 
+            method = "to_#{self.format}".to_sym
+            io = environment.output_buffer
+            options =  io_options[self.format]
+            ds.send(method, io, options)
           }
         end
       end

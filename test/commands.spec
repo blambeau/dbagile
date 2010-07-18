@@ -6,9 +6,7 @@ describe "DbAgile::Command through API" do
   let(:empty_config_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
   
   # The environment to use
-  let(:environment){ DbAgile::Fixtures::environment }
-  let(:env){ DbAgile::Fixtures::environment }
-  let(:dba){ DbAgile::Command::API.new(env) }
+  let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
   # Remove empty config between all test
   before(:each){ FileUtils.rm_rf(empty_config_path) }
@@ -39,20 +37,33 @@ describe "DbAgile::Command through API" do
   end
   
   ### Inport/Export commands
-  describe "The input/output commands" do 
+  DbAgile::Fixtures::environment.config_file.each do |config|
+    next if config.name == :unexisting
+    if config.ping?
+      describe "The input/output commands on #{config.name}" do 
 
-    before{ 
-      dba.use(%w{sqlite}) 
-      env.output_buffer = StringIO.new
-    }
+        before{ 
+          dba.use(%w{sqlite}) 
+          dba.output_buffer = StringIO.new
+        }
       
-    describe "The show command" do
-      it_should_behave_like "The show command" 
-    end
+        describe "The show command" do
+          it_should_behave_like "The show command" 
+        end
   
-    describe "The export command" do
-      it_should_behave_like "The export command" 
+        describe "The export command" do
+          it_should_behave_like "The export command" 
+        end
+  
+        describe "The import command" do
+          it_should_behave_like "The import command" 
+        end
+    
+      end
+    else
+      puts "Skipping tests on #{config.name} (no ping)"
     end
   end
+
   
 end

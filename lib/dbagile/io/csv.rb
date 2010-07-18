@@ -1,17 +1,32 @@
 module DbAgile
   module IO
     module CSV
-
+      
       # Normalizes CSV options from DBAgile options
-      def extract_csv_options(options)
-        res = options.dup.delete_if{|key,value| !FasterCSV::DEFAULT_OPTIONS.key?(key)}
-        if res[:headers]
-          res[:write_headers] = true 
-          res[:return_headers] = true 
+      def normalize_options(options)
+        if options[:headers]
+          options[:write_headers] = true 
+          options[:return_headers] = true 
         end
-        res
+        options
       end
-      module_function :extract_csv_options
+      module_function :normalize_options
+
+      # Makes the CSV require, depending on Ruby version
+      def build_csv_instance(io, options)
+        if RUBY_VERSION >= "1.9.0"
+          require 'csv'
+          options = options.dup.delete_if{|key,value| !::CSV::DEFAULT_OPTIONS.key?(key)}
+          options = normalize_options(options)
+          ::CSV.new(io, options)
+        else
+          require 'faster_csv'
+          options = options.dup.delete_if{|key,value| !FasterCSV::DEFAULT_OPTIONS.key?(key)}
+          options = normalize_options(options)
+          FasterCSV.new(io, options)
+        end
+      end
+      module_function :build_csv_instance
 
       #
       # Outputs some data as a CSV string.
@@ -19,10 +34,8 @@ module DbAgile
       # @return [...] the buffer itself
       #
       def to_csv(data, columns, buffer = "", options = {})
-        require 'faster_csv'
-        
         # Creates a CSV outputter with options
-        csv = FasterCSV.new(buffer, extract_csv_options(options))
+        csv = build_csv_instance(buffer, options)
         
         # Write header if required
         csv << columns if options[:headers]
@@ -45,10 +58,8 @@ module DbAgile
       # an array of tuples. 
       #
       def from_csv(input, options = {})
-        require 'faster_csv'
-        
         # Creates a CSV inputer with options
-        csv = FasterCSV.new(input, extract_csv_options(options))
+        csv = build_csv_instance(input, options)
         csv.header_convert(:symbol)
         csv.convert{|field| options[:type_system].parse_literal(field)} if options[:type_system]
         

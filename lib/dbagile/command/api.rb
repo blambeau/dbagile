@@ -1,6 +1,7 @@
 module DbAgile
   class Command
     class API
+      include DbAgile::Environment::Delegator
       
       # Underlying environment
       attr_reader :environment
@@ -9,6 +10,21 @@ module DbAgile
       def initialize(environment)
         @environment = environment
       end
+      
+      ##############################################################################
+      # Ruby commands
+      ##############################################################################
+      
+      # Returns a dataset instance
+      def dataset(name)
+        environment.with_current_config{|config|
+          config.connect.dataset(name)
+        }
+      end
+      
+      ##############################################################################
+      # Console subcommands mimics
+      ##############################################################################
       
       # Add API methods to Command class
       DbAgile::Command::each_subclass do |subclass|
@@ -21,6 +37,11 @@ module DbAgile
             command.unsecure_run(__FILE__, options)
           end
         EOF
+      end
+      
+      # Delegates this api on a environment duplication
+      def dup
+        API.new(environment.dup)
       end
       
     end # class API

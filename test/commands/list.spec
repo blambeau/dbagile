@@ -6,13 +6,13 @@ shared_examples_for("The list command") do
   
   it "should print the configurations" do
     dba.list
-    env.output_buffer.string.should =~ /Available databases/
+    dba.output_buffer.string.should =~ /Available databases/
   end
   
   it "should print a friendly error message when no config" do
-    env.config_file_path = empty_config_path
+    dba.config_file_path = empty_config_path
     dba.list
-    env.output_buffer.string.should =~ /No database configuration found/
+    dba.output_buffer.string.should =~ /No database configuration found/
   end
   
 end

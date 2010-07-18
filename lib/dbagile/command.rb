@@ -5,6 +5,7 @@ require 'dbagile/command/class_methods'
 module DbAgile
   class Command
     include ::DbAgile::Command::Robust
+    include ::DbAgile::Environment::Delegator
     extend ::DbAgile::Command::ClassMethods
     
     ##############################################################################
@@ -25,45 +26,6 @@ module DbAgile
       Command::command_name_of(self.class)
     end
     
-    ##############################################################################
-    ### Environment delegation
-    ##############################################################################
-    
-    # Delegated to environment
-    def say(*args, &block)
-      environment.say(*args, &block)
-    end
-    
-    # Delegated to environment
-    def display(*args, &block)
-      environment.display(*args, &block)
-    end
-    
-    # Delegated to environment
-    def output_buffer(*args, &block)
-      environment.output_buffer(*args, &block)
-    end
-    
-    # Delegated to environment
-    def input_buffer(*args, &block)
-      environment.input_buffer(*args, &block)
-    end
-    
-    # Delegated to environment
-    def with_config_file(*args, &block)
-      environment.with_config_file(*args, &block)
-    end
-
-    # Delegated to environment
-    def with_config(*args, &block)
-      environment.with_config(*args, &block)
-    end
-
-    # Delegated to environment
-    def with_current_config(*args, &block)
-      environment.with_current_config(*args, &block)
-    end
-
     ##############################################################################
     ### About options
     ##############################################################################

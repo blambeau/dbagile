@@ -10,12 +10,12 @@ shared_examples_for("The ping command") do
 
   it "should print a friendly message on success" do
     dba.ping(%w{sqlite})
-    env.output_buffer.string.should =~ /ok/
+    dba.output_buffer.string.should =~ /ok/
   end
 
   it "should print a friendly message on failure" do
     dba.ping(%w{unexisting})
-    env.output_buffer.string.should =~ /KO/
+    dba.output_buffer.string.should =~ /KO/
   end
 
 end
