@@ -58,8 +58,8 @@ module DbAgile
 
       # Adds the format options for output
       def add_output_format_options(opt)
-        opt.on('--format=X', [:csv, :text, :json, :yaml, :ruby],
-               "Export dataset in (csv, text, json, yaml, ruby)") do |value|
+        opt.on('--format=X', [:csv, :text, :json, :yaml, :ruby, :xml],
+               "Export dataset in (csv, text, json, yaml, ruby, xml)") do |value|
           self.format = value
         end
         opt.on("--csv",  "Export dataset in csv (default)"){ self.format = :csv }

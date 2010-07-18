@@ -7,6 +7,7 @@ module DbAgile
     
       # Creates a server instance
       def initialize(environment)
+        raise "Environment may not be nil" if environment.nil?
         @environment = environment
       end
     
@@ -17,9 +18,9 @@ module DbAgile
     
       # Starts the server inside a thread
       def start(options = DEFAULT_RACK_OPTIONS)
-        myself       = self
+        myself, env  = self, @environment
         rack_server  = Rack::Handler.default
-        rack_app     = Rack::Builder.new{ run DbAgile::Restful.new(@environment) }
+        rack_app     = Rack::Builder.new{ run DbAgile::Restful.new(env) }
         thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| 
           s.run(a, o){|server| @server = server}
         }
@@ -34,7 +35,7 @@ module DbAgile
         end until (ok or (try += 1)>10)
         raise "Unable to connect to server" if try >= 10
         
-        @environment.say("Have a look at #{server_uri(options)}database/table.json")
+        @environment.say("Have a look at #{server_uri(options)}")
         thread
       end
       
