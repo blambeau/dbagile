@@ -14,7 +14,7 @@ task :default => [:test]
 desc "Run all rspec test"
 Spec::Rake::SpecTask.new(:spec) do |t|
   t.ruby_opts = ['-I.']
-  t.spec_files = FileList['test/spec/test_all.rb', 'test/dbagile.spec']
+  t.spec_files = FileList['test/spec/test_all.rb', 'test/adapters.spec', 'test/commands.spec']
 end
 
 desc "Launches all tests"

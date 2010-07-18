@@ -9,7 +9,7 @@ require 'dbagile'
 require 'spec'
 require 'spec/autorun'
 
-Dir[File.join(File.dirname(__FILE__), "dbagile/**/*.spec")].each{|f| load(f)}
+Dir[File.join(File.dirname(__FILE__), "adapters/**/*.spec")].each{|f| load(f)}
 
 describe "DbAgile" do
 
