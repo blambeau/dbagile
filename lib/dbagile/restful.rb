@@ -1,5 +1,3 @@
-gem 'rack', ">= 1.1.0"
-require 'rack'
 require 'dbagile/restful/utils'
 require 'dbagile/restful/get'
 module DbAgile

@@ -36,7 +36,7 @@ end
 desc "Run all rspec test"
 Spec::Rake::SpecTask.new do |t|
   t.ruby_opts = ['-I.']
-  t.spec_files = FileList['test/spec/test_all.rb', 'test/adapters.spec', 'test/commands.spec']
+  t.spec_files = FileList['test/spec/test_all.rb', 'test/adapters.spec', 'test/commands.spec', 'test/restful.spec']
 end
 
 # About yard documentation
@@ -65,7 +65,7 @@ gemspec = Gem::Specification.new do |s|
   s.author = "Bernard Lambeau"
   s.email = "blambeau@gmail.com"
   s.homepage = "http://github.com/blambeau/dbagile"
-  s.add_dependency('sbyc', '>= 0.1.2')
+  s.add_dependency('sbyc', '>= 0.1.3')
   s.add_dependency('sequel', '>= 0.3.8')
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|

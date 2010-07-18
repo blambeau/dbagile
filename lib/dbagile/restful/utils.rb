@@ -2,6 +2,18 @@ module DbAgile
   class Restful
     module Utils
       
+      # Which format for what extension
+      EXTENSIONS_TO_FORMAT = {
+        ".csv"   => :csv,
+        ".txt"   => :text,
+        ".json"  => :json,
+        ".yaml"  => :yaml,
+        ".yml"   => :yaml,
+        ".xml"   => :xml,
+        ".ruby"  => :ruby,
+        ".rb"    => :rb
+      }
+      
       # Which content type for which format
       FORMAT_TO_CONTENT_TYPE = {
         :csv  => "text/csv",
@@ -11,6 +23,12 @@ module DbAgile
         :xml  => "text/xml",
         :ruby => "text/plain"
       }
+      
+      # Checks if an extension is known. Returns the associated format.
+      def known_extension?(f)
+        f = ".#{f}" unless f[0,1] == '.'
+        EXTENSIONS_TO_FORMAT[f]
+      end
       
       # Checks if a format is known. Returns the associated content type.
       def known_format?(f)

@@ -1,3 +1,11 @@
+if RUBY_VERSION == "1.8.6"
+  gem 'rack', "= 1.1.0"
+  require 'rack'
+else
+  gem 'rack', ">= 1.1.0"
+  require 'rack'
+end
+require 'webrick'
 module DbAgile
   class Restful
     class Server
@@ -12,15 +20,15 @@ module DbAgile
       end
     
       # Returns the server uri given by options
-      def server_uri(options)
+      def server_uri(options = DEFAULT_RACK_OPTIONS)
         URI::parse("http://#{options[:Host]}:#{options[:Port]}/")
       end
     
       # Starts the server inside a thread
       def start(options = DEFAULT_RACK_OPTIONS)
         myself, env  = self, @environment
-        rack_server  = Rack::Handler.default
-        rack_app     = Rack::Builder.new{ run DbAgile::Restful.new(env) }
+        rack_server  = ::Rack::Handler::default
+        rack_app     = ::Rack::Builder.new{ run DbAgile::Restful.new(env) }
         thread       = Thread.new(rack_server, rack_app, options.dup){|s,a,o| 
           s.run(a, o){|server| @server = server}
         }

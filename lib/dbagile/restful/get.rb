@@ -8,8 +8,9 @@ module DbAgile
           when ''
             return _copyright_(env)
           when /(\w+)\/(\w+)\.(\w+)$/
-            if content_type = known_format?($3.to_sym)
-              db, table, format = $1, $2, $3
+            if format = known_extension?($3)
+              content_type = known_format?(format)
+              db, table = $1, $2
               buffer = StringIO.new
               with_config(db.to_sym) do |config|
                 method = "to_#{format}".to_sym
