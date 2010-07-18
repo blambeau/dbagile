@@ -1,56 +1,12 @@
 require 'optparse'
 require 'fileutils'
 require 'dbagile/command/robust'
+require 'dbagile/command/class_methods'
 module DbAgile
   class Command
     include ::DbAgile::Command::Robust
+    extend ::DbAgile::Command::ClassMethods
     
-    ##############################################################################
-    ### Class level constructions
-    ##############################################################################
-    
-    # Current configuration as a class-level instance variable
-    class << self
-      
-      # Tracks subclasses for printing list of command
-      # and delegating execution to them.
-      def inherited(subclass) 
-        super
-        @subclasses ||= [] 
-        @subclasses << subclass 
-      end 
-
-      # Returns known command sub-classes
-      def subclasses 
-        @subclasses 
-      end 
-      
-      # Returns the command name of a given class
-      def command_name_of(clazz)
-        /::([A-Za-z0-9]+)$/ =~ clazz.name
-        $1.downcase
-      end
-    
-      # Returns a command for a given name, returns nil if it cannot be found
-      def command_for(name, env)
-        subclass = subclasses.find{|subclass| command_name_of(subclass).to_s == name.to_s}
-        subclass.nil? ? nil : subclass.new(env)
-      end
-
-      # Builds options
-      def build_command_options(options)
-        case options
-          when Array
-            options
-          when String
-            options.split
-          else
-            raise ArgumentError, "Invalid options #{options}"
-        end
-      end
-      
-    end # class << self
-     
     ##############################################################################
     ### Instance variables and construction
     ##############################################################################
