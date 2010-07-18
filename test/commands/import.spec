@@ -16,6 +16,14 @@ shared_examples_for("The import command") do
       dba.import ['--input', DbAgile::Fixtures::basic_values_path] + %w{--ruby --drop-table basic_values_copy}
       dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
     end
+    
+    it "should support an export/import piping through StringIO" do
+      dba.export %w{--ruby basic_values}
+      dba.input_buffer  = StringIO.new(dba.output_buffer.string)
+      dba.output_buffer = StringIO.new 
+      dba.import %w{--ruby --create-table basic_values_copy}
+      dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
+    end
 
   end # --ruby
   

@@ -48,12 +48,14 @@ module DbAgile
       # Inspects this configuration, returning a ruby chunk of code
       # whose evaluation leads to a configuration instance
       def inspect(prefix = "")
+        require 'sbyc/type_system/ruby'
         buffer = ""
         buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
         if plugs and not(plugs.empty?)
           plugs.each{|plug| 
-            buffer << "  plug " << plug.collect{|p| p.inspect}.join(', ') << "\n"
+            plugs_str = plug.collect{|p| SByC::TypeSystem::Ruby::to_literal(p)}.join(', ')
+            buffer << "  plug " << plugs_str << "\n"
           } 
         end
         buffer << "}"

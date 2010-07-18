@@ -7,7 +7,11 @@ module DbAgile
       
       # Returns a proc that computes the current time
       def self.now
-        lambda{ Time.now }
+        now = lambda{ Time.now }
+        def now.to_ruby_literal
+          "DbAgile::Plugin::Touch::now"
+        end
+        now
       end
       
       # Creates a plugin instance

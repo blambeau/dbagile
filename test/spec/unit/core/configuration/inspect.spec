@@ -7,11 +7,7 @@ describe "DbAgile::Core::Configuration#inspect" do
         config_str = File.read(file)
         config = Kernel.eval(config_str)
         config.name.should == File.basename(file, '.dba').to_sym
-        if config.name == :complex3
-          pending("Config.inspect should support complex options") { config.inspect.should == config_str } 
-        else
-          config.inspect("DbAgile::").should == config_str
-        end
+        config.inspect("DbAgile::").should == config_str
       }
     end
   end
