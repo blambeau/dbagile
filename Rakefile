@@ -24,7 +24,7 @@ YARD::Rake::YardocTask.new do |t|
   YARD::Tags::Library.define_tag "Precondition", :pre
   YARD::Tags::Library.define_tag "Postcondition", :post
   t.files   = ['lib/**/*.rb']
-  t.options = ['--output-dir', 'doc/api', '-', "README.textile", "LICENCE.textile", "CHANGELOG.textile"]
+  t.options = ['--output-dir', 'doc/api', '-', "README.textile", "COMMAND_LINE.textile", "LICENCE.textile", "CHANGELOG.textile"]
 end
 
 gemspec = Gem::Specification.new do |s|
@@ -35,7 +35,7 @@ gemspec = Gem::Specification.new do |s|
   s.files = Dir['lib/**/*'] + Dir['test/**/*']
   s.require_path = 'lib'
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README.textile", "LICENCE.textile"]
+  s.extra_rdoc_files = ["README.textile", "LICENCE.textile", "COMMAND_LINE.textile"]
   s.rdoc_options << '--title' << 'DbAgile - Agile Interface on top of SQL Databases' <<
                     '--main' << 'README.textile' <<
                     '--line-numbers'  

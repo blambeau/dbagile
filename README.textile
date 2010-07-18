@@ -2,50 +2,27 @@ h1. DbAgile - SQL Databases with Agility
 
 DbAgile aims at providing agile tools around databases, and relational/sql databases in particular.
 
-h2. Command line tool
+h2. Motivation
 
-DbAgile installs a 'dba' command line tool whose aim is to support database administrators for simple but very common tasks, as illustrated below.
-
-<pre class="shell">
-  dba --help
-
-  usage: dba [--version] [--help]
-         dba help <subcommand>
-         dba <subcommand> [OPTIONS] [ARGS]
-
-  Main commands:
-    help       Show help for a specific command
-    history    Display dba command history
-    replay     Replay a previous history command (last one by default)
-
-  Configuration management:
-    list       List available database configurations (found in ~/.dbagile)
-    ping       Ping a configuration (current one by default)
-    use        Set the current database configuration to use
-    add        Add a new database configuration
-    rm         Remove a database configuration
-
-  Import/Export management:
-    show       Display content of a table/view/query (shortcut for 'export --text ...')
-    export     Export a table/view/query to (csv, json, yaml, ruby, xml)
-    import     Import a table from (csv, json, yaml, ruby)
-</pre>
-
-h3. Getting started
-
-By default, 'dba' works with its own ~/.dbagile and ~/.dbagile_history files for managing connection configurations and command history, respectively. Assuming an existing postgresql database named 'contacts' on your machine (adapt all parameters, of course) and an existing 'people' table inside the database, try the following commands in a shell:
+Have you ever dreams of seing the contents of a table (say, 'contacts') in one shell command?
 
 <pre class="shell">
-  dba add contacts postgres://user:password@localhost/contacts
-  dba list
-  dba ping
-  dba show --pretty people
-  dba export --csv people
-</pre>
+  sh$ dba show --pretty contacts
+</pre> 
 
-h2. Command line API
+Or to output the content of any SQL query to yaml, json, csv, ruby, ... or even xml?
 
-All subcommands of 'dba' are easily accessible through a simple ruby API:
+<pre class="shell">
+  sh$ dba export --yaml "SELECT mail FROM contacts" 
+</pre> 
+
+Copying a table from one database to another one?
+
+<pre class="shell">
+  sh$ dba --use=sourcedb export --csv --type-safe contacts | dba --use=targetdb import --csv --type-safe --create-table contacts
+</pre> 
+
+Making same thing, but in Ruby?
 
 <pre>
   DbAgile::command do |env, dbagile|
@@ -55,15 +32,22 @@ All subcommands of 'dba' are easily accessible through a simple ruby API:
     env.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
-    dbagile.add %w{contacts postgres://user:password@localhost/contacts}
-    dbagile.list
-    dbagile.ping
-    dbagile.show %w{--pretty people}
-    dbagile.export %w{--csv people}
+    dbagile.export %w{--csv --type-safe contacts}  # each line pushed in buffer
+    dbagile.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
   end
 </pre>
 
+h2. Pointers
+
+* Read more about "the 'dba' command line tool":http://github.com/blambeau/dbagile/blob/master/COMMAND_LINE.textile
+* DbAgile developper documentation on "rdoc.info":http://rdoc.info/projects/blambeau/dbagile
+
 h2. Installation
+
+<pre>
+  gem install dbagile (required dependencies are automatically installed)
+  dba --help
+</pre>
 
 Required dependencies:
 
@@ -78,12 +62,6 @@ Optional dependencies (according to your needs):
 * yaml                   (only if you use yaml import/export)
 * builder                (only if you use xml export)
 * highline               (only if you want friendly command line tools)
-
-To install dbagile (required dependencies are automatically installed):
-
-<pre>
-  gem install dbagile
-</pre>
 
 h2. Credits
 

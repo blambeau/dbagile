@@ -1,0 +1,46 @@
+h1. DbAgile - 'dba' command line
+
+Have you ever dreamed of being able to output the content of a SQL query as a .csv file in only one shell command?
+
+<pre class="shell">
+  sh$ dba export --csv "SELECT mail FROM people" 
+</pre> 
+
+DbAgile installs a 'dba' command line tool whose aim is to support database administrators for simple but very common tasks, as illustrated below.
+
+<pre class="shell">
+  sh$ dba --help
+
+  usage: dba [--version] [--help]
+         dba help <subcommand>
+         dba <subcommand> [OPTIONS] [ARGS]
+
+  Main commands:
+    help       Show help for a specific command
+    history    Display dba command history
+    replay     Replay a previous history command (last one by default)
+
+  Configuration management:
+    list       List available database configurations (found in ~/.dbagile)
+    ping       Ping a configuration (current one by default)
+    use        Set the current database configuration to use
+    add        Add a new database configuration
+    rm         Remove a database configuration
+
+  Import/Export management:
+    show       Display content of a table/view/query (shortcut for 'export --text ...')
+    export     Export a table/view/query to (csv, json, yaml, ruby, xml)
+    import     Import a table from (csv, json, yaml, ruby)
+</pre>
+
+h2. Getting started
+
+By default, 'dba' works with its own ~/.dbagile and ~/.dbagile_history files for managing connection configurations and command history, respectively. Assuming an existing postgresql database named 'contacts' on your machine (adapt all parameters, of course) and an existing 'people' table inside the database, try the following commands in a shell:
+
+<pre class="shell">
+  sh$ dba add contacts postgres://user:password@localhost/contacts
+  sh$ dba list
+  sh$ dba ping
+  sh$ dba show --pretty people
+  sh$ dba export --csv people
+</pre>
