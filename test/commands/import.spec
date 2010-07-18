@@ -27,4 +27,21 @@ shared_examples_for("The import command") do
 
   end # --ruby
   
+  # --format=x --type-safe
+  [:csv, :json, :yaml, :ruby].each do |format|
+  
+    describe "When piping import/export with --type-safe in #{format}" do
+  
+      it "should be type safe" do
+        dba.export "--format", format, "--type-safe", "basic_values"
+        dba.input_buffer  = StringIO.new(dba.output_buffer.string)
+        dba.output_buffer = StringIO.new 
+        dba.import "--drop-table", "--format", format, "--type-safe", "basic_values_copy"
+        dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
+      end
+  
+    end
+    
+  end # --format=x --type-safe
+  
 end

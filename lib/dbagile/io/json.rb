@@ -1,6 +1,7 @@
 module DbAgile
   module IO
     module JSON
+      extend IO::TypeSafe
       
       # 
       # Outputs some data as a JSON string
@@ -9,11 +10,17 @@ module DbAgile
       #
       def to_json(data, buffer = "", options = {})
         require "json"
-        if options[:pretty]
-          buffer << ::JSON::pretty_generate(data)
-        else
-          buffer << ::JSON::fast_generate(data)
+        pretty, first = options[:pretty], true
+        buffer << (pretty ? "[\n" : "[")
+        with_type_safe_relation(data, options) do |tuple|
+          buffer << (pretty ? ",\n" : ",") unless first
+          if pretty
+            buffer << ::JSON::pretty_generate(tuple)
+          else
+            buffer << ::JSON::fast_generate(tuple)
+          end
         end
+        buffer << (pretty ? "\n]" : "]")
         buffer
       end
       module_function :to_json
@@ -22,22 +29,9 @@ module DbAgile
       # Loads some data from a json input. If a block is given, yields it with
       # each tuple in turn and returns nil. Otherwise returns an array of tuples.
       #
-      def from_json(input, options = {})
+      def from_json(input, options = {}, &block)
         require "json"
-        data = ::JSON::load(input)
-        if block_given?
-          if data.respond_to?(:each)
-            data.each{|d|
-              raise DbAgile::InvalidFormatError, "JSON loaded tuple should be an hash (#{d.inspect})" unless d.kind_of?(Hash)
-              yield(d)
-            }
-          else 
-            raise DbAgile::InvalidFormatError, "JSON loaded data should be an array of tuples (#{data.inspect})"
-          end
-          nil
-        else
-          data
-        end
+        from_typesafe_xxx(::JSON::load(input), options, &block)
       end
       module_function :from_json
       

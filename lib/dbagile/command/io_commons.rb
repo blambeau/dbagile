@@ -11,6 +11,9 @@ module DbAgile
       # Input/output options
       attr_accessor :io_options
       
+      # Type system to use
+      attr_accessor :type_system
+      
       # Dataset whose contents must be shown
       attr_accessor :dataset
       
@@ -23,6 +26,7 @@ module DbAgile
       # Builds default configuration
       def set_default_options
         self.format = :csv
+        self.type_system = nil
         self.conn_options = {}
         self.io_options = Hash.new{|h,k| h[k] = {}}
       end
@@ -36,6 +40,19 @@ module DbAgile
         opt.on('--allbut x,y,z', Array,
                "Select all but x, y, z columns") do |value|
           self.allbut = value.collect{|c| c.to_sym}
+        end
+      end
+      
+      def add_typesafe_options(opt)
+        opt.on("--type-safe=[X]", [:ruby], 
+               "Read/Write type-safe values for (ruby)") do |value|
+          case value
+            when :ruby, NilClass
+              require 'sbyc/type_system/ruby'
+              self.type_system = SByC::TypeSystem::Ruby
+            else
+              raise ArgumentError, "Unknown type system #{value}"
+          end
         end
       end
 
@@ -82,19 +99,6 @@ module DbAgile
         opt.on("--skip-blanks", "Skip blank lines?") do 
           io_options[:csv][:skip_blanks] = true
         end 
-        opt.on("--type-system=X", [:ruby], 
-               "Read/Write type-safe values for (ruby)") do |value|
-          case value
-            when :ruby
-              require 'sbyc/type_system/ruby'
-              io_options[:csv][:type_system] = SByC::TypeSystem::Ruby
-              io_options[:csv][:headers] = true unless io_options[:csv].key?(:headers)
-              io_options[:csv][:quote_char] = "'" unless io_options[:csv].key?(:quote_char)
-              io_options[:csv][:force_quotes] = true unless io_options[:csv].key?(:force_quotes)
-            else
-              raise ArgumentError, "Unknown type system #{value}"
-          end
-        end
       end
       alias :add_csv_input_options  :add_csv_options
       alias :add_csv_output_options :add_csv_options

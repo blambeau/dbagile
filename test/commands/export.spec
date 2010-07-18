@@ -40,8 +40,9 @@ shared_examples_for("The export command") do
   describe "When used with --json option" do
     
     it "should return a valid JSON string" do
-      dba.export %w{--json basic_values}
-      back_tuple = JSON::parse(dba.output_buffer.string)[0]
+      result = dba.export(%w{--json basic_values}).string
+      result.should be_a_valid_json_string
+      back_tuple = JSON::parse(result)[0]
       DbAgile::Fixtures::basic_values[0].each_pair{|k,v| 
         next if v.kind_of?(Time) or v.kind_of?(Date) # not supported by json
         back_tuple[k.to_s].should == v
@@ -49,13 +50,20 @@ shared_examples_for("The export command") do
     end
     
     it "should support a --no-pretty option" do
-      dba.export %w{--json --no-pretty --select id,name basic_values}
-      dba.output_buffer.string.strip.should_not =~ /\n/
+      result = dba.export(%w{--json --no-pretty --select id,name basic_values}).string
+      result.strip.should_not =~ /\n/
+      result.should be_a_valid_json_string
     end
 
     it "should support a --pretty option" do
-      dba.export %w{--json --pretty --select id,name basic_values}
-      dba.output_buffer.string.strip.should =~ /\n/
+      result = dba.export(%w{--json --pretty --select id,name basic_values}).string
+      result.strip.should =~ /\n/
+      result.should be_a_valid_json_string
+    end
+
+    it "should support a --type-sage option" do
+      result = dba.export(%w{--json --type-safe basic_values}).string
+      result.should be_a_valid_json_string
     end
     
   end
@@ -65,9 +73,14 @@ shared_examples_for("The export command") do
   describe "When used with --yaml option" do
 
     it "should return yaml valid string" do
-      dba.export %w{--yaml basic_values}
-      back = YAML::load(dba.output_buffer.string)
-      back.should == DbAgile::Fixtures::basic_values
+      result = dba.export(%w{--yaml basic_values}).string
+      result.should be_a_valid_yaml_string
+      YAML::load(result).should == DbAgile::Fixtures::basic_values
+    end
+    
+    it "should return yaml valid string with --type-safe" do
+      result = dba.export(%w{--yaml --type-safe basic_values}).string
+      result.should be_a_valid_yaml_string
     end
     
   end

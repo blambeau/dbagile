@@ -67,7 +67,8 @@ module DbAgile
 
         opt.separator "\nRecognized format options:"
         add_input_format_options(opt)
-
+        add_typesafe_options(opt)
+        
         # CSV output options
         opt.separator "\nCSV options:"
         add_csv_input_options(opt)
@@ -99,6 +100,7 @@ module DbAgile
       def with_emitter(&block)
         with_io{|io|
           options = io_options[self.format]
+          options[:type_system] = self.type_system if self.type_system
           case self.format
             when :csv
               DbAgile::IO::CSV::from_csv(io, options, &block)

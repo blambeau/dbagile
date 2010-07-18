@@ -1,9 +1,15 @@
 module DbAgile
   module IO
     module CSV
+      extend IO::TypeSafe
       
       # Normalizes CSV options from DBAgile options
       def normalize_options(options)
+        if options[:type_system]
+          options[:headers] = true unless options.key?(:headers)
+          options[:quote_char] = "'" unless options.key?(:quote_char)
+          options[:force_quotes] = true unless options.key?(:force_quotes)
+        end
         if options[:headers]
           options[:write_headers] = true 
           options[:return_headers] = true 
@@ -16,14 +22,14 @@ module DbAgile
       def build_csv_instance(io, options)
         if RUBY_VERSION >= "1.9.0"
           require 'csv'
-          options = options.dup.delete_if{|key,value| !::CSV::DEFAULT_OPTIONS.key?(key)}
           options = normalize_options(options)
-          ::CSV.new(io, options)
+          csv_options = options.dup.delete_if{|key,value| !::CSV::DEFAULT_OPTIONS.key?(key)}
+          [::CSV.new(io, csv_options), options]
         else
           require 'faster_csv'
-          options = options.dup.delete_if{|key,value| !FasterCSV::DEFAULT_OPTIONS.key?(key)}
           options = normalize_options(options)
-          FasterCSV.new(io, options)
+          csv_options = options.dup.delete_if{|key,value| !FasterCSV::DEFAULT_OPTIONS.key?(key)}
+          [FasterCSV.new(io, csv_options), options]
         end
       end
       module_function :build_csv_instance
@@ -35,16 +41,14 @@ module DbAgile
       #
       def to_csv(data, columns, buffer = "", options = {})
         # Creates a CSV outputter with options
-        csv = build_csv_instance(buffer, options)
+        csv, options = build_csv_instance(buffer, options)
         
         # Write header if required
         csv << columns if options[:headers]
         
         # Write tuples now
-        if ts = options[:type_system]
-          data.each{|row| csv << columns.collect{|c| ts.to_literal(row[c])}}
-        else
-          data.each{|row| csv << columns.collect{|c| row[c]}}
+        with_type_safe_relation(data, options) do |tuple|
+          csv << columns.collect{|c| tuple[c]}
         end
         
         # Return buffer
@@ -59,7 +63,7 @@ module DbAgile
       #
       def from_csv(input, options = {})
         # Creates a CSV inputer with options
-        csv = build_csv_instance(input, options)
+        csv, options = build_csv_instance(input, options)
         csv.header_convert(:symbol)
         csv.convert{|field| options[:type_system].parse_literal(field)} if options[:type_system]
         

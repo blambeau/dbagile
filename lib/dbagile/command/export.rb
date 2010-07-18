@@ -38,6 +38,7 @@ module DbAgile
 
         opt.separator "\nRecognized format options:"
         add_output_format_options(opt)
+        add_typesafe_options(opt)
 
         # CSV output options
         opt.separator "\nCSV options:"
@@ -95,6 +96,7 @@ module DbAgile
             method = "to_#{self.format}".to_sym
             io = environment.output_buffer
             options =  io_options[self.format]
+            options[:type_system] = self.type_system if self.type_system
             ds.send(method, io, options)
           }
         end

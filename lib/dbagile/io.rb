@@ -1,3 +1,4 @@
+require 'dbagile/io/type_safe'
 require 'dbagile/io/pretty_table'
 require 'dbagile/io/csv'
 require 'dbagile/io/json'
