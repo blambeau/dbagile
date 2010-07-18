@@ -13,6 +13,7 @@ module DbAgile
       #
       def on_error(command, error)
         case error
+          when SystemExit
           when OptionParser::ParseError
             say(error.message, :red)
             display(command.options.to_s)

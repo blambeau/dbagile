@@ -3,6 +3,7 @@ require 'dbagile/environment/interactions'
 require 'dbagile/environment/robustness'
 require 'dbagile/environment/configuration'
 require 'dbagile/environment/history'
+require 'dbagile/environment/console'
 module DbAgile
   #
   # Defines the contract to be an environment for dbagile.
@@ -12,6 +13,7 @@ module DbAgile
     include DbAgile::Environment::Robustness
     include DbAgile::Environment::Configuration
     include DbAgile::Environment::History
+    include DbAgile::Environment::Console
     
     # Creates an Environment instance with two buffers
     def initialize(input_buffer = STDIN, output_buffer = STDOUT)

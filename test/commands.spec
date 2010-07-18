@@ -7,33 +7,52 @@ describe "DbAgile::Command through API" do
   
   # The environment to use
   let(:environment){ DbAgile::Fixtures::environment }
-
+  let(:env){ DbAgile::Fixtures::environment }
+  let(:dba){ DbAgile::Command::API.new(env) }
+  
   # Remove empty config between all test
   before(:each){ FileUtils.rm_rf(empty_config_path) }
   after(:each){ FileUtils.rm_rf(empty_config_path) }
   
-  describe "The list command" do
-    it_should_behave_like "The list command" 
-  end
+  ### Configuration commands
   
-  describe "The add command" do
-    it_should_behave_like "The add command" 
-  end
-  
-  describe "The rm command" do
-    it_should_behave_like "The rm command" 
-  end
+  describe "The configuration commands" do 
+    describe "The list command" do
+      it_should_behave_like "The list command" 
+    end
 
-  describe "The use command" do
-    it_should_behave_like "The use command" 
+    describe "The add command" do
+      it_should_behave_like "The add command" 
+    end
+  
+    describe "The rm command" do
+      it_should_behave_like "The rm command" 
+    end
+  
+    describe "The use command" do
+      it_should_behave_like "The use command" 
+    end
+  
+    describe "The ping command" do
+      it_should_behave_like "The ping command" 
+    end
   end
   
-  describe "The ping command" do
-    it_should_behave_like "The ping command" 
-  end
+  ### Inport/Export commands
+  describe "The input/output commands" do 
 
-  describe "The show command" do
-    it_should_behave_like "The show command" 
+    before{ 
+      dba.use(%w{sqlite}) 
+      env.output_buffer = StringIO.new
+    }
+      
+    describe "The show command" do
+      it_should_behave_like "The show command" 
+    end
+  
+    describe "The export command" do
+      it_should_behave_like "The export command" 
+    end
   end
   
 end

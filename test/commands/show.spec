@@ -1,18 +1,17 @@
 shared_examples_for("The show command") do
   
   it "should return the output buffer" do
-    DbAgile::command(environment) do |env, api|
-      api.use(%w{sqlite})
-      api.show(%w{suppliers}).should == env.output_buffer
-    end
+    dba.show(%w{suppliers}).should == env.output_buffer
   end
   
   it "should print the table one the output buffer" do
-    DbAgile::command(environment) do |env, api|
-      api.use(%w{sqlite})
-      api.show(%w{suppliers})
-      env.output_buffer[-2].should =~ /^\+\-/
-    end
+    dba.show(%w{suppliers})
+    env.output_buffer.string.should =~ /^\+\-/
+  end
+  
+  it "should support pretty-printing" do
+    dba.show(%w{--pretty suppliers})
+    env.output_buffer.string.should =~ /\.\.\.$/
   end
   
 end

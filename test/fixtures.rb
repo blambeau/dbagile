@@ -9,7 +9,8 @@ module DbAgile
       env = DbAgile::Environment.new 
       env.config_file_path = File.expand_path('../fixtures/configs/dbagile.config', __FILE__)
       env.history_file_path = File.expand_path('../fixtures/configs/dbagile.history', __FILE__)
-      env.output_buffer = []
+      env.output_buffer = StringIO.new
+      env.console_width = 10
       env
     end
     

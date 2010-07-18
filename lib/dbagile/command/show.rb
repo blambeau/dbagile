@@ -30,25 +30,13 @@ module DbAgile
         end
       end
       
-      # Infers pretty options though highline
-      def infer_terminal_cols
-        begin
-          gem 'highline', '>= 1.5.2'
-          require 'highline'
-          HighLine.new.output_cols-3
-        rescue LoadError
-          say("Console output is pretty with highline. Try 'gem install highline'")
-          80
-        end
-      end
-      
       # Infer options
       def infer_options(argv)
         argv = ["--text"] + argv
         if argv.include?("--no-pretty")
           argv.delete("--no-pretty")
         else
-          argv += ["--truncate-at", infer_terminal_cols.to_s]
+          argv += ["--truncate-at", environment.console_width.to_s]
         end
         argv
       end
