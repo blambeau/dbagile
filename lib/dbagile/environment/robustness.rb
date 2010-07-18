@@ -19,7 +19,7 @@ module DbAgile
           when DbAgile::Error, Sequel::Error
             say(error.message, :red)
           else
-            say("ERROR: #{error.message}", :red)
+            say("ERROR (#{error.class}): #{error.message}", :red)
             display(error.backtrace.join("\n"))
         end
         error

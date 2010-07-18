@@ -7,7 +7,7 @@ require 'rubygems'
 require 'dbagile'
 require 'spec'
 require 'spec/autorun'
-require 'fixtures'
+require 'old_fixtures'
 require 'fileutils'
 
 Spec::Runner.configure do |config|

@@ -30,4 +30,7 @@ module DbAgile
   # Raised when input parsing of data fails for some reason
   class InvalidFormatError < DbAgile::Error; end
   
+  # Raised when possible when a table does not exists
+  class NoSuchTableError < DbAgile::Error; end
+  
 end # module DbAgile

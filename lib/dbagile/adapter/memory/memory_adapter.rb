@@ -34,7 +34,7 @@ module DbAgile
       
     # Returns a Dataset object for a given table
     def dataset(table, proj = nil)
-      raise ArgumentError, "No such table #{table}" unless has_table?(table)
+      raise NoSuchTableError, "No such table #{table}" unless has_table?(table)
       result = if proj.nil?
         tables[table]
       else

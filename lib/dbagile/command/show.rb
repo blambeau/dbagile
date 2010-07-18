@@ -56,6 +56,7 @@ module DbAgile
       # Override to avoid pending options to be rejected
       def unsecure_run(requester_file, argv)
         DbAgile::command(environment){|env, api| api.export(infer_options(argv))}
+        environment.output_buffer
       end
       
     end # class List

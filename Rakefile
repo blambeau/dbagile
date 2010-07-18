@@ -15,29 +15,21 @@ task :default => [:spec]
 
 # Creates the fixtures
 desc "Creates physical SQL test databases"
-task :physical_fixtures do
-  require 'readline'
-  puts "#################################################################################"
-  puts "ATTENTION: This task will create physical test databases on your computer"
-  puts "           A password will probably be asked as this task relies on 'sudo'."
-  puts "           Please provide the root password"
-  puts "#################################################################################"
-  Readline.readline("Press enter to start")
-  puts "Creating the physical postgresql database ..."
-  puts `sudo su postgres -c 'dropdb dbagile_test'`
-  puts `sudo su postgres -c 'dropuser dbagile'`
-  puts `sudo su postgres -c 'createuser --no-superuser --no-createrole --createdb dbagile'`
-  puts `sudo su postgres -c 'createdb --encoding=utf8 --owner=dbagile dbagile_test'`
-  puts 
-  puts "#################################################################################"
-  puts "Done."
-  puts "Please run 'rake fixtures'"
-  puts "#################################################################################"
+task :physical_databases do
+  $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
+  $LOAD_PATH.unshift(File.expand_path('../test', __FILE__))
+  require 'fixtures'
+  require 'dbagile'
+  DbAgile::Fixtures::ensure_physical_databases!
 end
 
 desc "Creates test fixture databases"
 task :fixtures do
-  load(File.expand_path('../test/fixtures/build.rb', __FILE__))
+  $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
+  $LOAD_PATH.unshift(File.expand_path('../test', __FILE__))
+  require 'fixtures'
+  require 'dbagile'
+  DbAgile::Fixtures::create_fixtures
 end
 
 # About spec tests

@@ -75,7 +75,7 @@ module DbAgile
           FileUtils.mkdir_p(File.dirname(self.output_file))
           File.open(self.output_file, "w", &block)
         else
-          block.call(STDOUT)
+          block.call(environment.output_buffer)
         end
       end
       
