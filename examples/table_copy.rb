@@ -1,7 +1,6 @@
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'dbagile'
 require 'rubygems'
-require 'fileutils'
 
 DbAgile::dba do |dba|
   dba.config_file_path = File.expand_path('../dbagile.config', __FILE__)
