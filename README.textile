@@ -25,15 +25,15 @@ Copying a table from one database to another one?
 Making same thing, but in Ruby?
 
 <pre>
-  DbAgile::command do |env, dbagile|
+  DbAgile::command do |env, dba|
     # Override environment default values (~/.dbagile, ...)
     env.config_file_path  = ...    # your application own config file
     env.history_file_path = nil    # no history
     env.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
-    dbagile.export %w{--csv --type-safe contacts}  # each line pushed in buffer
-    dbagile.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
+    dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
+    dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
   end
 </pre>
 

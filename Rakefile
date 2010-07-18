@@ -5,21 +5,49 @@ require 'spec/rake/spectask'
 require "rake/gempackagetask"
 require "yard"
 
+# Some utils
 dir     = File.dirname(__FILE__)
 lib     = File.join(dir, "lib", "dbagile.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
-task :default => [:test]
+# Default task is spec
+task :default => [:spec]
 
+# Creates the fixtures
+desc "Creates physical SQL test databases"
+task :physical_fixtures do
+  require 'readline'
+  puts "#################################################################################"
+  puts "ATTENTION: This task will create physical test databases on your computer"
+  puts "           A password will probably be asked as this task relies on 'sudo'."
+  puts "           Please provide the root password"
+  puts "#################################################################################"
+  Readline.readline("Press enter to start")
+  puts "Creating the physical postgresql database ..."
+  puts `sudo su postgres -c 'dropdb dbagile_test'`
+  puts `sudo su postgres -c 'dropuser dbagile'`
+  puts `sudo su postgres -c 'createuser --no-superuser --no-createrole --createdb dbagile'`
+  puts `sudo su postgres -c 'createdb --encoding=utf8 --owner=dbagile dbagile_test'`
+  puts 
+  puts "#################################################################################"
+  puts "Done."
+  puts "Please run 'rake fixtures'"
+  puts "#################################################################################"
+end
+
+desc "Creates test fixture databases"
+task :fixtures do
+  load(File.expand_path('../test/fixtures/build.rb', __FILE__))
+end
+
+# About spec tests
 desc "Run all rspec test"
-Spec::Rake::SpecTask.new(:spec) do |t|
+Spec::Rake::SpecTask.new do |t|
   t.ruby_opts = ['-I.']
   t.spec_files = FileList['test/spec/test_all.rb', 'test/adapters.spec', 'test/commands.spec']
 end
 
-desc "Launches all tests"
-task :test => [:spec]
-
+# About yard documentation
 YARD::Rake::YardocTask.new do |t|
   YARD::Tags::Library.define_tag "Precondition", :pre
   YARD::Tags::Library.define_tag "Postcondition", :post
@@ -27,6 +55,7 @@ YARD::Rake::YardocTask.new do |t|
   t.options = ['--output-dir', 'doc/api', '-', "README.textile", "COMMAND_LINE.textile", "LICENCE.textile", "CHANGELOG.textile"]
 end
 
+# About gem specification
 gemspec = Gem::Specification.new do |s|
   s.name = 'dbagile'
   s.version = version

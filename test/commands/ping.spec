@@ -6,9 +6,9 @@ shared_examples_for("The ping command") do
     end
   end
 
-  it "should return nil if ping failed" do
+  it "should return the error if ping failed" do
     DbAgile::command(environment) do |env, api|
-      api.ping(%w{unexisting}).should be_nil
+      api.ping(%w{unexisting}).should be_kind_of(StandardError)
     end
   end
 

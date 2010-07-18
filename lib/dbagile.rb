@@ -10,14 +10,16 @@ module DbAgile
   # A fresh new default environement is created if no one is given.
   #
   # Example
-  #   DbAgile::command do |env, dbagile|
-  #     # Overrides environment default values (~/.dbagile, ...)
-  #     env.config_file_path = ...
-  #     env.output_buffer = ...
-  #
-  #     # Starts using dbagile commands
-  #     dbagile.export "--csv people"
-  #   end
+  #   DbAgile::command do |env, dba|
+  #     # Override environment default values (~/.dbagile, ...)
+  #     env.config_file_path  = ...    # your application own config file
+  #     env.history_file_path = nil    # no history
+  #     env.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
+  # 
+  #     # Start using dbagile commands
+  #     dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
+  #     dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
+  # end
   #
   def command(environment = nil)
     env = environment || ::DbAgile::Environment.new

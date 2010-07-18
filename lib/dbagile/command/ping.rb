@@ -44,10 +44,10 @@ module DbAgile
             config.connect.ping
             say("Ping ok (#{config.uri})")
             config
-          rescue => ex
+          rescue StandardError => ex
             say("Ping KO (#{config.uri})", :red)
             display(ex.message)
-            nil
+            ex
           end
           
         end
