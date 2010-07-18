@@ -8,6 +8,7 @@ require 'dbagile'
 require 'spec'
 require 'spec/autorun'
 require 'fixtures'
+require 'fileutils'
 
 Spec::Runner.configure do |config|
 end

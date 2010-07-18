@@ -122,7 +122,6 @@ module DbAgile
     # Runs the command
     def run(requester_file, argv)
       unsecure_run(requester_file, argv)
-      environment
     rescue Exception => ex
       environment.on_error(self, ex)
       environment

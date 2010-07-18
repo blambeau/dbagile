@@ -19,7 +19,7 @@ module DbAgile
   class NoConfigFileError < DbAgile::Error; end
   
   # Raised when a configuration cannot be found
-  class UnknownConfigError < DbAgile::Error; end
+  class NoSuchConfigError < DbAgile::Error; end
 
   # Raised when a configuration name is already used (on add)
   class ConfigNameConflictError < DbAgile::Error; end

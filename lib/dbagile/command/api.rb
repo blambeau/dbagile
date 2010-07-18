@@ -17,7 +17,7 @@ module DbAgile
           def #{command_name}(options = [])
             command = DbAgile::Command::command_for(#{command_name.inspect}, environment)
             options = DbAgile::Command::build_command_options(options)
-            command.run(__FILE__, options)
+            command.unsecure_run(__FILE__, options)
           end
         EOF
       end

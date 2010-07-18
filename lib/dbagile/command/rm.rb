@@ -29,9 +29,13 @@ module DbAgile
         self.match = valid_configuration_name!(self.match)
       end
       
-      # Executes the command
+      #
+      # Executes the command.
+      #
+      # @return [DbAgile::Core::ConfigFile] the configuration file instance
+      #
       def execute_command
-        with_config_file do |config_file|
+        cf = with_config_file do |config_file|
           config = has_config!(config_file, self.match)
 
           # Move the current one if it was it
@@ -44,10 +48,13 @@ module DbAgile
       
           # Flush the configuration file
           config_file.flush!
-
         end
+        
         # List available databases now
         DbAgile::command(environment){|env, api| api.list %w{}}
+        
+        # Returns config file
+        cf
       end
       
     end # class List

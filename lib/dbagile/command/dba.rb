@@ -45,7 +45,7 @@ module DbAgile
       end
       
       # Runs the command
-      def run(requester_file, argv)
+      def unsecure_run(requester_file, argv)
         environment.load_history
         
         # Basic features

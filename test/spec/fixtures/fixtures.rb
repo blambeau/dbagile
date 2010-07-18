@@ -20,6 +20,22 @@ module Fixtures
   end
   module_function :dbagile_config_path
   
+  # Returns a path to the .dbagile-like config file in fixtures
+  def dbagile_history_path
+    File.join(root_path, "dbagile_history")
+  end
+  module_function :dbagile_history_path
+  
+  # Builds an environment for testing purposes
+  def test_environment
+    env = DbAgile::Environment.new
+    env.config_file_path = dbagile_config_path
+    env.history_file_path = dbagile_history_path
+    env.output_buffer = []
+    env
+  end
+  module_function :test_environment
+  
   # Returns sqlite testdb uri
   def sqlite_testdb_path
     File.join(root_path,"test.db")

@@ -6,15 +6,10 @@ module DbAgile
     module Interactions
       
       # The output buffer to use for user requests
-      attr_reader :input_buffer
+      attr_accessor :input_buffer
     
       # The output buffer to use for display
-      attr_reader :output_buffer
-    
-      # Creates an Environment instance with two buffers
-      def initialize(input_buffer = STDIN, output_buffer = STDOUT)
-        @input_buffer, @output_buffer = input_buffer, output_buffer
-      end
+      attr_accessor :output_buffer
     
       #
       # Asks something to the user/oracle. If a continuation block is given

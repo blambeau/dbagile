@@ -64,7 +64,7 @@ module DbAgile
     case uri
       when Symbol
         config = config(uri)
-        raise UnknownConfigError, "No such configuration #{uri}" unless config
+        raise NoSuchConfigError, "No such configuration #{uri}" unless config
         config.connect(options)
       when String
         DbAgile::Core::Configuration.new.connect(uri, options)

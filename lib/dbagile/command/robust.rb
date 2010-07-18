@@ -79,7 +79,7 @@ module DbAgile
           config_file.config(config_name)
         end
         if config.nil?
-          raise DbAgile::UnknownConfigError, "Unknown configuration #{config_name}" if config_name
+          raise DbAgile::NoSuchConfigError, "Unknown configuration #{config_name}" if config_name
           raise DbAgile::NoDefaultConfigError, "No default configuration set (try 'dba use ...' first)"
         else
           config

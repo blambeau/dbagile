@@ -54,8 +54,13 @@ module DbAgile
         valid_database_uri!(self.uri)
       end
       
-      # Executes the command
+      #
+      # Executes the command.
+      #
+      # @return [DbAgile::Core::Configuration] the created configuration
+      #
       def execute_command
+        config = nil
         with_config_file do |config_file|
         
           if config_file.has_config?(self.config_name)
@@ -72,9 +77,14 @@ module DbAgile
             # Flush the configuration file
             config_file.flush!
           end
+          
         end
+
         # List available databases now
         DbAgile::command(environment){|env, api| api.list %w{}}
+        
+        # Returns created configuration
+        config
       end
       
     end # class List

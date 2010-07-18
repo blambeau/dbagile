@@ -61,13 +61,13 @@ module DbAgile
       # As this method relies on config_file, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
-      # @raise UnknownConfigError if the configuration cannot be found.
+      # @raise NoSuchConfigError if the configuration cannot be found.
       # @return block execution result
       #
       def with_config(name)
         raise ArgumentError, "Missing block" unless block_given?
         config = config_file.config(name)
-        raise UnknownConfigError if config.nil?
+        raise NoSuchConfigError if config.nil?
         yield(config)
       end
       

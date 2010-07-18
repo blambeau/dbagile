@@ -142,6 +142,7 @@ module DbAgile
         else
           File.open(output_file, 'w'){|io| flush(io)}
         end
+        self
       end
       
       # Flushes the configuration into the source file
