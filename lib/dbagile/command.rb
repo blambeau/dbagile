@@ -181,16 +181,5 @@ require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
 
-class DbAgile::Command
-  
-  # Add API methods to Command class
-  DbAgile::Command::subclasses.each do |subclass|
-    command_name = DbAgile::Command::command_name_of(subclass)
-    instance_eval <<-EOF
-      def #{command_name}(options = [], env = DbAgile::default_environment)
-        command_for(#{command_name.inspect}, env).run(__FILE__, build_command_options(options))
-      end
-    EOF
-  end
-
-end
+# Build Command API now
+require 'dbagile/command/api'

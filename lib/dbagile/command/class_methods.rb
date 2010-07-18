@@ -16,7 +16,12 @@ module DbAgile
       #
       def subclasses 
         @subclasses 
-      end 
+      end
+      
+      # Yields the block with each subclass in turn
+      def each_subclass(&block)
+        subclasses.each(&block)
+      end
       
       #
       # Returns the command name of a given class

@@ -37,7 +37,7 @@ module DbAgile
       def execute_command
         command = environment.history[self.number]
         say("Replaying #{command.inspect}")
-        DbAgile::Command::dba(environment.from_command_line(command), environment)
+        DbAgile::command(environment){|env, api| api.dba(environment.from_command_line(command)) }
       end
       
     end # class List

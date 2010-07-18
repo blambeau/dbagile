@@ -43,7 +43,7 @@ module DbAgile
         end
 
         # List available databases now
-        DbAgile::Command::list([], environment)
+        DbAgile::command(environment){|env, api| api.list %w{}}
       end
       
     end # class List

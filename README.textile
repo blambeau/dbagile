@@ -48,11 +48,18 @@ h2. Command line API
 All subcommands of 'dba' are easily accessible through a simple ruby API:
 
 <pre>
-  DbAgile::Command::add %w{contacts postgres://user:password@localhost/contacts}
-  DbAgile::Command::list
-  DbAgile::Command::ping
-  DbAgile::Command::show %w{--pretty people}
-  DbAgile::Command::export %w{--csv people}
+  DbAgile::command do |env, dbagile|
+    # Override environment default values (~/.dbagile, ...)
+    env.config_file_path = ...
+    env.output_buffer = ...
+  
+    # Start using dbagile commands
+    dbagile.add %w{contacts postgres://user:password@localhost/contacts}
+    dbagile.list
+    dbagile.ping
+    dbagile.show %w{--pretty people}
+    dbagile.export %w{--csv people}
+  end
 </pre>
 
 h2. Installation

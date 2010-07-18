@@ -3,6 +3,29 @@ module DbAgile
   # Version of the DbAgile interface
   VERSION = "0.0.1".freeze
   
+  # 
+  # Builds a DbAgile::Command::API instance and yields the block with the
+  # environment and the api instance.
+  #
+  # A fresh new default environement is created if no one is given.
+  #
+  # Example
+  #   DbAgile::command do |env, dbagile|
+  #     # Overrides environment default values (~/.dbagile, ...)
+  #     env.config_file_path = ...
+  #     env.output_buffer = ...
+  #
+  #     # Starts using dbagile commands
+  #     dbagile.export "--csv people"
+  #   end
+  #
+  def command(environment = nil)
+    env = environment || ::DbAgile::Environment.new
+    api = DbAgile::Command::API.new(env)
+    yield(env, api)
+  end
+  module_function :command
+  
   # Returns the default environment to use.
   def default_environment
     @environment ||= ::DbAgile::Environment.new
