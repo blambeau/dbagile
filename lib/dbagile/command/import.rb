@@ -32,7 +32,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Import contents of a table from (csv, json, yaml, ruby)"
+        "Import a table from (csv, json, yaml, ruby)"
       end
       
       # Contribute to options
