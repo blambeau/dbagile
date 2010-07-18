@@ -27,8 +27,8 @@ DbAgile installs a 'dba' command line tool whose aim is to support database admi
 
   Import/Export management:
     show       Display content of a table/view/query (shortcut for 'export --text ...')
-    export     Export contents of a table/view/query to (csv, json, yaml, ruby, xml)
-    import     Import contents of a table from (csv, json, yaml, ruby)
+    export     Export a table/view/query to (csv, json, yaml, ruby, xml)
+    import     Import a table from (csv, json, yaml, ruby)
 </pre>
 
 h3. Getting started
