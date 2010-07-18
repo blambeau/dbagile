@@ -58,20 +58,23 @@ module DbAgile
       def execute_command
         with_config_file do |config_file|
         
-          # Create the configuration and adds it
-          config = ::DbAgile::Core::Configuration.new(self.config_name)
-          config.uri(self.uri)
-          config_file << config
+          if config_file.has_config?(self.config_name)
+            raise ConfigNameConflictError, "Configuration #{self.config_name} already exists"
+          else
+            # Create the configuration and adds it
+            config = ::DbAgile::Core::Configuration.new(self.config_name)
+            config.uri(self.uri)
+            config_file << config
         
-          # Makes it the current one if requested
-          config_file.current_config_name = config.name if self.current
+            # Makes it the current one if requested
+            config_file.current_config_name = config.name if self.current
         
-          # Flush the configuration file
-          config_file.flush!
-        
+            # Flush the configuration file
+            config_file.flush!
+          end
         end
         # List available databases now
-        DbAgile::Command::List.new.run(nil, [])
+        DbAgile::Command::list %w{}, environment
       end
       
     end # class List

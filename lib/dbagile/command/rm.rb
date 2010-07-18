@@ -47,7 +47,7 @@ module DbAgile
 
         end
         # List available databases now
-        DbAgile::Command::List.new.run(nil, [])
+        DbAgile::Command::list %w{}, environment
       end
       
     end # class List

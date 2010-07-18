@@ -21,6 +21,9 @@ module DbAgile
   # Raised when a configuration cannot be found
   class UnknownConfigError < DbAgile::Error; end
 
+  # Raised when a configuration name is already used (on add)
+  class ConfigNameConflictError < DbAgile::Error; end
+
   # Raised when no default configuration is set
   class NoDefaultConfigError < DbAgile::Error; end
   
