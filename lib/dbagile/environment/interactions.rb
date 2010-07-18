@@ -89,6 +89,7 @@ module DbAgile
       # @param [String] something a message to display
       #
       def writeline(something, color = nil)
+        return if output_buffer.nil?
         something += "\n" unless something =~ /[\n]$/ 
         output_buffer << something
       end
