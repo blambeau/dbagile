@@ -5,6 +5,8 @@ else
   gem 'rack', ">= 1.1.0"
   require 'rack'
 end
+require 'uri'
+require "net/http"
 require 'webrick'
 module DbAgile
   class Restful
