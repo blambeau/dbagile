@@ -8,7 +8,7 @@ module DbAgile
       #
       # @return [...] the buffer itself
       #
-      def to_yaml(data, buffer = "", options = {})
+      def to_yaml(data, columns = nil, buffer = "", options = {})
         require 'yaml'
         ::YAML::dump(to_typesafe_relation(options[:type_system], data), buffer)
         buffer

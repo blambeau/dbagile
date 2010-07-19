@@ -7,7 +7,7 @@ module DbAgile
       #
       # @return [...] the buffer itself
       #
-      def to_ruby(data, buffer = "", options = {})
+      def to_ruby(data, columns = nil, buffer = "", options = {})
         require 'sbyc/type_system/ruby'
         buffer << "["
         first = true

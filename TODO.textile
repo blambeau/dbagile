@@ -1,2 +1,3 @@
-* @pre and @post tags are used in the contracts modules but they don't appear in the yard documentation (because I don't know how to).
+* remove core extension to Object
 * clean oldies spec tests
+* @pre and @post tags are used in the contracts modules but they don't appear in the yard documentation (because I don't know how to).

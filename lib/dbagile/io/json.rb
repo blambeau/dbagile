@@ -8,7 +8,7 @@ module DbAgile
       #
       # @return [...] the buffer itself
       #
-      def to_json(data, buffer = "", options = {})
+      def to_json(data, columns = nil, buffer = "", options = {})
         require "json"
         pretty, first = options[:pretty], true
         buffer << (pretty ? "[\n" : "[")

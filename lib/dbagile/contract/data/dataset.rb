@@ -24,7 +24,7 @@ module DbAgile
         # @return [...] the buffer itself
         #
         def to_json(buffer = "", options = {})
-          DbAgile::IO::JSON::to_json(self.to_a, buffer, options)
+          DbAgile::IO::JSON::to_json(self.to_a, self.columns, buffer, options)
         end
       
         # 
@@ -33,7 +33,7 @@ module DbAgile
         # @return [...] the buffer itself
         #
         def to_yaml(buffer = "", options = {})
-          DbAgile::IO::YAML::to_yaml(self.to_a, buffer, options)
+          DbAgile::IO::YAML::to_yaml(self.to_a, self.columns, buffer, options)
         end
       
         # 
@@ -42,7 +42,7 @@ module DbAgile
         # @return [...] the buffer itself
         #
         def to_xml(buffer = "", options = {})
-          DbAgile::IO::XML::to_xml(self, buffer, options)
+          DbAgile::IO::XML::to_xml(self, self.columns, buffer, options)
         end
       
         # 
@@ -51,7 +51,7 @@ module DbAgile
         # @return [...] the buffer itself
         #
         def to_ruby(buffer = "", options = {})
-          DbAgile::IO::Ruby::to_ruby(self, buffer, options)
+          DbAgile::IO::Ruby::to_ruby(self, self.columns, buffer, options)
         end
       
         # 
