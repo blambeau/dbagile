@@ -4,7 +4,7 @@ module DbAgile
   #
   class Plugin
     include DbAgile::Contract::Utils::Delegate
-    include DbAgile::Adapter::Tools
+    include DbAgile::Tools::Tuple
     
     # Plugin options
     attr_reader :options

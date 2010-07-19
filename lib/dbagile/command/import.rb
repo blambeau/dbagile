@@ -6,7 +6,7 @@ module DbAgile
     #
     class Import < Command
       include ::DbAgile::Command::IOCommons
-      include ::DbAgile::Adapter::Tools
+      include ::DbAgile::Tools::Tuple
       
       # Input file to use
       attr_accessor :input_file

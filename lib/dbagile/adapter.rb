@@ -3,7 +3,6 @@ require 'dbagile/adapter/tools'
 module DbAgile
   class Adapter
     include DbAgile::Contract::Utils::Full
-    include DbAgile::Adapter::Tools
     
     # Builds an adapter instance from an URI
     def self.factor(uri, options = {})

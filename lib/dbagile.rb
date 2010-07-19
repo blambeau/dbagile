@@ -86,6 +86,7 @@ require 'sequel'
 
 require 'dbagile/contract'
 require 'dbagile/errors'
+require 'dbagile/tools'
 require 'dbagile/ext/object'
 require 'dbagile/io'
 require 'dbagile/adapter'

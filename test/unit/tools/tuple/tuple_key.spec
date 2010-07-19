@@ -1,7 +1,7 @@
 require File.expand_path('../../../fixtures', __FILE__)
-describe "::DbAgile::Adapter::Tools#tuple_key" do
+describe "::DbAgile::Tools::Tuple#tuple_key" do
   
-  let(:tools){ Object.new.extend(DbAgile::Adapter::Tools) }
+  let(:tools){ Object.new.extend(DbAgile::Tools::Tuple) }
   let(:tuple){ {:id => 1, :name => "dbagile", :version => DbAgile::VERSION} }
   
   describe "When called without keys info" do

@@ -1,6 +1,6 @@
 module DbAgile
-  class Adapter
-    module Tools
+  module Tools
+    module Tuple
       
       # Returns the heading of a given tuple
       def tuple_heading(tuple)
