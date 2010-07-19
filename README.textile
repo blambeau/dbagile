@@ -4,22 +4,16 @@ DbAgile aims at providing agile tools around databases, and relational/sql datab
 
 h2. Motivation
 
-Have you ever dreams of seing the contents of a table (say, 'contacts') in one shell command?
+Have you ever dreamed of displaying a SQL table (say, 'contacts') in one shell command?
 
 <pre class="shell">
-  sh$ dba show --pretty contacts
+  sh$ dba show contacts
 </pre> 
 
-Or to output the content of any SQL query to yaml, json, csv, ruby, ... or even xml?
+Or to output the result of any SQL query to yaml, json, csv, ruby, ... or even xml?
 
 <pre class="shell">
-  sh$ dba export --yaml "SELECT mail FROM contacts" 
-</pre> 
-
-Copying a table from one database to another one?
-
-<pre class="shell">
-  sh$ dba --use=sourcedb export --csv --type-safe contacts | dba --use=targetdb import --csv --type-safe --create-table contacts
+  sh$ dba export --yaml "SELECT name, mail FROM contacts" 
 </pre> 
 
 Making same thing, but in Ruby?
@@ -27,13 +21,12 @@ Making same thing, but in Ruby?
 <pre>
   DbAgile::dba do |dba|
     # Override environment default values (~/.dbagile, ...)
-    dba.config_file_path  = ...    # your application own config file
-    dba.history_file_path = nil    # no history
-    dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
+    dba.config_file_path  = ...     # your application own config file
+    dba.history_file_path = nil     # no history
+    dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
-    dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
-    dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
+    dba.export %w{--yaml contacts}  # each line pushed in output_buffer
   end
 </pre>
 
