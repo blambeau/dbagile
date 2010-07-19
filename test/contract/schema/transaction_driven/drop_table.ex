@@ -8,10 +8,3 @@ it "should allow removing tables that exist" do
   
 end
 
-it "should raise a NoSuchTableError if the table does not exist" do
-  
-  subject.has_table?(:unexisting).should be_false
-
-  lambda{ subject.drop_table(:unexisting) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end

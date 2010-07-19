@@ -7,7 +7,6 @@ module DbAgile
         def dataset(table, proj = nil)
           result = case table
             when Symbol
-              has_table!(table)
               proj.nil? ? db[table] : db[table].where(proj)
             else
               proj.nil? ? db[table] : db[table].where(proj)

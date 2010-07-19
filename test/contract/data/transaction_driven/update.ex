@@ -17,9 +17,3 @@ it "should support updating some tuples only" do
   subject.dataset(:non_empty_table).to_a.sort{|t1,t2| t1[:id] <=> t2[:id]}.should == expected
   
 end
-
-it "should raise a NoSuchTableError when table does not exists" do
-  
-  lambda { subject.update(:unexisting, :id => 1) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end

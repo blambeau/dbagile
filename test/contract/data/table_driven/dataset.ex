@@ -10,12 +10,6 @@ it "should support SQL queries" do
   
 end
 
-it "should raise a NoSuchTableError when table does not exists" do
-  
-  lambda { subject.dataset(:unexisting) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end
-
 it "should support a projection tuple" do
   
   subject.dataset(:basic_values, :id => 1).count.should == 1

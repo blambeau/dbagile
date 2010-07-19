@@ -5,14 +5,12 @@ module DbAgile
 
         # @see DbAgile::Contract::Data::TransactionDriven#insert
         def insert(transaction, table, tuple)
-          has_table!(table)
           db[table].insert(tuple)
           tuple
         end
     
         # @see DbAgile::Contract::Data::TransactionDriven#update
         def update(transaction, table_name, update, proj = {})
-          has_table!(table_name)
           if proj.nil? or proj.empty?
             db[table_name].update(update)
           else
@@ -22,7 +20,6 @@ module DbAgile
     
         # @see DbAgile::Contract::Data::TransactionDriven#delete
         def delete(transaction, table_name, proj = {})
-          has_table!(table_name)
           if proj.empty?
             db[table_name].delete
           else

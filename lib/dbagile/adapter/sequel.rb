@@ -36,16 +36,6 @@ module DbAgile
       @db
     end
     
-    # Asserts that a table exists or raises a NoSuchTableError
-    def has_table!(name)
-      raise NoSuchTableError, "No such table #{name}" unless has_table?(name)
-    end
-    
-    # Asserts that a table does not exist or raises a TableAlreadyExistsError
-    def not_has_table!(name)
-      raise TableAlreadyExistsError, "No such table #{name}" if has_table?(name)
-    end
-    
   end # class SequelAdapter
 end # module DbAgile
 require 'dbagile/adapter/sequel/sequel_tracer'

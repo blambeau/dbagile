@@ -18,12 +18,6 @@ it "should support SQL queries" do
   
 end
 
-it "should raise a NoSuchTableError when table does not exists" do
-  
-  lambda { subject.exists?(:unexisting) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end
-
 it "should support an empty projection" do
   
   subject.exists?(:basic_values, {}).should be_true

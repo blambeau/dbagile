@@ -171,7 +171,7 @@ module DbAgile
         begin
           ::DbAgile::Core::ConfigFile.new(file)
         rescue Exception => ex
-          raise CorruptedConfigFileError, "Corrupted config file #{file}", ex.backtrace
+          raise CorruptedConfigFileError, "Corrupted config file #{file}: #{ex.message}", ex.backtrace
         end
       end
 

@@ -26,9 +26,4 @@ it "should allow specifying a projection tuple" do
   
 end
 
-it "should raise a NoSuchTableError when table does not exists" do
-  
-  lambda { subject.delete(:unexisting) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end
 

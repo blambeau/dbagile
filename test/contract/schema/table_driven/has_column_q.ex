@@ -10,9 +10,4 @@ it "should return true on unexising column" do
   
 end
 
-it "should raise a NoSuchTableError when table does not exists" do
-  
-  lambda { subject.has_column?(:unexisting, :id) }.should raise_error(DbAgile::NoSuchTableError)
-  
-end
 

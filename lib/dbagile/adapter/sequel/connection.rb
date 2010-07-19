@@ -18,7 +18,7 @@ module DbAgile
         raise ArgumentError, "Missing transaction block" unless block
         begin
           db.transaction{ block.call(self) }
-        rescue DbAgile::Adapter::AbordTransactionError
+        rescue DbAgile::AbordTransactionError
           nil
         end
       end

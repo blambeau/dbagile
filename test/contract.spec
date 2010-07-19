@@ -18,6 +18,10 @@ describe "DbAgile Contract specification" do
         it_should_behave_like("A Contract::Connection")
         it_should_behave_like("A Contract::Data::TableDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
+        if /robust/ =~ configuration.name.to_s
+          it_should_behave_like("A robust Contract::Data::TableDriven")
+          it_should_behave_like("A robust Contract::Schema::TableDriven")
+        end
       end
   
       describe "::DbAgile::Core::Transaction on #{configuration.name}" do
@@ -27,6 +31,12 @@ describe "DbAgile Contract specification" do
         it_should_behave_like("A Contract::Data::TransactionDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
         it_should_behave_like("A Contract::Schema::TransactionDriven")
+        if /robust/ =~ configuration.name.to_s
+          it_should_behave_like("A robust Contract::Data::TableDriven")
+          it_should_behave_like("A robust Contract::Data::TransactionDriven")
+          it_should_behave_like("A robust Contract::Schema::TableDriven")
+          it_should_behave_like("A robust Contract::Schema::TransactionDriven")
+        end
       end
   
       describe "Result of dataset(Symbol) on #{configuration.name}" do
