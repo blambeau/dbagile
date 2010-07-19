@@ -3,6 +3,7 @@ module DbAgile
   # Provides helper methods about fixture databases
   #
   module Fixtures
+    include DbAgile::Environment::Delegator
     
     # Returns the fixture environment
     def environment

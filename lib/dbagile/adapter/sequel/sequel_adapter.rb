@@ -91,6 +91,7 @@ module DbAgile
     
     # Returns the list of column names for a given table
     def column_names(table, sort_it_by_name = false)
+      raise NoSuchTableError, "No such table #{table}" unless has_table?(table)
       sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
     end
     

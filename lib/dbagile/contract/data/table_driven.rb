@@ -23,7 +23,8 @@ module DbAgile
         # @param [Hash | nil] a tuple projection for query restriction
         # @return [...] a dataset object with query (execution result)
         #
-        # @pre if table_or_query is a Symbol, that table exists in the database.
+        # @raise [NoSuchTableError] if table_or_query is a symbol and the table does not 
+        #        exists.
         #
         def dataset(table_or_query, proj = nil)
           Kernel.raise NotImplementedError
@@ -37,7 +38,8 @@ module DbAgile
         # @return true if the projection of the query result on subtuple's heading contains
         #         the subtuple itself, false otherwise.
         #
-        # @pre if table_or_query is a Symbol, that table exists in the database.
+        # @raise [NoSuchTableError] if table_or_query is a symbol and the table does not 
+        #        exists.
         #
         def exists?(table_or_query, subtuple = {})
           Kernel.raise NotImplementedError

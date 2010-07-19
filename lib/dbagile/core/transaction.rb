@@ -35,12 +35,16 @@ module DbAgile
       
       # Automatically install methods of the Connection contract
       DbAgile::Contract::Connection.instance_methods(false).each do |method|
-        next if method.to_s == 'transaction'
         self.module_eval <<-EOF
           def #{method}(*args)
             connection.#{method}(*args)  
           end
         EOF
+      end
+      
+      # Executes the block inside this transaction
+      def transaction(&block)
+        execute(&block)
       end
 
       # Automatically install methods of the *::TableDriven contract

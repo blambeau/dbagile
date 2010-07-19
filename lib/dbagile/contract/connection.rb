@@ -14,6 +14,17 @@ module DbAgile
       end
       
       # 
+      # Ping the SQL server, returns true if everything is fine, false 
+      # otherwise.
+      #
+      def ping?
+        ping
+        true
+      rescue StandardError
+        false
+      end
+      
+      # 
       # Disconnect the adapter and frees all resources.
       #
       # @return true

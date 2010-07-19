@@ -25,7 +25,7 @@ module DbAgile
         # @param [Symbol] column_name the name of a column
         # @return true if the column exists on that table, false otherwise
         #
-        # @pre the database contains a table with that name
+        # @raise [NoSuchTableError] if table does no exists
         #
         def has_column?(table_name, column_name)
           column_names(table_name).include?(column_name)

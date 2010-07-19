@@ -40,9 +40,7 @@ module DbAgile
       
       # Checks if the connection pings correctly.
       def ping?
-        connect.ping
-      rescue StandardError => ex
-        false
+        connect.ping?
       end
       
       # Inspects this configuration, returning a ruby chunk of code
