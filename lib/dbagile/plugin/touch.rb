@@ -66,9 +66,9 @@ module DbAgile
       end
       
       # Inject default values to the tuple and delegate
-      def update(transaction, table, proj, tuple)
+      def update(transaction, table, tuple, proj = {})
         tuple = __do_touch(tuple) if at_update?
-        delegate.update(transaction, table, proj, tuple)
+        delegate.update(transaction, table, tuple, proj)
       end
       
       private :__do_touch

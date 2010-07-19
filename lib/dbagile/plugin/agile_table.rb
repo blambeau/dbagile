@@ -30,9 +30,9 @@ module DbAgile
       end
       
       # Makes an update inside a table
-      def update(transaction, table, proj, update)
+      def update(transaction, table, update, proj = {})
         ensure_columns(transaction, table, update)
-        delegate.update(transaction, table, proj, update)
+        delegate.update(transaction, table, update, proj)
       end
       
       private :ensure_columns

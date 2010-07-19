@@ -23,6 +23,7 @@ describe "DbAgile Contract specification" do
         subject{ DbAgile::Core::Transaction.new(connection) }
         it_should_behave_like("A Contract::Connection")
         it_should_behave_like("A Contract::Data::TableDriven")
+        it_should_behave_like("A Contract::Data::TransactionDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
       end
   

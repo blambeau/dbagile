@@ -35,7 +35,7 @@ module DbAgile
         # @pre update and proj tuples are valid projections of the table
         # @post all records have been updated.
         #
-        def update(transaction, table_name, proj, update)
+        def update(transaction, table_name, update, proj = {})
           Kernel.raise NotImplementedError
         end
       

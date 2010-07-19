@@ -64,7 +64,7 @@ module DbAgile
     def dataset(table, proj = nil)
       result = case table
         when Symbol
-          raise NoSuchTableError, "No such table #{table}" unless has_table?(table)
+          has_table!(table)
           proj.nil? ? db[table] : db[table].where(proj)
         else
           proj.nil? ? db[table] : db[table].where(proj)
@@ -89,14 +89,20 @@ module DbAgile
       db.table_exists?(name)
     end
     
+    # Asserts that a table exists or raises a NoSuchTableError
+    def has_table!(name)
+      raise NoSuchTableError, "No such table #{name}" unless has_table?(name)
+    end
+    
     # Returns the list of column names for a given table
     def column_names(table, sort_it_by_name = false)
-      raise NoSuchTableError, "No such table #{table}" unless has_table?(table)
+      has_table!(table)
       sort_it_by_name ? db[table].columns.sort{|k1,k2| k1.to_s <=> k2.to_s} : db[table].columns
     end
     
     # Returns keys of a table
     def keys(table_name)
+      has_table!(table_name)
       db.indexes(table_name).values.select{|i| i[:unique] == true}.collect{|i| i[:columns]}.sort{|a1, a2| a1.size <=> a2.size}
     end
     
@@ -112,11 +118,13 @@ module DbAgile
     
     # @see DbAgile::Contract::Schema::TransactionDriven#drop_table
     def drop_table(transaction, table_name)
+      has_table!(table_name)
       db.drop_table(table_name)
     end
         
     # Adds some columns to a table
     def add_columns(transaction, table, columns)
+      has_table!(table)
       db.alter_table(table) do
         columns.each_pair{|name, type| add_column name, type}
       end
@@ -134,18 +142,25 @@ module DbAgile
       
     # Inserts a tuple inside a given table
     def insert(transaction, table, tuple)
+      has_table!(table)
       db[table].insert(tuple)
       tuple
     end
     
     # Updates all tuples whose projection equal _proj_ with values given by _update_ 
     # inside a given table
-    def update(transaction, table_name, proj, update)
-      db[table_name].where(proj).update(update)
+    def update(transaction, table_name, update, proj = {})
+      has_table!(table_name)
+      if proj.nil? or proj.empty?
+        db[table_name].update(update)
+      else
+        db[table_name].where(proj).update(update)
+      end 
     end
     
     # Deletes all tuples whose projection equal _proj_ inside a given table
     def delete(transaction, table_name, proj = {})
+      has_table!(table_name)
       if proj.empty?
         db[table_name].delete
       else

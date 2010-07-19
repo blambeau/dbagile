@@ -26,7 +26,7 @@ describe "::DbAgile::Plugin::Touch#__do_touch" do
     
     specify("it does not touch the tuple at update time") do
       touch.insert(nil,:example, {:id => 1})
-      touch.update(nil,:example, {:id => 1}, {:now => "hello"})
+      touch.update(nil,:example, {:now => "hello"}, {:id => 1})
       adapter.dataset(:example).to_a.should == [ {:id => 1, :now => "hello"} ]
     end
   end
@@ -41,13 +41,13 @@ describe "::DbAgile::Plugin::Touch#__do_touch" do
     
     specify("it touches the tuple at update time") do
       touch.insert(nil,:example, {:id => 1})
-      touch.update(nil,:example, {:id => 1}, {:id => 2})
+      touch.update(nil,:example, {:id => 2}, {:id => 1})
       adapter.dataset(:example).to_a.should == [ {:id => 2, :now => "now!!"} ]
     end
 
     specify("it does not touch the tuple at update time if attribute is specified") do
       touch.insert(nil,:example, {:id => 1})
-      touch.update(nil,:example, {:id => 1}, {:id => 2, :now => "hello"})
+      touch.update(nil,:example, {:id => 2, :now => "hello"}, {:id => 1})
       adapter.dataset(:example).to_a.should == [ {:id => 2, :now => "hello"} ]
     end
   end
@@ -67,7 +67,7 @@ describe "::DbAgile::Plugin::Touch#__do_touch" do
     
     specify("it touches the tuple at update time even if specified") do
       touch.insert(nil,:example, {:id => 1})
-      touch.update(nil,:example, {:id => 1}, {:id => 2, :now => "hello"})
+      touch.update(nil,:example, {:id => 2, :now => "hello"}, {:id => 1})
       adapter.dataset(:example).to_a.should == [ {:id => 2, :now => "now!!"} ]
     end
   end

@@ -15,7 +15,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   describe "When called on an existing table with already existing columns" do
     subject{ 
-      db.transaction{|t| t.update(:example, {:id => 1}, {:name => "DbAgile"}) }
+      db.transaction{|t| t.update(:example, {:name => "DbAgile"}, {:id => 1}) }
     }
     specify{ 
       subject.should be_true
@@ -26,7 +26,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   describe "When called on an existing table with non existing columns" do
     subject{ 
-      db.transaction{|t| t.update(:example, {:id => 1}, {:hello => "world"}) }
+      db.transaction{|t| t.update(:example, {:hello => "world"}, {:id => 1}) }
     }
     specify{ 
       subject.should be_true
@@ -37,7 +37,7 @@ describe "::DbAgile::Plugin::AgileTable#update" do
   
   describe "When called on an existing table with a mix" do
     subject{ 
-      db.transaction{|t| t.update(:example, {:id => 1}, {:name => "DbAgile", :hello => "world"}) }
+      db.transaction{|t| t.update(:example, {:name => "DbAgile", :hello => "world"}, {:id => 1}) }
     }
     specify{ 
       subject.should be_true

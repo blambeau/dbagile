@@ -10,7 +10,7 @@ describe "::DbAgile::Adapter.has_table" do
         adapter.insert(nil, :example, :id => 2, :name => "sequel")
       }
       subject{ 
-        adapter.update(nil, :example, {:id => 1}, :name => "DbAgile") 
+        adapter.update(nil, :example, {:name => "DbAgile"}, {:id => 1}) 
       }
       specify{ 
         subject.should be_true

@@ -60,7 +60,7 @@ module DbAgile
       
       # Updates all tuples whose projection equal _proj_ with values given by _update_ 
       # inside a given table
-      def update(transaction, table_name, proj, update)
+      def update(transaction, table_name, update, proj = {})
         logger.debug("Updating #{table_name}::#{update.inspect} where #{proj.inspect} : #{(x = super).inspect}")
         x
       end
