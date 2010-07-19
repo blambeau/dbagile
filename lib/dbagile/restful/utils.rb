@@ -11,7 +11,7 @@ module DbAgile
         ".yml"   => :yaml,
         ".xml"   => :xml,
         ".ruby"  => :ruby,
-        ".rb"    => :rb
+        ".rb"    => :ruby
       }
       
       # Which content type for which format

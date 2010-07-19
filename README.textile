@@ -4,7 +4,14 @@ DbAgile aims at providing agile tools around databases, and relational/sql datab
 
 h2. Motivation
 
-Have you ever dreamed of displaying a SQL table (say, 'contacts') in one shell command?
+Have you ever dreamed of having one central point for keeping your database access infos?
+
+<pre class="shell">
+  sh$ dba list
+  sh$ dba use contacts
+</pre> 
+
+Or displaying a SQL table (say, 'contacts') in one shell command?
 
 <pre class="shell">
   sh$ dba show contacts
@@ -16,7 +23,13 @@ Or to output the result of any SQL query to yaml, json, csv, ruby, ... or even x
   sh$ dba export --yaml "SELECT name, mail FROM contacts" 
 </pre> 
 
-Making same thing, but in Ruby?
+Or to have a Restful server on top of SQL databases?
+
+<pre class="shell">
+  dba restful
+</pre>
+
+Making similar things, ... in Ruby?
 
 <pre>
   DbAgile::dba do |dba|
@@ -28,6 +41,17 @@ Making same thing, but in Ruby?
     # Start using dbagile commands
     dba.export %w{--yaml contacts}  # each line pushed in output_buffer
   end
+</pre>
+
+The Rack middleware for the restful server (config.ru):
+
+<pre>
+  #/usr/bin/env rackup -p 8711
+  require 'dbagile'
+  run DbAgile::Restful.new{|env|
+    env.config_file_path  = ...
+    env.history_file_path = nil
+  }
 </pre>
 
 h2. Pointers
