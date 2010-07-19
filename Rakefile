@@ -48,7 +48,10 @@ YARD::Rake::YardocTask.new do |t|
   YARD::Tags::Library.define_tag "Precondition", :pre
   YARD::Tags::Library.define_tag "Postcondition", :post
   t.files   = ['lib/**/*.rb']
-  t.options = ['--output-dir', 'doc/api', '-', "README.textile", "COMMAND_LINE.textile", "LICENCE.textile", "CHANGELOG.textile"]
+  t.options = ['--output-dir', 'doc/api', '-', 
+               "README.textile", "COMMAND_LINE.textile", 
+               "LICENCE.textile", "CHANGELOG.textile", 
+               "TODO.textile"]
 end
 
 # About gem specification
