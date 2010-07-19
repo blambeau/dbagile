@@ -25,7 +25,7 @@ module DbAgile
         # @param [Symbol] column_name the name of a column
         # @return true if the column exists on that table, false otherwise
         #
-        # @raise [NoSuchTableError] if table does no exists
+        # @pre [table_name] the table must exist
         #
         def has_column?(table_name, column_name)
           column_names(table_name).include?(column_name)
@@ -38,7 +38,7 @@ module DbAgile
         # @param [Boolean] sort sort column by names?
         # @return [Array<Symbol>] column names
         #
-        # @pre the database contains a table with that name
+        # @pre [table_name] the table must exist
         #
         def column_names(table_name, sort = false)
           Kernel.raise NotImplementedError
@@ -52,7 +52,7 @@ module DbAgile
         # @return [Boolean] true if the table contains such a unique key, 
         #         false otherwise
         #
-        # @pre the database contains a table with that name
+        # @pre [table_name] the table must exist
         #
         def is_key?(table_name, columns)
           keys(table_name).include?(columns)
@@ -64,6 +64,8 @@ module DbAgile
         #
         # @param [Symbol] table_name the name of a table
         # @return [Array<Array<Symbol>>] keys of the table
+        #
+        # @pre [table_name] the table must exist
         #
         def keys(table_name)
           Kernel.raise NotImplementedError
