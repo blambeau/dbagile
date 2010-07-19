@@ -33,8 +33,9 @@ module DbAgile
     
       ### DELEGATE PATTERN #########################################################
       
-      # Automatically install methods of the ConnectionDriven contract
-      DbAgile::Contract::ConnectionDriven.instance_methods(false).each do |method|
+      # Automatically install methods of the Connection contract
+      DbAgile::Contract::Connection.instance_methods(false).each do |method|
+        next if method.to_s == 'transaction'
         self.module_eval <<-EOF
           def #{method}(*args)
             connection.#{method}(*args)  
@@ -42,22 +43,32 @@ module DbAgile
         EOF
       end
 
-      # Automatically install methods of the TableDriven contract
-      DbAgile::Contract::TableDriven.instance_methods(false).each do |method|
-        self.module_eval <<-EOF
-          def #{method}(*args)
-            connection.#{method}(*args)  
-          end
-        EOF
-      end
+      # Automatically install methods of the *::TableDriven contract
+      [ DbAgile::Contract::Data::TableDriven,
+        DbAgile::Contract::Schema::TableDriven ].each do |mod|
 
-      # Automatically install methods of the TransactionDriven contract
-      DbAgile::Contract::TransactionDriven.instance_methods(false).each do |method|
-        self.module_eval <<-EOF
-          def #{method}(*args)
-            connection.find_delegate(args[0]).#{method}(self, *args)  
-          end
-        EOF
+        mod.instance_methods(false).each do |method|
+          self.module_eval <<-EOF
+            def #{method}(*args)
+              connection.#{method}(*args)  
+            end
+          EOF
+        end
+      
+      end # *::TableDriven
+
+      # Automatically install methods of the *::TransactionDriven contract
+      [ DbAgile::Contract::Data::TransactionDriven,
+        DbAgile::Contract::Schema::TransactionDriven ].each do |mod|
+
+        mod.instance_methods(false).each do |method|
+          self.module_eval <<-EOF
+            def #{method}(*args)
+              connection.find_delegate(args[0]).#{method}(self, *args)  
+            end
+          EOF
+        end
+        
       end
 
       private :connection

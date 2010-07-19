@@ -31,18 +31,10 @@ module DbAgile
         @connector.inspect
       end
     
-      ### TRANSACTIONS AND WRITE ACCESSES ############################################
-    
-      # Executes the block inside a transaction.
-      def transaction(&block)
-        raise ArgumentError, "Missing transaction block" unless block
-        Transaction.new(self).execute(&block)
-      end
-      
-      ### DELEGATE PATTERN #########################################################
+      ### DELEGATE PATTERN ON CONNECTION ################################################
 
-      # Automatically install methods of the ConnectionDriven contract
-      DbAgile::Contract::ConnectionDriven.instance_methods(false).each do |method|
+      # Automatically install methods of the Connection contract
+      DbAgile::Contract::Connection.instance_methods(false).each do |method|
         self.module_eval <<-EOF
           def #{method}(*args, &block)
             main_delegate.#{method}(*args, &block)  
@@ -50,13 +42,26 @@ module DbAgile
         EOF
       end
     
-      # Automatically install methods of the TableDriven contract
-      DbAgile::Contract::TableDriven.instance_methods(false).each do |method|
-        self.module_eval <<-EOF
-          def #{method}(*args, &block)
-            find_delegate(args[0]).#{method}(*args, &block)  
-          end
-        EOF
+      ### TRANSACTIONS AND WRITE ACCESSES ###############################################
+    
+      # Executes the block inside a transaction.
+      def transaction(&block)
+        raise ArgumentError, "Missing transaction block" unless block
+        Transaction.new(self).execute(&block)
+      end
+      
+      # Automatically install methods of the *::TableDriven contract
+      [ DbAgile::Contract::Data::TableDriven,
+        DbAgile::Contract::Schema::TableDriven ].each do |mod|
+
+        mod.instance_methods(false).each do |method|
+          self.module_eval <<-EOF
+            def #{method}(*args, &block)
+              find_delegate(args[0]).#{method}(*args, &block)  
+            end
+          EOF
+        end
+
       end
     
     end # class Connection

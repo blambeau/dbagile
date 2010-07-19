@@ -69,7 +69,7 @@ module DbAgile
         else
           proj.nil? ? db[table] : db[table].where(proj)
       end
-      result.extend(::DbAgile::Contract::Dataset)
+      result.extend(::DbAgile::Contract::Data::Dataset)
       result
     end
       

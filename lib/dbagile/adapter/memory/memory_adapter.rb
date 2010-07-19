@@ -41,7 +41,7 @@ module DbAgile
         keys = proj.keys
         tables[table].select{|t| tuple_project(t, keys) == proj}
       end
-      result.extend(::DbAgile::Contract::Dataset)
+      result.extend(::DbAgile::Contract::Data::Dataset)
       result
     end
     

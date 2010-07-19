@@ -59,7 +59,7 @@ module DbAgile
           end
         end
         case result
-          when DbAgile::Contract::Dataset
+          when DbAgile::Contract::Data::Dataset
             result.to_text(environment.output_buffer)
           else
             display(result)

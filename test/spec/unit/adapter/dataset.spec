@@ -14,7 +14,7 @@ describe "::DbAgile::Adapter.dataset" do
       subject{ adapter.dataset(:dbagile) }
       specify {
         subject.should be_kind_of(Enumerable) 
-        subject.should be_kind_of(::DbAgile::Contract::Dataset)
+        subject.should be_kind_of(::DbAgile::Contract::Data::Dataset)
         subject.should respond_to(:to_a)
       }
     end

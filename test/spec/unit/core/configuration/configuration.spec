@@ -15,7 +15,11 @@ describe "DbAgile::Core::Configuration" do
       }
     }
     specify{
-      config.connect.should be_kind_of(DbAgile::Core::Connection)
+      c = config.connect
+      c.should be_kind_of(DbAgile::Core::Connection)
+      c.transaction do |t|
+        t.should be_kind_of(DbAgile::Core::Transaction)
+      end
     }
   end
   

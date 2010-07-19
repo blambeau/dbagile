@@ -2,7 +2,7 @@ require 'dbagile/adapter/errors'
 require 'dbagile/adapter/tools'
 module DbAgile
   class Adapter
-    include DbAgile::Contract::Full
+    include DbAgile::Contract::Utils::Full
     include DbAgile::Adapter::Tools
     
     # Builds an adapter instance from an URI
