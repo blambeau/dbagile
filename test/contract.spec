@@ -1,5 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
-Dir[File.expand_path('../contract/**/*.spec', __FILE__)].each{|f| load(f)}
+dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile Contract specification" do
   
   let(:basic_values)      { DbAgile::Fixtures::basic_values       }

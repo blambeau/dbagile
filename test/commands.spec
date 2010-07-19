@@ -1,5 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
-Dir[File.expand_path('../commands/**/*.spec', __FILE__)].each{|f| load(f)}
+dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command through API" do
   
   # Path to an empty configuration file

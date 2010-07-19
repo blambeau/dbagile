@@ -13,8 +13,6 @@ shared_examples_for "A Contract::Schema::TransactionDriven" do
     subject.drop_table(:existing)   if subject.has_table?(:existing) 
   }
   
-  Dir[File.expand_path('../transaction_driven/**/*.ex', __FILE__)].each do |file|
-    self.instance_eval File.read(file)
-  end
+  dbagile_install_examples(__FILE__, self)
 
 end

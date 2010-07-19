@@ -13,8 +13,6 @@ shared_examples_for "A Contract::Data::TransactionDriven" do
     subject.insert(:non_empty_table, :id => 2, :english => "Two")
   }
   
-  Dir[File.expand_path('../transaction_driven/**/*.ex', __FILE__)].each do |file|
-    self.instance_eval File.read(file)
-  end
+  dbagile_install_examples(__FILE__, self)
 
 end

@@ -1,12 +1,9 @@
 require File.expand_path('../spec_helper', __FILE__)
 require 'dbagile/restful'
 require 'dbagile/restful/server'
-
 require 'net/http'
 require 'uri'
-
-# Load sub specs now
-Dir[File.expand_path('../restful/**/*.spec', __FILE__)].each{|f| load(f)}
+dbagile_load_all_subspecs(__FILE__)
 
 describe "DbAgile::Restful feature" do
   
