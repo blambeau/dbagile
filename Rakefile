@@ -38,7 +38,6 @@ Spec::Rake::SpecTask.new do |t|
   t.ruby_opts = ['-I.']
   t.spec_files = FileList['test/spec/test_all.rb', 
                           'test/contract.spec', 
-                          'test/adapters.spec', 
                           'test/commands.spec', 
                           'test/restful.spec']
 end
