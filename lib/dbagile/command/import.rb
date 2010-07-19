@@ -116,10 +116,10 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        with_current_config do |config|
+        with_current_connection(conn_options) do |connection|
         
           # Make the job now
-          config.connect(nil, conn_options).transaction do |t|
+          connection.transaction do |t|
             first = true
             with_emitter do |tuple|
               make_the_job(t, tuple, first)

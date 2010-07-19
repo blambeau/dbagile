@@ -82,9 +82,9 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        with_current_config do |config|
+        with_current_connection do |connection|
           # Prepare the dataset
-          ds = config.connect.dataset(self.dataset)
+          ds = connection.dataset(self.dataset)
           if self.select
             ds = ds.select(*self.select)
           elsif self.allbut

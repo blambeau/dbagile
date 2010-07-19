@@ -52,8 +52,8 @@ module DbAgile
       #
       def execute_command
         result = nil
-        with_current_config do |config|
-          config.connect.transaction do |t|
+        with_current_connection do |connection|
+          connection.transaction do |t|
             result = t.direct_sql(File.read(self.file)) if self.file
             result = t.direct_sql(self.query) if self.query
           end

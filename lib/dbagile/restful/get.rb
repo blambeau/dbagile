@@ -12,9 +12,9 @@ module DbAgile
               content_type = known_format?(format)
               db, table = $1, $2
               buffer = StringIO.new
-              with_config(db.to_sym) do |config|
+              with_connection(db.to_sym) do |connection|
                 method = "to_#{format}".to_sym
-                config.connect.dataset($2.to_sym).send(method, buffer)
+                connection.dataset($2.to_sym).send(method, buffer)
               end
               return _200_(env, content_type, [ buffer.string ])
             end

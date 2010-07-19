@@ -17,8 +17,8 @@ module DbAgile
       
       # Returns a dataset instance
       def dataset(name)
-        environment.with_current_config{|config|
-          config.connect.dataset(name)
+        environment.with_current_connection{|c|
+          c.dataset(name)
         }
       end
       

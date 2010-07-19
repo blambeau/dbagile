@@ -29,7 +29,10 @@ module DbAgile
         #
         :with_config_file,
         :with_config,
-        :with_current_config
+        :with_current_config,
+        #
+        :with_connection,
+        :with_current_connection
       ].each do |method_name|
         if method_name.to_s =~ /=$/
           code = <<-EOF

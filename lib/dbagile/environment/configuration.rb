@@ -40,6 +40,19 @@ module DbAgile
         @config_file ||= load_config_file(create, config_file_path)
       end
       
+      #
+      # Yields the block with each configuration in turn
+      #
+      # As this method is a wrapper on config_file, it shares the specification
+      # about parameters and exceptions.
+      #
+      # @raise ArgumentError if no block is provided
+      #
+      def each_config(&block)
+        raise ArgumentError, "Missing block" unless block_given?
+        config_file.each(&block)
+      end
+      
       # 
       # Yields the block with the ConfigFile instance loaded using config_file.
       #
@@ -86,6 +99,48 @@ module DbAgile
         config = config_file.current_config
         raise NoDefaultConfigError if config.nil?
         yield(config)
+      end
+      
+      #
+      # Yields the block with a connection on a given config; diconnect after that.
+      #
+      # As this method relies on config_file, it shares its exception contract.
+      #
+      # @raise ArgumentError if no block is provided
+      # @raise NoSuchConfigError if the configuration cannot be found.
+      # @return block execution result
+      #
+      def with_connection(config, conn_options = {})
+        raise ArgumentError, "Missing block" unless block_given?
+        case config
+          when Symbol
+            config = config_file.config(config)
+          when DbAgile::Core::Configuration
+          else
+            raise ArgumentError, "Config should be a config name"
+        end
+        raise NoSuchConfigError if config.nil?
+        
+        begin
+          connection = config.connect(nil, conn_options)
+          result = yield(connection)
+          result
+        ensure
+          connection.disconnect
+        end
+      end
+      
+      # 
+      # Yields the block with a connection on the current config.
+      #
+      # Same contract as with_connection, expect for parameters.
+      #
+      # @raise NoDefaultConfigError if the configuration cannot be found.
+      #
+      def with_current_connection(conn_options = {}, &block)
+        with_current_config{|config|
+          with_connection(config, conn_options, &block)
+        }
       end
       
       # Protected section starts here ###################################################

@@ -41,7 +41,7 @@ module DbAgile
         
           # Make the job now
           begin
-            config.connect.ping
+            with_connection(config){|c| c.ping}
             say("Ping ok (#{config.uri})")
             config
           rescue StandardError => ex
