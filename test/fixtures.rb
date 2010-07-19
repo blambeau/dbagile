@@ -73,6 +73,16 @@ module DbAgile
       end
     end
     
+    # Returns basic_values tuple
+    def basic_values_tuple
+      basic_values[0]
+    end
+    
+    # Returns basic_values keys (sorted by name)
+    def basic_values_keys
+      basic_values_tuple.keys.sort{|a,b| a.to_s <=> b.to_s}
+    end
+    
     # Adds class methods now
     extend Fixtures
     
@@ -82,6 +92,6 @@ module DbAgile
         Kernel.eval(File.read(file))
       end
     end
-    
+
   end # module Fixtures
 end # module DbAgile
