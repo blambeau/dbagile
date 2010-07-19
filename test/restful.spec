@@ -2,6 +2,7 @@ require File.expand_path('../spec_helper', __FILE__)
 require 'dbagile/restful'
 require 'dbagile/restful/server'
 require 'net/http'
+require 'cgi'
 require 'uri'
 dbagile_load_all_subspecs(__FILE__)
 
@@ -17,10 +18,15 @@ describe "DbAgile::Restful feature" do
   end
   
   # Makes a get request
-  def get(table, extension)
+  def get(table, extension, projection = nil)
     url = URI.parse(to_uri(table, extension))
+    if projection
+      query = "?" + projection.collect{|k,v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.reverse.join('&')
+    else
+      query = ""
+    end
     Net::HTTP.start(url.host, url.port) {|http|
-      res = http.get(url.path)
+      res = http.get(url.path.to_s + query)
       yield(res, http)
       res.body
     }

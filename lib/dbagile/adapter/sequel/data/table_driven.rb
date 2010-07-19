@@ -7,9 +7,9 @@ module DbAgile
         def dataset(table, proj = nil)
           result = case table
             when Symbol
-              proj.nil? ? db[table] : db[table].where(proj)
+              (proj.nil? or proj.empty?) ? db[table] : db[table].where(proj)
             else
-              proj.nil? ? db[table] : db[table].where(proj)
+              (proj.nil? or proj.empty?) ? db[table] : db[table].where(proj)
           end
           result.extend(::DbAgile::Contract::Data::Dataset)
           result

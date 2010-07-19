@@ -35,6 +35,17 @@ module DbAgile
         FORMAT_TO_CONTENT_TYPE[f]
       end
       
+      # Converts get parameters to a tuple for projection
+      def get_to_tuple(params, heading = {})
+        copy = {}
+        params.each_pair{|k, v| 
+          k = k.to_sym
+          next unless heading.key?(k)
+          copy[k] = SByC::TypeSystem::Ruby::coerce(v, heading[k])
+        }
+        copy
+      end
+      
       # Returns a copyright response
       def _copyright_(env)
         [

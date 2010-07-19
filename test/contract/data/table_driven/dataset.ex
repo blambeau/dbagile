@@ -17,3 +17,15 @@ it "should support a projection tuple" do
   subject.dataset(:basic_values, :id => 10).count.should == 0
   
 end
+
+it "should support an empty projection tuple" do
+  
+  subject.dataset(:basic_values, {}).count.should == 1
+
+end
+
+it "should support a nil projection tuple" do
+  
+  subject.dataset(:basic_values, nil).count.should == 1
+
+end

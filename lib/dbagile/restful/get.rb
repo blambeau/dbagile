@@ -4,17 +4,18 @@ module DbAgile
       
       # Implements GET access of the restful interface
       def get(env)
-        case env['PATH_INFO'].strip[1..-1]
+        request = Rack::Request.new(env)
+        case request.path.strip[1..-1]
           when ''
             return _copyright_(env)
           when /(\w+)\/(\w+)\.(\w+)$/
             if format = known_extension?($3)
               content_type = known_format?(format)
-              db, table = $1, $2
-              buffer = StringIO.new
+              db, table, buffer = $1, $2, StringIO.new
+              projection = get_to_tuple(request.GET)
               with_connection(db.to_sym) do |connection|
                 method = "to_#{format}".to_sym
-                connection.dataset($2.to_sym).send(method, buffer)
+                connection.dataset($2.to_sym, projection).send(method, buffer)
               end
               return _200_(env, content_type, [ buffer.string ])
             end
