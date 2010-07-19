@@ -56,11 +56,11 @@ module DbAgile
       end
       
       # Returns a 404 response
-      def _404_(env)
+      def _404_(env, ex = nil)
         [
           404, 
           {'Content-Type' => 'text/plain'},
-          ["Not found #{env['PATH_INFO']}"]
+          [ "Not found #{env['PATH_INFO']}" ] + (ex.nil? ? [] : [ ex.message ])
         ]
       end
       
