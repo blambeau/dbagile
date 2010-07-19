@@ -37,6 +37,7 @@ desc "Run all rspec test"
 Spec::Rake::SpecTask.new do |t|
   t.ruby_opts = ['-I.']
   t.spec_files = FileList['test/spec/test_all.rb', 
+                          'test/unit.spec', 
                           'test/contract.spec', 
                           'test/commands.spec', 
                           'test/restful.spec']
