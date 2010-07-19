@@ -8,11 +8,10 @@ module DbAgile
         #
         # @param [Transaction] transaction the current transaction
         # @param [Symbol] table_name the name of a table
-        # @param [Hash] columns column definitions
-        # @return [Boolean] true to indicate that everything is fine
+        # @param [Hash] a table heading
+        # @return [Hash] the actual table heading that has been created
         #
-        # @pre the database does not contain a table with that name
-        # @post the database contains a table with specified columns
+        # @raise TableAlreadyExistsError if table already exists
         #
         def create_table(transaction, table_name, columns)
           Kernel.raise NotImplementedError
@@ -25,8 +24,7 @@ module DbAgile
         # @param [Symbol] table_name the name of a table
         # @return [Boolean] true to indicate that everything is fine
         #
-        # @pre the database contains a table with that name
-        # @post the database does not contain a table with specified columns
+        # raise NoSuchTableError if table does not exists
         #
         def drop_table(transaction, table_name)
           Kernel.raise NotImplementedError

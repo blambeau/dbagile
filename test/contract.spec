@@ -26,6 +26,7 @@ describe "DbAgile Contract specification" do
         it_should_behave_like("A Contract::Data::TableDriven")
         it_should_behave_like("A Contract::Data::TransactionDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
+        it_should_behave_like("A Contract::Schema::TransactionDriven")
       end
   
       describe "Result of dataset(Symbol) on #{configuration.name}" do

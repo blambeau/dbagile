@@ -94,6 +94,11 @@ module DbAgile
       raise NoSuchTableError, "No such table #{name}" unless has_table?(name)
     end
     
+    # Asserts that a table does not exist or raises a TableAlreadyExistsError
+    def not_has_table!(name)
+      raise TableAlreadyExistsError, "No such table #{name}" if has_table?(name)
+    end
+    
     # Returns the list of column names for a given table
     def column_names(table, sort_it_by_name = false)
       has_table!(table)
@@ -110,16 +115,18 @@ module DbAgile
       
     # Creates a table with some attributes
     def create_table(transaction, name, columns)
+      not_has_table!(name)
       db.create_table(name){ 
         columns.each_pair{|name, type| column(name, type)} 
       }
-      true
+      columns
     end
     
     # @see DbAgile::Contract::Schema::TransactionDriven#drop_table
     def drop_table(transaction, table_name)
       has_table!(table_name)
       db.drop_table(table_name)
+      true
     end
         
     # Adds some columns to a table
