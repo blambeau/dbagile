@@ -1,3 +1,4 @@
+require File.expand_path('../../spec_helper', __FILE__)
 require 'fileutils'
 require 'sequel'
 module Fixtures
@@ -26,16 +27,6 @@ module Fixtures
   end
   module_function :dbagile_history_path
   
-  # Builds an environment for testing purposes
-  def test_environment
-    env = DbAgile::Environment.new
-    env.config_file_path = dbagile_config_path
-    env.history_file_path = dbagile_history_path
-    env.output_buffer = []
-    env
-  end
-  module_function :test_environment
-  
   # Returns sqlite testdb uri
   def sqlite_testdb_path
     File.join(root_path,"test.db")
@@ -63,48 +54,10 @@ module Fixtures
   end
   module_function :sqlite_testdb_sequel_adapter
   
-  # Returns a Database instance on testdb sqlite adapter
-  def sqlite_testdb
-    DbAgile::Database.new(sqlite_testdb_sequel_adapter)
-  end
-  module_function :sqlite_testdb
-  
   # Returns adapters under test
   def adapters_under_test
     [sqlite_testdb_sequel_adapter]
   end
   module_function :adapters_under_test
   
-  class SayHello
-    def del_to_block
-      yield
-    end
-    def say_hello(who)
-      who
-    end
-  end
-  class Reverse
-    def say_hello(who)
-      delegate.say_hello(who.reverse)
-    end
-  end
-  class Upcase
-    def say_hello(who)
-      delegate.say_hello(who.upcase)
-    end
-  end
-  class Downcase
-    def say_hello(who)
-      delegate.say_hello(who.downcase)
-    end
-  end
-  class Capitalize
-    def initialize(method = :capitalize)
-      @method = method
-    end
-    def say_hello(who)
-      delegate.say_hello(who.send(@method))
-    end
-  end
-
 end # module Fixture

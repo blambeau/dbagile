@@ -1,4 +1,4 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../fixtures', __FILE__)
 describe "::DbAgile::Adapter.add_columns" do
   
   Fixtures::adapters_under_test.each do |adapter|

@@ -1,7 +1,7 @@
-require File.expand_path('../../../spec_helper', __FILE__)
+require File.expand_path('../../fixtures', __FILE__)
 describe "::DbAgile::Adapter#keys" do
   
-  Fixtures::adapters_under_test.each do |adapter|
+  ::Fixtures::adapters_under_test.each do |adapter|
   
     describe "When called on a table without key" do
       subject{ adapter.keys(:dbagile) }
