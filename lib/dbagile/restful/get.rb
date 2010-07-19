@@ -11,11 +11,11 @@ module DbAgile
           when /(\w+)\/(\w+)\.(\w+)$/
             if format = known_extension?($3)
               content_type = known_format?(format)
-              db, table, buffer = $1, $2, StringIO.new
-              projection = get_to_tuple(request.GET)
-              with_connection(db.to_sym) do |connection|
+              db, table, buffer = $1.to_sym, $2.to_sym, StringIO.new
+              with_connection(db) do |connection|
+                projection = get_to_tuple(request.GET, connection.heading(table))
                 method = "to_#{format}".to_sym
-                connection.dataset($2.to_sym, projection).send(method, buffer)
+                connection.dataset(table, projection).send(method, buffer)
               end
               return _200_(env, content_type, [ buffer.string ])
             end
