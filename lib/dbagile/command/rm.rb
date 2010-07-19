@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba rm CONFIG"
+        "Usage: dba rm CONFIG"
       end
 
       # Short help

@@ -50,6 +50,12 @@ module DbAgile
       rescue URI::InvalidURIError
         raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}"
       end
+      
+      # Checks that a file exists and can be read or raises an IO error
+      def valid_read_file!(file)
+        raise IOError, "Unable to read #{file}" unless File.file?(file) and File.readable?(file)
+        file
+      end
         
       #
       # Asserts that a command exists or raises a NoSuchCommandError.

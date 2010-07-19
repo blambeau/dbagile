@@ -27,7 +27,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba import [OPTIONS] TABLE [FILE]"
+        "Usage: dba import [OPTIONS] TABLE [FILE]"
       end
 
       # Short help

@@ -1,0 +1,1 @@
+DELETE FROM basic_values WHERE id >= 10;

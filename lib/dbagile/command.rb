@@ -142,6 +142,9 @@ require 'dbagile/command/show'
 require 'dbagile/command/export'
 require 'dbagile/command/import'
 
+# :sql category
+require 'dbagile/command/sql'
+
 # :restful category
 require 'dbagile/command/restful'
 

@@ -12,7 +12,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba history"
+        "Usage: dba history"
       end
 
       # Short help

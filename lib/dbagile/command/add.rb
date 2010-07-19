@@ -16,7 +16,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba add NAME URI"
+        "Usage: dba add NAME URI"
       end
       
       # Returns command's category

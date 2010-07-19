@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba ping [CONFIG]"
+        "Usage: dba ping [CONFIG]"
       end
 
       # Short help

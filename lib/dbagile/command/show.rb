@@ -12,7 +12,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba show [OPTIONS] DATASET"
+        "Usage: dba show [OPTIONS] DATASET"
       end
 
       # Short help

@@ -40,10 +40,13 @@ describe "DbAgile::Command through API" do
   DbAgile::Fixtures::environment.config_file.each do |config|
     next if config.name == :unexisting
     if config.ping?
+      
+      puts "Running spec tests on #{config.name} (#{config.uri})"
+          
       describe "The input/output commands on #{config.name}" do 
 
         before{ 
-          dba.use(%w{sqlite}) 
+          dba.use([ config.name ]) 
           dba.output_buffer = StringIO.new
         }
       
@@ -60,6 +63,15 @@ describe "DbAgile::Command through API" do
         end
     
       end
+      
+      describe "The SQL commands on #{config.name}" do
+        
+        describe "The sql command" do
+          it_should_behave_like "The sql command" 
+        end
+  
+      end
+      
     else
       puts "Skipping tests on #{config.name} (no ping)"
     end

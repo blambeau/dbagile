@@ -9,7 +9,7 @@ module DbAgile
 
       # Returns the command banner
       def banner
-        "usage: dba [--version] [--help]\n       dba help <subcommand>\n       dba <subcommand> [OPTIONS] [ARGS]"
+        "Usage: dba [--version] [--help]\n       dba help <subcommand>\n       dba <subcommand> [OPTIONS] [ARGS]"
       end
 
       # Shows the help
@@ -21,7 +21,7 @@ module DbAgile
           command  = Command::command_for(name, environment)
           category = command.category
           raise "Unknown command category #{category}"\
-            unless [:dba, :configuration, :io, :restful].include?(category)
+            unless [:dba, :configuration, :io, :restful, :sql].include?(category)
           commands_by_categ[category] << command
         end
         
@@ -39,6 +39,11 @@ module DbAgile
         display ""
         display "Import/Export management:"
         commands_by_categ[:io].each do |command|
+          display "  #{align(command.command_name,10)} #{command.short_help}" 
+        end
+        display ""
+        display "SQL based commands:"
+        commands_by_categ[:sql].each do |command|
           display "  #{align(command.command_name,10)} #{command.short_help}" 
         end
         display ""

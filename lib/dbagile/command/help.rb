@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba help COMMAND"
+        "Usage: dba help COMMAND"
       end
 
       # Short help
@@ -31,8 +31,11 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        display(command.short_help)
-        display(command.options)
+        say(command.options.to_s)
+        say("")
+        say("Description:")
+        say("  " + command.short_help.to_s)
+        say("")
       end
       
     end # class List

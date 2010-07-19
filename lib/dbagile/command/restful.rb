@@ -7,7 +7,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba restful [OPTIONS]"
+        "Usage: dba restful [OPTIONS]"
       end
       
       # Returns command's category

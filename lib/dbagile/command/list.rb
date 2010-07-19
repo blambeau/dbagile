@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "usage: dba list"
+        "Usage: dba list"
       end
 
       # Short help

@@ -17,7 +17,7 @@ module DbAgile
 
       # Returns the command banner
       def banner
-        "usage: dba export [OPTIONS] DATASET [FILE]"
+        "Usage: dba export [OPTIONS] DATASET [FILE]"
       end
 
       # Short help
