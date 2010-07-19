@@ -27,8 +27,8 @@ desc "Creates test fixture databases"
 task :fixtures do
   $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
   $LOAD_PATH.unshift(File.expand_path('../test', __FILE__))
-  require 'fixtures'
   require 'dbagile'
+  require 'fixtures'
   DbAgile::Fixtures::create_fixtures
 end
 

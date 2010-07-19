@@ -1,3 +1,4 @@
+require 'stringio'
 require 'dbagile'
 require 'dbagile/restful/utils'
 require 'dbagile/restful/get'

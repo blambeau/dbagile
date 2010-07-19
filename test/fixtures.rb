@@ -1,3 +1,4 @@
+require 'stringio'
 module DbAgile
   #
   # Provides helper methods about fixture databases
@@ -64,8 +65,10 @@ module DbAgile
             puts "Installing fixture database on #{config.name.inspect}"
             dba.use(config.name)
             each_table_file{|name, file|
+              puts "Importing table #{name}"
               dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
+            dba.sql "DELETE FROM empty_table"
           else
             puts "Skipping fixture database #{config.name.inspect} (no ping)"
           end

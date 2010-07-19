@@ -24,3 +24,9 @@ it "should raise a NoSuchTableError when table does not exists" do
   
 end
 
+it "should support an empty projection" do
+  
+  subject.exists?(:basic_values, {}).should be_true
+  subject.exists?(:empty_table, {}).should be_false
+  
+end
