@@ -79,7 +79,7 @@ module DbAgile
 end # module DbAgile
 
 require 'rubygems'
-gem "sbyc", ">= 0.1.3"
+gem "sbyc", ">= 0.1.4"
 gem "sequel", ">= 3.8.0"
 require 'sbyc'
 require 'sequel'

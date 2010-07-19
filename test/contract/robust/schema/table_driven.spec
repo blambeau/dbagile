@@ -12,4 +12,10 @@ shared_examples_for "A robust Contract::Schema::TableDriven" do
   
   end
 
+  it "should raise a NoSuchTableError on heading when table does not exists" do
+  
+    lambda { subject.heading(:unexisting) }.should raise_error(DbAgile::NoSuchTableError)
+  
+  end
+
 end

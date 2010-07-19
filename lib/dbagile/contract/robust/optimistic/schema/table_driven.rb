@@ -13,6 +13,14 @@ module DbAgile
               raise
             end
         
+            # @see DbAgile::Contract::Schema::TableDriven#heading
+            def heading(*args, &block)
+              delegate.heading(*args, &block)
+            rescue
+              has_table!(args[0])
+              raise
+            end
+
             # @see DbAgile::Contract::Schema::TableDriven#column_names
             def column_names(*args, &block)
               delegate.column_names(*args, &block)

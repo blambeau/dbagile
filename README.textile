@@ -75,7 +75,7 @@ h2. Installation
 
 Required dependencies:
 
-* sbyc >= 0.1.3
+* sbyc >= 0.1.4
 * sequel >= 3.8.0
 
 Optional dependencies (according to your needs):

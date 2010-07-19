@@ -5,6 +5,7 @@ module DbAgile
   #
   module Fixtures
     include DbAgile::Environment::Delegator
+    include DbAgile::Tools::Tuple
     
     # Returns the fixture environment
     def environment
@@ -84,6 +85,22 @@ module DbAgile
     # Returns basic_values keys (sorted by name)
     def basic_values_keys
       basic_values_tuple.keys.sort{|a,b| a.to_s <=> b.to_s}
+    end
+
+    # Returns basic_values heading
+    def basic_values_heading
+      heading = {}
+      basic_values[0].each_pair do |key, value|
+        heading[key] = case value
+          when TrueClass, FalseClass
+            SByC::TypeSystem::Ruby::Boolean
+          when Fixnum, Bignum
+            Integer
+          else
+            value.class
+        end
+      end
+      heading
     end
     
     # Adds class methods now

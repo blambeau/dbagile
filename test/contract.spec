@@ -2,9 +2,10 @@ require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile Contract specification" do
   
-  let(:basic_values)      { DbAgile::Fixtures::basic_values       }
-  let(:basic_values_tuple){ DbAgile::Fixtures::basic_values_tuple }
-  let(:basic_values_keys) { DbAgile::Fixtures::basic_values_keys  }
+  let(:basic_values)        { DbAgile::Fixtures::basic_values         }
+  let(:basic_values_heading){ DbAgile::Fixtures::basic_values_heading }
+  let(:basic_values_tuple)  { DbAgile::Fixtures::basic_values_tuple   }
+  let(:basic_values_keys)   { DbAgile::Fixtures::basic_values_keys    }
   
   DbAgile::Fixtures::environment.each_config do |configuration|
     next unless configuration.ping?

@@ -32,6 +32,18 @@ module DbAgile
         end
       
         #
+        # Returns the heading of a given table.
+        #
+        # @param [Symbol] table_name the name of a table
+        # @return [Hash<Symbol => Class>] table heading
+        #
+        # @pre [table_name] the table must exist
+        #
+        def heading(table_name)
+          Kernel.raise NotImplementedError
+        end
+      
+        #
         # Returns the list of column names for a given table.
         #
         # @param [Symbol] table_name the name of a table

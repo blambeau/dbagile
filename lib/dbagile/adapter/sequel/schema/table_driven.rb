@@ -3,9 +3,37 @@ module DbAgile
     module Schema
       module TableDriven
 
+        # Returns the ruby type associated to a given column info
+        def dbtype_to_ruby_type(info)
+          type = info[:type]
+          capitalized = type.to_s.capitalize
+          begin
+            Kernel.eval(capitalized)
+          rescue NameError
+            case type
+              when :datetime
+                Time
+              when :boolean
+                SByC::TypeSystem::Ruby::Boolean
+              else
+                Object
+            end
+          end
+        end
+
         # @see DbAgile::Contract::Schema::TableDriven#has_table?
         def has_table?(name)
           db.table_exists?(name)
+        end
+    
+        # @see DbAgile::Contract::Schema::TableDriven#heading
+        def heading(table_name)
+          heading = {}
+          db.schema(table_name).each do |pair|
+            column_name, info = pair
+            heading[column_name] = dbtype_to_ruby_type(info)
+          end
+          heading
         end
     
         # @see DbAgile::Contract::Schema::TableDriven#columns_names
