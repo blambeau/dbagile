@@ -11,7 +11,7 @@ DbAgile installs a 'dba' command line tool whose aim is to support database admi
 <pre class="shell">
   sh$ dba --help
 
-  usage: dba [--version] [--help]
+  Usage: dba [--version] [--help]
          dba help <subcommand>
          dba <subcommand> [OPTIONS] [ARGS]
 
@@ -31,6 +31,12 @@ DbAgile installs a 'dba' command line tool whose aim is to support database admi
     show       Display content of a table/view/query (shortcut for 'export --text ...')
     export     Export a table/view/query to (csv, json, yaml, ruby, xml)
     import     Import a table from (csv, json, yaml, ruby)
+
+  SQL based commands:
+    sql        Send SQL directly to the DBMS
+
+  Restful server:
+    restful    Starts the restful server
 </pre>
 
 h2. Getting started
