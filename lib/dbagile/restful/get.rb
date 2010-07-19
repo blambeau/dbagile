@@ -9,7 +9,9 @@ module DbAgile
         with_connection(db) do |connection|
           projection = get_to_tuple(request.GET, connection.heading(table))
           method = "to_#{format}".to_sym
-          connection.dataset(table, projection).send(method, buffer)
+          columns = connection.column_names(table)
+          dataset = connection.dataset(table, projection)
+          DbAgile::IO.send(method, dataset, columns, buffer)
         end
         _200_(env, content_type, [ buffer.string ])
       rescue DbAgile::InvalidConfigurationName,
