@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin#insert" do
   
-  let(:adapter){ ::DbAgile::MemoryAdapter.new }
+  let(:adapter){ Fixtures::sqlite_testdb_sequel_adapter }
   before{ adapter.create_table(nil, :table_name, :id => Integer, :name => String)}
   
   describe "when call on last brick" do

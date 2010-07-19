@@ -2,11 +2,16 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::AgileTable#insert" do
   
   let(:db){
-    DbAgile::config(:test){ (plug AgileTable) }.connect("memory://test.db")
+    DbAgile::config(:test){ (plug AgileTable) }.connect("sqlite://test.db")
   }
   
   describe "When called on an existing table with already existing columns" do
-    before{ db.transaction{|t| t.create_table(:example, :id => Integer) } }
+    before{ 
+      db.transaction{|t| 
+        t.drop_table(:example) if t.has_table?(:example)
+        t.create_table(:example, :id => Integer) 
+      }
+    }
     subject{ 
       db.transaction{|t| t.insert(:example, :id => 1) }
     }
@@ -18,7 +23,10 @@ describe "::DbAgile::Plugin::AgileTable#insert" do
   end
   
   describe "When called on an existing table with non existing columns" do
-    before{ db.transaction{|t| t.create_table(:example, :id => Integer) } }
+    before{ db.transaction{|t| 
+      t.drop_table(:example) if t.has_table?(:example)
+      t.create_table(:example, :id => Integer) } 
+    }
     subject{ 
       db.transaction{|t| t.insert(:example, :name => "blambeau") } 
     }
@@ -29,7 +37,10 @@ describe "::DbAgile::Plugin::AgileTable#insert" do
   end
   
   describe "When called on an existing table with a mix" do
-    before{ db.transaction{|t| t.create_table(:example, :id => Integer) } }
+    before{ db.transaction{|t| 
+      t.drop_table(:example) if t.has_table?(:example)
+      t.create_table(:example, :id => Integer) } 
+    }
     subject{ 
       db.transaction{|t| t.insert(:example, :id => 1, :name => "blambeau") } 
     }

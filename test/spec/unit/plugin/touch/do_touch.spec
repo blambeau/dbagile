@@ -4,7 +4,7 @@ describe "::DbAgile::Plugin::Touch#__do_touch" do
   before{ ::DbAgile::Plugin::Touch.instance_eval{public :__do_touch} }
 
   let(:adapter){ 
-    adapter = DbAgile::MemoryAdapter.new 
+    adapter = Fixtures::sqlite_testdb_sequel_adapter
     adapter.create_table(nil,:example, :id => Integer, :now => String)
     adapter
   }

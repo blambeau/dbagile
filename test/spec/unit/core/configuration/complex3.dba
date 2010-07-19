@@ -1,4 +1,4 @@
 DbAgile::config(:complex3){
-  uri "memory://test.db"
+  uri "sqlite://test.db"
   plug DbAgile::Plugin::Defaults, {:now => DbAgile::Plugin::Touch::now}
 }

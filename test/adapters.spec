@@ -26,10 +26,4 @@ describe "DbAgile" do
     it_should_behave_like "All transactional adapters" 
   }
 
-  describe("DbAgile - memory adapter"){
-    let(:sqlite_file){ File.expand_path('../highlevel.db', __FILE__)               }
-    let(:conn)       { DbAgile::config(:empty).connect("memory://test.db")         }
-    it_should_behave_like "All adapters" 
-  }
-
 end

@@ -1,3 +1,3 @@
 DbAgile::config(:simple){
-  uri "memory://test.db"
+  uri "sqlite://test.db"
 }

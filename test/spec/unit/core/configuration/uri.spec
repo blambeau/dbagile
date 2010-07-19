@@ -3,12 +3,12 @@ describe "DbAgile::Core::Configuration#uri" do
   
   context "when called with a configuration block" do
     let(:config){ 
-      DbAgile::Core::Configuration.new{ uri "memory://test.db" }
+      DbAgile::Core::Configuration.new{ uri "sqlite://test.db" }
     }
     subject{ config.uri }
     specify{
-      subject.should == "memory://test.db"
-      config.uri.should == "memory://test.db"
+      subject.should == "sqlite://test.db"
+      config.uri.should == "sqlite://test.db"
     }
   end
   

@@ -3,7 +3,7 @@ describe "DbAgile's API" do
   
   before{
     DbAgile::config(:agile){
-      uri  "memory://test.db"
+      uri  "sqlite:///tmp/dbagile_test.db"
       plug AgileKeys, AgileTable
     }
   }
@@ -13,7 +13,7 @@ describe "DbAgile's API" do
   end
   
   it "should support connecting directly to a sql database" do
-    DbAgile::connect("memory://test.db").should be_kind_of(DbAgile::Core::Connection)
+    DbAgile::connect("sqlite:///tmp/dbagile_test.db").should be_kind_of(DbAgile::Core::Connection)
   end
   
   it "should raise an error when unknown configuration" do

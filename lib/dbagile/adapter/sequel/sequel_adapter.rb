@@ -109,6 +109,11 @@ module DbAgile
       true
     end
     
+    # @see DbAgile::Contract::Schema::TransactionDriven#drop_table
+    def drop_table(transaction, table_name)
+      db.drop_table(table_name)
+    end
+        
     # Adds some columns to a table
     def add_columns(transaction, table, columns)
       db.alter_table(table) do
