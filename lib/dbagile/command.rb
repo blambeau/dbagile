@@ -145,6 +145,9 @@ require 'dbagile/command/import'
 # :sql category
 require 'dbagile/command/sql'
 
+# :schema category
+require 'dbagile/command/heading'
+
 # :restful category
 require 'dbagile/command/webtools'
 

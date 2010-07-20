@@ -21,7 +21,7 @@ module DbAgile
           command  = Command::command_for(name, environment)
           category = command.category
           raise "Unknown command category #{category}"\
-            unless [:dba, :configuration, :io, :restful, :sql].include?(category)
+            unless [:dba, :configuration, :io, :restful, :sql, :schema].include?(category)
           commands_by_categ[category] << command
         end
         
@@ -44,6 +44,11 @@ module DbAgile
         display ""
         display "SQL based commands:"
         commands_by_categ[:sql].each do |command|
+          display "  #{align(command.command_name,10)} #{command.short_help}" 
+        end
+        display ""
+        display "Database schema based commands:"
+        commands_by_categ[:schema].each do |command|
           display "  #{align(command.command_name,10)} #{command.short_help}" 
         end
         display ""

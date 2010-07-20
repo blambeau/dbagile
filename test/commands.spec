@@ -39,42 +39,50 @@ describe "DbAgile::Command through API" do
   ### Inport/Export commands
   DbAgile::Fixtures::environment.config_file.each do |config|
     next if config.name == :unexisting
-    if config.ping?
-      
-      puts "Running spec tests on #{config.name} (#{config.uri})"
-          
-      describe "The input/output commands on #{config.name}" do 
-
-        before{ 
-          dba.use([ config.name ]) 
-          dba.output_buffer = StringIO.new
-        }
-      
-        describe "The show command" do
-          it_should_behave_like "The show command" 
-        end
-  
-        describe "The export command" do
-          it_should_behave_like "The export command" 
-        end
-  
-        describe "The import command" do
-          it_should_behave_like "The import command" 
-        end
-    
-      end
-      
-      describe "The SQL commands on #{config.name}" do
-        
-        describe "The sql command" do
-          it_should_behave_like "The sql command" 
-        end
-  
-      end
-      
-    else
+    unless config.ping?
       puts "Skipping tests on #{config.name} (no ping)"
+      next
     end
+
+    puts "Running spec tests on #{config.name} (#{config.uri})"
+        
+    describe "The input/output commands on #{config.name}" do 
+
+      before{ 
+        dba.use([ config.name ]) 
+        dba.output_buffer = StringIO.new
+      }
+    
+      describe "The show command" do
+        it_should_behave_like "The show command" 
+      end
+
+      describe "The export command" do
+        it_should_behave_like "The export command" 
+      end
+
+      describe "The import command" do
+        it_should_behave_like "The import command" 
+      end
+  
+    end
+    
+    describe "The SQL commands on #{config.name}" do
+      
+      describe "The sql command" do
+        it_should_behave_like "The sql command" 
+      end
+
+    end
+    
+    describe "The Schema commands on #{config.name}" do
+      
+      describe "The heading command" do
+        it_should_behave_like "The heading command" 
+      end
+
+    end
+    
   end
 
   
