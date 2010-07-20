@@ -40,11 +40,11 @@ describe "DbAgile::Command through API" do
   DbAgile::Fixtures::environment.config_file.each do |config|
     next if config.name == :unexisting
     unless config.ping?
-      puts "Skipping tests on #{config.name} (no ping)"
+      puts "skipping #{config.name} (no ping)"
       next
     end
 
-    puts "Running spec tests on #{config.name} (#{config.uri})"
+    puts "on #{config.name} (#{config.uri})"
         
     describe "The input/output commands on #{config.name}" do 
 

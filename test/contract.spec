@@ -8,9 +8,15 @@ describe "DbAgile::Contract /" do
   let(:basic_values_keys)   { DbAgile::Fixtures::basic_values_keys    }
   
   DbAgile::Fixtures::environment.each_config do |configuration|
-    next unless configuration.ping?
+    next if configuration.name == :unexisting
+    unless configuration.ping?
+      puts "skipping #{configuration.name} (no ping)"
+      next
+    end
 
     describe "on #{configuration.name} /" do
+    
+      puts "on #{configuration.name} #{configuration.uri}"
     
       DbAgile::Fixtures::environment.with_connection(configuration) do |connection|
         let(:config){ configuration }
