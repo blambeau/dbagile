@@ -81,6 +81,10 @@ describe "DbAgile::Command through API" do
         it_should_behave_like "The heading command" 
       end
 
+      describe "The drop command" do
+        it_should_behave_like "The drop command" 
+      end
+
     end
     
   end

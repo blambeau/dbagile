@@ -147,6 +147,7 @@ require 'dbagile/command/sql'
 
 # :schema category
 require 'dbagile/command/heading'
+require 'dbagile/command/drop'
 
 # :restful category
 require 'dbagile/command/webtools'
