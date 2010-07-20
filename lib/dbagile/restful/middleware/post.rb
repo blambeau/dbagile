@@ -9,10 +9,10 @@ module DbAgile
           decode(env, :json) do |connection, table, format|
             heading = connection.heading(table)
             tuple = params_to_tuple(request.POST, heading)
-            # connection.transaction do |t|
-            #   t.insert(table, tuple)
-            # end
-            to_xxx_enumerable(format, [ tuple ], tuple.keys)
+            inserted = connection.transaction do |t|
+              t.insert(table, tuple)
+            end
+            to_xxx_enumerable(format, [ inserted ], tuple.keys)
           end
         end
       

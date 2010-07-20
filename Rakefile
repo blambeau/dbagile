@@ -11,7 +11,7 @@ lib     = File.join(dir, "lib", "dbagile.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
 # Default task is spec
-task :default => [:spec]
+task :default => [:test]
 
 # Creates the fixtures
 desc "Creates physical SQL test databases"
@@ -32,17 +32,25 @@ task :fixtures do
   DbAgile::Fixtures::create_fixtures
 end
 
-# About spec tests
-desc "Run all rspec test"
-Spec::Rake::SpecTask.new do |t|
-  t.ruby_opts = ['-I.']
-  t.spec_files = FileList[
-    'test/unit.spec', 
-    'test/oldies.spec', 
-    'test/contract.spec', 
-    'test/commands.spec', 
-    'test/restful.spec'
-  ]
+tests = [ :assumptions, :unit, :contract, :commands, :restful, :oldies]
+tests.each do |kind|
+  desc "Run #{kind} spec tests"  
+  Spec::Rake::SpecTask.new("#{kind}_test".to_sym) do |t|
+    t.ruby_opts = ['-I.']
+    t.spec_files = FileList["test/#{kind}.spec"]
+  end
+end
+
+desc "Run all tests"
+task :test do
+  tests.each{|kind| 
+    puts
+    puts "Running #{kind}_test"
+    result = `rake #{kind}_test`
+    result.each_line{|l| 
+      puts l unless l =~ /^\s*\.*\s*$|\(in /
+    }
+  }
 end
 
 # About yard documentation
