@@ -37,7 +37,7 @@ module DbAgile
         opt.version = DbAgile::VERSION
         opt.release = nil
         opt.summary_indent = ' ' * 2
-        opt.banner = self.banner.gsub(/^[ \t]+/, "")
+        opt.banner = self.banner
         add_options(opt)
       end
     end

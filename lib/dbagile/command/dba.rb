@@ -31,13 +31,15 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba [--version] [--help]\n"\
+        "Usage: dba [--version] [--help] [--list]\n"\
         "       dba help <subcommand>\n"\
         "       dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]"
       end
 
       # Contribute to options
       def add_options(opt)
+        opt.separator nil
+        opt.separator "Options:"
         opt.on("--config=FILE", 
                "Use a specific configuration file (defaults to ~/.dbagile)") do |value|
           self.config_file_path = value
@@ -46,8 +48,12 @@ module DbAgile
                "Use a specific database configuration") do |value|
           self.use_config = value
         end
-        opt.on_tail("--help", "--help", "Show this message") do
-          show_help
+        opt.on_tail("--help", "Show help") do
+          show_short_help
+          self.stop_after_options = true
+        end
+        opt.on_tail("--list", "Show list of available subcommands") do
+          show_long_help
           self.stop_after_options = true
         end
         opt.on_tail("--version", "Show version") do
@@ -78,14 +84,17 @@ module DbAgile
         end
       end
 
-      # Shows the help
-      def show_help
+      # Shows the short help
+      def show_short_help
         display banner
-        display "\n"
-        display "Options:"
         display options.summarize
         display "\n"
-        
+      end
+      alias :show_help :show_short_help
+      
+      # Shows the long help
+      def show_long_help
+        show_short_help
         CATEGORIES.each{|categ|
           display CATEGORY_NAMES[categ]
           show_commands_help(categ)

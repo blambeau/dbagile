@@ -9,34 +9,44 @@ Have you ever dreamed of being able to output the content of a SQL query as a .c
 DbAgile installs a 'dba' command line tool whose aim is to support database administrators for simple but very common tasks, as illustrated below.
 
 <pre class="shell">
-  sh$ dba --help
+  sh$ dba --list
 
-  Usage: dba [--version] [--help]
+  Usage: dba [--version] [--help] [--list]
          dba help <subcommand>
-         dba <subcommand> [OPTIONS] [ARGS]
+         dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+
+  Options:
+        --config=FILE                Use a specific configuration file (defaults to ~/.dbagile)
+        --use=DB                     Use a specific database configuration
+        --help                       Show help
+        --list                       Show list of available subcommands
+        --version                    Show version
 
   Main commands:
-    help       Show help for a specific command
-    history    Display dba command history
-    replay     Replay a previous history command (last one by default)
+    help      Show help for a specific command
+    history   Display dba command history
+    replay    Replay a previous history command (last one by default)
 
   Configuration management:
-    list       List available database configurations (found in ~/.dbagile)
-    ping       Ping a configuration (current one by default)
-    use        Set the current database configuration to use
-    add        Add a new database configuration
-    rm         Remove a database configuration
+    list      List available database configurations (found in ~/.dbagile)
+    ping      Ping a configuration (current one by default)
+    use       Set the current database configuration to use
+    add       Add a new database configuration
+    rm        Remove a database configuration
 
   Import/Export management:
-    show       Display content of a table/view/query (shortcut for 'export --text ...')
-    export     Export a table/view/query to (csv, json, yaml, ruby, xml)
-    import     Import a table from (csv, json, yaml, ruby)
+    show      Display content of a table/view/query (shortcut for 'export --text ...')
+    export    Export a table/view/query to (csv, json, yaml, ruby, xml)
+    import    Import a table from (csv, json, yaml, ruby)
 
-  SQL based commands:
-    sql        Send SQL directly to the DBMS
+  Database and the web
+    webtools  Starts the web tools
 
-  Restful server:
-    webtools   Starts the web tools
+  Queries:
+    sql       Send SQL directly to the DBMS
+
+  Database schema:
+    heading   Shows the heading of a table
 </pre>
 
 h2. Getting started
