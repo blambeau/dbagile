@@ -5,13 +5,16 @@ dbagile_load_all_subspecs(__FILE__)
 
 describe "DbAgile::Restful feature" do
   
-  let(:server){ DbAgile::Restful::Server.new(DbAgile::Fixtures::environment) }
-  let(:client){ DbAgile::Restful::Client.new(server.uri)                     }
-  before(:all){ server.start }
-  after(:all) { server.stop  }
+  let(:environment){ DbAgile::Fixtures::environment                        }
+  let(:config_name){ :sqlite                                               }
+  let(:config)     { environment.config_file.config(config_name)           }
+  let(:server)     { DbAgile::Restful::Server.new(environment)             }
+  let(:client)     { DbAgile::Restful::Client.new(server.uri)              }
+  before(:all)     { server.start                                          }
+  after(:all)      { server.stop                                           }
   
   def basic_values_uri(extension = "")
-    "sqlite/basic_values#{extension}"
+    "#{config_name}/basic_values#{extension}"
   end
       
   describe "the GET interface" do
