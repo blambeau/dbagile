@@ -71,9 +71,6 @@ module DbAgile
             dba.use(config.name)
             each_table_file{|name, file|
               dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
-              if name == 'basic_values'
-                dba.show "basic_values"
-              end
             }
             dba.sql "DELETE FROM empty_table"
           else

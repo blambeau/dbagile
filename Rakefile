@@ -32,7 +32,7 @@ task :fixtures do
   DbAgile::Fixtures::create_fixtures
 end
 
-tests = [ :assumptions, :unit, :contract, :commands, :restful, :oldies]
+tests = Dir[File.expand_path('../test/*.spec', __FILE__)].collect{|f| File.basename(f, '.spec')}
 tests.each do |kind|
   desc "Run #{kind} spec tests"  
   Spec::Rake::SpecTask.new("#{kind}_test".to_sym) do |t|
@@ -41,16 +41,9 @@ tests.each do |kind|
   end
 end
 
-desc "Run all tests"
-task :test do
-  tests.each{|kind| 
-    puts
-    puts "Running #{kind}_test"
-    result = `rake #{kind}_test`
-    result.each_line{|l| 
-      puts l unless l =~ /^\s*\.*\s*$|\(in /
-    }
-  }
+desc "Run all spec tests"
+task :spec => :fixtures do
+  load(File.expand_path('../test/run_all_suite.rb', __FILE__))
 end
 
 # About yard documentation

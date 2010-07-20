@@ -1,6 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
-describe "DbAgile::Command through API" do
+describe "DbAgile::Command::API /" do
   
   # Path to an empty configuration file
   let(:empty_config_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
@@ -8,86 +8,101 @@ describe "DbAgile::Command through API" do
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
-  # Remove empty config between all test
-  before(:each){ FileUtils.rm_rf(empty_config_path) }
-  after(:each){ FileUtils.rm_rf(empty_config_path) }
+  # Clean everything after tests
+  after(:all) { FileUtils.rm_rf(empty_config_path) }
+    
+  # -- Configuration
+  describe "configuration commands (touching) /" do 
   
-  ### Configuration commands
+    # Remove empty config between all test
+    before       {  dba.config_file_path = empty_config_path }
+    before(:each){ FileUtils.rm_rf(empty_config_path)        }
   
-  describe "The configuration commands" do 
-    describe "The list command" do
-      it_should_behave_like "The list command" 
-    end
-
-    describe "The add command" do
+    describe "add" do
       it_should_behave_like "The add command" 
     end
   
-    describe "The rm command" do
+    describe "rm" do
       it_should_behave_like "The rm command" 
     end
   
-    describe "The use command" do
+    describe "use" do
       it_should_behave_like "The use command" 
     end
   
-    describe "The ping command" do
+  end # -- Configuration
+  
+  # -- Configuration
+  describe "configuration commands (touching) /" do 
+  
+    # Make usage of sqlite for these tests
+    before { dba.use %{sqlite} }
+  
+    describe "list" do
+      it_should_behave_like "The list command" 
+    end
+  
+    describe "ping" do
       it_should_behave_like "The ping command" 
     end
-  end
+
+  end # -- Configuration
   
-  ### Inport/Export commands
-  DbAgile::Fixtures::environment.config_file.each do |config|
-    next if config.name == :unexisting
-    unless config.ping?
-      puts "skipping #{config.name} (no ping)"
-      next
+  # -- Input/Output
+  describe "input/output commands" do 
+
+    # Make usage of sqlite for these tests
+    before{ 
+      dba.use %{sqlite}
+      dba.output_buffer = StringIO.new
+    }
+    
+    describe "The show command" do
+      it_should_behave_like "The show command" 
     end
 
-    puts "on #{config.name} (#{config.uri})"
-        
-    describe "The input/output commands on #{config.name}" do 
+    describe "The export command" do
+      it_should_behave_like "The export command" 
+    end
 
-      before{ 
-        dba.use([ config.name ]) 
-        dba.output_buffer = StringIO.new
-      }
-    
-      describe "The show command" do
-        it_should_behave_like "The show command" 
-      end
+    describe "The import command" do
+      it_should_behave_like "The import command" 
+    end
 
-      describe "The export command" do
-        it_should_behave_like "The export command" 
-      end
-
-      describe "The import command" do
-        it_should_behave_like "The import command" 
-      end
+  end # -- Input/Output
   
-    end
+  # -- Query
+  describe "query commands" do
     
-    describe "The SQL commands on #{config.name}" do
-      
-      describe "The sql command" do
-        it_should_behave_like "The sql command" 
-      end
-
-    end
+    # Make usage of sqlite for these tests
+    before{ 
+      dba.use %{sqlite}
+      dba.output_buffer = StringIO.new
+    }
     
-    describe "The Schema commands on #{config.name}" do
-      
-      describe "The heading command" do
-        it_should_behave_like "The heading command" 
-      end
-
-      describe "The drop command" do
-        it_should_behave_like "The drop command" 
-      end
-
+    describe "The sql command" do
+      it_should_behave_like "The sql command" 
     end
-    
-  end
 
+  end # -- Query
+  
+  # -- Schema
+  describe "schema commands" do
+    
+    # Make usage of sqlite for these tests
+    before{ 
+      dba.use %{sqlite}
+      dba.output_buffer = StringIO.new
+    }
+    
+    describe "The heading command" do
+      it_should_behave_like "The heading command" 
+    end
+
+    describe "The drop command" do
+      it_should_behave_like "The drop command" 
+    end
+
+  end # -- Schema
   
 end
