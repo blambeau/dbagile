@@ -110,8 +110,7 @@ module DbAgile
       # @raise NoSuchConfigError if the configuration cannot be found.
       # @return block execution result
       #
-      def with_connection(config, conn_options = {})
-        raise ArgumentError, "Missing block" unless block_given?
+      def with_connection(config, conn_options = {}, &block)
         case config
           when Symbol
             config = config_file.config(config)
@@ -120,14 +119,7 @@ module DbAgile
             raise ArgumentError, "Config should be a config name"
         end
         raise NoSuchConfigError if config.nil?
-        
-        begin
-          connection = config.connect(nil, conn_options)
-          result = yield(connection)
-          result
-        ensure
-          connection.disconnect
-        end
+        config.with_connection(&block)
       end
       
       # 

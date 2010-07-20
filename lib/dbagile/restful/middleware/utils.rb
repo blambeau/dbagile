@@ -42,43 +42,6 @@ module DbAgile
           ]
         end
       
-        # Decodes a path and yield the block with a connection and the 
-        # requested format
-        def decode(env, default_format = nil)
-          case env['PATH_INFO'].strip[1..-1]
-            when ''
-              _copyright_(env)
-            when /(\w+)\/(\w+)(\.(\w+))?$/
-              db, table = $1.to_sym, $2.to_sym
-            
-              # Handle format
-              if $3
-                format = known_extension?($3)
-                return _404_(env) unless format
-              else
-                format = default_format
-              end
-            
-              result = with_connection(db) do |connection|
-                yield(connection, table, format) 
-              end
-              content_type = DbAgile::IO::FORMAT_TO_CONTENT_TYPE[format]
-              [200, {'Content-Type' => content_type}, result]
-            else
-              _404_(env)
-          end
-        rescue DbAgile::InvalidConfigurationName,
-               DbAgile::NoSuchConfigError,
-               DbAgile::NoSuchTableError => ex
-          return _404_(env, ex)
-        rescue DbAgile::Error, Sequel::Error => ex
-          if ex.message =~ /exist/
-            _404_(env)
-          else
-            raise
-          end
-        end
-      
         # Converts a dataset-like object to an enumerable rack result
         def to_xxx_enumerable(format, dataset, columns)
           buffer = StringIO.new

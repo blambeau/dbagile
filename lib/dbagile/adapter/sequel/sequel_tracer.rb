@@ -17,6 +17,7 @@ module DbAgile
       
       # Creates a tracer instance
       def initialize(delegate, options)
+        raise ArgumentError, "Connection options should be a Hash" unless options.kind_of?(Hash)
         @delegate = delegate
         @options = DEFAULT_OPTIONS.merge(options)
       end

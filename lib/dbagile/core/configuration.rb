@@ -31,6 +31,11 @@ module DbAgile
         @connector.plug(*args)
       end
       
+      # Checks if the connection pings correctly.
+      def ping?
+        connect.ping?
+      end
+      
       # Connects and returns a Connection object
       def connect(uri = @uri, options = {})
         adapter = DbAgile::Adapter::factor(uri || @uri, options)
@@ -38,9 +43,21 @@ module DbAgile
         Connection.new(connector)
       end
       
-      # Checks if the connection pings correctly.
-      def ping?
-        connect.ping?
+      #
+      # Yields the block with a connection; disconnect after that.
+      #
+      # @raise ArgumentError if no block is provided
+      # @return block execution result
+      #
+      def with_connection(conn_options = {})
+        raise ArgumentError, "Missing block" unless block_given?
+        begin
+          connection = connect(@uri, conn_options)
+          result = yield(connection)
+          result
+        ensure
+          connection.disconnect if connection
+        end
       end
       
       # Inspects this configuration, returning a ruby chunk of code

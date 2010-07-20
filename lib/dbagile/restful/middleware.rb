@@ -3,43 +3,50 @@ require 'dbagile'
 require 'dbagile/restful/middleware/utils'
 require 'dbagile/restful/middleware/get'
 require 'dbagile/restful/middleware/post'
+require 'dbagile/restful/middleware/one_config'
 module DbAgile
   module Restful
     class Middleware
-      include DbAgile::Environment::Delegator
       include Middleware::Utils
-      include Middleware::Get
-      include Middleware::Post
     
       # Environment
       attr_reader :environment
+      
+      # OneConfig delegates
+      attr_reader :delegates
     
       # Creates a Restful handler
       def initialize(environment = DbAgile::default_environment, &block)
         raise "Environment may not be nil" if environment.nil?
         block.call(environment) if block
         @environment = environment
-      end
-    
-      # Rack handler
-      def call(env)
-        method = env['REQUEST_METHOD'].downcase.to_sym
-        if self.respond_to?(method)
-          result = self.send(method, env)
-        else
-          puts "Unsupported restful method #{env['REQUEST_METHOD']}"
-          [
-            500, 
-            {'Content-Type' => 'text/plain'},
-            ["Unsupported restful method #{env['REQUEST_METHOD']}"]
-          ]
-        end
-      rescue Exception => ex
-        puts ex.message
-        puts ex.backtrace.join("\n")
-        [500, {'Content-Type' => 'text/plain'}, [ex.message]]
+        _install
       end
       
+      # Installs the delegates
+      def _install
+        @delegates = {}
+        environment.config_file.each{|config|
+          @delegates[config.name] = Middleware::OneConfig.new(config)
+        }
+      end
+      
+      # Delegated according to the path
+      def call(env)
+        env['PATH_INFO'] =~ /^\/(\w+)(.*)$/
+        if $1
+          if delegates.key?($1.to_sym)
+            env['PATH_INFO'] = $2
+            delegates[$1.to_sym].call(env)
+          else
+            _404_(env)
+          end
+        else
+          _copyright_(env)
+        end
+      end
+     
+      private :_install
     end # class Middleware
   end # module Restful
 end # module DbAgile
