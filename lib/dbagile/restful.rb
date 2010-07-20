@@ -2,6 +2,7 @@ require 'stringio'
 require 'dbagile'
 require 'dbagile/restful/utils'
 require 'dbagile/restful/get'
+require 'dbagile/restful/post'
 module DbAgile
   #
   # Implements a Restful rack middleware on top of dbagile
@@ -10,6 +11,7 @@ module DbAgile
     include DbAgile::Environment::Delegator
     include DbAgile::Restful::Utils
     include Restful::Get
+#    include Restful::Post
     
     # Environment
     attr_reader :environment
