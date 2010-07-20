@@ -71,8 +71,6 @@ module DbAgile
             each_table_file{|name, file|
               dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
               if name == 'basic_values'
-                puts "Setting to null"
-                dba.sql "UPDATE basic_values SET ruby_nil = null"
                 dba.show "basic_values"
               end
             }
@@ -82,14 +80,6 @@ module DbAgile
           end
         end
       end
-    end
-    
-    # Returns the basic values
-    def basic_values
-      return @basic_values if @basic_values
-      @basic_values = Kernel.eval(File.read(basic_values_path))
-      @basic_values[0][:ruby_nil] = nil
-      @basic_values
     end
     
     # Returns basic_values tuple
@@ -125,7 +115,6 @@ module DbAgile
     
     # Provide helpers to get the contents of the tables
     each_table_file do |name, file|
-      next if name == "basic_values"
       define_method name do
         Kernel.eval(File.read(file))
       end

@@ -20,13 +20,11 @@ shared_examples_for("The import command") do
     end
     
     it "should support an export/import piping through StringIO" do
-      pending "Still problems with null values so far" do
-        dba.export %w{--ruby basic_values}
-        dba.input_buffer  = StringIO.new(dba.output_buffer.string)
-        dba.output_buffer = StringIO.new 
-        dba.import %w{--ruby --create-table basic_values_copy}
-        dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
-      end
+      dba.export %w{--ruby basic_values}
+      dba.input_buffer  = StringIO.new(dba.output_buffer.string)
+      dba.output_buffer = StringIO.new 
+      dba.import %w{--ruby --create-table basic_values_copy}
+      dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
     end
 
   end # --ruby
@@ -37,13 +35,11 @@ shared_examples_for("The import command") do
     describe "When piping import/export with --type-safe in #{format}" do
   
       it "should be type safe" do
-        pending "Still problems with null values so far" do
-          dba.export "--format", format, "--type-safe", "basic_values"
-          dba.input_buffer  = StringIO.new(dba.output_buffer.string)
-          dba.output_buffer = StringIO.new 
-          dba.import "--drop-table", "--format", format, "--type-safe", "basic_values_copy"
-          dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
-        end
+        dba.export "--format", format, "--type-safe", "basic_values"
+        dba.input_buffer  = StringIO.new(dba.output_buffer.string)
+        dba.output_buffer = StringIO.new 
+        dba.import "--drop-table", "--format", format, "--type-safe", "basic_values_copy"
+        dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
       end
   
     end

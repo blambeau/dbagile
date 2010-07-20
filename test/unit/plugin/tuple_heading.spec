@@ -8,10 +8,4 @@ describe "::DbAgile::Plugin#tuple_heading" do
     it{ should == {:id => Fixnum, :name => String} }
   end
 
-  describe "When called with nil values" do
-    subject{ plugin.send(:tuple_heading, :id => 1, :name => nil) }
-    it{ should == {:id => Fixnum} }
-  end
-
-  
 end

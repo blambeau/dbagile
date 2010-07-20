@@ -9,6 +9,11 @@ require 'dbagile/io/text'
 module DbAgile
   module IO
     
+    # Options to set to ensure roundtrip on each format
+    ROUND_TRIP_OPTIONS = {
+      :type_system => SByC::TypeSystem::Ruby
+    }
+      
     # Known IO formats
     KNOWN_FORMATS = [:yaml, :csv, :json, :ruby, :text, :xml]
     
@@ -61,14 +66,28 @@ module DbAgile
       FORMAT_TO_CONTENT_TYPE[f]
     end
     
+    # Returns roundtrip options
+    def roundtrip_options(format)
+      ROUND_TRIP_OPTIONS
+    end
+    
     # Install helper methods now
-    FORMAT_TO_MODULE.each_pair do |format, mod|
+    KNOWN_TO_FORMATS.each{|format|
       module_eval <<-EOF
         def to_#{format}(*args, &block)
-          #{mod}.to_#{format}(*args, &block)
+          FORMAT_TO_MODULE[#{format.inspect}].to_#{format}(*args, &block)
         end
       EOF
-    end
+    }
+    
+    # Install helper methods now
+    KNOWN_FROM_FORMATS.each{|format|
+      module_eval <<-EOF
+        def from_#{format}(*args, &block)
+          FORMAT_TO_MODULE[#{format.inspect}].from_#{format}(*args, &block)
+        end
+      EOF
+    }
     
     extend(DbAgile::IO)
   end # module IO

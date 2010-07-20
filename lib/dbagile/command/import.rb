@@ -144,6 +144,7 @@ module DbAgile
         end
         if create_table
           heading = tuple_heading(tuple)
+          heading = check_tuple_heading(heading, environment)
           t.create_table(self.dataset, heading)
         end
         if truncate_table

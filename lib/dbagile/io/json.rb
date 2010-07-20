@@ -19,6 +19,7 @@ module DbAgile
           else
             buffer << ::JSON::fast_generate(tuple)
           end
+          first = false
         end
         buffer << (pretty ? "\n]" : "]")
         buffer

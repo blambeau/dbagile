@@ -5,7 +5,22 @@ module DbAgile
       # Returns the heading of a given tuple
       def tuple_heading(tuple)
         heading = {}
-        tuple.each_pair{|name, value| heading[name] = value.class unless value.nil?}
+        tuple.each_pair{|name, value| heading[name] = value.class}
+        heading
+      end
+      
+      # Checks a tuple heading, displaying a warning message on the 
+      # environment if something goes bad...
+      def check_tuple_heading(heading, environment)
+        heading.each_pair{|k,v|
+          if NilClass == v
+            environment.say("WARNING: NilClass in heading (type inference failure), using String")
+            heading[k] = String
+          elsif !DbAgile::RECOGNIZED_DOMAINS.include?(v)
+            environment.say("WARNING: Unrecognized domain #{v} in heading, using String")
+            heading[k] = String
+          end
+        }
         heading
       end
       

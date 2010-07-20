@@ -44,7 +44,13 @@ module DbAgile
         csv, options = build_csv_instance(buffer, options)
         
         # Write header if required
-        csv << columns if options[:headers]
+        if options[:headers]
+          if ts = options[:type_system]
+            csv << columns.collect{|c| ts.to_literal(c)}
+          else
+            csv << columns
+          end
+        end
         
         # Write tuples now
         with_type_safe_relation(data, options) do |tuple|
@@ -64,20 +70,26 @@ module DbAgile
       def from_csv(input, options = {})
         # Creates a CSV inputer with options
         csv, options = build_csv_instance(input, options)
-        csv.header_convert(:symbol)
-        csv.convert{|field| options[:type_system].parse_literal(field)} if options[:type_system]
+        if ts = options[:type_system]
+          converter = lambda{|field| ts.parse_literal(field)}
+          csv.header_convert(&converter)
+          csv.convert(&converter)
+        end
         
         # Load data now
         ts = options[:type_system]
-        tuples = []
-        csv.each do |row|
-          next if row.header_row?
-          tuple = row.to_hash
-          if block_given?
-            yield(tuple)
-          else
-            tuples << tuple
+        if block_given?
+          csv.each do |row|
+            next if row.header_row?
+            yield(row.to_hash)
           end
+        else
+          tuples = []
+          csv.each do |row|
+            next if row.header_row?
+            tuples << row.to_hash
+          end
+          tuples
         end
       end
       module_function :from_csv

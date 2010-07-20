@@ -8,10 +8,4 @@ describe "::DbAgile::Tools::Tuple#tuple_heading" do
     it{ should == {:id => Fixnum, :name => String} }
   end
 
-  describe "When called with nil values" do
-    subject{ tools.tuple_heading(:id => 1, :name => nil) }
-    it{ should == {:id => Fixnum} }
-  end
-
-  
 end

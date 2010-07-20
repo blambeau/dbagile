@@ -1,7 +1,19 @@
+require 'time'
+require 'date'
 module DbAgile
   
   # Version of the DbAgile interface
   VERSION = "0.0.1".freeze
+  
+  # Domains recognized as valid domains inside a SQL database
+  RECOGNIZED_DOMAINS = [
+    TrueClass, FalseClass, 
+    String, 
+    Fixnum, Bignum, Integer,
+    Float,
+    Time, 
+    Date
+  ]
   
   # 
   # Builds a DbAgile::Command::API instance and yields the block with the

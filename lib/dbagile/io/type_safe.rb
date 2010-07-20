@@ -29,7 +29,10 @@ module DbAgile
       def from_typesafe_tuple(type_system, tuple)
         return tuple if type_system.nil?
         copy = {}
-        tuple.each_pair{|k,v| copy[k] = type_system.parse_literal(v)}
+        tuple.each_pair{|k,v| 
+          k = k.to_sym unless k.kind_of?(Symbol)
+          copy[k] = type_system.parse_literal(v)
+        }
         copy
       end
       
