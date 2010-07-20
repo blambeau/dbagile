@@ -26,7 +26,7 @@ module DbAgile
       # Installs the delegates
       def _install
         @delegates = {}
-        environment.config_file.each{|config|
+        environment.config_file(false).each{|config|
           @delegates[config.name] = Middleware::OneConfig.new(config)
         }
       end

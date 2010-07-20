@@ -41,8 +41,13 @@ tests.each do |kind|
   end
 end
 
-desc "Run all spec tests"
+desc "Install physical fixtures the run all spec tests"
 task :spec => :fixtures do
+  load(File.expand_path('../test/run_all_suite.rb', __FILE__))
+end
+
+desc "Run all spec tests directly"
+task :suite do
   load(File.expand_path('../test/run_all_suite.rb', __FILE__))
 end
 
