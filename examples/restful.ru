@@ -1,5 +1,5 @@
-#!/usr/bin/env rackup --require dbagile/restful -p 8711
-app = DbAgile::Restful.new{|env|
+#!/usr/bin/env rackup --require dbagile/restful/middleware -p 8711
+app = DbAgile::Restful::Middleware.new{|env|
   #
   # Set the environment!
   #

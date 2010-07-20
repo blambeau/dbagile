@@ -24,6 +24,11 @@ module DbAgile
         key.nil? ? tuple : tuple_project(tuple, key)
       end
       
+      # Converts a tuple to a query string
+      def tuple_to_querystring(tuple)
+        tuple.collect{|k,v| "#{CGI::escape(k.to_s)}=#{CGI::escape(v.to_s)}"}.reverse.join('&')
+      end
+      
     end # module Tools
   end # class Adapter
 end # module DbAgile
