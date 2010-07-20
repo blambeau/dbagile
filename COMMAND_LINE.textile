@@ -36,7 +36,7 @@ DbAgile installs a 'dba' command line tool whose aim is to support database admi
     sql        Send SQL directly to the DBMS
 
   Restful server:
-    restful    Starts the restful server
+    webtools   Starts the web tools
 </pre>
 
 h2. Getting started
