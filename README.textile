@@ -26,7 +26,7 @@ Or to output the result of any SQL query to yaml, json, csv, ruby, ... or even x
 Or to have a Restful server on top of SQL databases?
 
 <pre class="shell">
-  dba restful
+  dba webtools
 </pre>
 
 Making similar things, ... in Ruby?
