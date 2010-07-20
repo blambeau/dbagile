@@ -46,8 +46,8 @@ Making similar things, ... in Ruby?
 The Rack middleware for the restful server (config.ru):
 
 <pre>
-  #!/usr/bin/env rackup --require dbagile/restful -p 8711
-  app = DbAgile::Restful.new{|env|
+  #!/usr/bin/env rackup --require dbagile/restful/middleware -p 8711
+  app = DbAgile::Restful::Middleware.new{|env|
     #
     # Set the environment!
     #
@@ -58,7 +58,6 @@ The Rack middleware for the restful server (config.ru):
     env.config_file_path  = ::File.expand_path('../dbagile.config', __FILE__)
     env.history_file_path = nil
   }
-  run app
 </pre>
 
 h2. Pointers
