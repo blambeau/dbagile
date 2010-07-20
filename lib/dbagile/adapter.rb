@@ -1,4 +1,3 @@
-require 'dbagile/adapter/tools'
 module DbAgile
   class Adapter
     include DbAgile::Contract::Robust::Helpers

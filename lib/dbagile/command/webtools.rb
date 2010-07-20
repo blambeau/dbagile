@@ -1,13 +1,13 @@
 module DbAgile
   class Command
     #
-    # Starts the restful server
+    # Starts the web tools
     #
-    class Restful < Command
+    class WebTools < Command
       
       # Returns the command banner
       def banner
-        "Usage: dba restful [OPTIONS]"
+        "Usage: dba webtools [OPTIONS]"
       end
       
       # Returns command's category
@@ -17,7 +17,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Starts the restful server"
+        "Starts the webtools server"
       end
       
       # Sets the default options
@@ -34,13 +34,12 @@ module DbAgile
       # @return [DbAgile::Core::Configuration] the created configuration
       #
       def execute_command
-        require 'dbagile/restful'
         require 'dbagile/restful/server'
         DbAgile::Restful::Server.new(environment).start.join
       rescue Interrupt => ex
         environment.say("Ciao!")
       end
       
-    end # class List
+    end # class WebTools
   end # class Command
 end # module DbAgile

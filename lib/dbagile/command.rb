@@ -146,7 +146,7 @@ require 'dbagile/command/import'
 require 'dbagile/command/sql'
 
 # :restful category
-require 'dbagile/command/restful'
+require 'dbagile/command/webtools'
 
 # Build Command API now
 require 'dbagile/command/api'

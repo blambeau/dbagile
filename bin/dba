@@ -6,8 +6,7 @@
 #  Copyright (c) 2010 Bernard Lambeau & University of Louvain, 
 #  Released under a MIT or Ruby licence
 #
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'rubygems'
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'dbagile'
 
 begin

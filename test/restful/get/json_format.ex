@@ -8,5 +8,12 @@ describe "when called with .json extension" do
     }
   end
   
+  it "should be the default" do
+    client.get(basic_values_uri){|res,http|
+      res.content_type.should == 'application/json'
+      res.body.should be_a_valid_json_string
+    }
+  end
+  
 end # .json
 
