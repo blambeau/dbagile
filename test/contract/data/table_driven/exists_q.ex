@@ -14,6 +14,7 @@ end
 it "should support SQL queries" do
   
   subject.exists?("SELECT * FROM basic_values").should be_true
+
   subject.exists?("SELECT * FROM basic_values WHERE id=10").should be_false
   
 end
