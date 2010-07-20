@@ -77,6 +77,14 @@ module DbAgile
           raise
         end
       end
+      
+      # Converts a dataset-like object to an enumerable rack result
+      def to_xxx_enumerable(format, dataset, columns)
+        buffer = StringIO.new
+        method = "to_#{format}".to_sym
+        DbAgile::IO.send(method, dataset, columns, buffer)
+        [ buffer.string ]
+      end
 
     end # module Utils
   end # class Restful

@@ -16,12 +16,7 @@ module DbAgile
           dataset = connection.dataset(table, projection)
 
           # Make output now
-          buffer = StringIO.new
-          method = "to_#{format}".to_sym
-          DbAgile::IO.send(method, dataset, columns, buffer)
-
-          # Return result
-          [ buffer.string ]
+          to_xxx_enumerable(format, dataset, columns)
         end
       end
       

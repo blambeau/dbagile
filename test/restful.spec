@@ -33,23 +33,23 @@ describe "DbAgile::Restful feature" do
   end
       
   # Makes a post request
-  # def post(table, extension, tuple)
-  #   url = URI.parse(to_uri(table, extension))
-  #   Net::HTTP.start(url.host, url.port) {|http|
-  #     req = Net::HTTP::Post.new(url.path)
-  #     req.set_form_data(tuple)
-  #     res = http.request(req)
-  #     yield(res, http)
-  #     res.body
-  #   }
-  # end
+  def post(table, extension, tuple)
+    url = URI.parse(to_uri(table, extension))
+    Net::HTTP.start(url.host, url.port) {|http|
+      req = Net::HTTP::Post.new(url.path)
+      req.set_form_data(tuple)
+      res = http.request(req)
+      yield(res, http)
+      res.body
+    }
+  end
       
   describe "the GET interface" do
     it_should_behave_like "The Restful GET interface" 
   end
 
-  # describe "the POST interface" do
-  #   it_should_behave_like "The Restful POST interface" 
-  # end
+  describe "the POST interface" do
+    it_should_behave_like "The Restful POST interface" 
+  end
 
 end

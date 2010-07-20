@@ -11,7 +11,7 @@ module DbAgile
     include DbAgile::Environment::Delegator
     include DbAgile::Restful::Utils
     include Restful::Get
-#    include Restful::Post
+    include Restful::Post
     
     # Environment
     attr_reader :environment
