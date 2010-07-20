@@ -32,11 +32,11 @@ module DbAgile
     
     # Parses commandline options provided as an array of Strings.
     def options
-      @options  ||= OptionParser.new do |opt|
+      @options ||= OptionParser.new do |opt|
         opt.program_name = File.basename $0
         opt.version = DbAgile::VERSION
         opt.release = nil
-        opt.summary_indent = ' ' * 4
+        opt.summary_indent = ' ' * 2
         opt.banner = self.banner.gsub(/^[ \t]+/, "")
         add_options(opt)
       end
