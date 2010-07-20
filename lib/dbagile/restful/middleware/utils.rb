@@ -41,6 +41,15 @@ module DbAgile
             result
           ]
         end
+        
+        # Returns a 500 response
+        def _500_(env, message)
+          [
+            500, 
+            {'Content-Type' => 'text/plain'}, 
+            [ message ]
+          ]
+        end
       
         # Converts a dataset-like object to an enumerable rack result
         def to_xxx_enumerable(format, dataset, columns)

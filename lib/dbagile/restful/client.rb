@@ -4,6 +4,7 @@ require 'net/http'
 require 'dbagile/restful/client/utils'
 require 'dbagile/restful/client/get'
 require 'dbagile/restful/client/post'
+require 'dbagile/restful/client/delete'
 module DbAgile
   module Restful
     #
@@ -13,6 +14,7 @@ module DbAgile
       include DbAgile::Restful::Client::Utils
       include DbAgile::Restful::Client::Get
       include DbAgile::Restful::Client::Post
+      include DbAgile::Restful::Client::Delete
       include DbAgile::Tools::Tuple
 
       # Server uri

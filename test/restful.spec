@@ -25,4 +25,8 @@ describe "DbAgile::Restful feature" do
     it_should_behave_like "The Restful POST interface" 
   end
 
+  describe "the DELETE interface" do
+    it_should_behave_like "The Restful DELETE interface" 
+  end
+
 end
