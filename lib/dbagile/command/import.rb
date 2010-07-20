@@ -140,7 +140,7 @@ module DbAgile
       def handle_schema_modification(t, tuple)
         # Handle table creation/deletion/truncation
         if drop_table
-          t.direct_sql("DROP TABLE #{self.dataset}") if t.has_table?(self.dataset)
+          t.drop_table(self.dataset) if t.has_table?(self.dataset)
         end
         if create_table
           heading = tuple_heading(tuple)

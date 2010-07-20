@@ -100,6 +100,8 @@ module DbAgile
       # Format the value so it takes up exactly size characters
       def self.format_cell(size, v) # :nodoc:
         case v
+          when NilClass
+            "%-#{size}s" % "[null]"
           when Bignum, Fixnum
             "%#{size}d" % v
           when Float

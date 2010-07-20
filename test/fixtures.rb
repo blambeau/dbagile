@@ -32,6 +32,7 @@ module DbAgile
     
     # Creates the physical databases for fixtures
     def create_physical_databases
+      FileUtils.rm_rf '/tmp/dbagile_test.db'
       require 'readline'
       puts "#################################################################################"
       puts "ATTENTION: This task will create physical test databases on your computer"
@@ -61,13 +62,19 @@ module DbAgile
     def create_fixtures
       ensure_physical_databases!
       DbAgile::dba(environment) do |dba|
+        dba.output_buffer = STDOUT
+        dba.console_width = nil
         dba.config_file.each do |config|
           if config.ping?
             puts "Installing fixture database on #{config.name.inspect}"
             dba.use(config.name)
             each_table_file{|name, file|
-              puts "Importing table #{name}"
               dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
+              if name == 'basic_values'
+                puts "Setting to null"
+                dba.sql "UPDATE basic_values SET ruby_nil = null"
+                dba.show "basic_values"
+              end
             }
             dba.sql "DELETE FROM empty_table"
           else
@@ -75,6 +82,14 @@ module DbAgile
           end
         end
       end
+    end
+    
+    # Returns the basic values
+    def basic_values
+      return @basic_values if @basic_values
+      @basic_values = Kernel.eval(File.read(basic_values_path))
+      @basic_values[0][:ruby_nil] = nil
+      @basic_values
     end
     
     # Returns basic_values tuple
@@ -92,6 +107,8 @@ module DbAgile
       heading = {}
       basic_values[0].each_pair do |key, value|
         heading[key] = case value
+          when NilClass
+            String
           when TrueClass, FalseClass
             SByC::TypeSystem::Ruby::Boolean
           when Fixnum, Bignum
@@ -108,6 +125,7 @@ module DbAgile
     
     # Provide helpers to get the contents of the tables
     each_table_file do |name, file|
+      next if name == "basic_values"
       define_method name do
         Kernel.eval(File.read(file))
       end

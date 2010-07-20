@@ -8,5 +8,6 @@
    :false_value => false, 
    :id          => 1,
    :date        => Date::parse("2010-07-16"), 
-   :pos_fixnum => 1}
+   :pos_fixnum  => 1,
+   :ruby_nil    => ""}
 ]
