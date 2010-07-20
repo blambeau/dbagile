@@ -110,6 +110,23 @@ module DbAgile
       heading
     end
     
+    # Empty the basic values on a config
+    def empty_basic_values(config)
+      config.with_connection{|c|
+        c.transaction{|t| t.delete(:basic_values) }
+      }
+    end
+    
+    # Empty the basic values on a config
+    def restore_basic_values(config)
+      config.with_connection{|c|
+        c.transaction{|t| 
+          t.delete(:basic_values) 
+          t.insert(:basic_values, basic_values[0])
+        }
+      }
+    end
+    
     # Adds class methods now
     extend Fixtures
     
