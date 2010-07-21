@@ -13,9 +13,9 @@ WLang::dialect('wdoc') do
     rules WLang::RuleSet::Context
     rules WLang::RuleSet::XHtml
     
-    # Rule dedicated to :@{...} links
-    rule '@:' do |parser,offset|
-      text, reached = parser.parse(offset)
+    # Rule dedicated to @{...} links
+    rule '@' do |parser,offset|
+      text, reached = parser.parse(offset, "wlang/active-string")
       [DbAgile::Doc::to_link(text), reached]
     end
     

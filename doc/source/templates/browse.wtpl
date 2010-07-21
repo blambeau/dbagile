@@ -10,6 +10,9 @@
 <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
 </head>
 <body>
+<div id="menu">
+<<+{menu.wtpl}
+</div>
 <div id="content">
 <<+{${requested_file}}
 </div>

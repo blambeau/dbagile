@@ -2,8 +2,8 @@ h1. Restful Specification
 
 The restful specification follows. The ruby implementation are provided by the following classes.[1]
 
-- @:{MiddleWare::OneConfig} := An implementation for one database Core::Configuration. Recognizes <code>/table</code> url paths (see below)
-- @:{MiddleWare} := Acts as a middleware for a complete Core::ConfigFile and/or Environment. Installs paths under <code>/config_name/table</code>
+- @{MiddleWare::OneConfig} := An implementation for one database Core::Configuration. Recognizes <code>/table</code> url paths (see below)
+- @{MiddleWare} := Acts as a middleware for a complete Core::ConfigFile and/or Environment. Installs paths under <code>/config_name/table</code>
 
 h2. The GET interface
 
