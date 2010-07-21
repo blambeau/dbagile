@@ -16,7 +16,9 @@ describe "DbAgile::Contract /" do
   
     describe "on #{configuration.name} /" do
     
-      let(:conn)  { configuration.connect                }
+      before(:each){ @connection = configuration.connect   }
+      after(:each) { @connection.disconnect if @connection }
+      let(:conn)  { @connection }
       let(:trans) { DbAgile::Core::Transaction.new(conn) }
   
       describe "::DbAgile::Core::Connection" do

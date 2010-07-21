@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>DbAgile Restful Client test</title>
+		<meta http-equiv="Content-language" content="en" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<base href="http://127.0.0.1:8711/"/>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script type="text/javascript" src="client.js"></script>
+    <script type="text/javascript" src="jquery-1.3.2.min.js"></script>
+	</head>
+	<body>
+	  <h1>Make a get restful request</h1>
+	  <form id="form" enctype="multipart/form-data">
+	    <input name="max" value=""/>
+	    <select id="table" name="table">
+	      <option value="basic_values">basic_values</option>
+	      <option value="suppliers">suppliers</option>
+	      <option value="parts">parts</option>
+	      <option value="supplies">supplies</option>
+	    </select>
+  	  <input type="button" value="Make GET debug"  onclick="javascript:dbagile_get_debug('form')"/></br>
+  	  <input type="button" value="Make POST debug" onclick="javascript:dbagile_post_debug('form')"/></br>
+  	  <input type="button" value="Make GET call"   onclick="javascript:dbagile_get_call('form')"></input></br>
+  	  <input type="button" value="Make POST call"  onclick="javascript:dbagile_post_call('form')"></br>
+	  </form>
+	</body>
+</html>
