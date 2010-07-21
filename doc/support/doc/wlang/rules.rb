@@ -47,7 +47,7 @@ module DbAgile
           label = nil
           if parser.has_block?(reached)
             label, reached = parser.parse_block(reached, "wlang/active-string") 
-            label = WLang::encode(label, 'wlang/xhtml/entities-encoding')
+            label = ::WLang::encode(label, 'wlang/xhtml/entities-encoding')
           end
       
           # Return result

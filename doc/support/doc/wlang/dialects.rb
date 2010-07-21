@@ -35,3 +35,7 @@ WLang::dialect('wdoc') do
   end
   
 end
+
+# We need to oveeride hard-coding of 'a' on wlang/xhtml
+xhtml = WLang::dialect('wlang/xhtml')
+xhtml.add_rule('@'){|parser, offset| DbAgile::Doc::WLang::Rules.at(parser, offset)}
