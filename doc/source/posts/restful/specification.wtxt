@@ -15,7 +15,7 @@ The ruby implementation is based on the following classes.[1]
 
 h2. The GET interface
 
-The GET interface corresponds to SELECT. The query string is interpreted as a table restriction (WHERE). However, only parameters that match a table attribute are taken into account (noise free).
+The GET interface corresponds to a SELECT. The query string is interpreted as a table restriction (WHERE). However, only parameters that match a table attribute are taken into account (noise free).
 
 - /table := Returns the content of the table in json format. SQL values are converted to JSON values whenever possible. They are to_s'ed otherwise.
 - /table.[json|yaml|xml|txt|rb] := Returns the content of the table in specified format with default options. 
@@ -27,11 +27,18 @@ Example (jquery):
 
 h2. The POST interface
 
-The POST interface corresponds to INSERT (dba import). 
+The POST interface corresponds to an INSERT. 
 
-- /table := Attemps an SQL insert on table with tuple build with POST parameters. 
+- /table := Attemps a SQL insert on table with tuple build with POST parameters. 
             ATTENTION: unlike GET, this access is not noise free: posting invalid attributes will lead to an error.
 - /table.[json|yaml|rb] := Uploads data inside a table through INSERT statements. 
                            This access expects a _data_ parameter for uploaded file.
+
+h2. The DELETE interface
+
+The DELETE interface corresponds to an DELETE (sic). 
+
+- /table := Attemps a SQL delete on table. Request parameters are interpreted as a restriction (WHERE). 
+            ATTENTION: unlike GET, this access is not noise free: invalid restriction attributes will lead to an error.
 
 fn1. Unless stated explicitely by a rooted ruby namespace (i.e. starting with '::'), all classes referenced here are under the ::DbAgile namespace.

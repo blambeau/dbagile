@@ -1,3 +1,5 @@
 h1. The 'dba' command line tool
 
+DbAgile installs a 'dba' shell command that helps database administrator for common tasks. We definitely try to support recurrent tasks (like exporting data) through this shell interface. Don't hesitate to contribute your own proposals, inspired by patterns you use in practice!
+
 <<+{dba/help.wsh}

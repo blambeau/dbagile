@@ -5,3 +5,22 @@ h2. The 'dba' command line API
 The 'dba' @{/dba}{command line tool} is easily accessible in ruby itself, to help you writing non-truly-shell scripts. All commands are automatically installed as instance methods of the @{Command::API} class, as illustrated below:
 
 <<+{ruby/examples/export.wrb}
+
+h2. The contract
+
+DbAgile's core architecture relies on a chain design pattern, documented as a contract. The later is split and documented through five main interfaces (ruby modules):
+
+- @{Contract::Data::Connection} := Encalpsulates all connection-driven accesses to the database. A connection allows to _ping_ the database and to start transactions. Connections also give natural access (instance methods) to the Data::TableDriven and Schema::TableDriven contracts (see below). TransactionDriven contracts are only accessible inside a database transaction
+
+- @{Contract::Data::TableDriven} := Encapsulates all read-only data accesses to the database. All methods of the contract take a table name (ruby Symbol) as first argument, plus additional parameters.
+
+- @{Contract::Data::TransactionDriven} :=  Encapsulates all write data accesses to the database. All methods of the contract take a @{Core::Transaction} instance as first parameters, plus additional parameters.
+
+- @{Contract::Schema::TableDriven} := Encapsulates all read-only, schema-driven queries, about a SQL database. All methods of the contract take a table name (ruby Symbol) as first argument, plus additional parameters.
+
+- @{Contract::Schema::TransactionDriven} := Encapsulates all write, schema-driven, accesses to the database. All methods of the contract take a @{Core::Transaction} instance as first parameters, plus additional parameters.
+
+h2. Core objects
+
+Core objects implement basic features that the developer use when using DbAgile in Ruby:
+
