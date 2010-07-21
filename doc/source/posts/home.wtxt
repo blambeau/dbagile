@@ -1,3 +1,64 @@
 h1. Welcome to DbAgile
 
-DbAgile primarily aims at supporting database administrators and developers of database-centric (web) applications.
+DbAgile primarily aims at supporting database administrators and application developers (provided that the application needs data management ... that is, almost all applications)
+
+h2. What is DbAgile
+
+DbAgile is a set of tools for using, connecting to, developing around SQL databases. It is implemented in Ruby (therefore, you need a correct ruby installation) but provides dedicated API levels for specific tasks ... some of them not requiring to know Ruby at all:
+
+* A fully-featured 'dba' @{/dba}{command line tool} to (debug, introspect, manage, import, export) schema and data from/to (legacy) SQL databases
+* A @{/restful}{restful inferface} on top of SQL databases to ease web development and application integration
+* A pluginable @{/ruby}{Ruby connection middleware} with an open architecture
+
+h2. Why?
+
+As an independent-but-ordinary application developer, the main developer of DbAgile and a researcher, I would summarize my feelings about data management and application development as follows:
+
+<blockquote>
+SQL databases are far from being perfect, not speaking for SQL itself... The SQL community (and manufacturers in particular) is definitely slow in understanding developer's needs and difficulties when time comes to implement supporting tools (for the web, for example). 
+
+In contrast, communities around ORMs and NoSQL products are very much active ... but they forget a lot of sound principles introduced 40 years ago with the relational theory (data independence, views, consistency, constraints in general, and so on). 
+
+While google, twitter and facebook replace those principles (for scalibility reasons) by manpower and lines of code, as an ordinary programmer, and for my reasonable-sized projects, I simply can't. 
+
+When time comes ...
+
+* to perform a logical JOIN not following a foreign key,
+* to perform bulk export/clean/import (you know, the stakeholder-noisy-excel-file, the never-ever-normalized-legacy-database of your predecessor),
+* to implement the very-demanding-client's statistic module (do you know OLAP?),
+* to add a (temporal / i18n / ...) dimension to a table,
+* to implement a user-oriented-schema-free feature,
+* ... and so on ...
+
+I definitely need relational-oriented databases, that's it. If the implementation of a  @{http://en.wikipedia.org/wiki/The_Third_Manifesto}{truly-relational database} is far behind DbAgile's scope, *pragmatically providing agile-yet-sound-inspired tools* above SQL databases is possible.
+</blockquote>
+
+h2. Getting started
+
+DbAgile is a simple ruby gem, that you can install with:
+
+<notextile>
+<div class="CodeRay">
+  <div class="code"><pre>gem install dbagile</pre></div>
+</div>
+</notextile>
+
+Then, try
+
+<notextile>
+<div class="CodeRay">
+  <div class="code"><pre>dba --list</pre></div>
+</div>
+</notextile>
+
+h2. What DbAgile is NOT
+
+* DbAgile is not a *Object Relational Mapper*, and won't. Have a look at @{http://ar.rubyonrails.org/}{Active Record}, @{http://datamapper.org/}{DataMapper} or @{http://sequel.rubyforge.org/}{Sequel}
+* DbAgile is not *SQL query helper*. Have a loot at @{http://sequel.rubyforge.org/}{Sequel}
+* DbAgile is not a *NoSQL database* for Ruby. Have a loot at @{http://friendlyorm.com/}{Friendly} instead
+
+h2. Licence and Credits
+
+DbAgile (c) 2010 is developed by Bernard Lambeau and distributed under the MIT licence.
+
+This work is partially supported by the @{http://www.uclouvain.be/en-ingi.html}{department of computer science} of the @{http://www.uclouvain.be/en-index.html}{University of Louvain} (EPL/INGI, Universite Catholique de Louvain, UCL, Louvain-la-Neuve, Belgium) and the Regional Government of Wallonia (GISELE project, RW Conv. 616425) and the MoVES project (PAI program of the Belgian government).

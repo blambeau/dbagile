@@ -1,9 +1,7 @@
 .CodeRay {
 	font-family: Courier;
-  color: #efefef;
   border: 1px dashed #999;
   overflow: hidden;
-	color: white;
 	margin: 10px 0px 10px 0px;
 	background-color: #f5f5ff;
 }
@@ -12,7 +10,6 @@
 	margin: 0px;
 	line-height: 1.2em;
 }
-
 
 /* all but recognized */
 .CodeRay .code { color: black; background: transparent; }

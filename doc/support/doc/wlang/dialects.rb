@@ -34,6 +34,13 @@ WLang::dialect('wdoc') do
     }
   end
   
+  # WLang-ed shell to be included inside textile
+  dialect("wsh", ".wsh") do
+    post_transform{|txt| 
+      "<notextile><div class=\"CodeRay\"><pre>#{txt}</pre></div></notextile>"
+    }
+  end
+  
 end
 
 # We need to oveeride hard-coding of 'a' on wlang/xhtml

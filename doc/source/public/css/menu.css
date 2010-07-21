@@ -5,7 +5,7 @@
 #menu ul { margin: 0px; padding: 0px; }
 #menu ul li { display: inline; }
 #menu ul.pages { float: left; }
-#menu ul.pages li { margin-right: 10px; }
+#menu ul.pages li { margin-right: 5px; }
 #menu ul.links { float: right; }
-#menu ul.links li { margin-left: 10px; }
+#menu ul.links li { margin-left: 5px; }
 

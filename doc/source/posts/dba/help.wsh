@@ -1,0 +1,39 @@
+sh$ dba --list
+
+Usage: dba [--version] [--help] [--list]
+       dba help <subcommand>
+       dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+
+Options:
+      --config=FILE                Use a specific configuration file (defaults to ~/.dbagile)
+      --use=DB                     Use a specific database configuration
+      --help                       Show help
+      --list                       Show list of available subcommands
+      --version                    Show version
+
+Main commands:
+  help      Show help for a specific command
+  history   Display dba command history
+  replay    Replay a previous history command (last one by default)
+
+Configuration management:
+  list      List available database configurations (found in ~/.dbagile)
+  ping      Ping a configuration (current one by default)
+  use       Set the current database configuration to use
+  add       Add a new database configuration
+  rm        Remove a database configuration
+
+Import/Export management:
+  show      Display content of a table/view/query (shortcut for 'export --text ...')
+  export    Export a table/view/query to (csv, json, yaml, ruby, xml)
+  import    Import a table from (csv, json, yaml, ruby)
+
+Database and the web:
+  webtools  Start the web tools
+
+Queries:
+  sql       Send SQL directly to the DBMS
+
+Database schema:
+  heading   Show the heading of a table
+  drop      Drop a table

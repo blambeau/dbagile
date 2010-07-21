@@ -17,7 +17,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Starts the web tools"
+        "Start the web tools"
       end
       
       # Sets the default options

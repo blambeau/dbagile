@@ -20,7 +20,7 @@ module DbAgile
 
       # Short help
       def short_help
-        "Shows the heading of a table"
+        "Show the heading of a table"
       end
       
       # Normalizes the pending arguments

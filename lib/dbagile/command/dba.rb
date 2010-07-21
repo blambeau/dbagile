@@ -12,7 +12,7 @@ module DbAgile
         :io            => "Import/Export management:",
         :sql           => "Queries:",
         :schema        => "Database schema:",
-        :restful       => "Database and the web"
+        :restful       => "Database and the web:"
       }
 
       # Configuration file
