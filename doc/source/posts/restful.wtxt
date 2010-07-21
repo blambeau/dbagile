@@ -1,6 +1,6 @@
 h1. DbAgile Restful interface
 
-DbAgile opens SQL databases on the web through a @{http://en.wikipedia.org/wiki/Representational_State_Transfer}{restful interface}. Such an interface maps URLs to resources, and provides access to these resources through HTTP requests, as illustrated below. 
+DbAgile opens SQL databases on the web through a @{http://en.wikipedia.org/wiki/Representational_State_Transfer}{restful interface}. Such an interface maps URLs to resources, and provides access to these resources through HTTP requests, as illustrated below. An overview of restful features is given below. Please refer to the @{/restful/specification}{restful specification} for details.
 
 h2. SQL and Restful?
 
@@ -40,6 +40,3 @@ The dbagile.config file should look like this:
 
 <<+{restful/examples/dbagile_config.wrb}
 
-h2. Pointers
-
-* Read more about the @{/restful/specification}{restful specification}

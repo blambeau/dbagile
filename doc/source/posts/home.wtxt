@@ -23,8 +23,8 @@ While google, twitter and facebook replace those principles (for scalability rea
 
 When time comes ...
 
-* to perform a logical JOIN not following a foreign key,
-* to perform bulk export/clean/import (you know, the stakeholder-noisy-excel-file, the never-ever-normalized-legacy-database of your position predecessor, ...),
+* to perform a logical JOIN not along a foreign key,
+* to perform bulk export/clean/import (you know, the stakeholder-noisy-excel-file, the never-ever-normalized-legacy-database of your position's predecessor, ...),
 * to implement the very-demanding-client's statistic module (do you know OLAP?),
 * to add a (temporal / i18n / ...) dimension to a table,
 * to implement a user-oriented-schema-free feature,
