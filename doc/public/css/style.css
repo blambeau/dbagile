@@ -1,0 +1,51 @@
+body{ 
+	width: 800px;
+	margin: auto;
+  font-family: Verdana, "Lucida Grande", "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.5em;
+  background: #525252 url("/images/bgcolor.gif") repeat-x top left; 
+}
+p {
+	text-align: justify;
+}
+h1, h2, h3 {
+  font-family: Georgia, serif;
+  clear: both; 
+}
+h1, h2, h3, p {
+  margin: 0px 15px; 
+}
+ul, dl, blockquote {
+  margin: 10px 25px; 
+}
+pre {
+  margin: 0px 25px; 
+}
+h2 {
+  font-size: 2em;
+  line-height: 0.9em;
+  margin-bottom: 0.9em;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: center; 
+}
+h2 strong, h3 strong {
+  background-color: transparent;
+  font-weight: bold;
+  color: #e5cb00; 
+}
+h3 {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  margin-bottom: 1em;
+  border-bottom: 1px dotted #000000; 
+}
+h4 {
+	margin-left: 1.5em; 
+}
+#main {
+	background-color: white; 
+	margin-top: 15px;
+	padding: 15px;
+}

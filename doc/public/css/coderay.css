@@ -1,0 +1,31 @@
+.CodeRay {
+	font-family: Courier;
+  background: #262626;
+  color: #efefef;
+  border: 1px dashed #999;
+  overflow: hidden;
+	color: white;
+	margin: 10px;
+	margin-left: 20px;
+}
+.CodeRay pre {
+	padding: 10px;
+	margin: 0px;
+}
+.CodeRay .code { color: #ffdead; background: transparent; }
+.CodeRay .c { color: #b22222; font-weight: bold; background: transparent; }
+.CodeRay .r, 
+.CodeRay .ke,
+.CodeRay .ty,
+.CodeRay .pd,
+.CodeRay .ta,
+.CodeRay .kw { color: #00ffff; background: transparent; }
+.CodeRay .vl,
+.CodeRay .s { color: #7fffd4; background: transparent; }
+.CodeRay .i  { color: #7fffd4; background: transparent; }
+.CodeRay .fu,
+.CodeRay .an { color: #ffa07a; background: transparent; }
+.CodeRay .iv { color: #eedd82; background: transparent; }
+.CodeRay .rx  { color: #ffa07a; background: transparent; }
+.CodeRay .pc  { color: #00ffee; background: transparent; }
+.CodeRay .idl    { color: #ffa07a; background: transparent; }

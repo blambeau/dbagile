@@ -1,0 +1,29 @@
+h2. Restful Specification
+
+The restful specification follows. The ruby implementation are provided by the following classes.[1]
+
+- MiddleWare::OneConfig := An implementation for one database Core::Configuration. Recognizes <code>/table</code> url paths (see below)
+- MiddleWare := Acts as a middleware for a complete Core::ConfigFile and/or Environment. Installs paths under <code>/config_name/table</code>
+
+h3. The GET interface
+
+The GET interface corresponds to SELECT (dba export). The query string (say ?name=...&age=...) is interpreted as a table restriction (WHERE name=... AND age=...). However, only parameters that match a table attribute are taken into account (noise free).
+
+- /table := Returns the content of the table in json format. Values are converted whenever possible. They are to_s'es otherwise.
+- /table.[json|yaml|xml|txt|rb]] := Returns the content of the table in specified format with default options. 
+                                    Equivalent to 'dba export --format=...table' 
+
+Example (jquery):
+
+<<+{examples/get.wjs}
+
+h3. The POST interface
+
+The POST interface corresponds to INSERT (dba import). 
+
+- /table := Attemps an SQL insert on table with tuple build with POST parameters. 
+            ATTENTION: unlike GET, this access is not noise free: posting invalid attributes will lead to an error.
+- /table.[json|yaml|rb]] := Uploads data inside a table through INSERT statements. 
+                            This access expects a _data_ parameter for uploaded file.
+
+fn1. Unless stated explicitely by a rooted ruby namespace (typically ::DbAgile), all classes referenced here are under the DbAgile::Restful namespace.
