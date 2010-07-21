@@ -12,12 +12,7 @@ WLang::dialect('wdoc') do
     rules WLang::RuleSet::Buffering
     rules WLang::RuleSet::Context
     rules WLang::RuleSet::XHtml
-    
-    # Rule dedicated to @{...} links
-    rule '@' do |parser,offset|
-      text, reached = parser.parse(offset, "wlang/active-string")
-      [DbAgile::Doc::to_link(text), reached]
-    end
+    rules DbAgile::Doc::WLang::Rules
     
     # Post transformation trhough RedCloth
     post_transform "redcloth/xhtml"
@@ -27,6 +22,14 @@ WLang::dialect('wdoc') do
   dialect("wjs", ".wjs") do
     post_transform{|txt| 
       encoded = WLang::encode(txt, "xhtml/coderay/javascript")
+      "<notextile>#{encoded}</notextile>"
+    }
+  end
+  
+  # WLang-ed ruby to be included inside textile
+  dialect("wrb", ".wrb") do
+    post_transform{|txt| 
+      encoded = WLang::encode(txt, "xhtml/coderay/ruby")
       "<notextile>#{encoded}</notextile>"
     }
   end

@@ -1,0 +1,23 @@
+#!/usr/bin/env rackup --require dbagile/restful/middleware -p 8711
+
+app = DbAgile::Restful::Middleware::build{|builder|
+
+  # Set the path to a dbagile.config file 
+  #
+  # WARNING: Always use ::File instead of File because constants are
+  #          resolved in Rack scope, which contains a File class. Not
+  #          doing this may mead to bugs in certain ruby versions.
+  #
+  builder.config_file_path = ::File.expand_path('../dbagile.config', __FILE__)
+
+  # Grant GET access only on the address book database
+  builder.GET  env.config(:address_book)
+  
+  # Grant FULL access on the example database
+  builder.FULL env.config(:example)
+}
+
+# Run the data middleware under a specific path
+map "/data-service" do
+  run app
+end

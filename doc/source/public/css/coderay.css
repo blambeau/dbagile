@@ -1,31 +1,47 @@
 .CodeRay {
 	font-family: Courier;
-  background: #262626;
   color: #efefef;
   border: 1px dashed #999;
   overflow: hidden;
 	color: white;
-	margin: 10px;
-	margin-left: 20px;
+	margin: 10px 0px 10px 0px;
+	background-color: #f5f5ff;
 }
 .CodeRay pre {
 	padding: 10px;
 	margin: 0px;
+	line-height: 1.2em;
 }
-.CodeRay .code { color: #ffdead; background: transparent; }
-.CodeRay .c { color: #b22222; font-weight: bold; background: transparent; }
+
+
+/* all but recognized */
+.CodeRay .code { color: black; background: transparent; }
+/* comments */
+.CodeRay .c { color: #0066FF; background: transparent; }
+/* string literal */
+.CodeRay .s { color: #036A07; background: transparent; }
+/* class name */
+.CodeRay .cl { color: #585CF6; }
+/* symbol */
+.CodeRay .sy { color: #C5060B; }
+/* constant */
+.CodeRay .co { color: #585CF6; }
+/* keywords and associated */
 .CodeRay .r, 
 .CodeRay .ke,
 .CodeRay .ty,
 .CodeRay .pd,
 .CodeRay .ta,
-.CodeRay .kw { color: #00ffff; background: transparent; }
+.CodeRay .kw { color: #0000FF; background: transparent; }
+/* instance variable */
 .CodeRay .vl,
-.CodeRay .s { color: #7fffd4; background: transparent; }
-.CodeRay .i  { color: #7fffd4; background: transparent; }
-.CodeRay .fu,
-.CodeRay .an { color: #ffa07a; background: transparent; }
-.CodeRay .iv { color: #eedd82; background: transparent; }
+.CodeRay .iv,
+.CodeRay .i  { color: #318495; background: transparent; }
+/* Regular expression */
 .CodeRay .rx  { color: #ffa07a; background: transparent; }
+/* method name */
+.CodeRay .fu,
+.CodeRay .an { color: #036A07; background: transparent; }
+
 .CodeRay .pc  { color: #00ffee; background: transparent; }
 .CodeRay .idl    { color: #ffa07a; background: transparent; }

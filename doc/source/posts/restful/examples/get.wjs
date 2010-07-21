@@ -1,5 +1,5 @@
-/* Get all contacts that live in New York in JSON and 
- * do something with the result. */
+/* Get all contacts that live in New York in JSON  */
 $.get("/contacts.json", { city: "New York" }, function(data) {
     alert(data);
 })
+/* SELECT * FROM contacts WHERE city='New York' */

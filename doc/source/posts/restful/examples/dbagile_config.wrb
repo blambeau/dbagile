@@ -1,0 +1,13 @@
+config(:address_book){
+  uri "postgres://user:password@localhost/address_book"
+  
+  # Ensures no write access at all on this database
+  plug DbAgile::Plugin::ReadOnly
+}
+config(:example){
+  uri "sqlite:///tmp/example.db"
+  
+  # All access are granted on this one, the following line
+  # ensures friendly messages when something goes wrong
+  plug DbAgile::Contract::Robust::Optimistic
+}

@@ -1,0 +1,5 @@
+/* Insert a new contact named Jones who lives in New York. */
+$.post("/contacts", { name: "Jones", city: "New York" }, function(data) {
+    alert(result);
+})
+/* INSERT INTO contacts (name, city) VALUES ('Jones', 'New York') */

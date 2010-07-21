@@ -72,6 +72,7 @@ YARD::Rake::YardocTask.new do |t|
 end
 
 task :"browse-doc" do
+  puts "Have a loot at http://127.0.0.1:9292/"
   Kernel.system "cd doc && ./browse.ru"
 end
 

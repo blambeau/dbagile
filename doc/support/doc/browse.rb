@@ -21,7 +21,10 @@ module DbAgile
       def call(env)
         begin 
           path = env['PATH_INFO'].strip[1..-1]
-          if File.exists?(File.join(PUBLIC_PATH, path))
+          if path.empty?
+            env['PATH_INFO'] = '/home'
+            call(env)
+          elsif File.exists?(File.join(PUBLIC_PATH, path))
             @delegate.call(env)
           else 
             file = File.join(SOURCE_PATH, 'posts', "#{path}.wtxt")

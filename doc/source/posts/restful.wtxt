@@ -1,0 +1,45 @@
+h1. DbAgile Restful interface
+
+DbAgile opens SQL databases on the web through a @{http://en.wikipedia.org/wiki/Representational_State_Transfer}{restful interface}. Such an interface maps URLs to resources, and provides access to these resources through HTTP requests, as illustrated below. 
+
+h2. SQL and Restful?
+
+A restful interface maps urls to resources (a SQL <code>table</code>, in our case). Such resources can then...
+
+<ul>
+<li>
+... be read through a GET http request (<code>SELECT ... FROM contacts</code>)
+
+<<+{restful/examples/get.wjs}
+
+</li>
+
+<li>
+... be updated through a POST http request (<code>INSERT/UPDATE (INTO) contacts ...</code>)
+
+<<+{restful/examples/post.wjs}
+
+</li>
+
+<li>
+... be deleted through a DELETE http request (<code>DELETE FROM contacts ...</code>)
+
+<<+{restful/examples/delete.wjs}
+
+</li>
+
+</ul>
+
+h2. Configuration
+
+DbAgile implements the restful interface through @{http://rack.rubyforge.org/}{Rack middlewares}, i.e. the Ruby standard for connecting tools on the web! Below is a typical 'config.ru' rack file:
+
+<<+{restful/examples/rack.wrb}
+
+The dbagile.config file should look like this:
+
+<<+{restful/examples/dbagile_config.wrb}
+
+h2. Pointers
+
+* Read more about the @{/restful/specification}{restful specification}

@@ -1,0 +1,5 @@
+/* Delete contact number 99 */
+$.delete("/contacts", { id: 99 }, function(data) {
+    alert(result);
+})
+/* DELETE FROM contacts WHERE id=99 */

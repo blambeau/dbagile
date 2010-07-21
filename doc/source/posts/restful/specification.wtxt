@@ -1,15 +1,23 @@
 h1. Restful Specification
 
-The restful specification follows. The ruby implementation are provided by the following classes.[1]
+The restful specification implemented by DbAgile follows. The documentation here assumes a SQL database named 'address_book' with a 'contacts' table with following heading
 
-- @{MiddleWare::OneConfig} := An implementation for one database Core::Configuration. Recognizes <code>/table</code> url paths (see below)
-- @{MiddleWare} := Acts as a middleware for a complete Core::ConfigFile and/or Environment. Installs paths under <code>/config_name/table</code>
+<<+{examples/contacts.wrb}
+
+The ruby implementation is based on the following classes.[1]
+
+- @{Restful::MiddleWare} := Restful implementation for a complete @{Core::ConfigFile} or @{Core::Environment}. 
+  Installs paths under <code>/config_name/table</code> and delegates effective access to a OneConfig/Get/Post/Delete instance according to <code>config_name</code>. 
+- @{Restful::MiddleWare::OneConfig} := Complete restful implementation for one database @{Core::Configuration} only. Recognizes <code>/table</code> url paths.
+- @{Restful::MiddleWare::Get} := GET implementation for one database @{Core::Configuration} only. Recognizes <code>/table</code> url paths.
+- @{Restful::MiddleWare::Post} := POST implementation for one database @{Core::Configuration} only. Recognizes <code>/table</code> url paths.
+- @{Restful::MiddleWare::Delete} := DELETE implementation for one database @{Core::Configuration} only. Recognizes <code>/table</code> url paths.
 
 h2. The GET interface
 
-The GET interface corresponds to SELECT (dba export). The query string (say ?name=...&age=...) is interpreted as a table restriction (WHERE name=... AND age=...). However, only parameters that match a table attribute are taken into account (noise free).
+The GET interface corresponds to SELECT. The query string is interpreted as a table restriction (WHERE). However, only parameters that match a table attribute are taken into account (noise free).
 
-- /table := Returns the content of the table in json format. Values are converted whenever possible. They are to_s'es otherwise.
+- /table := Returns the content of the table in json format. SQL values are converted to JSON values whenever possible. They are to_s'ed otherwise.
 - /table.[json|yaml|xml|txt|rb] := Returns the content of the table in specified format with default options. 
                                    Equivalent to 'dba export --format=...table' 
 
@@ -26,4 +34,4 @@ The POST interface corresponds to INSERT (dba import).
 - /table.[json|yaml|rb] := Uploads data inside a table through INSERT statements. 
                            This access expects a _data_ parameter for uploaded file.
 
-fn1. Unless stated explicitely by a rooted ruby namespace (typically ::DbAgile), all classes referenced here are under the DbAgile::Restful namespace.
+fn1. Unless stated explicitely by a rooted ruby namespace (i.e. starting with '::'), all classes referenced here are under the ::DbAgile namespace.
