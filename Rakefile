@@ -10,6 +10,10 @@ dir     = File.dirname(__FILE__)
 lib     = File.join(dir, "lib", "dbagile.rb")
 version = File.read(lib)[/^\s*VERSION\s*=\s*(['"])(\d\.\d\.\d)\1/, 2]
 
+####################################################################################
+#TEST SUITE 
+####################################################################################
+
 # Default task is spec
 task :default => [:test]
 
@@ -32,6 +36,7 @@ task :fixtures do
   DbAgile::Fixtures::create_fixtures
 end
 
+# Install sub-spec test suite
 tests = Dir[File.expand_path('../test/*.spec', __FILE__)].collect{|f| File.basename(f, '.spec')}
 tests.each do |kind|
   desc "Run #{kind} spec tests"  
@@ -51,7 +56,11 @@ task :suite do
   load(File.expand_path('../test/run_all_suite.rb', __FILE__))
 end
 
-# About yard documentation
+####################################################################################
+# DOCUMENTATION
+####################################################################################
+
+# yard
 YARD::Rake::YardocTask.new do |t|
   YARD::Tags::Library.define_tag "Precondition", :pre
   YARD::Tags::Library.define_tag "Postcondition", :post
@@ -61,6 +70,14 @@ YARD::Rake::YardocTask.new do |t|
                "LICENCE.textile", "CHANGELOG.textile", 
                "TODO.textile"]
 end
+
+task :"browse-doc" do
+  Kernel.system "cd doc && ./browse.ru"
+end
+
+####################################################################################
+# GEM
+####################################################################################
 
 # About gem specification
 gemspec = Gem::Specification.new do |s|
