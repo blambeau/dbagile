@@ -146,6 +146,7 @@ require 'dbagile/command/import'
 require 'dbagile/command/sql'
 
 # :schema category
+require 'dbagile/command/schema'
 require 'dbagile/command/heading'
 require 'dbagile/command/drop'
 

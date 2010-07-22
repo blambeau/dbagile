@@ -80,7 +80,7 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + align(command.command_name,10) + command.short_help
+          display options.summary_indent + align(command.command_name,15) + command.short_help
         end
       end
 

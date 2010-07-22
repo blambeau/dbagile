@@ -1,0 +1,1 @@
+require 'dbagile/command/schema/dump'

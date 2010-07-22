@@ -1,5 +1,10 @@
 require 'time'
 require 'date'
+require 'rubygems'
+gem "sbyc", ">= 0.1.4"
+gem "sequel", ">= 3.8.0"
+require 'sbyc'
+require 'sequel'
 module DbAgile
   
   # Version of the DbAgile interface
@@ -7,6 +12,7 @@ module DbAgile
   
   # Domains recognized as valid domains inside a SQL database
   RECOGNIZED_DOMAINS = [
+    ::SByC::TypeSystem::Ruby::Boolean,
     TrueClass, FalseClass, 
     String, 
     Fixnum, Bignum, Integer,
@@ -89,12 +95,6 @@ module DbAgile
   module_function :connect
   
 end # module DbAgile
-
-require 'rubygems'
-gem "sbyc", ">= 0.1.4"
-gem "sequel", ">= 3.8.0"
-require 'sbyc'
-require 'sequel'
 
 require 'dbagile/errors'
 require 'dbagile/contract'

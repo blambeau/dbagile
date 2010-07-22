@@ -12,6 +12,11 @@ module DbAgile
         @db.disconnect if @db
         true
       end
+      
+      # @see DbAgile::Contract::Connection#database_schema
+      def database_schema
+        SequelAdapter::Schema::Loader.new.run(db)
+      end
     
       # @see DbAgile::Contract::Connection#transaction
       def transaction(&block)

@@ -24,6 +24,13 @@ module DbAgile
         false
       end
       
+      #
+      # Returns the database schema as a DbAgile::Core::Schema instance
+      #
+      def database_schema
+        Kernel.raise NotImplementedError
+      end
+      
       # 
       # Disconnect the adapter and frees all resources.
       #
