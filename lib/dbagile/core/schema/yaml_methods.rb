@@ -5,23 +5,11 @@ module DbAgile
       
         # Loads a schema from a YAML string
         def yaml_load(str)
-          logical, physical = nil, nil
+          builder = DbAgile::Core::Schema::Builder.new
           YAML::each_document(str){|doc|
-            unless doc.kind_of?(Hash) and doc.size == 1
-              raise DbAgile::Error, "Invalid schema YAML file" 
-            end
-            case doc.keys[0]
-              when 'logical'
-                logical = doc
-              when 'physical'
-                physical = doc
-              else
-                raise DbAgile::Error, "Invalid schema YAML file"
-            end
+            builder._natural(doc)
           }
-          physical = {} unless physical
-          raise DbAgile::Error, "Invalid schema YAML file" if logical.nil? or physical.nil?
-          Schema.new(logical, physical)
+          builder._dump
         end
       
         # Loads a schema from a YAML file
@@ -35,7 +23,17 @@ module DbAgile
               raise ArgumentError, "Unable to load schema from #{file}"
           end
         end
-      
+        
+        # Unloads a given schema
+        def yaml_unload(schema, buffer = "")
+          buffer << "---" << "\n"
+          buffer << "logical:" << "\n"
+          buffer << schema.logical.inspect << "\n"
+          buffer << "---" << "\n"
+          buffer << "physical:" << "\n"
+          buffer << schema.physical.inspect << "\n"
+        end
+        
       end # module YAMLMethods
     end # class Schema
   end # module Core
