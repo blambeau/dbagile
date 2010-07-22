@@ -1,6 +1,6 @@
-require 'dbagile/core/schema/helpers'
 require 'dbagile/core/schema/yaml_methods'
 require 'dbagile/core/schema/builder'
+require 'dbagile/core/schema/relvar'
 module DbAgile
   module Core
     #

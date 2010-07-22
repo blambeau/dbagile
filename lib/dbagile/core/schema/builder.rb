@@ -1,8 +1,11 @@
+require 'dbagile/core/schema/builder/helpers'
+require 'dbagile/core/schema/builder/hash_factory'
 module DbAgile
   module Core
     class Schema
       class Builder
-        include Schema::Helpers
+        include Builder::Helpers
+        include Builder::HashFactory
         
         # Call stack
         attr_accessor :stack
@@ -96,21 +99,21 @@ module DbAgile
         # Starts a relvar section
         def relvar(name, hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          relvar = (_peek(:logical)[name] ||= {})
+          relvar = (_peek(:logical)[symbolize_name(name)] ||= build_relvar(name))
           _push(:relvar, relvar, &block)
         end
         
         # Starts a heading section
         def heading(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          heading = (_peek(:relvar)[:heading] ||= {})
+          heading = (_peek(:relvar)[:heading] ||= build_heading)
           _push(:heading, heading, &block)
         end
         
         # Starts a constraints section
         def constraints(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          cs = (_peek(:relvar)[:constraints] ||= {})
+          cs = (_peek(:relvar)[:constraints] ||= build_constraints)
           _push(:constraints, cs, &block)
         end
         
@@ -118,12 +121,12 @@ module DbAgile
         
         # Adds an attribute to current heading
         def attribute(name, definition)
-          _peek(:heading)[name] = definition
+          _peek(:heading)[symbolize_name(name)] = build_attribute(name, definition)
         end
         
         # Adds a constraint to current relvar
         def constraint(name, definition)
-          _peek(:constraints)[name] = definition
+          _peek(:constraints)[symbolize_name(name)] = build_constraint(name, definition)
         end
         
         ############################################################################
@@ -139,7 +142,7 @@ module DbAgile
         # Starts the indexes section and yields
         def indexes(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          indexes = (_peek(:physical)[:indexes] ||= {})
+          indexes = (_peek(:physical)[:indexes] ||= build_indexes)
           _push(:indexes, indexes, &block)
         end
         
@@ -147,7 +150,7 @@ module DbAgile
         
         # Adds an index to indexes
         def index(name, definition)
-          _peek(:indexes)[name] = definition
+          _peek(:indexes)[symbolize_name(name)] = build_index(name, definition)
         end
         
       end # class Builder
