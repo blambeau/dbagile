@@ -117,11 +117,11 @@ module DbAgile
         
         # Coerces a domain
         def coerce_domain(domain)
-          # not_nil!(domain)
-          # domain = SByC::TypeSystem::Ruby::coerce(domain, Class)
-          # unless DbAgile::RECOGNIZED_DOMAINS.include?(domain)
-          #   invalid!("unable to use #{domain} for attribute domain")
-          # end
+          not_nil!(domain)
+          domain = SByC::TypeSystem::Ruby::coerce(domain, Class)
+          unless DbAgile::RECOGNIZED_DOMAINS.include?(domain)
+            invalid!("unable to use #{domain} for attribute domain")
+          end
           domain
         end
         
