@@ -10,7 +10,6 @@ describe "DbAgile::Core::Schema#to_yaml" do
   end
   
   it "returned string should be loadable as a Schema" do
-    puts schema.to_yaml
     DbAgile::Core::Schema::yaml_load(schema.to_yaml).should be_kind_of(DbAgile::Core::Schema)
   end
   
