@@ -16,7 +16,22 @@ module DbAgile
               @name = name
               @definition = definition
             end
+            
+            # Returns source table attributes
+            def source_attributes
+              definition[:source]
+            end
+            
+            # Returns the referenced table
+            def referenced
+              definition[:references]
+            end
           
+            # Returns target table attributes
+            def target_attributes
+              definition[:target]
+            end
+            
             # Delegation pattern on YAML flushing
             def to_yaml(opts = {})
               YAML::quick_emit(self, opts){|out|

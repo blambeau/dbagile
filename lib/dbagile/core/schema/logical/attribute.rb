@@ -15,6 +15,21 @@ module DbAgile
             @name = name
             @definition = definition
           end
+          
+          # Returns attribute domain
+          def domain
+            definition[:domain]
+          end
+          
+          # Returns default value
+          def default_value
+            definition[:default]
+          end
+        
+          # Returns default value
+          def mandatory?
+            !(definition[:mandatory] == false)
+          end
         
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})

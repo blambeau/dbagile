@@ -15,6 +15,16 @@ module DbAgile
               @name = name
               @definition = definition
             end
+            
+            # Is it a primary key?
+            def primary?
+              definition[:type] == :primary_key
+            end
+            
+            # Returns key attributes
+            def attributes
+              definition[:attributes]
+            end
           
             # Delegation pattern on YAML flushing
             def to_yaml(opts = {})

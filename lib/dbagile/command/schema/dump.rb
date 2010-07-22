@@ -31,7 +31,7 @@ module DbAgile
           schema
         end
       
-      end # class List
+      end # class SchemaDump
     end # module Schema
   end # class Command
 end # module DbAgile

@@ -35,6 +35,11 @@ module DbAgile
       end
       alias :inspect :to_yaml
       
+      # Yields the block with each relvar in turn
+      def each_relvar(&block)
+        logical.values.each(&block)
+      end
+      
     end # class Schema
   end # module Core
 end # module DbAgile

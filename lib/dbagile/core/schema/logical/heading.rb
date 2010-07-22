@@ -22,6 +22,11 @@ module DbAgile
             self.attributes[name] = definition
           end
         
+          # Yields the block with each attribute 
+          def each_attribute(&block)
+            attributes.values.each(&block)
+          end
+          
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             Schema::Coercion::unsymbolize_hash(attributes).to_yaml(opts)
