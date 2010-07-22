@@ -2,5 +2,6 @@ coverage
 pkg
 spec/fixtures/test.db
 doc/api
+doc/static
 .yardoc
 *.db
