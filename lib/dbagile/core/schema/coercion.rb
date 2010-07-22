@@ -4,6 +4,22 @@ module DbAgile
       module Coercion
         
         ###############################################################################
+        ### Tools
+        ###############################################################################
+        def unsymbolize_hash(h)
+          unsymbolized = {}
+          h.each_pair{|k,v| unsymbolized[k.to_s] = v}
+          unsymbolized
+        end
+        module_function :unsymbolize_hash
+        
+        # Unsymbolizes an array of names
+        def unsymbolize_array(array)
+          array.collect{|c| c.to_s}
+        end
+        module_function :unsymbolize_array
+        
+        ###############################################################################
         ### Validity
         ###############################################################################
         
@@ -101,11 +117,11 @@ module DbAgile
         
         # Coerces a domain
         def coerce_domain(domain)
-          not_nil!(domain)
-          domain = SByC::TypeSystem::Ruby::coerce(domain, Class)
-          unless DbAgile::RECOGNIZED_DOMAINS.include?(domain)
-            invalid!("unable to use #{domain} for attribute domain")
-          end
+          # not_nil!(domain)
+          # domain = SByC::TypeSystem::Ruby::coerce(domain, Class)
+          # unless DbAgile::RECOGNIZED_DOMAINS.include?(domain)
+          #   invalid!("unable to use #{domain} for attribute domain")
+          # end
           domain
         end
         

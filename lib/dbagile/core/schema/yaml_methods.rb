@@ -24,16 +24,6 @@ module DbAgile
           end
         end
         
-        # Unloads a given schema
-        def yaml_unload(schema, buffer = "")
-          buffer << "---" << "\n"
-          buffer << "logical:" << "\n"
-          buffer << schema.logical.inspect << "\n"
-          buffer << "---" << "\n"
-          buffer << "physical:" << "\n"
-          buffer << schema.physical.inspect << "\n"
-        end
-        
       end # module YAMLMethods
     end # class Schema
   end # module Core

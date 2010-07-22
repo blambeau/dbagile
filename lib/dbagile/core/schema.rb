@@ -1,6 +1,7 @@
 require 'dbagile/core/schema/yaml_methods'
 require 'dbagile/core/schema/builder'
-require 'dbagile/core/schema/relvar'
+require 'dbagile/core/schema/logical'
+require 'dbagile/core/schema/physical'
 module DbAgile
   module Core
     #
@@ -20,11 +21,19 @@ module DbAgile
         @logical, @physical = logical, physical
       end
       
-      # Dumps the schema as a YAML file
-      def yaml_unload(buffer = "")
-        self.class.yaml_unload(self)
+      # Dumps the schema to YAML
+      def to_yaml(opts = {})
+        ls = Schema::Coercion::unsymbolize_hash(logical)
+        ps = Schema::Coercion::unsymbolize_hash(physical)
+        if ps['indexes']
+          ps['indexes'] = Schema::Coercion::unsymbolize_hash(ps['indexes'])
+        end
+        YAML::dump_stream(
+          {'logical'  => ls}, 
+          {'physical' => ps}
+        )
       end
-      alias :inspect :yaml_unload
+      alias :inspect :to_yaml
       
     end # class Schema
   end # module Core

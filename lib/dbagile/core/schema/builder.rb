@@ -1,11 +1,13 @@
 require 'dbagile/core/schema/coercion'
 require 'dbagile/core/schema/builder/hash_factory'
+require 'dbagile/core/schema/builder/concept_factory'
 module DbAgile
   module Core
     class Schema
       class Builder
         include Schema::Coercion
-        include Builder::HashFactory
+        # include Builder::HashFactory
+        include Builder::ConceptFactory
         
         # Call stack
         attr_accessor :stack
@@ -102,6 +104,8 @@ module DbAgile
           name = coerce_relvar_name(name)
           relvar = (_peek(:logical)[name] ||= build_relvar(name))
           _push(:relvar, relvar, &block)
+        rescue SByC::TypeSystem::CoercionError => ex
+          invalid!("Invalid relvar definition (#{name}): #{ex.message}")
         end
         
         # Starts a heading section
@@ -155,6 +159,8 @@ module DbAgile
         def index(name, definition)
           name, defn = coerce_index_name(name), coerce_index_definition(definition)
           _peek(:indexes)[name] = build_index(name, defn)
+        rescue SByC::TypeSystem::CoercionError => ex
+          invalid!("Invalid index definition (#{name}): #{ex.message}")
         end
         
       end # class Builder
