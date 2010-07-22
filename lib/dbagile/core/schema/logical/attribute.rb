@@ -44,6 +44,12 @@ module DbAgile
               end
             }
           end
+          
+          # Compares with another attribute
+          def ==(other)
+            return nil unless other.kind_of?(Attribute)
+            (name == other.name) and (definition == other.definition)
+          end
         
         end # class Attribute
       end # module Logical

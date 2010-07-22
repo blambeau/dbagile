@@ -34,7 +34,7 @@ module DbAgile
         def _push(section, object)
           stack.push([section, object])
           if block_given?
-            yield
+            yield(object)
             _pop
           end
           object

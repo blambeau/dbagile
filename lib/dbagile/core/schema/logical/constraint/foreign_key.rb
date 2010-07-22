@@ -47,7 +47,13 @@ module DbAgile
               }
             end
 
-          end # class CandidateKey
+            # Compares with another attributes
+            def ==(other)
+              return nil unless other.kind_of?(ForeignKey)
+              (name == other.name) and (definition == other.definition)
+            end
+          
+          end # class ForeignKey
         end # class Constraint
       end # module Logical
     end # class Schema

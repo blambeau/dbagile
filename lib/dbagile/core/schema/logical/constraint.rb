@@ -5,6 +5,7 @@ module DbAgile
     class Schema
       module Logical
         class Constraint
+          
         end # class Constraint
       end # module Logical
     end # class Schema

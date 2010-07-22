@@ -28,6 +28,12 @@ module DbAgile
             }
           end
         
+          # Compares with another index
+          def ==(other)
+            return nil unless other.kind_of?(Index)
+            (name == other.name) and (definition == other.definition)
+          end
+        
         end # class Index
       end # module Physical
     end # class Schema

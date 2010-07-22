@@ -107,6 +107,7 @@ module DbAgile
           if value.kind_of?(Symbol)
             case value 
               when :autonumber
+                :autonumber
               else
                 invalid!("unknown default value handler #{value}") 
             end

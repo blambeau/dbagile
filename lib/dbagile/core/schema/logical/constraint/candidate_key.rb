@@ -38,6 +38,12 @@ module DbAgile
               }
             end
 
+            # Compares with another attributes
+            def ==(other)
+              return nil unless other.kind_of?(CandidateKey)
+              (name == other.name) and (definition == other.definition)
+            end
+          
           end # class CandidateKey
         end # class Constraint
       end # module Logical

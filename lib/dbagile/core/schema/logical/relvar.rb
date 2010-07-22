@@ -51,13 +51,42 @@ module DbAgile
               c.kind_of?(Logical::Constraint::ForeignKey)
             }.each(&block)
           end
+          
+          # Delegate pattern on minus
+          def minus(other, builder)
+            raise ArgumentError, "Relvar expected" unless other.kind_of?(Relvar)
+            builder.relvar(name){
+              heading.minus(other.heading, builder)
+              builder.constraints{|b_constraints|
+                mck, ock = self.constraints.keys, other.constraints.keys
+                mine, common = (mck - ock), mck.select{|k| ock.include?(k)}
+                mine.each{|m| b_constraints[m] = constraints[m]}
+                common.each{|m| 
+                  unless constraints[m] == other.constraints[m]
+                    b_constraints[m] = constraints[m]
+                  end
+                }
+              }
+            }
+          end
+        
+          # Checks if this relvar is empty
+          def empty?
+            heading.empty? and constraints.empty?
+          end
+          
+          # Compares with another attribute
+          def ==(other)
+            return nil unless other.kind_of?(Relvar)
+            (name == other.name) and (heading == other.heading) and (constraints == other.constraints)
+          end
         
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|
               out.map("tag:yaml.org,2002:map", to_yaml_style ) do |map|
-                map.add('heading', heading)
-                map.add('constraints', Schema::Coercion::unsymbolize_hash(constraints))
+                map.add('heading', heading) unless heading.empty?
+                map.add('constraints', Schema::Coercion::unsymbolize_hash(constraints)) unless constraints.empty?
               end
             }
           end
