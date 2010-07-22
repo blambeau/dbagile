@@ -16,7 +16,7 @@ module DbAgile
         
           # Builds an attribute
           def build_attribute(name, definition)
-            attribute_def_hash!(definition)
+            definition
           end
         
           # Builds a constraint collection
@@ -26,7 +26,7 @@ module DbAgile
         
           # Builds a constraint
           def build_constraint(name, definition)
-            constraint_def_hash!(definition)
+            definition
           end
         
           # Builds an index collection
@@ -36,7 +36,7 @@ module DbAgile
         
           # Builds an index
           def build_index(name, definition)
-            index_def_hash!(definition)
+            definition
           end
 
         end # module HashFactory

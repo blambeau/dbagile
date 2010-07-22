@@ -1,10 +1,10 @@
-require 'dbagile/core/schema/builder/helpers'
+require 'dbagile/core/schema/coercion'
 require 'dbagile/core/schema/builder/hash_factory'
 module DbAgile
   module Core
     class Schema
       class Builder
-        include Builder::Helpers
+        include Schema::Coercion
         include Builder::HashFactory
         
         # Call stack
@@ -57,29 +57,29 @@ module DbAgile
         def _natural(hash)
           case section = stack.last[0]
             when :root
-              s = symbolized_hash!(hash, 1, [ :logical, :physical ])
+              s = coerce_symbolized_hash(hash)
               self.send(s.keys[0], s.values[0])
             when :logical
-              symbolized_hash!(hash).each_pair{|relvar_name, relvar_def|
+              coerce_symbolized_hash(hash).each_pair{|relvar_name, relvar_def|
                 relvar(relvar_name, relvar_def)
               }
             when :heading
-              symbolized_hash!(hash).each_pair{|attr_name, attr_def|
+              coerce_symbolized_hash(hash).each_pair{|attr_name, attr_def|
                 attribute(attr_name, attr_def)
               }
             when :constraints
-              symbolized_hash!(hash).each_pair{|c_name, c_def|
+              coerce_symbolized_hash(hash).each_pair{|c_name, c_def|
                 constraint(c_name, c_def)
               }
             when :physical
-              s = symbolized_hash!(hash, nil, [ :indexes ])
+              s = coerce_symbolized_hash(hash)
               self.send(s.keys[0], s.values[0])
             when :indexes
-              symbolized_hash!(hash).each_pair{|index_name, index_def|
+              coerce_symbolized_hash(hash).each_pair{|index_name, index_def|
                 index(index_name, index_def)
               }
             else
-              symbolized_hash!(hash).each_pair{|k, v|
+              coerce_symbolized_hash(hash).each_pair{|k, v|
                 invalid!("No such section #{k}") unless self.respond_to?(k)
                 self.send(k, v)
               }
@@ -99,7 +99,8 @@ module DbAgile
         # Starts a relvar section
         def relvar(name, hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          relvar = (_peek(:logical)[symbolize_name(name)] ||= build_relvar(name))
+          name = coerce_relvar_name(name)
+          relvar = (_peek(:logical)[name] ||= build_relvar(name))
           _push(:relvar, relvar, &block)
         end
         
@@ -121,12 +122,14 @@ module DbAgile
         
         # Adds an attribute to current heading
         def attribute(name, definition)
-          _peek(:heading)[symbolize_name(name)] = build_attribute(name, definition)
+          name, defn = coerce_attribute_name(name), coerce_attribute_definition(definition)
+          _peek(:heading)[name] = build_attribute(name, defn)
         end
         
         # Adds a constraint to current relvar
         def constraint(name, definition)
-          _peek(:constraints)[symbolize_name(name)] = build_constraint(name, definition)
+          name, defn = coerce_constraint_name(name), coerce_constraint_definition(definition)
+          _peek(:constraints)[name] = build_constraint(name, defn)
         end
         
         ############################################################################
@@ -150,7 +153,8 @@ module DbAgile
         
         # Adds an index to indexes
         def index(name, definition)
-          _peek(:indexes)[symbolize_name(name)] = build_index(name, definition)
+          name, defn = coerce_index_name(name), coerce_index_definition(definition)
+          _peek(:indexes)[name] = build_index(name, defn)
         end
         
       end # class Builder

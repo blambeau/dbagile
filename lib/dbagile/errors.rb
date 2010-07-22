@@ -30,4 +30,7 @@ module DbAgile
   # Raised when input parsing of data fails for some reason
   class InvalidFormatError < DbAgile::Error; end
   
+  # Raised when something goes wrong with a schema
+  class InvalidSchemaError < DbAgile::Error; end
+  
 end # module DbAgile
