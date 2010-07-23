@@ -1,5 +1,6 @@
 require 'dbagile/core/configuration/robustness'
 require 'dbagile/core/configuration/dsl'
+require 'dbagile/core/configuration/file'
 module DbAgile
   module Core
     #

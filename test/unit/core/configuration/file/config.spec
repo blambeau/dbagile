@@ -1,8 +1,8 @@
-require File.expand_path('../../../fixtures', __FILE__)
-describe "DbAgile::Core::ConfigFile#config" do
+require File.expand_path('../../../../fixtures', __FILE__)
+describe "DbAgile::Core::Configuration::File#config" do
 
   let(:file)  { File.expand_path("../example2.dba", __FILE__) }
-  let(:config){ DbAgile::Core::ConfigFile.new(file)           }
+  let(:config){ DbAgile::Core::Configuration::File.new(file)           }
 
   describe("When called with an unexisting configuration name") do
     subject{ config.config(:test) }

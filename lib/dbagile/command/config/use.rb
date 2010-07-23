@@ -38,7 +38,6 @@ module DbAgile
         def execute_command
           config = nil
           with_config_file do |config_file|
-            raise unless DbAgile::Core::ConfigFile === config_file
             config = has_config!(config_file, self.match)
 
             # Makes it the current one

@@ -2,7 +2,7 @@ shared_examples_for("The config:rm command") do
   
   it "should return the config file" do
     dba.config_add(%w{test sqlite://test.db})
-    dba.config_rm(%w{test}).should be_kind_of(::DbAgile::Core::ConfigFile)
+    dba.config_rm(%w{test}).should be_kind_of(::DbAgile::Core::Configuration::File)
   end
   
   it "should raise an error when the name is unknown" do
