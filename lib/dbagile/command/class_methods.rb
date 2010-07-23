@@ -2,18 +2,34 @@ module DbAgile
   class Command
     module ClassMethods
       
-      #
+      # The command summary
+      attr_reader :summary
+      
+      # The command banner
+      attr_reader :usage
+      
+      # Command description
+      attr_reader :description
+      
+      # Helper to generate command classes 
+      def build_me(command_class, file)
+        rdoc = DbAgile::RubyTools::rdoc_file_paragraphs(file)
+        summary, usage, help = rdoc.shift, rdoc.shift, rdoc.join
+        command_class.instance_eval{
+          @summary     = summary
+          @usage       = usage.gsub('#{command_name}', command_class.command_name)
+          @description = description
+        }
+      end
+      
       # Tracks subclasses for maintaining subcommand list
-      #
       def inherited(subclass) 
         super
         @subclasses ||= [] 
         @subclasses << subclass 
       end 
       
-      #
       # Returns the array of known command sub-classes
-      #
       def subclasses 
         @subclasses 
       end
@@ -23,9 +39,7 @@ module DbAgile
         subclasses.each(&block)
       end
       
-      #
       # Returns the command name of a given class
-      #
       def command_name_of(clazz)
         /Command::([A-Za-z0-9]+)(::([A-Za-z0-9]+))?$/ =~ clazz.name
         if $3
@@ -34,18 +48,19 @@ module DbAgile
           $1.downcase
         end
       end
+      
+      # Returns command name
+      def command_name
+        command_name_of(self)
+      end
     
-      #
       # Returns the ruby name of a given class
-      #
       def ruby_method_for(clazz)
         command_name_of(clazz).gsub(':', '_').to_sym
       end
     
-      #
       # Returns a command instance for a given name and environment, 
       # returns nil if it cannot be found
-      #
       def command_for(name_symbol_or_class, env)
         subclass = case name_symbol_or_class
           when String
@@ -58,9 +73,7 @@ module DbAgile
         subclass.nil? ? nil : subclass.new(env)
       end
 
-      #
       # Builds command options
-      #
       def build_command_options(options)
         case options
           when Array

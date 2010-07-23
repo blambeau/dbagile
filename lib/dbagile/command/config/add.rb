@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module Config
       #
-      # Adds a configuration in ~/.dbagile with a (name, uri)
+      # Adds a new database configuration
+      #
+      # Usage: dba #{command_name} NAME URI
       #
       class Add < Command
+        Command::build_me(self, __FILE__)
       
         # Name of the configuration to add
         attr_accessor :config_name
@@ -15,21 +18,11 @@ module DbAgile
         # Makes it the current configuration
         attr_accessor :current
       
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} NAME URI"
-        end
-      
         # Returns command's category
         def category
           :config
         end
 
-        # Short help
-        def short_help
-          "Add a new database configuration"
-        end
-      
         # Sets the default options
         def set_default_options
           @current = true

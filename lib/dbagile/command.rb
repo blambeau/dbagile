@@ -21,6 +21,17 @@ module DbAgile
       set_default_options
     end
     
+    # Returns command summary
+    def summary
+      self.class.summary || ""
+    end
+    
+    # Returns command summary
+    def usage
+      self.class.usage || ""
+    end
+    alias :banner :usage
+    
     # Returns command name
     def command_name
       Command::command_name_of(self.class)
@@ -59,16 +70,6 @@ module DbAgile
       raise "Command.category should be overriden by subclasses"
     end
       
-    # Returns the command banner
-    def banner
-      raise "Command.banner should be overriden by subclasses"
-    end
-    
-    # Returns a one line help
-    def short_help
-      raise "Command.banner should be overriden by subclasses"
-    end
-    
     # Shows the help
     def show_help
       display banner

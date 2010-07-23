@@ -1,7 +1,13 @@
 module DbAgile
   class Command
     module Schema
+      #
+      # Drop a table from the real SQL database
+      #
+      # Usage: dba #{command_name} TABLE
+      # 
       class Drop < Command
+        Command::build_me(self, __FILE__)
       
         # Table which must be dropped
         attr_accessor :table
@@ -11,16 +17,6 @@ module DbAgile
           :schema
         end
 
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} TABLE"
-        end
-
-        # Short help
-        def short_help
-          "Drop a table"
-        end
-      
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.table = valid_argument_list!(arguments, Symbol)

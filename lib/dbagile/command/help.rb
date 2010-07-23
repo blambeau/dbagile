@@ -3,7 +3,10 @@ module DbAgile
     #
     # Show help of a given command
     #
+    # Usage: dba #{command_name} COMMAND
+    #
     class Help < Command
+      Command::build_me(self, __FILE__)
       
       # Name of the configuration to add
       attr_accessor :command
@@ -11,16 +14,6 @@ module DbAgile
       # Returns command's category
       def category
         :dba
-      end
-      
-      # Returns the command banner
-      def banner
-        "Usage: dba #{command_name} COMMAND"
-      end
-
-      # Short help
-      def short_help
-        "Show help for a specific command"
       end
       
       # Normalizes the pending arguments
@@ -31,10 +24,11 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        say(command.options.to_s)
+        say(command.usage.to_s)
         say("")
         say("Description:")
-        say("  " + command.short_help.to_s)
+        say("  " + command.summary.to_s)
+        say(command.options.summarize.join)
         say("")
       end
       

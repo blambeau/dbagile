@@ -3,11 +3,14 @@ module DbAgile
   class Command
     module Bulk
       #
-      # Imports the content of a table in different formats
+      # Import a table from (csv, json, yaml, ruby)
+      #
+      # Usage: dba #{command_name} [OPTIONS] TABLE [FILE]
       #
       class Import < Command
         include ::DbAgile::Command::IOCommons
         include ::DbAgile::Tools::Tuple
+        Command::build_me(self, __FILE__)
       
         # Input file to use
         attr_accessor :input_file
@@ -24,16 +27,6 @@ module DbAgile
         # Returns command's category
         def category
           :bulk
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} [OPTIONS] TABLE [FILE]"
-        end
-
-        # Short help
-        def short_help
-          "Import a table from (csv, json, yaml, ruby)"
         end
       
         # Contribute to options

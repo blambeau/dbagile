@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module Schema
       #
-      # Shows the heading of a table
+      # Show the heading of a table
+      #
+      # Usage: dba #{command_name} TABLE
       #
       class Heading < Command
+        Command::build_me(self, __FILE__)
       
         # Table whose heading must be displayed
         attr_accessor :dataset
@@ -14,16 +17,6 @@ module DbAgile
           :schema
         end
 
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} TABLE"
-        end
-
-        # Short help
-        def short_help
-          "Shows the heading of a table"
-        end
-      
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.dataset = valid_argument_list!(arguments, Symbol)
