@@ -41,7 +41,11 @@ module DbAgile
         say("  " + command.summary.to_s)
         say(command.options.summarize.join)
         say("")
-        say(command.description.to_s) if complete
+        if complete
+          say("Read more:")
+          say(command.description.to_s.gsub(/^/, "  ")) 
+          say("")
+        end
       end
       
     end # class List
