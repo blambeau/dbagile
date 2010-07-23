@@ -68,8 +68,8 @@ module DbAgile
               raise ConfigNameConflictError, "Configuration #{self.config_name} already exists"
             else
               # Create the configuration and adds it
-              config = ::DbAgile::Core::Configuration.new(self.config_name)
-              config.uri(self.uri)
+              name, uri = self.config_name, self.uri
+              config = DbAgile::Core::Configuration.new(name, uri)
               config_file << config
         
               # Makes it the current one if requested

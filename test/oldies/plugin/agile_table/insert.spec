@@ -2,7 +2,10 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::AgileTable#insert" do
   
   let(:db){
-    DbAgile::config(:test){ (plug AgileTable) }.connect("sqlite://test.db")
+    DbAgile::config(:test){ 
+      uri "sqlite://test.db"
+      plug AgileTable
+    }.connect
   }
   
   describe "When called on an existing table with already existing columns" do

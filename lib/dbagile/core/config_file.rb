@@ -16,30 +16,6 @@ module DbAgile
       attr_accessor :current_config_name
       
       #############################################################################################
-      ### Class-level utils
-      #############################################################################################
-      
-      # Domain-Specific-Language implementation of config files
-      class DSL
-        
-        # Creates a DSL instance
-        def initialize(config_file)
-          @config_file = config_file
-        end
-        
-        # Adds a configuration under a given name
-        def config(name, &block)
-          @config_file.configurations << Configuration.new(name, &block)
-        end
-        
-        # Sets the current configuration
-        def current_config(name)
-          @config_file.current_config_name = name
-        end
-        
-      end # class DSL
-      
-      #############################################################################################
       ### Initialization and parsing
       #############################################################################################
       
@@ -61,7 +37,7 @@ module DbAgile
       
       # Parses a configuration source
       def parse(source)
-        DSL.new(self).instance_eval(source)
+        Configuration::DSL.new(self).instance_eval(source)
       end
       
       #############################################################################################

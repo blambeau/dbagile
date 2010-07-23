@@ -45,12 +45,12 @@ describe "DbAgile::Command::API /" do
     describe "config:ping /" do
       it_should_behave_like "The config:ping command" 
     end
-
+  
   end # -- Configuration
   
   # -- Input/Output
   describe "bulk commands /" do 
-
+  
     # Make usage of sqlite for these tests
     before{ 
       dba.config_use %{sqlite}
@@ -60,11 +60,11 @@ describe "DbAgile::Command::API /" do
     describe "bulk:export /" do
       it_should_behave_like "The bulk:export command" 
     end
-
+  
     describe "bulk:import /" do
       it_should_behave_like "The bulk:import command" 
     end
-
+  
   end # -- Input/Output
   
   # -- Sql 
@@ -79,11 +79,11 @@ describe "DbAgile::Command::API /" do
     describe "sql:send /" do
       it_should_behave_like "The sql:send command" 
     end
-
+  
     describe "sql:show /" do
       it_should_behave_like "The sql:show command" 
     end
-
+  
   end # -- Query
   
   # -- Schema
@@ -98,11 +98,11 @@ describe "DbAgile::Command::API /" do
     describe "schema:heading /" do
       it_should_behave_like "The schema:heading command" 
     end
-
+  
     describe "schema:drop /" do
       it_should_behave_like "The schema:drop command" 
     end
-
+  
   end # -- Schema
   
 end

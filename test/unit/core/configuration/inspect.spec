@@ -1,5 +1,5 @@
 require File.expand_path('../../../fixtures', __FILE__)
-describe "DbAgile::Core::Configuration#inspect" do
+describe "DbAgile::Core::Configuration#inspect /" do
 
   describe "On examples file and DbAgile:: prefix" do
     Dir[File.expand_path('../*.dba', __FILE__)].each do |file|
