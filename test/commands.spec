@@ -102,7 +102,11 @@ describe "DbAgile::Command::API /" do
     describe "schema:drop /" do
       it_should_behave_like "The schema:drop command" 
     end
-  
+
+    describe "The schema:dump command" do
+      it_should_behave_like "The schema:dump command" 
+    end
+
   end # -- Schema
   
 end

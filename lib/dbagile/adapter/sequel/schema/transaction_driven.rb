@@ -4,6 +4,11 @@ module DbAgile
       module TransactionDriven
 
         # @see DbAgile::Contract::Schema::TransactionDriven#create_table
+        def create_schema(transaction, schema)
+          SequelAdapter::Schema::Creator.new.run(db, schema)
+        end
+
+        # @see DbAgile::Contract::Schema::TransactionDriven#create_table
         def create_table(transaction, name, columns)
           db.create_table(name){ 
             columns.each_pair{|name, type| column(name, type)} 

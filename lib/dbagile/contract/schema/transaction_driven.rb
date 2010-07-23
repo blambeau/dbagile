@@ -3,6 +3,13 @@ module DbAgile
     module Schema
       module TransactionDriven
 
+        # 
+        # Creates an entire schema
+        #
+        def create_schema(transaction, schema)
+          Kernel.raise NotImplementedError
+        end
+
         #
         # Creates a table with some columns. 
         #
