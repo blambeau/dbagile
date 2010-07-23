@@ -43,7 +43,7 @@ module DbAgile
               display(config_file.inspect)
             else
               unless config_file.empty?
-                say("Available databases are:")
+                display("Available databases are:")
                 config_file.each do |config|
                   msg = config_file.current?(config) ? "  -> " : " "*5
                   msg += config.name.to_s.ljust(15)
@@ -52,7 +52,7 @@ module DbAgile
                   display(msg)
                 end
               else
-                say("No database configuration found. Checks ~/.dbagile")
+                say("No database configuration found. Checks ~/.dbagile", :red)
               end
             end
 

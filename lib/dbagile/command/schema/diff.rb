@@ -101,9 +101,11 @@ module DbAgile
           say "### RIGHT: #{right_debug}"
           say "### Objects to #{kind}", color
           say "#"*size
+          say "\n"
           minus = (left_schema - right_schema)
           if minus.empty?
-            say("nothing to do", :yellow)
+            say("nothing to do", :blue)
+            say "\n"
           else
             say(minus.to_yaml, color)  
           end
