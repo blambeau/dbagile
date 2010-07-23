@@ -8,14 +8,14 @@ shared_examples_for("The bulk:import command") do
       File.open(DbAgile::Fixtures::basic_values_path, "r"){|io|
         dba.input_buffer = io
         dba.bulk_import %w{--ruby --drop-table basic_values_copy}
-        dba.sql "UPDATE basic_values_copy SET ruby_nil = null"
+        dba.sql_send "UPDATE basic_values_copy SET ruby_nil = null"
       }
       dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
     end
 
     it "should accept a --input option" do
       dba.bulk_import ['--input', DbAgile::Fixtures::basic_values_path] + %w{--ruby --drop-table basic_values_copy}
-      dba.sql "UPDATE basic_values_copy SET ruby_nil = null"
+      dba.sql_send "UPDATE basic_values_copy SET ruby_nil = null"
       dba.dataset(:basic_values_copy).to_a.should == DbAgile::Fixtures::basic_values
     end
     

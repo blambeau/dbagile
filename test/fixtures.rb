@@ -72,7 +72,7 @@ module DbAgile
             each_table_file{|name, file|
               dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
-            dba.sql "DELETE FROM empty_table"
+            dba.sql_send "DELETE FROM empty_table"
           else
             puts "Skipping fixture database #{config.name.inspect} (no ping)"
           end

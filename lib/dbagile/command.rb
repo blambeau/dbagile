@@ -122,8 +122,6 @@ require 'dbagile/command/replay'
 # :config category
 require 'dbagile/command/config'
 
-require 'dbagile/command/show'
-
 # :bulk category
 require 'dbagile/command/bulk'
 
@@ -133,8 +131,8 @@ require 'dbagile/command/sql'
 # :schema category
 require 'dbagile/command/schema'
 
-# :restful category
-require 'dbagile/command/webtools'
+# :web category
+require 'dbagile/command/web'
 
 # Build Command API now
 require 'dbagile/command/api'

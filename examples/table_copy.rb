@@ -19,5 +19,5 @@ DbAgile::dba do |dba|
   
   # Show the result
   dba.output_buffer = STDOUT
-  dba.show %w{suppliers}
+  dba.sql_show %w{suppliers}
 end

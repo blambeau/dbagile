@@ -57,10 +57,6 @@ describe "DbAgile::Command::API /" do
       dba.output_buffer = StringIO.new
     }
     
-    describe "show /" do
-      it_should_behave_like "The show command" 
-    end
-
     describe "bulk:export /" do
       it_should_behave_like "The bulk:export command" 
     end
@@ -71,8 +67,8 @@ describe "DbAgile::Command::API /" do
 
   end # -- Input/Output
   
-  # -- Query
-  describe "query commands /" do
+  # -- Sql 
+  describe "sql commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
@@ -80,8 +76,12 @@ describe "DbAgile::Command::API /" do
       dba.output_buffer = StringIO.new
     }
     
-    describe "sql /" do
-      it_should_behave_like "The sql command" 
+    describe "sql:send /" do
+      it_should_behave_like "The sql:send command" 
+    end
+
+    describe "sql:show /" do
+      it_should_behave_like "The sql:show command" 
     end
 
   end # -- Query
