@@ -1,0 +1,5 @@
+DbAgile::config(:many_schema_files){
+  uri "sqlite://test.db"
+  schema_files DbAgile::Fixtures::Core::Schema::schema_file(:dbagile), 
+               DbAgile::Fixtures::Core::Schema::schema_file(:suppliers_and_parts)
+}

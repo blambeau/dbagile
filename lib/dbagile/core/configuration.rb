@@ -91,7 +91,7 @@ module DbAgile
         unless schema_files.nil? or schema_files.empty?
           builder = DbAgile::Core::Schema::Builder.new
           schema_files.collect{|f| file_resolver.call(f)}.each{|f|
-            DbAgile::Core::Schema::yaml_file_load(f)
+            DbAgile::Core::Schema::yaml_file_load(f, builder)
           }
           builder._dump
         else
@@ -111,7 +111,11 @@ module DbAgile
         buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
         unless schema_files.nil? or schema_files.empty?
-          buffer << "  schema_files #{schema_files.inspect}" << "\n"
+          if schema_files.size == 1
+            buffer << "  schema_file #{schema_files[0].inspect}" << "\n"
+          else
+            buffer << "  schema_files #{schema_files.inspect}" << "\n"
+          end
         end
         if plugs and not(plugs.empty?)
           plugs.each{|plug| 

@@ -1,0 +1,7 @@
+--- 
+logical: 
+  DBAGILE_INFO:
+    heading:
+      VERSION: { domain: String, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'VERSION' ] }
