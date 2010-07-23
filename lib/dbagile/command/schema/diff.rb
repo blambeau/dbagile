@@ -39,37 +39,11 @@ module DbAgile
           normalize_comparison_arguments(arguments)
         end
         
-        # Shows the minus
-        def show_minus(left_debug, left_schema, right_debug, right_schema, kind)
-          size = 20 + DbAgile::MathTools::max(left_debug.to_s.length, right_debug.to_s.length)
-          color = (kind == :add ? :green : :red)
-          say "#"*size
-          say "### LEFT: #{left_debug}"
-          say "### RIGHT: #{right_debug}"
-          say "### Objects to #{kind} on LEFT", color
-          say "#"*size
-          say "\n"
-          minus = (left_schema - right_schema)
-          if minus.empty?
-            say("nothing to do", :blue)
-            say "\n"
-          else
-            say(minus.to_yaml, color)  
-          end
-          say ""
-        end
-      
         # Executes the command
         def execute_command
-          if left == right
-            left_schema, left_debug = real_schema_of(self.left)
-            right_schema, right_debug = files_schema_of(self.right)
-          else
-            left_schema, left_debug = schema_of(self.left)
-            right_schema, right_debug = schema_of(self.right)
-          end
-          show_minus(left_debug, left_schema, right_debug, right_schema, :remove)
-          show_minus(right_debug, right_schema, left_debug, left_schema, :add)
+          ls, ld, rs, rd = left_and_right_schemas(true)
+          show_minus(ld, ls, rd, rs, :remove)
+          show_minus(rd, rs, ld, ls, :add)
         end
       
       end # class SchemaDump

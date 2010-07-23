@@ -67,6 +67,42 @@ module DbAgile
           end
         end
         
+        # Returns left and right schemas
+        def left_and_right_schemas(debug = false)
+          if left == right
+            left_schema, left_debug = real_schema_of(self.left)
+            right_schema, right_debug = files_schema_of(self.right)
+          else
+            left_schema, left_debug = schema_of(self.left)
+            right_schema, right_debug = schema_of(self.right)
+          end
+          if debug
+            [ left_schema, left_debug, right_schema, right_debug ]
+          else
+            [ left_schema, right_schema ]
+          end
+        end
+
+        # Shows the minus
+        def show_minus(left_debug, left_schema, right_debug, right_schema, kind)
+          size = 20 + DbAgile::MathTools::max(left_debug.to_s.length, right_debug.to_s.length)
+          color = (kind == :add ? :green : :red)
+          say "#"*size
+          say "### LEFT: #{left_debug}"
+          say "### RIGHT: #{right_debug}"
+          say "### Objects to #{kind} on LEFT", color
+          say "#"*size
+          say "\n"
+          minus = (left_schema - right_schema)
+          if minus.empty?
+            say("nothing to do", :blue)
+            say "\n"
+          else
+            say(minus.to_yaml, color)  
+          end
+          say ""
+        end
+      
       end # module ComparisonBased
     end # module Schema
   end # class Command
