@@ -99,7 +99,7 @@ module DbAgile
           say "#"*size
           say "### LEFT: #{left_debug}"
           say "### RIGHT: #{right_debug}"
-          say "### Objects to #{kind}", color
+          say "### Objects to #{kind} on LEFT", color
           say "#"*size
           say "\n"
           minus = (left_schema - right_schema)
@@ -121,8 +121,8 @@ module DbAgile
             left_schema, left_debug = schema_of(self.left)
             right_schema, right_debug = schema_of(self.right)
           end
-          show_minus(left_debug, left_schema, right_debug, right_schema, :add)
-          show_minus(right_debug, right_schema, left_debug, left_schema, :remove)
+          show_minus(left_debug, left_schema, right_debug, right_schema, :remove)
+          show_minus(right_debug, right_schema, left_debug, left_schema, :add)
         end
       
       end # class SchemaDump
