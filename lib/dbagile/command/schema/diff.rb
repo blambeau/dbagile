@@ -41,7 +41,7 @@ module DbAgile
         
         # Shows the minus
         def show_minus(left_debug, left_schema, right_debug, right_schema, kind)
-          size = 20 + DbAgile::MathTools::max(left_debug.length, right_debug.length)
+          size = 20 + DbAgile::MathTools::max(left_debug.to_s.length, right_debug.to_s.length)
           color = (kind == :add ? :green : :red)
           say "#"*size
           say "### LEFT: #{left_debug}"
