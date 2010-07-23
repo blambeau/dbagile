@@ -11,7 +11,7 @@ module DbAgile
       # Default implementation returns ~/.dbagile
       #
       def config_file_path
-        @config_file_path ||= File.join(ENV['HOME'], '.dbagile')
+        @config_file_path ||= DbAgile::find_config_file_path
       end
       
       #

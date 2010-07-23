@@ -47,6 +47,16 @@ module DbAgile
   end
   module_function :dba
   
+  # Finds 
+  def find_config_file_path
+    if File.exists?("./dbagile.cfg")
+      "./dbagile.cfg"
+    else
+      File.join(ENV['HOME'], '.dbagile')
+    end
+  end
+  module_function :find_config_file_path
+  
   # Returns the default environment to use.
   def default_environment
     @environment ||= ::DbAgile::Environment.new
