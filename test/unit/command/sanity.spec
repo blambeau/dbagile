@@ -14,6 +14,12 @@ describe "command sanity /" do
         it "should have a usage" do
           cmd.usage.should =~ /^Usage: dba #{cmd.command_name}/
         end
+      
+      else
+        
+        it "should have the description" do
+          cmd.description.should =~ /blambeau.github.com/
+        end
         
       end
       

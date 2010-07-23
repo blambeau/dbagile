@@ -1,11 +1,14 @@
 module DbAgile
   class Command
     #
-    # Main 'dba' command
+    # Agile SQL databases and tools for database administrators
     #
     # Usage: dba [--version] [--help] [--list]
-    #        dba help <subcommand>
+    #        dba help [--complete] <subcommand>
     #        dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+    #
+    # DbAgile aims at supporting database administrators and developers of database
+    # oriented application. Read more about it on http://blambeau.github.com/dbagile.
     #
     class DbA < Command
       Command::build_me(self, __FILE__)
