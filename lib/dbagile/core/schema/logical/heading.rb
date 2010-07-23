@@ -36,8 +36,8 @@ module DbAgile
           def minus(other, builder)
             builder.heading{|b_attributes|
               attributes.keys.each{|name|
-                unless attributes[m] == other.attributes[m]
-                  b_attributes[m] = attributes[m]
+                unless attributes[name] == other.attributes[name]
+                  b_attributes[name] = attributes[name]
                 end
               }
             }

@@ -1,19 +1,9 @@
 --- 
 logical: 
-  ONLY_ON_LEFT_RELVAR: 
-    heading: 
-      ID:    { domain: Integer, mandatory: true, default: :autonumber }
-    constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ] }
   ADDED_COLUMNS_ON_LEFT: 
     heading: 
       ID:    { domain: Integer, mandatory: true, default: :autonumber }
       ADDED: { domain: String,  mandatory: true                       }
-    constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ] }
-  DROPPED_COLUMNS_ON_LEFT: 
-    heading: 
-      ID:    { domain: Integer, mandatory: true, default: :autonumber }
     constraints: 
       pk: { type: :primary_key, attributes: [ 'ID' ] }
   ADDED_CONSTRAINT_ON_LEFT: 
@@ -22,17 +12,32 @@ logical:
     constraints: 
       pk: { type: :primary_key, attributes: [ 'ID' ] }
       added_constraint: { type: :foreign_key, references: => ADDED_COLUMNS_ON_LEFT, source: [ 'ID' ], target: [ 'ID' ]}
-  DROPPED_CONSTRAINT_ON_LEFT: 
-    heading: 
-      ID:    { domain: Integer, mandatory: true, default: :autonumber }
-    constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ] }
-  CONFLICTING: 
+  CONFLICTING_HEADING: 
     heading: 
       NO_CONFLICT: { domain: Float, mandatory: true }
       CONFLICT:    { domain: Integer, mandatory: true, default: :autonumber }
     constraints: 
       pk: { type: :primary_key, attributes: [ 'NO_CONFLICT' ] }
+  DROPPED_COLUMNS_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true, default: :autonumber }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  DROPPED_CONSTRAINT_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true, default: :autonumber }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  ONLY_ON_LEFT_RELVAR: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true, default: :autonumber }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  SAME:
+    heading: 
+      ID:    { domain: Integer, mandatory: true, default: :autonumber }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
 ---
 physical:
   indexes:

@@ -4,16 +4,19 @@ module DbAgile
       module TransactionDriven
 
         # 
-        # Creates an entire schema
+        # Expands the schema of the underlying database with schema objects.
         #
-        def create_schema(transaction, schema)
+        # @param [DbAgile::Core::Transaction] transaction the current transaction
+        # @param [DbAgile::Core::Schema] schema objects to create on the SQL database
+        #
+        def expand_schema(transaction, schema, options = {})
           Kernel.raise NotImplementedError
         end
 
         #
         # Creates a table with some columns. 
         #
-        # @param [Transaction] transaction the current transaction
+        # @param [DbAgile::Core::Transaction] transaction the current transaction
         # @param [Symbol] table_name the name of a table
         # @param [Hash] a table heading
         # @return [Hash] the actual table heading that has been created
@@ -27,7 +30,7 @@ module DbAgile
         #
         # Drops a table
         #
-        # @param [Transaction] transaction the current transaction
+        # @param [DbAgile::Core::Transaction] transaction the current transaction
         # @param [Symbol] table_name the name of a table
         # @return [Boolean] true to indicate that everything is fine
         #
@@ -40,7 +43,7 @@ module DbAgile
         #
         # Adds some columns to a table
         #
-        # @param [Transaction] transaction the current transaction
+        # @param [DbAgile::Core::Transaction] transaction the current transaction
         # @param [Symbol] table_name the name of a table
         # @param [Hash] columns column definitions
         # @return [Boolean] true to indicate that everything is fine
@@ -56,7 +59,7 @@ module DbAgile
         # 
         # Make columns be a candidate key for the table.
         #
-        # @param [Transaction] transaction the current transaction
+        # @param [DbAgile::Core::Transaction] transaction the current transaction
         # @param [Symbol] table_name the name of a table
         # @param [Array<Symbol>] columns column names
         # @return [Boolean] true to indicate that everything is fine

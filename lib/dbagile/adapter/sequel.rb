@@ -3,7 +3,7 @@ require 'dbagile/adapter/sequel/connection'
 require 'dbagile/adapter/sequel/data/table_driven'
 require 'dbagile/adapter/sequel/data/transaction_driven'
 require 'dbagile/adapter/sequel/schema/loader'
-require 'dbagile/adapter/sequel/schema/creator'
+require 'dbagile/adapter/sequel/schema/expander'
 require 'dbagile/adapter/sequel/schema/table_driven'
 require 'dbagile/adapter/sequel/schema/transaction_driven'
 module DbAgile

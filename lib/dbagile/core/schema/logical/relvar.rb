@@ -39,7 +39,7 @@ module DbAgile
           
           # Returns the relation variable primary key
           def primary_key
-            constraints.each_value{|c|
+            constraints.each{|c|
               return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
             }
             raise InvalidSchemaError, "Relation variable #{name} has no primary key!"
@@ -47,7 +47,7 @@ module DbAgile
           
           # Yiels the block with each foreign key
           def each_foreign_key(&block)
-            constraints.values.select{|c|
+            constraints.select{|c|
               c.kind_of?(Logical::Constraint::ForeignKey)
             }.each(&block)
           end

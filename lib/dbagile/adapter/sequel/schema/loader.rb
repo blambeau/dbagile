@@ -52,6 +52,8 @@ module DbAgile
           builder.heading{
             columns = conn.schema(table, {:reload => true})
             columns.each do |name, info|
+              #puts info.inspect
+              
               # find attribute definition
               defn = {:domain    => dbtype_to_ruby_type(info),
                       :mandatory => !info[:allow_null] }

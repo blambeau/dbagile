@@ -74,7 +74,7 @@ module DbAgile
     
       # Yields the block with each relvar in turn
       def each_relvar(&block)
-        logical.values.each(&block)
+        logical.each(&block)
       end
       
     end # class Schema

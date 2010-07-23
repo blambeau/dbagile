@@ -43,17 +43,31 @@ module DbAgile
         
         # Delegation pattern on YAML flushing
         def to_yaml(opts = {})
-          DbAgile::Core::Schema::Coercion::unsymbolize_hash(objects).to_yaml(opts)
+          YAML::quick_emit(self, opts){|out|
+            out.map("tag:yaml.org,2002:map") do |map|
+              objects.keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
+                map.add(k.to_s, objects[k])
+              }
+            end
+          }
         end
         
         # Delegate pattern on minus
         def minus(other, builder)
           unless other.kind_of?(NamedCollection) and other.kind == kind
-            raise ArgumentError, "NamedCollection(#{kind}) expected" 
+            raise ArgumentError, "NamedCollection(#{kind}) expected, #{other.inspect} received" 
           end
           builder.send(kind){|builder_object|
             names.each{|name|
-              unless other[name] == self[name]
+              unless other[name].nil?
+                unless other[name] == self[name]
+                  if self[name].respond_to?(:minus)
+                    builder_object[name] = self[name].minus(other[name], builder)
+                  else
+                    builder_object[name] = self[name]
+                  end
+                end
+              else
                 builder_object[name] = self[name]
               end
             }
