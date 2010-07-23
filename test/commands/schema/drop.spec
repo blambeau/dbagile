@@ -1,4 +1,4 @@
-shared_examples_for("The drop command") do
+shared_examples_for("The schema:drop command") do
   
   before{
     dba.with_current_connection do |conn|
@@ -16,7 +16,7 @@ shared_examples_for("The drop command") do
   }
   
   it "should drop the table" do
-    dba.drop %{unexisting}
+    dba.schema_drop %{unexisting}
     dba.with_current_connection do |conn|
       conn.has_table?(:unexisting).should be_false
     end

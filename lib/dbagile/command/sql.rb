@@ -18,7 +18,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba sql QUERY"
+        "Usage: dba #{command_name} QUERY"
       end
 
       # Short help

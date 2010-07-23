@@ -27,16 +27,34 @@ module DbAgile
       # Returns the command name of a given class
       #
       def command_name_of(clazz)
-        /::([A-Za-z0-9]+)$/ =~ clazz.name
-        $1.downcase
+        /Command::([A-Za-z0-9]+)(::([A-Za-z0-9]+))?$/ =~ clazz.name
+        if $3
+          "#{$1.downcase}:#{$3.downcase}"
+        else
+          $1.downcase
+        end
+      end
+    
+      #
+      # Returns the ruby name of a given class
+      #
+      def ruby_method_for(clazz)
+        command_name_of(clazz).gsub(':', '_').to_sym
       end
     
       #
       # Returns a command instance for a given name and environment, 
       # returns nil if it cannot be found
       #
-      def command_for(name, env)
-        subclass = subclasses.find{|subclass| command_name_of(subclass).to_s == name.to_s}
+      def command_for(name_symbol_or_class, env)
+        subclass = case name_symbol_or_class
+          when String
+            subclasses.find{|subclass| command_name_of(subclass) == name_symbol_or_class}
+          when Symbol
+            subclasses.find{|subclass| ruby_method_for(subclass) == name_symbol_or_class}
+          when Class
+            name_symbol_or_class
+        end
         subclass.nil? ? nil : subclass.new(env)
       end
 

@@ -70,7 +70,7 @@ module DbAgile
             puts "Installing fixture database on #{config.name.inspect}"
             dba.use(config.name)
             each_table_file{|name, file|
-              dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
+              dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
             dba.sql "DELETE FROM empty_table"
           else

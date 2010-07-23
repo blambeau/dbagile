@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba list"
+        "Usage: dba #{command_name}"
       end
 
       # Short help
@@ -52,7 +52,7 @@ module DbAgile
               say("Available databases are:")
               config_file.each do |config|
                 msg = config_file.current?(config) ? "  -> " : " "*5
-                msg += align(config.name,15)
+                msg += config.name.to_s.ljust(15)
                 msg += " "
                 msg += config.uri
                 display(msg)

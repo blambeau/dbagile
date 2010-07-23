@@ -110,17 +110,6 @@ module DbAgile
     def execute_command
     end
     
-    ##############################################################################
-    ### Deprecated or should be moved
-    ##############################################################################
-    
-    # Aligns a string by appending whitespaces up to size.
-    # This method has not effect if size is nil
-    def align(string, size = nil)
-      return string if size.nil?
-      string.to_s + " "*(size - string.to_s.length)
-    end
-    
   end # class Command
 end # module DbAgile
 
@@ -137,17 +126,16 @@ require 'dbagile/command/use'
 require 'dbagile/command/add'
 require 'dbagile/command/rm'
 
-# :io category
 require 'dbagile/command/show'
-require 'dbagile/command/export'
-require 'dbagile/command/import'
+
+# :bulk category
+require 'dbagile/command/bulk'
 
 # :sql category
 require 'dbagile/command/sql'
 
 # :schema category
-require 'dbagile/command/heading'
-require 'dbagile/command/drop'
+require 'dbagile/command/schema'
 
 # :restful category
 require 'dbagile/command/webtools'

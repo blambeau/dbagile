@@ -3,13 +3,14 @@ module DbAgile
     class DbA < Command
       
       # Command categories
-      CATEGORIES = [:dba, :configuration, :io, :restful, :sql, :schema]
+      CATEGORIES = [:dba, :configuration, :bulk, :io, :restful, :sql, :schema]
       
       # Names of the categories
       CATEGORY_NAMES = {
         :dba           => "Main commands:",
         :configuration => "Configuration management:",
         :io            => "Import/Export management:",
+        :bulk          => "Import/Export management:",
         :sql           => "Queries:",
         :schema        => "Database schema:",
         :restful       => "Database and the web"
@@ -80,7 +81,7 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + align(command.command_name,10) + command.short_help
+          display options.summary_indent + command.command_name.ljust(20) + command.short_help
         end
       end
 

@@ -12,7 +12,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba show [OPTIONS] DATASET"
+        "Usage: dba #{command_name} [OPTIONS] DATASET"
       end
 
       # Short help
@@ -43,7 +43,7 @@ module DbAgile
       
       # Override to avoid pending options to be rejected
       def unsecure_run(requester_file, argv)
-        DbAgile::dba(environment){|dba| dba.export(infer_options(argv))}
+        DbAgile::dba(environment){|dba| dba.bulk_export(infer_options(argv))}
         environment.output_buffer
       end
       

@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba help COMMAND"
+        "Usage: dba #{command_name} COMMAND"
       end
 
       # Short help
