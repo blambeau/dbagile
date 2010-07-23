@@ -28,10 +28,11 @@ module DbAgile
         def valid_database_uri!(uri)
           require 'uri'
           got = URI::parse(uri)
-          if got.scheme.nil?
-            raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}" 
+          if got.scheme or (uri =~ /\.db$/)
+            uri
+          else
+            raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}"
           end
-          uri
         rescue URI::InvalidURIError
           raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}"
         end

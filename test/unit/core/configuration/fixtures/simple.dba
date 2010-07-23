@@ -1,3 +1,3 @@
 DbAgile::config(:simple){
-  uri "sqlite://test.db"
+  uri "postgres://user@localhost/database"
 }

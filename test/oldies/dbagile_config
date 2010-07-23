@@ -1,5 +1,5 @@
 config(:sqlite){
-  uri "sqlite:///Users/blambeau/work/chefbe/devel/dbagile/test/oldies/fixtures/ruby_values.db"
+  uri "ruby_values.db"
 }
 config(:postgres){
   uri "postgres://dbagile@localhost/ruby_values"

@@ -4,6 +4,14 @@ shared_examples_for("The config:add command") do
     dba.config_add(%w{test sqlite://test.db}).should be_kind_of(DbAgile::Core::Configuration)
   end
   
+  it "should accept a sqlite relative database" do
+    dba.config_add(%w{test test.db}).should be_kind_of(DbAgile::Core::Configuration)
+  end
+  
+  it "should accept a sqlite absolute database" do
+    dba.config_add(%w{test sqlite://test.db}).should be_kind_of(DbAgile::Core::Configuration)
+  end
+  
   it "should raise an error when the name is already in use" do
     dba.config_add(%w{test sqlite://test.db})
     lambda{ dba.config_add(%w{test sqlite://test.db}) }.should raise_error(DbAgile::ConfigNameConflictError)

@@ -60,7 +60,14 @@ module DbAgile
       def connect(options = {})
         raise ArgumentError, "Options should be a Hash" unless options.kind_of?(Hash)
         raise DbAgile::Error, "Configuration has no database uri" if uri.nil?
-        adapter = DbAgile::Adapter::factor(uri, options)
+        if uri =~ /:\/\//
+          adapter = DbAgile::Adapter::factor(uri, options)
+        elsif file_resolver
+          file = file_resolver.call(uri)
+          adapter = DbAgile::Adapter::factor("sqlite://#{file}", options)
+        else
+          raise DbAgile::Error, "A file resolver is required for using #{uri} as database uri"
+        end
         connector = @connector.connect(adapter)
         Connection.new(connector)
       end
