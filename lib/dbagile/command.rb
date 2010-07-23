@@ -21,6 +21,11 @@ module DbAgile
       set_default_options
     end
     
+    # Returns command name
+    def command_name
+      self.class.command_name
+    end
+    
     # Returns command summary
     def summary
       self.class.summary || ""
@@ -32,9 +37,8 @@ module DbAgile
     end
     alias :banner :usage
     
-    # Returns command name
-    def command_name
-      Command::command_name_of(self.class)
+    def description
+      self.class.description || ""
     end
     
     ##############################################################################
