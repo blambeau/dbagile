@@ -35,8 +35,8 @@ module DbAgile
   #     dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   # 
   #     # Start using dbagile commands
-  #     dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
-  #     dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
+  #     dba.bulk_export %w{--csv --type-safe contacts}  # each line pushed in buffer
+  #     dba.bulk_export %w{--ruby contacts}             # each record pushed as a Hash in buffer
   # end
   #
   def dba(environment = nil)
@@ -59,27 +59,23 @@ module DbAgile
   module_function :default_environment=
   
   #
-  # If a block is given, creates a new configuration, save it in environment 
-  # and returns the block. Otherwise, returns a confguration by name.
+  # Creates a new configuration and returns it.
   #
   # @param [Symbol] name configuration name
-  # @param [Proc] block configuration block dsl (optional)
+  # @param [Proc] block configuration block dsl
   # @return [DbAgile::Core::Configuration] a database configuration instance.
   # 
   def config(name, &block)
-    default_environment.with_config_file(true) do |config_file|
-      if block_given?
-        config = DbAgile::Core::Configuration.new(name, &block)
-        config_file << config
-        config
-      else
-        config_file.config(name)
-      end
+    unless block
+      default_environment.config_file.config(name)
+    else
+      dsl = DbAgile::Core::Configuration::DSL.new
+      dsl.config(name, &block)
     end
   end
   module_function :config
   
-  # Connects to a database and returns a Database instance
+  # Connects to a database and returns a Connection instance
   def connect(uri, options = {}, &block)
     case uri
       when Symbol
@@ -99,7 +95,6 @@ end # module DbAgile
 require 'dbagile/errors'
 require 'dbagile/contract'
 require 'dbagile/tools'
-require 'dbagile/ext/object'
 require 'dbagile/io'
 require 'dbagile/adapter'
 require 'dbagile/core'

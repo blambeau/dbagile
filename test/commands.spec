@@ -18,89 +18,89 @@ describe "DbAgile::Command::API /" do
     before       {  dba.config_file_path = empty_config_path }
     before(:each){ FileUtils.rm_rf(empty_config_path)        }
   
-    describe "add" do
-      it_should_behave_like "The add command" 
+    describe "config:add /" do
+      it_should_behave_like "The config:add command" 
     end
   
-    describe "rm" do
-      it_should_behave_like "The rm command" 
+    describe "config:rm /" do
+      it_should_behave_like "The config:rm command" 
     end
   
-    describe "use" do
-      it_should_behave_like "The use command" 
+    describe "config:use /" do
+      it_should_behave_like "The config:use command" 
     end
   
   end # -- Configuration
   
   # -- Configuration
-  describe "configuration commands (touching) /" do 
+  describe "configuration commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.use %{sqlite} }
+    before { dba.config_use %{sqlite} }
   
-    describe "list" do
-      it_should_behave_like "The list command" 
+    describe "config:list /" do
+      it_should_behave_like "The config:list command" 
     end
   
-    describe "ping" do
-      it_should_behave_like "The ping command" 
+    describe "config:ping /" do
+      it_should_behave_like "The config:ping command" 
     end
-
+  
   end # -- Configuration
   
   # -- Input/Output
-  describe "input/output commands" do 
-
+  describe "bulk commands /" do 
+  
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The show command" do
-      it_should_behave_like "The show command" 
+    describe "bulk:export /" do
+      it_should_behave_like "The bulk:export command" 
     end
-
-    describe "The export command" do
-      it_should_behave_like "The export command" 
+  
+    describe "bulk:import /" do
+      it_should_behave_like "The bulk:import command" 
     end
-
-    describe "The import command" do
-      it_should_behave_like "The import command" 
-    end
-
+  
   end # -- Input/Output
   
-  # -- Query
-  describe "query commands" do
+  # -- Sql 
+  describe "sql commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The sql command" do
-      it_should_behave_like "The sql command" 
+    describe "sql:send /" do
+      it_should_behave_like "The sql:send command" 
     end
-
+  
+    describe "sql:show /" do
+      it_should_behave_like "The sql:show command" 
+    end
+  
   end # -- Query
   
   # -- Schema
-  describe "schema commands" do
+  describe "schema commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The heading command" do
-      it_should_behave_like "The heading command" 
+    describe "schema:heading /" do
+      it_should_behave_like "The schema:heading command" 
     end
-
-    describe "The drop command" do
-      it_should_behave_like "The drop command" 
+  
+    describe "schema:drop /" do
+      it_should_behave_like "The schema:drop command" 
     end
 
     describe "The schema:dump command" do

@@ -1,3 +1,6 @@
+require 'dbagile/core/configuration/robustness'
+require 'dbagile/core/configuration/dsl'
+require 'dbagile/core/configuration/file'
 module DbAgile
   module Core
     #
@@ -8,21 +11,19 @@ module DbAgile
       # Configuration name
       attr_reader :name
       
+      # Configuration uri
+      attr_accessor :uri
+      
       # Plugs as arrays of arrays
       attr_reader :plugs
       
       # Creates a configuration instance
-      def initialize(name = :noname, &block)
+      def initialize(name, uri = nil, &block)
+        raise ArgumentError, "Configuration name is mandatory" unless name.kind_of?(Symbol)
+        raise ArgumentError, "Configuration DSL is deprecated" unless block.nil?
         @name = name
-        @uri = nil
+        @uri = uri
         @connector = ::DbAgile::Core::Connector.new
-        self.instance_eval(&block) if block
-      end
-      
-      # Sets the configuration URI
-      def uri(uri = nil)
-        @uri = uri unless uri.nil?
-        @uri
       end
       
       # @see Connector#plug
@@ -37,8 +38,10 @@ module DbAgile
       end
       
       # Connects and returns a Connection object
-      def connect(uri = @uri, options = {})
-        adapter = DbAgile::Adapter::factor(uri || @uri, options)
+      def connect(options = {})
+        raise ArgumentError, "Options should be a Hash" unless options.kind_of?(Hash)
+        raise DbAgile::Error, "Configuration has no database uri" if uri.nil?
+        adapter = DbAgile::Adapter::factor(uri, options)
         connector = @connector.connect(adapter)
         Connection.new(connector)
       end
@@ -52,7 +55,7 @@ module DbAgile
       def with_connection(conn_options = {})
         raise ArgumentError, "Missing block" unless block_given?
         begin
-          connection = connect(@uri, conn_options)
+          connection = connect(conn_options)
           result = yield(connection)
           result
         ensure

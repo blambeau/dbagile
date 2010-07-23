@@ -4,7 +4,7 @@ describe "::DbAgile::Command::API" do
   
   it "should have instance methods for each command" do
     ::DbAgile::Command::each_subclass do |subclass|
-      command_name = DbAgile::Command::command_name_of(subclass)
+      command_name = DbAgile::Command::ruby_method_for(subclass)
       api.should respond_to(command_name)
     end
   end

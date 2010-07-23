@@ -68,11 +68,11 @@ module DbAgile
         dba.config_file.each do |config|
           if config.ping?
             puts "Installing fixture database on #{config.name.inspect}"
-            dba.use(config.name)
+            dba.config_use(config.name)
             each_table_file{|name, file|
-              dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
+              dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
-            dba.sql "DELETE FROM empty_table"
+            dba.sql_send "DELETE FROM empty_table"
           else
             puts "Skipping fixture database #{config.name.inspect} (no ping)"
           end

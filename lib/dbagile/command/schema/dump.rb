@@ -4,7 +4,7 @@ module DbAgile
       #
       # Dumps the schema of a database
       #
-      class SchemaDump < Command
+      class Dump < Command
       
         # Returns command's category
         def category
@@ -13,7 +13,7 @@ module DbAgile
 
         # Returns the command banner
         def banner
-          "Usage: dba schema:dump"
+          "Usage: dba #{command_name}"
         end
 
         # Short help

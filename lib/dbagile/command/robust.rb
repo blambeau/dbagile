@@ -1,6 +1,7 @@
 module DbAgile
   class Command
     module Robust
+      include DbAgile::Core::Configuration::Robustness
       
       # Raises an OptionParser::InvalidArgument
       def bad_argument_list!(rest)
@@ -30,27 +31,6 @@ module DbAgile
         end
       end
       
-      # Asserts that a configuration name is valid or raises
-      # a InvalidConfigurationName error
-      def valid_configuration_name!(name)
-        raise DbAgile::InvalidConfigurationName, "Invalid configuration name #{name}"\
-          unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
-        name
-      end
-      
-      # Asserts that a database uri is valid or raises
-      # a InvalidDatabaseUri error
-      def valid_database_uri!(uri)
-        require 'uri'
-        got = URI::parse(uri)
-        if got.scheme.nil?
-          raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}" 
-        end
-        uri
-      rescue URI::InvalidURIError
-        raise DbAgile::InvalidDatabaseUri, "Invalid database uri: #{uri}"
-      end
-      
       # Checks that a file exists and can be read or raises an IO error
       def valid_read_file!(file)
         raise IOError, "Unable to read #{file}" unless File.file?(file) and File.readable?(file)
@@ -68,27 +48,6 @@ module DbAgile
           raise DbAgile::NoSuchCommandError, "No such command #{name.inspect}" 
         else
           cmd
-        end
-      end
-      
-      #
-      # Asserts that a configuration exists. When config_name is nil, asserts
-      # that a default configuration is set.
-      #
-      # @return [DbAgile::Core::Configuration] the configuration instance when 
-      # found.
-      #
-      def has_config!(config_file, config_name = nil)
-        config = if config_name.nil?
-          config_file.current_config
-        else 
-          config_file.config(config_name)
-        end
-        if config.nil?
-          raise DbAgile::NoSuchConfigError, "Unknown configuration #{config_name}" if config_name
-          raise DbAgile::NoDefaultConfigError, "No default configuration set (try 'dba use ...' first)"
-        else
-          config
         end
       end
       

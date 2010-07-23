@@ -15,7 +15,7 @@ module DbAgile
       
       # Returns the command banner
       def banner
-        "Usage: dba replay [NUMBER]"
+        "Usage: dba #{command_name} [NUMBER]"
       end
 
       # Short help
