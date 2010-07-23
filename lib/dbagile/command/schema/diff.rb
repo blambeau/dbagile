@@ -4,9 +4,9 @@ module DbAgile
       #
       # Show differences between database schemas
       #
-      # Usage: dba diff
-      #        dba diff REFERENCE
-      #        dba diff DB1 DB2
+      # Usage: dba #{command_name}
+      #        dba #{command_name} REFERENCE
+      #        dba #{command_name} DB1 DB2
       #
       # When used without any argument, shows the differences between the schema inside
       # the SQL database (left) of the current configuration and the schema files (right).
