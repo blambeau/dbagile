@@ -4,8 +4,8 @@ describe "::DbAgile::Command::ruby_method_for /" do
   subject{ ::DbAgile::Command::ruby_method_for(command) }
   
   describe "when called on a root command" do
-    let(:command){ DbAgile::Command::List }
-    it{ should == :list }
+    let(:command){ DbAgile::Command::Help }
+    it{ should == :help }
   end
   
   describe "when called on a non root command" do

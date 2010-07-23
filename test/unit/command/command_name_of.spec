@@ -4,8 +4,8 @@ describe "::DbAgile::Command::command_name_of /" do
   subject{ ::DbAgile::Command::command_name_of(command) }
   
   describe "when called on a root command" do
-    let(:command){ DbAgile::Command::List }
-    it{ should == "list" }
+    let(:command){ DbAgile::Command::Help }
+    it{ should == "help" }
   end
   
   describe "when called on a non root command" do

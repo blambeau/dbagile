@@ -68,7 +68,7 @@ module DbAgile
         dba.config_file.each do |config|
           if config.ping?
             puts "Installing fixture database on #{config.name.inspect}"
-            dba.use(config.name)
+            dba.config_use(config.name)
             each_table_file{|name, file|
               dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }

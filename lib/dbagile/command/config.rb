@@ -1,0 +1,5 @@
+require 'dbagile/command/config/add'
+require 'dbagile/command/config/rm'
+require 'dbagile/command/config/list'
+require 'dbagile/command/config/use'
+require 'dbagile/command/config/ping'

@@ -119,12 +119,8 @@ require 'dbagile/command/help'
 require 'dbagile/command/history'
 require 'dbagile/command/replay'
 
-# :configuration category
-require 'dbagile/command/list'
-require 'dbagile/command/ping'
-require 'dbagile/command/use'
-require 'dbagile/command/add'
-require 'dbagile/command/rm'
+# :config category
+require 'dbagile/command/config'
 
 require 'dbagile/command/show'
 

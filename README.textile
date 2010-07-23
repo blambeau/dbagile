@@ -39,7 +39,7 @@ Making similar things, ... in Ruby?
     dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
-    dba.export %w{--yaml contacts}  # each line pushed in output_buffer
+    dba.bulk_export %w{--yaml contacts}  # each line pushed in output_buffer
   end
 </pre>
 

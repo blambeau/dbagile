@@ -29,8 +29,8 @@ module DbAgile
   #     dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   # 
   #     # Start using dbagile commands
-  #     dba.export %w{--csv --type-safe contacts}  # each line pushed in buffer
-  #     dba.export %w{--ruby contacts}             # each record pushed as a Hash in buffer
+  #     dba.bulk_export %w{--csv --type-safe contacts}  # each line pushed in buffer
+  #     dba.bulk_export %w{--ruby contacts}             # each record pushed as a Hash in buffer
   # end
   #
   def dba(environment = nil)

@@ -3,12 +3,12 @@ module DbAgile
     class DbA < Command
       
       # Command categories
-      CATEGORIES = [:dba, :configuration, :bulk, :io, :restful, :sql, :schema]
+      CATEGORIES = [:dba, :config, :bulk, :io, :restful, :sql, :schema]
       
       # Names of the categories
       CATEGORY_NAMES = {
         :dba           => "Main commands:",
-        :configuration => "Configuration management:",
+        :config        => "Configuration management:",
         :io            => "Import/Export management:",
         :bulk          => "Import/Export management:",
         :sql           => "Queries:",

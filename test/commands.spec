@@ -18,16 +18,16 @@ describe "DbAgile::Command::API /" do
     before       {  dba.config_file_path = empty_config_path }
     before(:each){ FileUtils.rm_rf(empty_config_path)        }
   
-    describe "add /" do
-      it_should_behave_like "The add command" 
+    describe "config:add /" do
+      it_should_behave_like "The config:add command" 
     end
   
-    describe "rm /" do
-      it_should_behave_like "The rm command" 
+    describe "config:rm /" do
+      it_should_behave_like "The config:rm command" 
     end
   
-    describe "use /" do
-      it_should_behave_like "The use command" 
+    describe "config:use /" do
+      it_should_behave_like "The config:use command" 
     end
   
   end # -- Configuration
@@ -36,14 +36,14 @@ describe "DbAgile::Command::API /" do
   describe "configuration commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.use %{sqlite} }
+    before { dba.config_use %{sqlite} }
   
-    describe "list /" do
-      it_should_behave_like "The list command" 
+    describe "config:list /" do
+      it_should_behave_like "The config:list command" 
     end
   
-    describe "ping /" do
-      it_should_behave_like "The ping command" 
+    describe "config:ping /" do
+      it_should_behave_like "The config:ping command" 
     end
 
   end # -- Configuration
@@ -53,7 +53,7 @@ describe "DbAgile::Command::API /" do
 
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -76,7 +76,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -91,7 +91,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.config_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
