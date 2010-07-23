@@ -62,7 +62,6 @@ The Rack middleware for the restful server (config.ru):
 
 h2. Pointers
 
-* Read more about "the 'dba' command line tool":http://github.com/blambeau/dbagile/blob/master/COMMAND_LINE.textile
 * DbAgile developper documentation on "rdoc.info":http://rdoc.info/projects/blambeau/dbagile
 
 h2. Installation

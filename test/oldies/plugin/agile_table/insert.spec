@@ -4,7 +4,7 @@ describe "::DbAgile::Plugin::AgileTable#insert" do
   let(:db){
     DbAgile::config(:test){ 
       uri "sqlite://test.db"
-      plug AgileTable
+      plug DbAgile::Plugin::AgileTable
     }.connect
   }
   
