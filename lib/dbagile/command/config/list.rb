@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module Config
       #
-      # List available database handler listed in ~/.dbagile file
+      # List available database configurations (found in ~/.dbagile)
+      #
+      # Usage: dba #{command_name}
       #
       class List < Command
+        Command::build_me(self, __FILE__)
       
         # Verbose ?
         attr_accessor :verbose
@@ -12,16 +15,6 @@ module DbAgile
         # Returns command's category
         def category
           :config
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name}"
-        end
-
-        # Short help
-        def short_help
-          "List available database configurations (found in ~/.dbagile)"
         end
       
         # Sets the default options

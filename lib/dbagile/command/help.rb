@@ -3,26 +3,30 @@ module DbAgile
     #
     # Show help of a given command
     #
+    # Usage: dba #{command_name} [--complete] COMMAND
+    #
     class Help < Command
+      Command::build_me(self, __FILE__)
       
       # Name of the configuration to add
       attr_accessor :command
+      
+      # Complete help?
+      attr_accessor :complete
       
       # Returns command's category
       def category
         :dba
       end
       
-      # Returns the command banner
-      def banner
-        "Usage: dba #{command_name} COMMAND"
+      # Contribute to options
+      def add_options(opt)
+        opt.separator "\nOptions:"
+        opt.on("--complete", "Provide complete command description") do
+          self.complete = true
+        end
       end
-
-      # Short help
-      def short_help
-        "Show help for a specific command"
-      end
-      
+        
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
         self.command = valid_argument_list!(arguments, String)
@@ -31,11 +35,13 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        say(command.options.to_s)
+        say(command.usage.to_s)
         say("")
         say("Description:")
-        say("  " + command.short_help.to_s)
+        say("  " + command.summary.to_s)
+        say(command.options.summarize.join)
         say("")
+        say(command.description.to_s) if complete
       end
       
     end # class List

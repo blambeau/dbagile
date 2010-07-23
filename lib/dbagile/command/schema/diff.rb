@@ -24,6 +24,7 @@ module DbAgile
       #          this behavior. 
       #
       class Diff < Command
+        Command::build_me(self, __FILE__)
       
         # Left of the comparison
         attr_accessor :left
@@ -39,18 +40,6 @@ module DbAgile
           :schema
         end
 
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name}\n"\
-          "       dba #{command_name} REFERENCE\n"\
-          "       dba #{command_name} DB1 DB2"
-        end
-
-        # Short help
-        def short_help
-          "Show differences between database schemas"
-        end
-      
         # Contribute to options
         def add_options(opt)
           opt.separator nil

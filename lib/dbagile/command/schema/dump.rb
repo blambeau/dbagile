@@ -2,25 +2,18 @@ module DbAgile
   class Command
     module Schema
       #
-      # Dumps the schema of a database
+      # Dump the schema of the database
+      #
+      # Usage: dba #{command_name}
       #
       class Dump < Command
+        Command::build_me(self, __FILE__)
       
         # Returns command's category
         def category
           :schema
         end
 
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name}"
-        end
-
-        # Short help
-        def short_help
-          "Dumps the schema of the database"
-        end
-      
         # Executes the command
         def execute_command
           schema = nil

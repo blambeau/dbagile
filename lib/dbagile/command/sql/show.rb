@@ -2,23 +2,16 @@ module DbAgile
   class Command
     module SQL
       #
-      # Shows the content of a table
+      # Display content of a table/view/query (shortcut for 'export --text ...')
+      #
+      # Usage: dba #{command_name} [OPTIONS] DATASET
       #
       class Show < Command
+        Command::build_me(self, __FILE__)
       
         # Returns command's category
         def category
           :sql
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} [OPTIONS] DATASET"
-        end
-
-        # Short help
-        def short_help
-          "Display content of a table/view/query (shortcut for 'export --text ...')"
         end
       
         # Contribute to options

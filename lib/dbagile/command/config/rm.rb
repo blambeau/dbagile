@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module Config
       #
-      # Removes a configuration in ~/.dbagile
+      # Remove a configuration in ~/.dbagile
+      #
+      # Usage: dba #{command_name} CONFIG
       #
       class Rm < Command
+        Command::build_me(self, __FILE__)
       
         # Name of the configuration to add
         attr_accessor :match
@@ -12,16 +15,6 @@ module DbAgile
         # Returns command's category
         def category
           :config
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} CONFIG"
-        end
-
-        # Short help
-        def short_help
-          "Remove a database configuration"
         end
       
         # Normalizes the pending arguments

@@ -3,10 +3,16 @@ module DbAgile
   class Command
     module Bulk
       #
-      # Exports the content of a table in different formats
+      # Export a table/view/query to (csv, json, yaml, ruby, xml)
+      #
+      # Usage: dba #{command_name} [OPTIONS] DATASET [FILE]
+      #
+      # This command helps exporting data in a SQL database to common transfer 
+      # formats.
       #
       class Export < Command
         include ::DbAgile::Command::IOCommons
+        Command::build_me(self, __FILE__)
       
         # Output file to use
         attr_accessor :output_file
@@ -16,16 +22,6 @@ module DbAgile
           :bulk
         end
 
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} [OPTIONS] DATASET [FILE]"
-        end
-
-        # Short help
-        def short_help
-          "Export a table/view/query to (csv, json, yaml, ruby, xml)"
-        end
-      
         # Contribute to options
         def add_options(opt)
           # Main output options

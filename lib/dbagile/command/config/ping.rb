@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module Config
       #
-      # Pings a configuration
+      # Ping a configuration (current one by default)
+      #
+      # Usage: dba #{command_name} [CONFIG]
       #
       class Ping < Command
+        Command::build_me(self, __FILE__)
       
         # Name of the configuration to ping
         attr_accessor :match
@@ -12,16 +15,6 @@ module DbAgile
         # Returns command's category
         def category
           :config
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} [CONFIG]"
-        end
-
-        # Short help
-        def short_help
-          "Ping a configuration (current one by default)"
         end
       
         # Normalizes the pending arguments

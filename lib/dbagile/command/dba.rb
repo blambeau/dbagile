@@ -1,6 +1,14 @@
 module DbAgile
   class Command
+    #
+    # Main 'dba' command
+    #
+    # Usage: dba [--version] [--help] [--list]
+    #        dba help <subcommand>
+    #        dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+    #
     class DbA < Command
+      Command::build_me(self, __FILE__)
       
       # Command categories
       CATEGORIES = [:dba, :config, :sql, :schema, :bulk, :web]
@@ -29,13 +37,6 @@ module DbAgile
         :dba
       end
       
-      # Returns the command banner
-      def banner
-        "Usage: dba [--version] [--help] [--list]\n"\
-        "       dba help <subcommand>\n"\
-        "       dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]"
-      end
-
       # Contribute to options
       def add_options(opt)
         opt.separator nil
@@ -80,7 +81,7 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + command.command_name.ljust(20) + command.short_help
+          display options.summary_indent + command.command_name.ljust(20) + command.summary.to_s
         end
       end
 
@@ -104,7 +105,7 @@ module DbAgile
       
       # Runs the command
       def unsecure_run(requester_file, argv)
-        environment.load_history
+        #environment.load_history
         
         # My own options
         my_args = []
@@ -129,14 +130,14 @@ module DbAgile
         environment.on_error(self, ex)
         environment
       ensure
-        environment.save_history if environment.manage_history?
+        #environment.save_history if environment.manage_history?
       end
       
       # Invokes the subcommand
       def invoke_subcommand(requester_file, argv)
         # Save command in history 
         unless ['replay', 'history'].include?(argv[0])
-          environment.push_in_history(argv) 
+          #environment.push_in_history(argv) 
         end
       
         # Command execution

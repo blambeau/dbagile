@@ -2,33 +2,18 @@ module DbAgile
   class Command
     module Web
       #
-      # Starts the web tools
+      # Start the web tools
+      #
+      # Usage: dba #{command_name} [OPTIONS]
       #
       class Tools < Command
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} [OPTIONS]"
-        end
+        Command::build_me(self, __FILE__)
       
         # Returns command's category
         def category
           :web
         end
 
-        # Short help
-        def short_help
-          "Starts the web tools"
-        end
-      
-        # Sets the default options
-        def set_default_options
-        end
-      
-        # Contribute to options
-        def add_options(opt)
-        end
-      
         #
         # Executes the command.
         #

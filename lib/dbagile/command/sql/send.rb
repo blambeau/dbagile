@@ -2,9 +2,12 @@ module DbAgile
   class Command
     module SQL
       #
-      # Send sequel directly to the DBMS
+      # Send SQL commands directly to the DBMS
+      #
+      # Usage: dba #{command_name} QUERY
       #
       class Send < Command
+        Command::build_me(self, __FILE__)
       
         # Query to send
         attr_accessor :query
@@ -15,16 +18,6 @@ module DbAgile
         # Returns command's category
         def category
           :sql
-        end
-      
-        # Returns the command banner
-        def banner
-          "Usage: dba #{command_name} QUERY"
-        end
-
-        # Short help
-        def short_help
-          "Send SQL directly to the DBMS"
         end
       
         # Contribute to options
