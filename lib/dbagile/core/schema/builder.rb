@@ -31,10 +31,10 @@ module DbAgile
         ############################################################################
         
         # Push a hash on the stack
-        def _push(section, object)
+        def _push(section, object, &block)
           stack.push([section, object])
-          if block_given?
-            yield(object)
+          if block
+            DbAgile::RubyTools::optional_args_block_call(block, [ object ])
             _pop
           end
           object
