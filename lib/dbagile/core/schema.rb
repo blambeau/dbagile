@@ -1,5 +1,6 @@
 require 'dbagile/core/schema/yaml_methods'
 require 'dbagile/core/schema/builder'
+require 'dbagile/core/schema/named_collection'
 require 'dbagile/core/schema/logical'
 require 'dbagile/core/schema/physical'
 module DbAgile
@@ -17,19 +18,26 @@ module DbAgile
       attr_reader :physical
       
       # Creates a schema instance
-      def initialize(logical = {}, physical = {})
-        @logical, @physical = logical, physical
+      def initialize
+        @logical  = Schema::NamedCollection.new(:logical)
+        @physical = Schema::NamedCollection.new(:physical)
+      end
+      
+      # Mimics a hash
+      def [](name)
+        case name
+          when :logical
+            self.logical
+          when :physical
+            self.physical
+          else
+            raise ArgumentError, "No such #{name} on Schema"
+        end
       end
       
       # Dumps the schema to YAML
       def to_yaml(opts = {})
-        ls = Schema::Coercion::unsymbolize_hash(logical)
-        ps = Schema::Coercion::unsymbolize_hash(physical)
-        if ps['indexes']
-          ps['indexes'] = Schema::Coercion::unsymbolize_hash(ps['indexes'])
-        end
-        objects = {'logical' => ls, 'physical' => ps}.delete_if{|k,v| v.empty?}
-        YAML::dump_stream(objects)
+        YAML::dump_stream({'logical' => logical}, {'physical' => physical})
       end
       alias :inspect :to_yaml
       
@@ -41,27 +49,13 @@ module DbAgile
       # Applies schema minus
       def minus(other, builder = Schema::Builder.new)
         raise ArgumentError, "Schema expected" unless other.kind_of?(Schema)
-        builder.logical{|b_logical|
-          mlk, olk = logical.keys, other.logical.keys
-          mine, common = (mlk - olk), mlk.select{|k| olk.include?(k)}
-          mine.each{|m| b_logical[m] = logical[m]}
-          common.each{|m| 
-            b_logical[m] = logical[m].minus(other.logical[m], builder)
-          }
-        }
-        builder.physical{
-          builder.indexes{|b_indexes|
-            mik, oik = physical[:indexes].keys, other.physical[:indexes].keys
-            mine, common = (mik - oik), mik.select{|k| oik.include?(k)}
-            mine.each{|m| b_indexes[m] = physical[:indexes][m]}
-            common.each{|m| 
-              unless physical[:indexes][m] == other.physical[:indexes][m]
-                b_indexes[m] = physical[:indexes][m]
-              end
-            }
-          }
-        }
-        builder._dump.strip!
+        unless logical.nil? or logical.empty?
+          logical.minus(other.logical, builder)
+        end
+        unless physical.nil? or physical.empty?
+          physical.minus(other.physical, builder)
+        end
+        builder._dump
       end
       alias :- :minus
       

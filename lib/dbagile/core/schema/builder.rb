@@ -74,8 +74,9 @@ module DbAgile
                 constraint(c_name, c_def)
               }
             when :physical
-              s = coerce_symbolized_hash(hash)
-              self.send(s.keys[0], s.values[0])
+              coerce_symbolized_hash(hash).each_pair{|name, defn|
+                self.send(name, defn)
+              }
             when :indexes
               coerce_symbolized_hash(hash).each_pair{|index_name, index_def|
                 index(index_name, index_def)
@@ -95,7 +96,8 @@ module DbAgile
         # Starts the logical section and yields
         def logical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          _push(:logical, _peek(:root).logical, &block)
+          logical = (_peek(:root)[:logical] ||= build_logical)
+          _push(:logical, logical, &block)
         end
         
         # Starts a relvar section
@@ -143,7 +145,8 @@ module DbAgile
         # Starts the physical section and yields
         def physical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          _push(:physical, _peek(:root).physical, &block)
+          physical = (_peek(:root)[:physical] ||= build_physical)
+          _push(:physical, physical, &block)
         end
         
         # Starts the indexes section and yields

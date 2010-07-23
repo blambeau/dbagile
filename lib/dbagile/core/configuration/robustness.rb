@@ -62,6 +62,20 @@ module DbAgile
             config
           end
         end
+        
+        # 
+        # Asserts that a configuration has schema files installed or raise an error.
+        #
+        # @param [DbAgile::Core::Configuration] cfg a configuration instance
+        # @return [DbAgile::Core::Configuration] cfg
+        # @raise NoSchemaFilesError if the schema files are not installed.
+        #
+        def has_schema_files!(cfg)
+          unless cfg.has_schema_files?
+            raise NoSchemaFilesError, "No schema files installed on #{cfg.name}"
+          end
+          cfg
+        end
       
       end # module Robustness
     end # class Configuration

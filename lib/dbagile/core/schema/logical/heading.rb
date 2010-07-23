@@ -35,10 +35,7 @@ module DbAgile
           # Minus pattern delegation
           def minus(other, builder)
             builder.heading{|b_attributes|
-              mak, oak = self.attributes.keys, other.attributes.keys
-              mine, common = (mak - oak), mak.select{|k| oak.include?(k)}
-              mine.each{|m| b_attributes[m] = attributes[m]}
-              common.each{|m| 
+              attributes.keys.each{|name|
                 unless attributes[m] == other.attributes[m]
                   b_attributes[m] = attributes[m]
                 end

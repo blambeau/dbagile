@@ -86,9 +86,14 @@ module DbAgile
       ### About schema
       ##############################################################################
       
+      # Returns true if schema files are installed, false otherwise
+      def has_schema_files?
+        not(schema_files.nil? or schema_files.empty?)
+      end
+      
       # Loads the schema from the schema files
       def schema
-        unless schema_files.nil? or schema_files.empty?
+        if has_schema_files?
           builder = DbAgile::Core::Schema::Builder.new
           schema_files.collect{|f| file_resolver.call(f)}.each{|f|
             DbAgile::Core::Schema::yaml_file_load(f, builder)
@@ -110,7 +115,7 @@ module DbAgile
         buffer = ""
         buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
-        unless schema_files.nil? or schema_files.empty?
+        if has_schema_files?
           if schema_files.size == 1
             buffer << "  schema_file #{schema_files[0].inspect}" << "\n"
           else

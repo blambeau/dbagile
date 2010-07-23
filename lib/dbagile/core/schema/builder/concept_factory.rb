@@ -4,6 +4,11 @@ module DbAgile
       class Builder
         module ConceptFactory
 
+          # Builds a logical schema
+          def build_logical
+            Schema::NamedCollection.new(:logical)
+          end
+          
           # Builds a relvar
           def build_relvar(name)
             Schema::Logical::Relvar.new(name)
@@ -21,7 +26,7 @@ module DbAgile
         
           # Builds a constraint collection
           def build_constraints
-            {}
+            Schema::NamedCollection.new(:constraints)
           end
         
           # Builds a constraint
@@ -36,9 +41,14 @@ module DbAgile
             end
           end
         
+          # Builds a physical schema
+          def build_physical
+            Schema::NamedCollection.new(:physical)
+          end
+          
           # Builds an index collection
           def build_indexes
-            {}
+            Schema::NamedCollection.new(:indexes)
           end
         
           # Builds an index

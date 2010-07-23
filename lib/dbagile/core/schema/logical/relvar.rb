@@ -17,7 +17,7 @@ module DbAgile
           def initialize(name)
             @name = name.to_s.to_sym
             @heading = Schema::Logical::Heading.new
-            @constraints = {}
+            @constraints = Schema::NamedCollection.new(:constraints)
           end
         
           # Mimics a hash on heading and constraints
@@ -57,16 +57,7 @@ module DbAgile
             raise ArgumentError, "Relvar expected" unless other.kind_of?(Relvar)
             builder.relvar(name){
               heading.minus(other.heading, builder)
-              builder.constraints{|b_constraints|
-                mck, ock = self.constraints.keys, other.constraints.keys
-                mine, common = (mck - ock), mck.select{|k| ock.include?(k)}
-                mine.each{|m| b_constraints[m] = constraints[m]}
-                common.each{|m| 
-                  unless constraints[m] == other.constraints[m]
-                    b_constraints[m] = constraints[m]
-                  end
-                }
-              }
+              constraints.minus(other.constraints, builder)
             }
           end
         
@@ -86,7 +77,7 @@ module DbAgile
             YAML::quick_emit(self, opts){|out|
               out.map("tag:yaml.org,2002:map", to_yaml_style ) do |map|
                 map.add('heading', heading) unless heading.empty?
-                map.add('constraints', Schema::Coercion::unsymbolize_hash(constraints)) unless constraints.empty?
+                map.add('constraints', constraints) unless constraints.empty?
               end
             }
           end

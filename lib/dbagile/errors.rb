@@ -33,4 +33,8 @@ module DbAgile
   # Raised when something goes wrong with a schema
   class InvalidSchemaError < DbAgile::Error; end
   
+  # Raised when usage of schema files fails because they are not 
+  # installed
+  class NoSchemaFilesError < DbAgile::Error; end
+  
 end # module DbAgile
