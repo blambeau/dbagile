@@ -13,7 +13,7 @@ module DbAgile
         attr_accessor :stack
         
         # Creates a builder instance
-        def initialize
+        def initialize(schema = Schema.new)
           @stack = [ [:root, Schema.new ] ]
         end
         

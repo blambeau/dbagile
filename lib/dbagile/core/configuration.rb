@@ -14,6 +14,12 @@ module DbAgile
       # Configuration uri
       attr_accessor :uri
       
+      # Array of schema files
+      attr_reader :schema_files
+      
+      # Resolves relative files
+      attr_accessor :file_resolver
+      
       # Plugs as arrays of arrays
       attr_reader :plugs
       
@@ -23,14 +29,27 @@ module DbAgile
         raise ArgumentError, "Configuration DSL is deprecated" unless block.nil?
         @name = name
         @uri = uri
+        @schema_files = []
+        @file_resolver = lambda{|f| ::File.expand_path(f) }
         @connector = ::DbAgile::Core::Connector.new
       end
+      
+      
+      
+      ##############################################################################
+      ### About configuration
+      ##############################################################################
       
       # @see Connector#plug
       def plug(*args)
         (@plugs ||= []) << args
         @connector.plug(*args)
       end
+      
+      
+      ##############################################################################
+      ### About connection
+      ##############################################################################
       
       # Checks if the connection pings correctly.
       def ping?
@@ -63,6 +82,27 @@ module DbAgile
         end
       end
       
+      ##############################################################################
+      ### About schema
+      ##############################################################################
+      
+      # Loads the schema from the schema files
+      def schema
+        unless schema_files.nil? or schema_files.empty?
+          builder = DbAgile::Core::Schema::Builder.new
+          schema_files.collect{|f| file_resolver.call(f)}.each{|f|
+            DbAgile::Core::Schema::yaml_file_load(f)
+          }
+          builder._dump
+        else
+          nil
+        end
+      end
+      
+      ##############################################################################
+      ### About io
+      ##############################################################################
+      
       # Inspects this configuration, returning a ruby chunk of code
       # whose evaluation leads to a configuration instance
       def inspect(prefix = "")
@@ -70,6 +110,9 @@ module DbAgile
         buffer = ""
         buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
+        unless schema_files.nil? or schema_files.empty?
+          buffer << "  schema_files #{schema_files.inspect}" << "\n"
+        end
         if plugs and not(plugs.empty?)
           plugs.each{|plug| 
             plugs_str = plug.collect{|p| SByC::TypeSystem::Ruby::to_literal(p)}.join(', ')
