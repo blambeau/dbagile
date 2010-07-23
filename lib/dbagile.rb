@@ -89,8 +89,10 @@ end # module DbAgile
 require 'rubygems'
 gem "sbyc", ">= 0.1.4"
 gem "sequel", ">= 3.8.0"
+gem 'highline', '>= 1.5.2'
 require 'sbyc'
 require 'sequel'
+require 'highline'
 
 require 'dbagile/errors'
 require 'dbagile/contract'

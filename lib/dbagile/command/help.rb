@@ -35,16 +35,27 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        say(command.usage.to_s)
-        say("")
-        say("Description:")
-        say("  " + command.summary.to_s)
-        say(command.options.summarize.join)
-        say("")
+        display(command.usage)
+        display("\n")
+        #
+        display("Description:")
+        display("  " + command.summary) unless command.summary.empty?
+        #
+        options = command.options.summarize
+        unless options.empty?
+          display(options.join)
+          display("\n")
+        end
+        #
+        description = command.description.to_s
         if complete
-          say("Read more:")
-          say(command.description.to_s.gsub(/^/, "  ")) 
-          say("")
+          if description.strip.empty?
+            display("Sorry, no more information available yet")
+          else
+            display("Read more:")
+            display(description.gsub(/^/, "  ")) 
+            display("")
+          end
         end
       end
       
