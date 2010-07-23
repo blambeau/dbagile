@@ -13,19 +13,6 @@ module DbAgile
     class DbA < Command
       Command::build_me(self, __FILE__)
       
-      # Command categories
-      CATEGORIES = [:dba, :config, :sql, :schema, :bulk, :web]
-      
-      # Names of the categories
-      CATEGORY_NAMES = {
-        :dba           => "Main commands:",
-        :config        => "Configuration management:",
-        :bulk          => "Import/Export management:",
-        :sql           => "SQL:",
-        :schema        => "Database schema:",
-        :web           => "Database and the web:"
-      }
-
       # Configuration file
       attr_accessor :config_file_path
       
@@ -75,7 +62,7 @@ module DbAgile
           name     = Command::command_name_of(subclass)
           command  = Command::command_for(name, environment)
           category = command.category
-          raise "Unknown command category #{category}" unless CATEGORIES.include?(category)
+          raise "Unknown command category #{category}" unless DbAgile::Command::CATEGORIES.include?(category)
           @commands_by_categ[category] << command
         end
         @commands_by_categ
@@ -99,8 +86,8 @@ module DbAgile
       # Shows the long help
       def show_long_help
         show_short_help
-        CATEGORIES.each{|categ|
-          display CATEGORY_NAMES[categ]
+        DbAgile::Command::CATEGORIES.each{|categ|
+          display DbAgile::Command::CATEGORY_NAMES[categ]
           show_commands_help(categ)
           display ""
         }

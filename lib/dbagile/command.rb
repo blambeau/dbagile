@@ -8,6 +8,19 @@ module DbAgile
     include ::DbAgile::Environment::Delegator
     extend ::DbAgile::Command::ClassMethods
     
+    # Command categories
+    CATEGORIES = [:dba, :config, :sql, :schema, :bulk, :web]
+    
+    # Names of the categories
+    CATEGORY_NAMES = {
+      :dba           => "Main commands:",
+      :config        => "Configuration management:",
+      :bulk          => "Import/Export management:",
+      :sql           => "SQL:",
+      :schema        => "Database schema:",
+      :web           => "Database and the web:"
+    }
+
     ##############################################################################
     ### Instance variables and construction
     ##############################################################################

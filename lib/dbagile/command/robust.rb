@@ -45,6 +45,10 @@ module DbAgile
       def has_command!(name, env)
         cmd = DbAgile::Command.command_for(name, env)
         if cmd.nil?
+          DbAgile::Command::CATEGORIES.each{|c|
+            cmd = DbAgile::Command.command_for("#{c}:#{name}", env)
+            return cmd if cmd
+          }
           raise DbAgile::NoSuchCommandError, "No such command #{name.inspect}" 
         else
           cmd
