@@ -14,7 +14,7 @@ module DbAgile
       # Helper to generate command classes 
       def build_me(command_class, file)
         rdoc = DbAgile::RubyTools::rdoc_file_paragraphs(file)
-        summary, usage, description = rdoc.shift, rdoc.shift, rdoc.join
+        summary, usage, description = rdoc.shift, rdoc.shift, rdoc.join("\n")
         command_class.instance_eval{
           @summary     = summary
           @usage       = usage.gsub('#{command_name}', command_class.command_name)
