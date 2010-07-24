@@ -96,12 +96,15 @@ module DbAgile
         end
       
         # @see DbAgile::Core::SchemaObject
-        def []=(name, part)
+        def []=(name, part, annotation = nil)
           if @composite_parts.key?(name)
             raise ArgumentError, "A part already exists with name '#{name}'" 
           end
           @composite_parts[name] = part
           part.send(:parent=, self)
+          unless annotation.nil?
+            part.visit{|p, parent| p.annotation = annotation}
+          end
           part
         end
       
@@ -116,6 +119,30 @@ module DbAgile
               part_keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
                 map.add(k.to_s, self[k])
               }
+            end
+          }
+        end
+        
+        # Returns a yaml string
+        def yaml_say(env, 
+                     options = {}, 
+                     colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
+                     indent = 0)
+          part_keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
+            mine = "  "*indent + k.to_s + ":"
+            part = self[k]
+            annotation = part.annotation.to_s.ljust(25)
+            if part.composite?
+              if part.annotation == :same and options[:skip_unchanged]
+              else
+                env.say(mine, colors[part.annotation])
+                part.yaml_say(env, options, colors, indent+1)
+              end
+            else
+              part_str = part.to_yaml
+              part_str =~ /---\s*(.*)$/
+              part_str = $1
+              env.say(mine + " " + part_str, colors[part.annotation])
             end
           }
         end

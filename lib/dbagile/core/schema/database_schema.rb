@@ -37,6 +37,12 @@ module DbAgile
         end
         alias :- :minus
       
+        # Applies schema merging
+        def merge(other)
+          Schema::Computations::merge(self, other)
+        end
+        alias :+ :merge
+      
         # Yields the block with each relvar in turn
         def each_relvar(&block)
           logical.each(&block)
@@ -47,6 +53,11 @@ module DbAgile
           DatabaseSchema.new(schema_identifier, _dup_parts)
         end
           
+        # Returns a yaml string
+        def to_yaml_str
+          to_yaml
+        end
+
       end # class DatabaseSchema
     end # module Schema
   end # module Core

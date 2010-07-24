@@ -6,6 +6,9 @@ module DbAgile
         # Parent object
         attr_accessor :parent
         
+        # Object annotations
+        attr_accessor :annotation
+        
         # Returns true if this schema object is composite, false
         # otherwise
         def composite?
@@ -26,7 +29,7 @@ module DbAgile
         def builder_args
           []
         end
-
+        
         private :parent=
       end # class SchemaObject
     end # module Schema
