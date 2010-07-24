@@ -13,10 +13,7 @@ module DbAgile
               raise ArgumentError, "Minus called on a part object!"
             end
             
-            # TODO: remove this hack!
-            args = left.kind_of?(Schema::Logical::Relvar) ? [ left.name ] : [ ]
-            
-            result = builder.send(left.builder_handler, *args){|builder_object|
+            result = builder.send(left.builder_handler, *left.builder_args){|builder_object|
               left.part_keys.each{|name|
                 left_sub, right_sub = left[name], right[name]
                 if right_sub.nil?

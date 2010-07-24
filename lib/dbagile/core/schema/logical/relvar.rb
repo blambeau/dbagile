@@ -13,6 +13,10 @@ module DbAgile
             super(parts)
           end
           
+          ############################################################################
+          ### Equality and hash code
+          ############################################################################
+        
           # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
           def _install_eigenclass_methods?
             true
@@ -24,6 +28,11 @@ module DbAgile
              :constraints => Schema::Logical::Constraints.new}
           end
         
+          # Returns the arguments to pass to builder handler
+          def builder_args
+            [ name ]
+          end
+
           # Yields the block with each attribute 
           def each_attribute(&block)
             heading.each_attribute(&block)

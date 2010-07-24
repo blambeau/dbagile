@@ -21,6 +21,11 @@ module DbAgile
         def builder_handler
           DbAgile::RubyTools::class_unqualified_name(self.class).downcase.to_sym
         end
+        
+        # Returns the arguments to pass to builder handler
+        def builder_args
+          []
+        end
 
         private :parent=
       end # class SchemaObject
