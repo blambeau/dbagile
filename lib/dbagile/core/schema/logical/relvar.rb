@@ -10,9 +10,14 @@ module DbAgile
           # Creates a relation variable instance
           def initialize(name, parts = _default_parts)
             @name = name.to_s.to_sym
-            super(parts, true)
+            super(parts)
           end
           
+          # @see DbAgile::Core::SchemaObject::Composite#_install_eigenclass_methods?
+          def _install_eigenclass_methods?
+            true
+          end
+        
           # Creates default parts
           def _default_parts
             {:heading     => Schema::Logical::Heading.new,

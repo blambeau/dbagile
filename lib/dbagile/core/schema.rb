@@ -13,10 +13,20 @@ module DbAgile
       # Creates a schema instance
       def initialize(schema_identifier = nil)
         @schema_identifier = schema_identifier
-        super({:logical  => Schema::Logical.new,
-               :physical => Schema::Physical.new}, true)
+        super(_default_parts)
       end
       
+      # @see DbAgile::Core::SchemaObject::Composite#_install_eigenclass_methods?
+      def _install_eigenclass_methods?
+        true
+      end
+      
+      # @see DbAgile::Core::SchemaObject::Composite#_default_parts
+      def _default_parts
+        {:logical  => Schema::Logical.new,
+         :physical => Schema::Physical.new}
+      end
+        
       # Dumps the schema to YAML
       def to_yaml(opts = {})
         YAML::dump_stream({'logical' => logical}, {'physical' => physical})

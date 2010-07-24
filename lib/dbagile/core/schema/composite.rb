@@ -5,24 +5,47 @@ module DbAgile
         include Enumerable
         
         # Creates a composite instance with parts
-        def initialize(composite_parts = {}, install_methods = false)
-          raise ArgumentError, "Composite parts must be a hash" unless composite_parts.kind_of?(Hash)
-          @composite_parts = composite_parts
-          _install_methods(composite_parts) if install_methods
+        def initialize(composite_parts = _default_parts)
+          unless composite_parts.kind_of?(Hash)
+            raise ArgumentError, "Composite parts must be a hash, got #{composite_parts.inspect}" 
+          end
+          _install_parts(composite_parts)
         end
         
-        # Installs instance methods for parts
-        def _install_methods(composite_parts)
-          composite_parts.each_pair{|k, v|
-            (class << self; self; end).send(:define_method, k){
-              @composite_parts[k]
-            }
+        ############################################################################
+        ### Private interface
+        ############################################################################
+        attr_reader :composite_parts
+        protected   :composite_parts
+        private
+        
+        # Creates defaut parts hash
+        def _default_parts
+          {}
+        end
+        
+        # Make installation of parts
+        def _install_parts(parts)
+          meth = _install_eigenclass_methods?
+          parts.each_pair{|k, v|
+            v.send(:parent=, self)
+            if meth
+              eigenclazz = (class << self; self; end)
+              eigenclazz.send(:define_method, k){ @composite_parts[k] }
+            end
           }
+          @composite_parts = parts
+        end
+        
+        # Installs eigenclass methods on parts provided at construction
+        def _install_eigenclass_methods?
+          false
         end
         
         ############################################################################
         ### Public interface
         ############################################################################
+        public
         
         # Yields the block with each part in turn
         def each(&block)
@@ -99,14 +122,11 @@ module DbAgile
         
         # @see DbAgile::Core::SchemaObject
         def dup
-          dup = self.class.new
-          @composite_parts.each_pair{|name, part| dup[name] = part.dup}
-          dup
+          dup_parts = {}
+          @composite_parts.each_pair{|name, part| dup_parts[name] = part.dup}
+          self.class.new(dup_parts)
         end
-
-        attr_reader :composite_parts
-        protected   :composite_parts
-        private     :_install_methods
+        
       end # class Coposite
     end # class SchemaObject
   end # module Core

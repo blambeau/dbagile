@@ -5,11 +5,16 @@ module DbAgile
     class Schema < SchemaObject::Composite
       class Physical < SchemaObject::Composite
         
-        # Creates a logical schema instance
-        def initialize
-          super({:indexes => Physical::Indexes.new}, true)
+        # @see DbAgile::Core::SchemaObject::Composite#_default_parts
+        def _default_parts
+          {:indexes => Physical::Indexes.new}
         end
                 
+        # @see DbAgile::Core::SchemaObject::Composite#_install_eigenclass_methods?
+        def _install_eigenclass_methods?
+          true
+        end
+        
       end # class Logical
     end # class Schema
   end # module Core
