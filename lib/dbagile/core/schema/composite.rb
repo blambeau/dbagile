@@ -129,20 +129,20 @@ module DbAgile
                      colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
                      indent = 0)
           part_keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
-            mine = "  "*indent + k.to_s + ":"
             part = self[k]
             annotation = part.annotation.to_s.ljust(25)
-            if part.composite?
-              if part.annotation == :same and options[:skip_unchanged]
-              else
+            show_it = !(part.annotation == :same and options[:skip_unchanged])
+            if show_it
+              mine = "  "*indent + k.to_s + ":"
+              if part.composite?
                 env.say(mine, colors[part.annotation])
                 part.yaml_say(env, options, colors, indent+1)
+              else
+                part_str = part.to_yaml
+                part_str =~ /---\s*(.*)$/
+                part_str = $1
+                env.say(mine + " " + part_str, colors[part.annotation])
               end
-            else
-              part_str = part.to_yaml
-              part_str =~ /---\s*(.*)$/
-              part_str = $1
-              env.say(mine + " " + part_str, colors[part.annotation])
             end
           }
         end
