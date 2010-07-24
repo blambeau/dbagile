@@ -13,4 +13,9 @@ describe "DbAgile::RubyTools#class_unqualified_name /" do
     it{ should == "RubyTools" }
   end
   
+  describe "when called on long qualified class" do
+    let(:clazz){ DbAgile::Fixtures::Utils }
+    it{ should == "Utils" }
+  end
+  
 end
