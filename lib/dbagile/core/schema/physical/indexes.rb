@@ -15,8 +15,8 @@ module DbAgile
             __initialize_named_collection
           end
         
-          # @see DbAgile::Core::Schema::NamedCollection#builder_handler_name
-          def builder_handler_name
+          # @see DbAgile::Core::Schema::NamedCollection#brick_builder_handler
+          def brick_builder_handler
             :indexes
           end
         

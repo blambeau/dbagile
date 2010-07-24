@@ -59,15 +59,20 @@ module DbAgile
         def minus(other, builder)
           raise ArgumentError, "#{self.class} expected, #{other.class} received"\
             unless self.class == other.class
-          builder.send(builder_handler_name){|builder_object|
+          builder.send(brick_builder_handler){|builder_object|
             sub_bricks.keys.each{|name|
               my_sub, other_sub = self[name], other[name]
               if other_sub.nil?
+                # missing in right
                 builder_object[name] = my_sub
               elsif other_sub.brick_composite?
+                # present in right, possibly the same
                 builder_object[name] = my_sub.minus(other_sub, builder)
               elsif my_sub != other_sub
+                # present in right, conflicting
                 builder_object[name] = my_sub
+              else
+                # present in right, same
               end
             }
           }
@@ -119,14 +124,6 @@ module DbAgile
         # Handler to initialize this module
         def __initialize_named_collection
           @sub_bricks = {}
-        end
-        
-        # 
-        # Returns the builder's handler name for this collection. Should be 
-        # implemented by includers.
-        #
-        def builder_handler_name
-          Kernel.raise NotImplementedError
         end
         
       end # class NamedCollection

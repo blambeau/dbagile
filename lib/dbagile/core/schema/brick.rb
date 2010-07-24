@@ -25,6 +25,11 @@ module DbAgile
 
         # Returns the parent brick
         attr_accessor :parent
+        
+        # Returns the brick builder handler
+        def brick_builder_handler
+          Kernel.raise NotImplementedError
+        end
 
         # Is this object a composite one?
         def brick_composite?
