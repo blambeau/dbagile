@@ -25,7 +25,7 @@ module DbAgile
               end
             }
           end
-
+          
         end # class CandidateKey
       end # module Logical
     end # module Schema

@@ -61,12 +61,12 @@ module DbAgile
         ############################################################################
         public
       
-        # Implements a dept-first visit 
+        # @see DbAgile::Core::Schema
         def visit(&block)
           block.call(self, parent)
           parts.each{|p| p.visit(&block)}
         end
-      
+        
         ############################################################################
         ### SchemaObject
         ############################################################################
@@ -140,6 +140,11 @@ module DbAgile
           self.class.new(_dup_parts)
         end
       
+        # Returns a string representation
+        def to_s
+          "#{DbAgile::RubyTools::unqualified_class_name(self.class)}"
+        end
+        
       end # class Composite
     end # module Schema
   end # module Core

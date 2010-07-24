@@ -65,6 +65,11 @@ module DbAgile
             Logical::Relvar.new(name, :heading => heading.dup, :constraints => constraints.dup)
           end
           
+          # Returns a string representation
+          def to_s
+            "#{DbAgile::RubyTools::unqualified_class_name(self.class)}: #{name}"
+          end
+          
           private :_default_parts
         end # class Relvar
       end # module Logical

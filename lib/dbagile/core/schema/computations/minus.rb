@@ -29,7 +29,9 @@ module DbAgile
                   # present in right, conflicting
                   builder_object[name] = left_sub.dup
                 else
-                  # present in right, same
+                  # present in right, same 
+                  # (following line otherwise, not counted by rcov)
+                  1
                 end
               }
             }

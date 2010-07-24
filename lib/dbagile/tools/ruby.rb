@@ -10,6 +10,7 @@ module DbAgile
         name
       end
     end
+    alias :unqualified_class_name :class_unqualified_name
     
     # Makes a call to a block that accepts optional arguments
     def optional_args_block_call(block, args)
