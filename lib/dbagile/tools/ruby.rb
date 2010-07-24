@@ -4,7 +4,7 @@ module DbAgile
     # Returns the unqualified name of a class
     def class_unqualified_name(clazz)
       name = clazz.name
-      if name =~ /::(.*)$/
+      if name =~ /::([^:]+)$/
         $1
       else
         name
