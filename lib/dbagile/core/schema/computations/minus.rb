@@ -24,7 +24,7 @@ module DbAgile
                   builder_object[name] = left_sub.dup
                 elsif left_sub.composite?
                   # present in right, possibly the same
-                  builder_object[name] = minus(left_sub, right_sub, builder)
+                  minus(left_sub, right_sub, builder)
                 elsif left_sub != right_sub
                   # present in right, conflicting
                   builder_object[name] = left_sub.dup

@@ -8,11 +8,15 @@ module DbAgile
           attr_reader :name
         
           # Creates a relation variable instance
-          def initialize(name)
+          def initialize(name, parts = _default_parts)
             @name = name.to_s.to_sym
-            super({
-              :heading     => Schema::Logical::Heading.new,
-              :constraints => Schema::Logical::Constraints.new}, true)
+            super(parts, true)
+          end
+          
+          # Creates default parts
+          def _default_parts
+            {:heading     => Schema::Logical::Heading.new,
+             :constraints => Schema::Logical::Constraints.new}
           end
         
           # Yields the block with each attribute 
@@ -53,12 +57,10 @@ module DbAgile
           
           # Duplicates this attribute
           def dup
-            dup = Logical::Relvar.new(name)
-            dup[:heading] = heading.dup
-            dup[:constraints] = constraints.dup
-            dup
+            Logical::Relvar.new(name, :heading => heading.dup, :constraints => constraints.dup)
           end
-        
+          
+          private :_default_parts
         end # class Relvar
       end # module Logical
     end # class Schema

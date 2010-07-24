@@ -11,6 +11,7 @@ module DbAgile
           _install_methods(composite_parts) if install_methods
         end
         
+        # Installs instance methods for parts
         def _install_methods(composite_parts)
           composite_parts.each_pair{|k, v|
             (class << self; self; end).send(:define_method, k){
@@ -58,6 +59,9 @@ module DbAgile
         
         # @see DbAgile::Core::SchemaObject
         def []=(name, part)
+          if @composite_parts.key?(name)
+            raise ArgumentError, "A part already exists with name '#{name}'" 
+          end
           @composite_parts[name] = part
           part.send(:parent=, self)
           part
