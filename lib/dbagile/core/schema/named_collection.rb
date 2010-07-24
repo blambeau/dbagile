@@ -100,8 +100,8 @@ module DbAgile
         ############################################################################
         
         # Handler to initialize this module
-        def __initialize_named_collection
-          @sub_bricks = {}
+        def __initialize_named_collection(coll = {})
+          @sub_bricks = coll
         end
         
       end # class NamedCollection
