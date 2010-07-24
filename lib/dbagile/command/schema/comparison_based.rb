@@ -27,7 +27,7 @@ module DbAgile
           say "\n"
           minus = (left_schema - right_schema)
           if minus.empty?
-            say("nothing to do", :blue)
+            say("nothing to do", :magenta)
             say "\n"
           else
             say(minus.to_yaml, color)  

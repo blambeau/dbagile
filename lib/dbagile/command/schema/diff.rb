@@ -2,26 +2,9 @@ module DbAgile
   class Command
     module Schema
       #
-      # Show differences between database schemas
+      # Show differences between announed and effective database schemas
       #
       # Usage: dba #{command_name}
-      #        dba #{command_name} REFERENCE
-      #        dba #{command_name} DB1 DB2
-      #
-      # When used without any argument, shows the differences between the schema inside
-      # the SQL database (left) of the current configuration and the schema files (right).
-      #
-      # When used with one configuration name (REFERENCE), shows the differences between
-      # the schema of the current configuration and the schema of REFERENCE.
-      #
-      # When used with two configuration names (DB1 and DB2), shows the differences between
-      # the schemas of the respective databases.
-      #
-      # WARNING: The current version of DbAgile is unable to infer some SQL database objects
-      #          (like foreign keys) when using certain adapters. In contrast, comparing 
-      #          schema files is safe. Therefore, in the second and third cases, if schema 
-      #          files are installed, they have the prirory. Use --real option to override 
-      #          this behavior. 
       #
       class Diff < Command
         include Schema::ComparisonBased
@@ -32,13 +15,34 @@ module DbAgile
           normalize_comparison_arguments(arguments)
         end
         
+        # Shows the minus
+        def show_diff(left, right)
+          # format debug
+          ld, rd = left.schema_identifier, right.schema_identifier
+          ld, rd = ld.inspect, rd.inspect
+          size = 20 + DbAgile::MathTools::max(ld.length, rd.length)
+          
+          # Say what will be done
+          say "#"*size
+          say "### LEFT: #{ld}"
+          say "### RIGHT: #{rd}"
+          say "### Objects to add on LEFT", :green
+          say "### Objects to remove on LEFT", :red
+          say "#"*size
+          say "\n"
+          
+          to_remove = (left - right)
+          to_add    = (right - left)
+          say(to_add.to_yaml, :green)  
+          say(to_remove.to_yaml, :red)  
+        end
+      
         # Executes the command
         def execute_command
           with_current_config{|config|
-            left  = config.announced_schema(true)
-            right = config.effective_schema(true)
-            show_minus(left, right, :add)
-            show_minus(right, right, :remove)
+            left = config.effective_schema(true)
+            right = config.announced_schema(true)
+            show_diff(left, right)
           }
         end
       
