@@ -1,39 +1,30 @@
+require 'dbagile/core/schema/schema_object'
 require 'dbagile/core/schema/yaml_methods'
 require 'dbagile/core/schema/builder'
-require 'dbagile/core/schema/brick'
-require 'dbagile/core/schema/named_collection'
-require 'dbagile/core/schema/logical'
-require 'dbagile/core/schema/physical'
 require 'dbagile/core/schema/computations'
 module DbAgile
   module Core
-    #
-    # Encapsulates the notion of database schema.
-    #
-    class Schema
+    class Schema < DbAgile::Core::SchemaObject::Composite
       extend(DbAgile::Core::Schema::YAMLMethods)
       
       # Identifier of this schema
       attr_reader :schema_identifier
       
-      # Logical schema
-      attr_reader :logical
-      
-      # Physical schema
-      attr_reader :physical
-      
       # Creates a schema instance
       def initialize(schema_identifier = nil)
         @schema_identifier = schema_identifier
-        @logical  = Schema::Logical.new
-        @physical = Schema::Physical.new
+        super(
+          :logical  => Schema::Logical.new,
+          :physical => Schema::Physical.new
+        )
       end
       
-      # Mimics a hash
-      def [](name)
-        return logical if name == :logical
-        return physical if name == :physical
-        raise ArgumentError, "No such #{name} on Schema"
+      def logical
+        self[:logical]
+      end
+      
+      def physical
+        self[:physical]
       end
       
       # Dumps the schema to YAML
@@ -42,30 +33,14 @@ module DbAgile
       end
       alias :inspect :to_yaml
       
-      # Checks if this relvar is empty
-      def empty?
-        logical.empty? and physical.empty?
-      end
-          
       # Applies schema minus
       def minus(other, builder = Schema::Builder.new)
-        raise ArgumentError, "Schema expected" unless other.kind_of?(Schema)
-        unless logical.nil? or logical.brick_empty?
-          Schema::Computations::minus(logical, other.logical, builder)
-        end
-        unless physical.nil? or physical.brick_empty?
-          Schema::Computations::minus(physical, other.physical, builder)
-        end
+        Schema::Computations::minus(self.logical, other.logical, builder)
+        Schema::Computations::minus(self.physical, other.physical, builder)
         builder._dump
       end
       alias :- :minus
       
-      # Compares with another attribute
-      def ==(other)
-        return nil unless other.kind_of?(Schema)
-        (logical == other.logical) and (physical == other.physical)
-      end
-    
       # Yields the block with each relvar in turn
       def each_relvar(&block)
         logical.each(&block)

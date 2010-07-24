@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class Schema
+    class Schema < SchemaObject::Composite
       module Coercion
         
         ###############################################################################

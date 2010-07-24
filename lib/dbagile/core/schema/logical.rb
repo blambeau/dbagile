@@ -5,14 +5,10 @@ require 'dbagile/core/schema/logical/constraints'
 require 'dbagile/core/schema/logical/constraint'
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        include Schema::NamedCollection
+    class Schema < SchemaObject::Composite
+      class Logical < SchemaObject::Composite
         
-        # Creates a logical schema instance
-        def initialize
-          __initialize_named_collection
-        end
+        
         
       end # class Logical
     end # class Schema

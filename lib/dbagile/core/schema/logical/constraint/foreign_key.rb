@@ -1,8 +1,8 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Constraint < Schema::Brick
+    class Schema < SchemaObject::Composite
+      class Logical < SchemaObject::Composite
+        class Constraint < SchemaObject::Part
           class ForeignKey < Constraint
           
             # Returns source table attributes

@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class Schema
+    class Schema < SchemaObject::Composite
       module Computations
         module Minus
           
@@ -9,26 +9,32 @@ module DbAgile
             unless left.class == right.class
               raise ArgumentError, "#{left.class} != #{right.class}"
             end
+            unless left.composite?
+              raise ArgumentError, "Minus called on a part object!"
+            end
             
-            args = left.respond_to?(:name) ? [ left.name ] : [ ]
-            builder.send(left.brick_builder_handler, *args){|builder_object|
-              left.brick_subbrick_keys.each{|name|
+            # TODO: remove this hack!
+            args = left.kind_of?(Schema::Logical::Relvar) ? [ left.name ] : [ ]
+            
+            result = builder.send(left.builder_handler, *args){|builder_object|
+              left.part_keys.each{|name|
                 left_sub, right_sub = left[name], right[name]
                 if right_sub.nil?
                   # missing in right
-                  builder_object[name] = left_sub
-                elsif left_sub.brick_composite?
+                  builder_object[name] = left_sub.dup
+                elsif left_sub.composite?
                   # present in right, possibly the same
                   builder_object[name] = minus(left_sub, right_sub, builder)
                 elsif left_sub != right_sub
                   # present in right, conflicting
-                  builder_object[name] = left_sub
+                  builder_object[name] = left_sub.dup
                 else
                   # present in right, same
                 end
               }
             }
             
+            result
           end
           
         end # module Minus

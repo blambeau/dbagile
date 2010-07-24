@@ -2,7 +2,7 @@ require 'dbagile/core/schema/coercion'
 require 'dbagile/core/schema/builder/concept_factory'
 module DbAgile
   module Core
-    class Schema
+    class Schema < SchemaObject::Composite
       class Builder
         include Schema::Coercion
         include Builder::ConceptFactory

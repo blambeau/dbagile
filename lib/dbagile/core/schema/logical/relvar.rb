@@ -1,9 +1,8 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Relvar < Schema::Brick
-          include Schema::NamedCollection
+    class Schema < SchemaObject::Composite
+      class Logical < SchemaObject::Composite
+        class Relvar < SchemaObject::Composite
           
           # Relvar name
           attr_reader :name
@@ -11,7 +10,7 @@ module DbAgile
           # Creates a relation variable instance
           def initialize(name)
             @name = name.to_s.to_sym
-            __initialize_named_collection(
+            super(
               :heading     => Schema::Logical::Heading.new,
               :constraints => Schema::Logical::Constraints.new
             )
@@ -54,7 +53,8 @@ module DbAgile
           # Compares with another attribute
           def ==(other)
             return nil unless other.kind_of?(Relvar)
-            (name == other.name) and (sub_bricks == other.sub_bricks)
+            return false unless name == other.name
+            super
           end
         
           # Returns an hash code
