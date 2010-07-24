@@ -28,7 +28,7 @@ module DbAgile
         
         # Returns the brick builder handler
         def brick_builder_handler
-          Kernel.raise NotImplementedError
+          DbAgile::RubyTools::class_unqualified_name(self.class).downcase.to_sym
         end
 
         # Is this object a composite one?

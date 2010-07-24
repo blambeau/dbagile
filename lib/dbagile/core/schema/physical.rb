@@ -11,12 +11,7 @@ module DbAgile
           __initialize_named_collection
           self[:indexes] = Physical::Indexes.new
         end
-        
-        # @see DbAgile::Core::Schema::NamedCollection#brick_builder_handler
-        def brick_builder_handler
-          :physical
-        end
-        
+                
       end # class Logical
     end # class Schema
   end # module Core

@@ -10,11 +10,6 @@ module DbAgile
             __initialize_named_collection
           end
         
-          # @see DbAgile::Core::Schema::NamedCollection#brick_builder_handler
-          def brick_builder_handler
-            :constraints
-          end
-        
         end # class Constraints
       end # class Logical
     end # class Schema
