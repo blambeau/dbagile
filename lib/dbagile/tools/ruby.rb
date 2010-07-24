@@ -1,6 +1,16 @@
 module DbAgile
   module RubyTools
     
+    # Returns the unqualified name of a class
+    def class_unqualified_name(clazz)
+      name = clazz.name
+      if name =~ /::(.*)$/
+        $1
+      else
+        name
+      end
+    end
+    
     # Makes a call to a block that accepts optional arguments
     def optional_args_block_call(block, args)
       if RUBY_VERSION >= "1.9.0"
