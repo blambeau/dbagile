@@ -44,19 +44,6 @@ module DbAgile
           end
           
           ############################################################################
-          ### Schema computations
-          ############################################################################
-        
-          # Delegate pattern on minus
-          def minus(other, builder)
-            raise ArgumentError, "Relvar expected" unless other.kind_of?(Relvar)
-            builder.relvar(name){
-              heading.minus(other.heading, builder)
-              constraints.minus(other.constraints, builder)
-            }
-          end
-        
-          ############################################################################
           ### DbAgile::Core::Schema::Brick
           ############################################################################
         
@@ -89,10 +76,10 @@ module DbAgile
           
           # @see DbAgile::Core::Schema::Brick#[]=
           def []=(name, value)
-            if (name == :heading) and value.kind_of?(Logical::Constraints)
+            if (name == :heading) and value.kind_of?(Logical::Heading)
               @heading = value 
               value.send(:parent=, self)
-            elsif name == :constraints and value.kind_of?(Logical::Heading)
+            elsif name == :constraints and value.kind_of?(Logical::Constraints)
               @constraints = value
               value.send(:parent=, self)
             else

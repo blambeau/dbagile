@@ -4,6 +4,7 @@ require 'dbagile/core/schema/brick'
 require 'dbagile/core/schema/named_collection'
 require 'dbagile/core/schema/logical'
 require 'dbagile/core/schema/physical'
+require 'dbagile/core/schema/computations'
 module DbAgile
   module Core
     #
@@ -50,10 +51,10 @@ module DbAgile
       def minus(other, builder = Schema::Builder.new)
         raise ArgumentError, "Schema expected" unless other.kind_of?(Schema)
         unless logical.nil? or logical.brick_empty?
-          logical.minus(other.logical, builder)
+          Schema::Computations::minus(logical, other.logical, builder)
         end
         unless physical.nil? or physical.brick_empty?
-          physical.minus(other.physical, builder)
+          Schema::Computations::minus(physical, other.physical, builder)
         end
         builder._dump
       end
