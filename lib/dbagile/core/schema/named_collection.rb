@@ -34,6 +34,11 @@ module DbAgile
           sub_bricks.empty?
         end
         
+        # Returns sub brick keys
+        def brick_subbrick_keys
+          sub_bricks.keys
+        end
+        
         # @see DbAgile::Core::Schema::Brick#brick_children
         def brick_children
           sub_bricks.values
@@ -60,7 +65,7 @@ module DbAgile
           raise ArgumentError, "#{self.class} expected, #{other.class} received"\
             unless self.class == other.class
           builder.send(brick_builder_handler){|builder_object|
-            sub_bricks.keys.each{|name|
+            brick_subbrick_keys.each{|name|
               my_sub, other_sub = self[name], other[name]
               if other_sub.nil?
                 # missing in right

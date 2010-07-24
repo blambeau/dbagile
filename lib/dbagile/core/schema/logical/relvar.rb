@@ -4,6 +4,9 @@ module DbAgile
       class Logical < Schema::Brick
         class Relvar < Schema::Brick
         
+          # Sub brick keys
+          BRICK_SUBBRICK_KEYS = [:heading, :constraints]
+        
           # Relvar name
           attr_reader :name
         
@@ -66,6 +69,11 @@ module DbAgile
           def brick_empty?
             heading.brick_empty? and constraints.brick_empty?
           end
+          
+          # @see DbAgile::Core::Schema::Brick#brick_subbrick_keys
+          def brick_subbrick_keys
+            BRICK_SUBBRICK_KEYS
+          end 
           
           # @see DbAgile::Core::Schema::Brick#brick_children
           def brick_children

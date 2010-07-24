@@ -46,6 +46,11 @@ module DbAgile
           end
         end
         
+        # Returns sub brick keys
+        def brick_subbrick_keys
+            Kernel.raise NotImplementedError
+        end
+        
         # Returns an array with child bricks. 
         # Non composite bricks should return an empty array 
         def brick_children

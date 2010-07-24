@@ -54,6 +54,11 @@ module DbAgile
             @attributes.empty?
           end
           
+          # @see DbAgile::Core::Schema::Brick#brick_subbrick_keys
+          def brick_subbrick_keys
+            @attributes.keys
+          end 
+        
           # @see DbAgile::Core::Schema::Brick#brick_children
           def brick_children
             @attributes.values
