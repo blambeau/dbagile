@@ -5,9 +5,18 @@ module DbAgile
         include Enumerable
         
         # Creates a composite instance with parts
-        def initialize(composite_parts = {})
+        def initialize(composite_parts = {}, install_methods = false)
           raise ArgumentError, "Composite parts must be a hash" unless composite_parts.kind_of?(Hash)
           @composite_parts = composite_parts
+          _install_methods(composite_parts) if install_methods
+        end
+        
+        def _install_methods(composite_parts)
+          composite_parts.each_pair{|k, v|
+            (class << self; self; end).send(:define_method, k){
+              @composite_parts[k]
+            }
+          }
         end
         
         ############################################################################
@@ -93,6 +102,7 @@ module DbAgile
 
         attr_reader :composite_parts
         protected   :composite_parts
+        private     :_install_methods
       end # class Coposite
     end # class SchemaObject
   end # module Core

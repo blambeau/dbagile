@@ -7,7 +7,7 @@ module DbAgile
         
         # Creates a logical schema instance
         def initialize
-          super(:indexes => Physical::Indexes.new)
+          super({:indexes => Physical::Indexes.new}, true)
         end
                 
       end # class Logical

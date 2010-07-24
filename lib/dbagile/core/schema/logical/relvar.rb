@@ -10,20 +10,9 @@ module DbAgile
           # Creates a relation variable instance
           def initialize(name)
             @name = name.to_s.to_sym
-            super(
+            super({
               :heading     => Schema::Logical::Heading.new,
-              :constraints => Schema::Logical::Constraints.new
-            )
-          end
-          
-          # Returns relvar heading
-          def heading
-            self[:heading]
-          end
-        
-          # Returns relvar constraints
-          def constraints
-            self[:constraints]
+              :constraints => Schema::Logical::Constraints.new}, true)
           end
         
           # Yields the block with each attribute 

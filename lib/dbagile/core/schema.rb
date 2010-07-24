@@ -13,18 +13,8 @@ module DbAgile
       # Creates a schema instance
       def initialize(schema_identifier = nil)
         @schema_identifier = schema_identifier
-        super(
-          :logical  => Schema::Logical.new,
-          :physical => Schema::Physical.new
-        )
-      end
-      
-      def logical
-        self[:logical]
-      end
-      
-      def physical
-        self[:physical]
+        super({:logical  => Schema::Logical.new,
+               :physical => Schema::Physical.new}, true)
       end
       
       # Dumps the schema to YAML
