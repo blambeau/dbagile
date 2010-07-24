@@ -2,20 +2,28 @@
 logical: 
   ADDED_COLUMNS_ON_LEFT: 
     heading: 
-      ADDED: { domain: String,  mandatory: true                       }
+      ADDED: { domain: String,  mandatory: true }
+    constraints: {}
   ADDED_CONSTRAINT_ON_LEFT: 
+    heading: {}
     constraints: 
       added_constraint: { type: :foreign_key, references: => ADDED_COLUMNS_ON_LEFT, source: [ 'ID' ], target: [ 'ID' ]}
   CONFLICTING_HEADING: 
     heading: 
       CONFLICT:    { domain: Integer, mandatory: true, default: :autonumber }
-  DROPPED_COLUMNS_ON_LEFT: {}
-  DROPPED_CONSTRAINT_ON_LEFT: {}
+    constraints: {}
+  DROPPED_COLUMNS_ON_LEFT:
+    heading: {}
+    constraints: {}
+  DROPPED_CONSTRAINT_ON_LEFT:
+    heading: {}
+    constraints: {}
   ONLY_ON_LEFT_RELVAR: 
     heading: 
       ID:    { domain: Integer, mandatory: true, default: :autonumber }
     constraints: 
       pk: { type: :primary_key, attributes: [ 'ID' ] }
+  SAME: {}
 ---
 physical:
   indexes:

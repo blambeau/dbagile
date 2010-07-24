@@ -1,8 +1,8 @@
 module DbAgile
   module Core
     class Schema
-      module Logical
-        class Attribute
+      class Logical < Schema::Brick
+        class Attribute < Schema::Brick
         
           # Attribute name
           attr_reader :name
@@ -31,6 +31,39 @@ module DbAgile
             !(definition[:mandatory] == false)
           end
         
+          ############################################################################
+          ### DbAgile::Core::Schema::Brick
+          ############################################################################
+        
+          # @see DbAgile::Core::Schema::Brick#brick_composite?
+          def brick_composite?
+            false
+          end
+        
+          ############################################################################
+          ### Equality and hash code
+          ############################################################################
+        
+          # Compares with another attribute
+          def ==(other)
+            return nil unless other.kind_of?(Attribute)
+            (name == other.name) and (definition == other.definition)
+          end
+        
+          # Returns an hash code
+          def hash
+            [ name, definition ].hash
+          end
+          
+          # Duplicates this attribute
+          def dup
+            Logical::Attribute.new(name, definition.dup)
+          end
+        
+          ############################################################################
+          ### About IO
+          ############################################################################
+        
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|
@@ -45,12 +78,6 @@ module DbAgile
             }
           end
           
-          # Compares with another attribute
-          def ==(other)
-            return nil unless other.kind_of?(Attribute)
-            (name == other.name) and (definition == other.definition)
-          end
-        
         end # class Attribute
       end # module Logical
     end # class Schema

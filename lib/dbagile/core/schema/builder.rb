@@ -1,5 +1,4 @@
 require 'dbagile/core/schema/coercion'
-require 'dbagile/core/schema/builder/hash_factory'
 require 'dbagile/core/schema/builder/concept_factory'
 module DbAgile
   module Core

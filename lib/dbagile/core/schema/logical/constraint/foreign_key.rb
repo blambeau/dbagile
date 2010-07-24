@@ -1,22 +1,10 @@
 module DbAgile
   module Core
     class Schema
-      module Logical
-        class Constraint
+      class Logical < Schema::Brick
+        class Constraint < Schema::Brick
           class ForeignKey < Constraint
           
-            # Foreign key name
-            attr_reader :name
-          
-            # Foreign key definition
-            attr_reader :definition
-          
-            # Creates a key instance
-            def initialize(name, definition)
-              @name = name
-              @definition = definition
-            end
-            
             # Returns source table attributes
             def source_attributes
               definition[:source]
@@ -47,12 +35,6 @@ module DbAgile
               }
             end
 
-            # Compares with another attributes
-            def ==(other)
-              return nil unless other.kind_of?(ForeignKey)
-              (name == other.name) and (definition == other.definition)
-            end
-          
           end # class ForeignKey
         end # class Constraint
       end # module Logical

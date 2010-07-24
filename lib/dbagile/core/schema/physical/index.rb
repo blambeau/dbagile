@@ -1,8 +1,8 @@
 module DbAgile
   module Core
     class Schema
-      module Physical
-        class Index
+      class Physical < Schema::Brick
+        class Index < Schema::Brick
         
           # Index name
           attr_reader :name
@@ -16,6 +16,39 @@ module DbAgile
             @definition = definition
           end
         
+          ############################################################################
+          ### DbAgile::Core::Schema::Brick
+          ############################################################################
+        
+          # @see DbAgile::Core::Schema::Brick#brick_composite?
+          def brick_composite?
+            false
+          end
+        
+          ############################################################################
+          ### Equality and hash code
+          ############################################################################
+        
+          # Compares with another index
+          def ==(other)
+            return nil unless other.kind_of?(Index)
+            (name == other.name) and (definition == other.definition)
+          end
+          
+          # Returns an hash code
+          def hash
+            [ name, definition ].hash
+          end
+          
+          # Duplicates this index
+          def dup
+            Physical::Index.new(name, definition.dup)
+          end
+        
+          ############################################################################
+          ### About IO
+          ############################################################################
+        
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|
@@ -26,12 +59,6 @@ module DbAgile
                 map.add('attributes', attrs)
               end
             }
-          end
-        
-          # Compares with another index
-          def ==(other)
-            return nil unless other.kind_of?(Index)
-            (name == other.name) and (definition == other.definition)
           end
         
         end # class Index

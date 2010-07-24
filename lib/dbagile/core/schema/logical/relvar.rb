@@ -1,8 +1,8 @@
 module DbAgile
   module Core
     class Schema
-      module Logical
-        class Relvar
+      class Logical < Schema::Brick
+        class Relvar < Schema::Brick
         
           # Relvar name
           attr_reader :name
@@ -17,21 +17,9 @@ module DbAgile
           def initialize(name)
             @name = name.to_s.to_sym
             @heading = Schema::Logical::Heading.new
-            @constraints = Schema::NamedCollection.new(:constraints)
+            @constraints = Schema::Logical::Constraints.new
           end
         
-          # Mimics a hash on heading and constraints
-          def [](name)
-            case name
-              when :heading 
-                self.heading
-              when :constraints
-                self.constraints
-              else
-                raise ArgumentError, "No such mimics method #{name} on Relvar"
-            end
-          end
-          
           # Yields the block with each attribute 
           def each_attribute(&block)
             heading.each_attribute(&block)
@@ -52,6 +40,10 @@ module DbAgile
             }.each(&block)
           end
           
+          ############################################################################
+          ### Schema computations
+          ############################################################################
+        
           # Delegate pattern on minus
           def minus(other, builder)
             raise ArgumentError, "Relvar expected" unless other.kind_of?(Relvar)
@@ -61,23 +53,78 @@ module DbAgile
             }
           end
         
-          # Checks if this relvar is empty
-          def empty?
-            heading.empty? and constraints.empty?
+          ############################################################################
+          ### DbAgile::Core::Schema::Brick
+          ############################################################################
+        
+          # @see DbAgile::Core::Schema::Brick#brick_composite?
+          def brick_composite?
+            true
           end
           
+          # @see DbAgile::Core::Schema::Brick#brick_empty?
+          def brick_empty?
+            heading.brick_empty? and constraints.brick_empty?
+          end
+          
+          # @see DbAgile::Core::Schema::Brick#brick_children
+          def brick_children
+            [ heading, constraints ]
+          end
+        
+          # @see DbAgile::Core::Schema::Brick#[]
+          def [](name)
+            return self.heading if name == :heading
+            return self.constraints if name == :constraints
+            raise ArgumentError, "No such mimics method #{name} on Relvar"
+          end
+          
+          # @see DbAgile::Core::Schema::Brick#[]=
+          def []=(name, value)
+            if (name == :heading) and value.kind_of?(Logical::Constraints)
+              @heading = value 
+              value.send(:parent=, self)
+            elsif name == :constraints and value.kind_of?(Logical::Heading)
+              @constraints = value
+              value.send(:parent=, self)
+            else
+              raise ArgumentError, "Relvar does not accept #{value.class} for #{name}"
+            end
+          end
+          
+          ############################################################################
+          ### Equality and hash code
+          ############################################################################
+        
           # Compares with another attribute
           def ==(other)
             return nil unless other.kind_of?(Relvar)
             (name == other.name) and (heading == other.heading) and (constraints == other.constraints)
           end
         
+          # Returns an hash code
+          def hash
+            [ name, heading, constraints ].hash
+          end
+          
+          # Duplicates this attribute
+          def dup
+            dup = Logical::Relvar.new(name)
+            dup[:heading] = heading.dup
+            dup[:constraints] = constraints.dup
+            dup
+          end
+        
+          ############################################################################
+          ### About IO
+          ############################################################################
+        
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|
               out.map("tag:yaml.org,2002:map", to_yaml_style ) do |map|
-                map.add('heading', heading) unless heading.empty?
-                map.add('constraints', constraints) unless constraints.empty?
+                map.add('heading', heading) unless heading.brick_empty?
+                map.add('constraints', constraints) unless constraints.brick_empty?
               end
             }
           end

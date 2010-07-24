@@ -6,7 +6,7 @@ module DbAgile
 
           # Builds a logical schema
           def build_logical
-            Schema::NamedCollection.new(:logical)
+            Schema::Logical.new
           end
           
           # Builds a relvar
@@ -26,29 +26,22 @@ module DbAgile
         
           # Builds a constraint collection
           def build_constraints
-            Schema::NamedCollection.new(:constraints)
+            Schema::Logical::Constraint.new
           end
         
           # Builds a constraint
           def build_constraint(name, definition)
-            case kind = definition[:type]
-              when :primary_key, :candidate_key, :key
-                Schema::Logical::Constraint::CandidateKey.new(name, definition)
-              when :foreign_key
-                Schema::Logical::Constraint::ForeignKey.new(name, definition)
-              else 
-                raise ArgumentError, "Unexpected constraint kind #{kind}"
-            end
+            Schema::Logical::Constraint::factor(name, definition)
           end
         
           # Builds a physical schema
           def build_physical
-            Schema::NamedCollection.new(:physical)
+            Schema::Physical.new
           end
           
           # Builds an index collection
           def build_indexes
-            Schema::NamedCollection.new(:indexes)
+            Schema::Physical::Indexes.new
           end
         
           # Builds an index

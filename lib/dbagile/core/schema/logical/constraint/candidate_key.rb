@@ -1,21 +1,10 @@
 module DbAgile
   module Core
     class Schema
-      module Logical
-        class Constraint
+      class Logical < Schema::Brick
+        class Constraint < Schema::Brick
           class CandidateKey < Constraint
           
-            # Candidate key name
-            attr_reader :name
-          
-            # Candidate key definition
-            attr_reader :definition
-          
-            def initialize(name, definition)
-              @name = name
-              @definition = definition
-            end
-            
             # Is it a primary key?
             def primary?
               definition[:type] == :primary_key
@@ -38,12 +27,6 @@ module DbAgile
               }
             end
 
-            # Compares with another attributes
-            def ==(other)
-              return nil unless other.kind_of?(CandidateKey)
-              (name == other.name) and (definition == other.definition)
-            end
-          
           end # class CandidateKey
         end # class Constraint
       end # module Logical

@@ -1,85 +1,134 @@
 module DbAgile
   module Core
     class Schema
-      class NamedCollection
+      #
+      # Helper module for implementing a brick which is a simple collection of 
+      # named sub bricks.
+      #
+      module NamedCollection
         include Enumerable
         
-        # Collection kind
-        attr_reader :kind
+        # Sub bricks, by name
+        attr_accessor :sub_bricks
         
-        # Objects by name (Hash)
-        attr_reader :objects
+        ############################################################################
+        ### Public interface
+        ############################################################################
         
-        # Creates a collection instance
-        def initialize(kind)
-          @kind = kind
-          @objects = {}
-        end
-        
-        # Delegated to objects (values)
+        # Yields the block with each sub brick in turn
         def each(&block)
-          objects.values.each(&block)
+          sub_bricks.values.each(&block)
         end
         
-        # Returns names
-        def names
-          objects.keys
+        ############################################################################
+        ### Schema::Brick
+        ############################################################################
+        
+        # @see DbAgile::Core::Schema::Brick#brick_composite?
+        def brick_composite?
+          true
         end
         
-        # Returns an object by name
+        # @see DbAgile::Core::Schema::Brick#brick_empty?
+        def brick_empty?
+          sub_bricks.empty?
+        end
+        
+        # @see DbAgile::Core::Schema::Brick#brick_children
+        def brick_children
+          sub_bricks.values
+        end
+        
+        # @see DbAgile::Core::Schema::Brick#[]
         def [](name)
-          objects[name]
+          sub_bricks[name]
         end
         
-        # Sets an object
-        def []=(name, object)
-          objects[name] = object
+        # @see DbAgile::Core::Schema::Brick#[]=
+        def []=(name, brick)
+          sub_bricks[name] = brick
+          brick.send(:parent=, self)
+          brick
         end
         
-        # Checks if this collection is empty
-        def empty?
-          objects.empty?
-        end
-        
-        # Delegation pattern on YAML flushing
-        def to_yaml(opts = {})
-          YAML::quick_emit(self, opts){|out|
-            out.map("tag:yaml.org,2002:map") do |map|
-              objects.keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
-                map.add(k.to_s, objects[k])
-              }
-            end
-          }
-        end
+        ############################################################################
+        ### Schema computations
+        ############################################################################
         
         # Delegate pattern on minus
         def minus(other, builder)
-          unless other.kind_of?(NamedCollection) and other.kind == kind
-            raise ArgumentError, "NamedCollection(#{kind}) expected, #{other.inspect} received" 
-          end
-          builder.send(kind){|builder_object|
-            names.each{|name|
-              unless other[name].nil?
-                unless other[name] == self[name]
-                  if self[name].respond_to?(:minus)
-                    builder_object[name] = self[name].minus(other[name], builder)
-                  else
-                    builder_object[name] = self[name]
-                  end
-                end
-              else
-                builder_object[name] = self[name]
+          raise ArgumentError, "#{self.class} expected, #{other.class} received"\
+            unless self.class == other.class
+          builder.send(builder_handler_name){|builder_object|
+            sub_bricks.keys.each{|name|
+              my_sub, other_sub = self[name], other[name]
+              if other_sub.nil?
+                builder_object[name] = my_sub
+              elsif other_sub.brick_composite?
+                builder_object[name] = my_sub.minus(other_sub, builder)
+              elsif my_sub != other_sub
+                builder_object[name] = my_sub
               end
             }
           }
         end
         
-        # Compares with another attribute
+        ############################################################################
+        ### About IO
+        ############################################################################
+        
+        # Delegation pattern on YAML flushing
+        def to_yaml(opts = {})
+          YAML::quick_emit(self, opts){|out|
+            out.map("tag:yaml.org,2002:map") do |map|
+              sub_bricks.keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
+                map.add(k.to_s, sub_bricks[k])
+              }
+            end
+          }
+        end
+        
+        ############################################################################
+        ### Equality and hash code
+        ############################################################################
+        
+        # Compares with another brick
         def ==(other)
-          return nil unless other.kind_of?(NamedCollection)
-          (self.kind == other.kind) and (self.objects == other.objects)
+          return nil unless other.kind_of?(self.class)
+          (self.sub_bricks == other.sub_bricks)
+        end
+        
+        # Returns a hash code
+        def hash
+          sub_bricks.hash
+        end
+        
+        # Duplicates this named collection
+        def dup
+          dup = self.call.new
+          sub_bricks.each_pair{|name, brick|
+            dup[name] = brick.dup
+          }
+          dup
         end
           
+        ############################################################################
+        ### Pseudo private methods
+        ############################################################################
+        
+        # Handler to initialize this module
+        def __initialize_named_collection
+          @sub_bricks = {}
+        end
+        
+        # 
+        # Returns the builder's handler name for this collection. Should be 
+        # implemented by includers.
+        #
+        def builder_handler_name
+          Kernel.raise NotImplementedError
+        end
+        
       end # class NamedCollection
     end # class Schema
   end # module Core

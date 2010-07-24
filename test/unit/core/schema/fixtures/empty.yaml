@@ -1,0 +1,9 @@
+--- 
+logical: 
+  EMPTY_RELVAR: 
+    heading: {}
+    constraints: {}
+---
+physical:
+  indexes: {}
+  

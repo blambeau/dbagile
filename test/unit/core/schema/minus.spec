@@ -12,7 +12,9 @@ describe "DbAgile::Core::Schema#minus" do
   end
   
   it "should be as expected" do
+    (left - right).should_not be_empty
     (left - right).should == left_minus_right
+    (right - left).should_not be_empty
     (right - left).should == right_minus_left
   end
 
