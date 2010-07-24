@@ -12,6 +12,9 @@ module DbAgile
     class Schema
       extend(DbAgile::Core::Schema::YAMLMethods)
       
+      # Identifier of this schema
+      attr_reader :schema_identifier
+      
       # Logical schema
       attr_reader :logical
       
@@ -19,7 +22,8 @@ module DbAgile
       attr_reader :physical
       
       # Creates a schema instance
-      def initialize
+      def initialize(schema_identifier = nil)
+        @schema_identifier = schema_identifier
         @logical  = Schema::Logical.new
         @physical = Schema::Physical.new
       end

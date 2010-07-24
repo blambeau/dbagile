@@ -18,7 +18,7 @@ module DbAgile
         def execute_command
           schema = nil
           with_current_connection do |connection|
-            schema = connection.database_schema
+            schema = connection.physical_schema
             display schema.to_yaml
           end
           schema

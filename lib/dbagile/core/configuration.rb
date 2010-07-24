@@ -14,8 +14,11 @@ module DbAgile
       # Configuration uri
       attr_accessor :uri
       
-      # Array of schema files
-      attr_reader :schema_files
+      # Array of files for the announced schema
+      attr_accessor :announced_files
+      
+      # Array of files for the effective schema
+      attr_accessor :effective_files
       
       # Resolves relative files
       attr_accessor :file_resolver
@@ -29,7 +32,8 @@ module DbAgile
         raise ArgumentError, "Configuration DSL is deprecated" unless block.nil?
         @name = name
         @uri = uri
-        @schema_files = []
+        @announced_files = nil
+        @effective_files = nil
         @file_resolver = lambda{|f| ::File.expand_path(f) }
         @connector = ::DbAgile::Core::Connector.new
       end
@@ -93,24 +97,61 @@ module DbAgile
       ### About schema
       ##############################################################################
       
-      # Returns true if schema files are installed, false otherwise
-      def has_schema_files?
-        not(schema_files.nil? or schema_files.empty?)
+      # Does this configuration has announced schema files?
+      def has_announced_schema?
+        !(@announced_files.nil? or @announced_files.empty?)
       end
       
-      # Loads the schema from the schema files
+      # Does this configuration has effective schema files?
+      def has_effective_schema?
+        !(@effective_files.nil? or @effective_files.empty?)
+      end
+      
+      # Loads a schema from schema files
+      def load_schema_from_files(files)
+        schema = DbAgile::Core::Schema.new(files)
+        builder = DbAgile::Core::Schema::Builder.new(schema)
+        files.collect{|f| file_resolver.call(f)}.each{|f|
+          DbAgile::Core::Schema::yaml_file_load(f, builder)
+        }
+        builder._dump
+      end
+      
+      # Returns the schema of highest level (announced -> effective -> physical).
       def schema
-        if has_schema_files?
-          builder = DbAgile::Core::Schema::Builder.new
-          schema_files.collect{|f| file_resolver.call(f)}.each{|f|
-            DbAgile::Core::Schema::yaml_file_load(f, builder)
-          }
-          builder._dump
+        announced_schema(true)
+      end
+      
+      # Returns the announced schema. If no announce schema files are installed
+      # and unstage is true, returns the effective schema. Returns nil otherwise.
+      def announced_schema(unstage = false)
+        if has_announced_schema?
+          load_schema_from_files(announced_files)
+        elsif unstage
+          effective_schema(unstage)
         else
           nil
         end
       end
       
+      # Returns the effective schema. If no effective files are installed and 
+      # unstage is true, returns the physical schema. Returns nil otherwise.
+      def effective_schema(unstage = false)
+        if has_effective_schema?
+          load_schema_from_files(effective_files)
+        elsif unstage
+          physical_schema
+        else
+          nil
+        end
+      end
+      
+      # Returns the database physical schema
+      def physical_schema
+        with_connection{|c| c.physical_schema}
+      end
+      
+      private :load_schema_from_files
       ##############################################################################
       ### About io
       ##############################################################################
@@ -122,12 +163,11 @@ module DbAgile
         buffer = ""
         buffer << "#{prefix}config(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
-        if has_schema_files?
-          if schema_files.size == 1
-            buffer << "  schema_file #{schema_files[0].inspect}" << "\n"
-          else
-            buffer << "  schema_files #{schema_files.inspect}" << "\n"
-          end
+        if has_announced_schema?
+          buffer << "  " << _friendly_files_inspect("announced", announced_files) << "\n"
+        end
+        if has_effective_schema?
+          buffer << "  " << _friendly_files_inspect("effective", effective_files) << "\n"
         end
         if plugs and not(plugs.empty?)
           plugs.each{|plug| 
@@ -138,6 +178,15 @@ module DbAgile
         buffer << "}"
       end
       
+      def _friendly_files_inspect(name, files)
+        if files.size == 1
+          "#{name}_schema #{files[0].inspect}"
+        else
+          "#{name}_schema #{files.inspect}"
+        end  
+      end
+      
+      private :_friendly_files_inspect
     end # class Configuration
   end # module Core
 end # module DbAgile 

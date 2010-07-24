@@ -5,7 +5,6 @@ module DbAgile
     class Schema
       class Builder
         include Schema::Coercion
-        # include Builder::HashFactory
         include Builder::ConceptFactory
         
         # Call stack
@@ -13,7 +12,7 @@ module DbAgile
         
         # Creates a builder instance
         def initialize(schema = Schema.new)
-          @stack = [ [:root, Schema.new ] ]
+          @stack = [ [:root, schema ] ]
         end
         
         ############################################################################

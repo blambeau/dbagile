@@ -27,13 +27,6 @@ module DbAgile
         include Schema::ComparisonBased
         Command::build_me(self, __FILE__)
       
-        # Contribute to options
-        def add_options(opt)
-          opt.separator nil
-          opt.separator "Options:"
-          add_common_schema_options(opt)
-        end
-      
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           normalize_comparison_arguments(arguments)
@@ -41,9 +34,12 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          ls, ld, rs, rd = left_and_right_schemas(true)
-          show_minus(ld, ls, rd, rs, :remove)
-          show_minus(rd, rs, ld, ls, :add)
+          with_current_config{|config|
+            left  = config.announced_schema(true)
+            right = config.effective_schema(true)
+            show_minus(left, right, :add)
+            show_minus(right, right, :remove)
+          }
         end
       
       end # class SchemaDump

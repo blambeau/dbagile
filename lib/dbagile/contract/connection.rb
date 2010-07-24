@@ -27,7 +27,7 @@ module DbAgile
       #
       # Returns the database schema as a DbAgile::Core::Schema instance
       #
-      def database_schema
+      def physical_schema
         Kernel.raise NotImplementedError
       end
       

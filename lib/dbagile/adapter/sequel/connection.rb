@@ -13,9 +13,9 @@ module DbAgile
         true
       end
       
-      # @see DbAgile::Contract::Connection#database_schema
-      def database_schema
-        SequelAdapter::Schema::Loader.new.run(db)
+      # @see DbAgile::Contract::Connection#physical_schema
+      def physical_schema
+        SequelAdapter::Schema::Loader.new.run(db, uri)
       end
     
       # @see DbAgile::Contract::Connection#transaction

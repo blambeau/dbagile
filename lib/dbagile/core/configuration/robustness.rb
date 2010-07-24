@@ -65,17 +65,15 @@ module DbAgile
         end
         
         # 
-        # Asserts that a configuration has schema files installed or raise an error.
+        # Coerces and asserts that schema files arguments are correct. 
+        # Returns normalized version.
         #
-        # @param [DbAgile::Core::Configuration] cfg a configuration instance
-        # @return [DbAgile::Core::Configuration] cfg
-        # @raise NoSchemaFilesError if the schema files are not installed.
-        #
-        def has_schema_files!(cfg)
-          unless cfg.has_schema_files?
-            raise NoSchemaFilesError, "No schema files installed on #{cfg.name}"
+        def valid_schema_files!(*files)
+          files = files.flatten
+          unless files.all?{|f| f.kind_of?(String)}
+            raise DbAgile::InvalidSchemaError, "Invalid schema files #{files.inspect}"
           end
-          cfg
+          files
         end
       
       end # module Robustness
