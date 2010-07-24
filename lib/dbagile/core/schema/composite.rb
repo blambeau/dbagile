@@ -2,7 +2,6 @@ module DbAgile
   module Core
     module Schema
       class Composite < SchemaObject
-        include Enumerable
       
         # Creates a composite instance with parts
         def initialize(composite_parts = _default_parts)
@@ -41,15 +40,31 @@ module DbAgile
         def _install_eigenclass_methods?
           false
         end
+        
+        # Duplicates parts
+        def _dup_parts
+          dup_parts = {}
+          @composite_parts.each_pair{|name, part| dup_parts[name] = part.dup}
+          dup_parts
+        end
+        
+        # Makes a sanity check on the composite
+        def _sanity_check
+          parts.each{|p| 
+            raise "Expected #{p.to_yaml} to have me as parent. Has #{p.parent.to_yaml}"\
+              unless p.parent == self
+          }
+        end
       
         ############################################################################
         ### Public interface
         ############################################################################
         public
       
-        # Yields the block with each part in turn
-        def each(&block)
-          @composite_parts.values.each(&block)
+        # Implements a dept-first visit 
+        def visit(&block)
+          block.call(self, parent)
+          parts.each{|p| p.visit(&block)}
         end
       
         ############################################################################
@@ -122,9 +137,7 @@ module DbAgile
       
         # @see DbAgile::Core::SchemaObject
         def dup
-          dup_parts = {}
-          @composite_parts.each_pair{|name, part| dup_parts[name] = part.dup}
-          self.class.new(dup_parts)
+          self.class.new(_dup_parts)
         end
       
       end # class Composite

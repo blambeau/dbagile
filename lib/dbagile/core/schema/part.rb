@@ -15,6 +15,19 @@ module DbAgile
           @definition = definition
         end
         
+        # Makes a sanity check on the part
+        def _sanity_check
+        end
+        
+        ############################################################################
+        ### Schema::SchemaObject
+        ############################################################################
+        
+        # Implements a dept-first visit 
+        def visit(&block)
+          block.call(self, parent)
+        end
+        
         ############################################################################
         ### Equality and hash code
         ############################################################################

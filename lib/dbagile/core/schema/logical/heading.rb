@@ -5,7 +5,11 @@ module DbAgile
         class Heading < Schema::Composite
          
           alias :attributes     :parts
-          alias :each_attribute :each
+          
+          # Yields the block with each attribute
+          def each_attribute(&block)
+            attributes.each(&block)
+          end
         
         end # class Heading
       end # class Logical

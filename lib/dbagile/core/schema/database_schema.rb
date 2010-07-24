@@ -2,14 +2,16 @@ module DbAgile
   module Core
     module Schema
       class DatabaseSchema < Schema::Composite
+        include Enumerable
+        alias :each :visit
       
         # Identifier of this schema
         attr_reader :schema_identifier
       
         # Creates a schema instance
-        def initialize(schema_identifier = nil)
+        def initialize(schema_identifier = nil, parts = _default_parts)
           @schema_identifier = schema_identifier
-          super(_default_parts)
+          super(parts)
         end
       
         # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
@@ -42,6 +44,11 @@ module DbAgile
           logical.each(&block)
         end
       
+        # @see DbAgile::Core::Schema::SchemaObject
+        def dup
+          DatabaseSchema.new(schema_identifier, _dup_parts)
+        end
+          
       end # class DatabaseSchema
     end # module Schema
   end # module Core
