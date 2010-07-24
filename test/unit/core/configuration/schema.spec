@@ -5,13 +5,13 @@ describe "DbAgile::Core::Schema#schema" do
   
   describe "when one schema file has been installed" do
     let(:config){ DbAgile::Fixtures::Core::Configuration::config(:one_schema_file) }
-    it{ should be_kind_of(DbAgile::Core::Schema) }
+    it{ should be_kind_of(DbAgile::Core::Schema::DatabaseSchema) }
     it{ should_not be_empty }
   end
   
   describe "when many schema files have been installed" do
     let(:config){ DbAgile::Fixtures::Core::Configuration::config(:many_schema_files) }
-    it{ should be_kind_of(DbAgile::Core::Schema) }
+    it{ should be_kind_of(DbAgile::Core::Schema::DatabaseSchema) }
     it{ should_not be_empty }
   end
   

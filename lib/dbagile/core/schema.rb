@@ -1,51 +1,63 @@
 require 'dbagile/core/schema/schema_object'
-require 'dbagile/core/schema/yaml_methods'
 require 'dbagile/core/schema/builder'
 require 'dbagile/core/schema/computations'
 module DbAgile
   module Core
-    class Schema < DbAgile::Core::SchemaObject::Composite
-      extend(DbAgile::Core::Schema::YAMLMethods)
-      
-      # Identifier of this schema
-      attr_reader :schema_identifier
-      
-      # Creates a schema instance
-      def initialize(schema_identifier = nil)
-        @schema_identifier = schema_identifier
-        super(_default_parts)
+    module Schema
+
+      #
+      # Creates a DatabaseSchema instance.
+      #
+      # Intent of this method is to hide implementation details of this package.
+      # It should ALWAYS be used for creating schema instances (no direct accesses
+      # to the DatabaseSchema should be made!).
+      #
+      # @param [Object] optional tracability identifier
+      # @return [DatabaseSchema] a database schema
+      #
+      def new(schema_identifier = nil)
+        Schema::DatabaseSchema.new(schema_identifier)
       end
-      
-      # @see DbAgile::Core::SchemaObject::Composite#_install_eigenclass_methods?
-      def _install_eigenclass_methods?
-        true
-      end
-      
-      # @see DbAgile::Core::SchemaObject::Composite#_default_parts
-      def _default_parts
-        {:logical  => Schema::Logical.new,
-         :physical => Schema::Physical.new}
-      end
-        
-      # Dumps the schema to YAML
-      def to_yaml(opts = {})
-        YAML::dump_stream({'logical' => logical}, {'physical' => physical})
-      end
-      alias :inspect :to_yaml
-      
-      # Applies schema minus
-      def minus(other, builder = Schema::Builder.new)
-        Schema::Computations::minus(self.logical, other.logical, builder)
-        Schema::Computations::minus(self.physical, other.physical, builder)
+      module_function :new
+
+      #
+      # Loads a database schema from a YAML string
+      #
+      # @param [String] str a YAML schema source
+      # @param [DbAgile::Core::Schema::Builder] a builder instance to use to
+      #        populate the schema
+      # @returns [DbAgile::Core:Schema::DatabaseSchema] the loaded database 
+      #          schema
+      #
+      def yaml_load(str, builder = DbAgile::Core::Schema::Builder.new)
+        YAML::each_document(str){|doc|
+          builder._natural(doc)
+        }
         builder._dump
       end
-      alias :- :minus
-      
-      # Yields the block with each relvar in turn
-      def each_relvar(&block)
-        logical.each(&block)
+      module_function :yaml_load
+    
+      #
+      # Loads a schema from a YAML file
+      #
+      # @param [String|IO] a path name or an IO instance
+      # @param [DbAgile::Core::Schema::Builder] a builder instance to use to
+      #        populate the schema
+      # @returns [DbAgile::Core:Schema::DatabaseSchema] the loaded database 
+      #          schema
+      #
+      def yaml_file_load(path_or_io, builder = DbAgile::Core::Schema::Builder.new)
+        case path_or_io
+          when String
+            File.open(path_or_io, 'r'){|io| yaml_load(io, builder) }
+          when IO, File
+            yaml_load(path_or_io, builder)
+          else 
+            raise ArgumentError, "Unable to load schema from #{file}"
+        end
       end
-      
-    end # class Schema
+      module_function :yaml_file_load
+        
+    end # module Schema
   end # module Core
 end # module DbAgile

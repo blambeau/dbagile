@@ -1,10 +1,8 @@
-require 'dbagile/core/schema/logical/constraint/candidate_key'
-require 'dbagile/core/schema/logical/constraint/foreign_key'
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
-      class Logical < SchemaObject::Composite
-        class Constraint < SchemaObject::Part
+    module Schema
+      class Logical
+        class Constraint < Schema::Part
           
           ############################################################################
           ### Constraint factory
@@ -14,9 +12,9 @@ module DbAgile
           def self.factor(name, definition)
             case kind = definition[:type]
               when :primary_key, :candidate_key, :key
-                Schema::Logical::Constraint::CandidateKey.new(name, definition)
+                Schema::Logical::CandidateKey.new(name, definition)
               when :foreign_key
-                Schema::Logical::Constraint::ForeignKey.new(name, definition)
+                Schema::Logical::ForeignKey.new(name, definition)
               else 
                 raise ArgumentError, "Unexpected constraint kind #{kind}"
             end
@@ -24,6 +22,8 @@ module DbAgile
 
         end # class Constraint
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile
+require 'dbagile/core/schema/logical/constraint/candidate_key'
+require 'dbagile/core/schema/logical/constraint/foreign_key'

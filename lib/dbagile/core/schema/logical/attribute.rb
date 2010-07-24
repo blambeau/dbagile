@@ -1,8 +1,8 @@
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
-      class Logical < SchemaObject::Composite
-        class Attribute < SchemaObject::Part
+    module Schema
+      class Logical
+        class Attribute < Schema::Part
         
           # Returns attribute domain
           def domain
@@ -39,6 +39,6 @@ module DbAgile
           
         end # class Attribute
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

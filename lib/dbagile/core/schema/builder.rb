@@ -1,10 +1,10 @@
-require 'dbagile/core/schema/coercion'
+require 'dbagile/core/schema/builder/coercion'
 require 'dbagile/core/schema/builder/concept_factory'
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
+    module Schema
       class Builder
-        include Schema::Coercion
+        include Builder::Coercion
         include Builder::ConceptFactory
         
         # Call stack
@@ -165,6 +165,6 @@ module DbAgile
         end
         
       end # class Builder
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class SchemaObject
+    module Schema
       class Part < SchemaObject
         
         # Object name
@@ -36,6 +36,6 @@ module DbAgile
         end
         
       end # class Part
-    end # class SchemaObject
+    end # module Schema
   end # module Core
 end # module DbAgile

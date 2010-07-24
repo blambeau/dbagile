@@ -2,11 +2,11 @@ require 'dbagile/core/schema/physical/indexes'
 require 'dbagile/core/schema/physical/index'
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
+    module Schema
       class Physical 
-        class Indexes < SchemaObject::Composite
+        class Indexes < Schema::Composite
         end # class Indexes
       end # class Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

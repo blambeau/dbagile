@@ -1,9 +1,9 @@
 module DbAgile
   module Core
-    class SchemaObject
+    module Schema
       class Composite < SchemaObject
         include Enumerable
-        
+      
         # Creates a composite instance with parts
         def initialize(composite_parts = _default_parts)
           unless composite_parts.kind_of?(Hash)
@@ -11,19 +11,19 @@ module DbAgile
           end
           _install_parts(composite_parts)
         end
-        
+      
         ############################################################################
         ### Private interface
         ############################################################################
         attr_reader :composite_parts
         protected   :composite_parts
         private
-        
+      
         # Creates defaut parts hash
         def _default_parts
           {}
         end
-        
+      
         # Make installation of parts
         def _install_parts(parts)
           meth = _install_eigenclass_methods?
@@ -36,26 +36,26 @@ module DbAgile
           }
           @composite_parts = parts
         end
-        
+      
         # Installs eigenclass methods on parts provided at construction
         def _install_eigenclass_methods?
           false
         end
-        
+      
         ############################################################################
         ### Public interface
         ############################################################################
         public
-        
+      
         # Yields the block with each part in turn
         def each(&block)
           @composite_parts.values.each(&block)
         end
-        
+      
         ############################################################################
         ### SchemaObject
         ############################################################################
-        
+      
         # @see DbAgile::Core::SchemaObject
         def empty?(recurse = true)
           if recurse
@@ -64,22 +64,22 @@ module DbAgile
             @composite_parts.empty?
           end
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def part_keys
           @composite_parts.keys
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def parts
           @composite_parts.values
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def [](name)
           @composite_parts[name]
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def []=(name, part)
           if @composite_parts.key?(name)
@@ -89,11 +89,11 @@ module DbAgile
           part.send(:parent=, self)
           part
         end
-        
+      
         ############################################################################
         ### About IO
         ############################################################################
-        
+      
         # @see DbAgile::Core::SchemaObject
         def to_yaml(opts = {})
           YAML::quick_emit(self, opts){|out|
@@ -104,30 +104,30 @@ module DbAgile
             end
           }
         end
-        
+      
         ############################################################################
         ### Equality and hash code
         ############################################################################
-        
+      
         # @see DbAgile::Core::SchemaObject
         def ==(other)
           return nil unless other.kind_of?(self.class)
           (@composite_parts == other.composite_parts)
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def hash
           @composite_parts.hash
         end
-        
+      
         # @see DbAgile::Core::SchemaObject
         def dup
           dup_parts = {}
           @composite_parts.each_pair{|name, part| dup_parts[name] = part.dup}
           self.class.new(dup_parts)
         end
-        
-      end # class Coposite
-    end # class SchemaObject
+      
+      end # class Composite
+    end # module Schema
   end # module Core
 end # module DbAgile

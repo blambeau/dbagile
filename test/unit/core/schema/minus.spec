@@ -7,8 +7,8 @@ describe "DbAgile::Core::Schema#minus" do
   let(:right_minus_left) { DbAgile::Fixtures::Core::Schema::schema(:right_minus_left)  }
   
   it "should be a valid Schema" do
-    (left - right).should be_kind_of(DbAgile::Core::Schema)
-    (left - left).should be_kind_of(DbAgile::Core::Schema)
+    (left - right).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
+    (left - left).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
   end
   
   it "should be as expected" do

@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class Schema
+    module Schema
       class Builder
         module ConceptFactory
 
@@ -51,6 +51,6 @@ module DbAgile
 
         end # module ConceptFactory
       end # class Builder
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

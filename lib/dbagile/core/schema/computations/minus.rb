@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
+    module Schema
       module Computations
         module Minus
           

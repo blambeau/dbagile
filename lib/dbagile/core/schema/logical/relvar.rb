@@ -1,8 +1,8 @@
 module DbAgile
   module Core
-    class Schema < SchemaObject::Composite
-      class Logical < SchemaObject::Composite
-        class Relvar < SchemaObject::Composite
+    module Schema
+      class Logical
+        class Relvar < Schema::Composite
           
           # Relvar name
           attr_reader :name
@@ -13,7 +13,7 @@ module DbAgile
             super(parts)
           end
           
-          # @see DbAgile::Core::SchemaObject::Composite#_install_eigenclass_methods?
+          # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
           def _install_eigenclass_methods?
             true
           end
@@ -68,6 +68,6 @@ module DbAgile
           private :_default_parts
         end # class Relvar
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile
