@@ -26,10 +26,11 @@ module DbAgile
 
         # Runs the loading process and returns the schema instance
         def run(conn, identifier)
-          schema = DbAgile::Core::Schema.new(identifier)
-          builder = DbAgile::Core::Schema::Builder.new(schema)
-          builder.logical{ load_logical_schema(conn, builder) }
-          builder.physical{ load_physical_schema(conn, builder) }
+          builder = DbAgile::Core::Schema::builder
+          builder.schema(identifier){
+            builder.logical{ load_logical_schema(conn, builder) }
+            builder.physical{ load_physical_schema(conn, builder) }
+          }
           builder._dump
         end
       

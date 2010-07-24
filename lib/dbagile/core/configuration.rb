@@ -109,10 +109,11 @@ module DbAgile
       
       # Loads a schema from schema files
       def load_schema_from_files(files)
-        schema = DbAgile::Core::Schema.new(files)
-        builder = DbAgile::Core::Schema::Builder.new(schema)
-        files.collect{|f| file_resolver.call(f)}.each{|f|
-          DbAgile::Core::Schema::yaml_file_load(f, builder)
+        builder = DbAgile::Core::Schema::builder
+        builder.schema(files){
+          files.collect{|f| file_resolver.call(f)}.each{|f|
+            DbAgile::Core::Schema::yaml_file_load(f, builder)
+          }
         }
         builder._dump
       end

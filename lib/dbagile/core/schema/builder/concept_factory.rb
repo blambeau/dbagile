@@ -5,6 +5,11 @@ module DbAgile
         module ConceptFactory
 
           # Builds a logical schema
+          def build_schema(identifier)
+            Schema.new(identifier)
+          end
+          
+          # Builds a logical schema
           def build_logical
             Schema::Logical.new
           end

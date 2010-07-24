@@ -20,6 +20,22 @@ module DbAgile
       end
       module_function :new
 
+      # 
+      # Creates a builder instance
+      #
+      def builder(schema = nil)
+        DbAgile::Core::Schema::Builder.new(schema)
+      end
+      module_function :builder
+
+      #      
+      # Factors a Builder instance ready for loading a yaml schema file
+      #
+      def yaml_builder(schema = Schema.new)
+        DbAgile::Core::Schema::Builder.new(schema)
+      end
+      module_function :yaml_builder
+
       #
       # Loads a database schema from a YAML string
       #
@@ -29,7 +45,7 @@ module DbAgile
       # @returns [DbAgile::Core:Schema::DatabaseSchema] the loaded database 
       #          schema
       #
-      def yaml_load(str, builder = DbAgile::Core::Schema::Builder.new)
+      def yaml_load(str, builder = yaml_builder)
         YAML::each_document(str){|doc|
           builder._natural(doc)
         }
@@ -46,7 +62,7 @@ module DbAgile
       # @returns [DbAgile::Core:Schema::DatabaseSchema] the loaded database 
       #          schema
       #
-      def yaml_file_load(path_or_io, builder = DbAgile::Core::Schema::Builder.new)
+      def yaml_file_load(path_or_io, builder = yaml_builder)
         case path_or_io
           when String
             File.open(path_or_io, 'r'){|io| yaml_load(io, builder) }

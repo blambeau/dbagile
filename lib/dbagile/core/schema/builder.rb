@@ -12,7 +12,11 @@ module DbAgile
         
         # Creates a builder instance
         def initialize(schema = Schema.new)
-          @stack = [ [:root, schema ] ]
+          if schema
+            @stack = [ [:schema, schema ] ]
+          else
+            @stack = [ [:root, {}] ]
+          end
         end
         
         ############################################################################
@@ -21,7 +25,11 @@ module DbAgile
         
         # Dumps as a Schema instance
         def _dump
-          _peek(:root)
+          if stack.last[0] == :schema
+            _peek(:schema)
+          else
+            _peek(:root)[:schema]
+          end
         end
         
         ############################################################################
@@ -56,9 +64,10 @@ module DbAgile
         # Applies natural rules according to current section
         def _natural(hash)
           case section = stack.last[0]
-            when :root
-              s = coerce_symbolized_hash(hash)
-              self.send(s.keys[0], s.values[0])
+            when :schema
+              coerce_symbolized_hash(hash).each_pair{|name, defn|
+                self.send(name, defn)
+              }
             when :logical
               coerce_symbolized_hash(hash).each_pair{|relvar_name, relvar_def|
                 relvar(relvar_name, relvar_def)
@@ -92,9 +101,20 @@ module DbAgile
         ############################################################################
         
         # Starts the logical section and yields
+        def database_schema(identifier = nil, hash = nil, &block)
+          block = lambda{ _natural(hash) } unless block
+          schema = (_peek(:root)[:schema] ||= build_schema(identifier))
+          _push(:schema, schema, &block)
+        end
+        
+        # TODO: remove this hack
+        alias :databaseschema :database_schema
+        alias :schema :database_schema
+        
+        # Starts the logical section and yields
         def logical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          logical = (_peek(:root)[:logical] ||= build_logical)
+          logical = (_peek(:schema)[:logical] ||= build_logical)
           _push(:logical, logical, &block)
         end
         
@@ -143,7 +163,7 @@ module DbAgile
         # Starts the physical section and yields
         def physical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          physical = (_peek(:root)[:physical] ||= build_physical)
+          physical = (_peek(:schema)[:physical] ||= build_physical)
           _push(:physical, physical, &block)
         end
         

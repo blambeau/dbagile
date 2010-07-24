@@ -32,10 +32,8 @@ module DbAgile
         alias :inspect :to_yaml
       
         # Applies schema minus
-        def minus(other, builder = Schema::Builder.new)
-          Schema::Computations::minus(self.logical, other.logical, builder)
-          Schema::Computations::minus(self.physical, other.physical, builder)
-          builder._dump
+        def minus(other)
+          Schema::Computations::minus(self, other)
         end
         alias :- :minus
       
