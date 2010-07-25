@@ -48,11 +48,13 @@ module DbAgile
           dup_parts
         end
         
+        protected
         # Makes a sanity check on the composite
-        def _sanity_check
+        def _sanity_check(schema)
           parts.each{|p| 
-            raise "Expected #{p.to_yaml} to have me as parent. Has #{p.parent.to_yaml}"\
-              unless p.parent == self
+            raise unless p.parent == self
+            raise unless p.schema == schema
+            p._sanity_check(schema) if p.composite?
           }
         end
       

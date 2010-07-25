@@ -13,6 +13,11 @@ module DbAgile
           @schema_identifier = schema_identifier
           super(parts)
         end
+        
+        # Overrided to return self.
+        def schema
+          self
+        end
       
         # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
         def _install_eigenclass_methods?

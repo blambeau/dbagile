@@ -18,14 +18,14 @@ describe "DbAgile::Core::Schema's sanity /" do
   end
   
   it "should be sane when loaded" do
-    lambda{ schema.send(:_sanity_check) }.should_not raise_error
+    lambda{ schema.send(:_sanity_check, schema) }.should_not raise_error
   end
   
   it "should stay sane after dup" do
     lambda{ 
-      schema.send(:_sanity_check)
-      schema.dup.send(:_sanity_check) 
-      schema.send(:_sanity_check)
+      schema.send(:_sanity_check, schema)
+      schema.dup.send(:_sanity_check, schema) 
+      schema.send(:_sanity_check, schema)
     }.should_not raise_error
   end
   

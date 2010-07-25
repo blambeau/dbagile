@@ -9,6 +9,11 @@ module DbAgile
         # Object annotations
         attr_accessor :annotation
         
+        # Returns the main schema instance
+        def schema
+          @schema ||= (parent && parent.schema)
+        end
+        
         # Returns true if this schema object is composite, false
         # otherwise
         def composite?
