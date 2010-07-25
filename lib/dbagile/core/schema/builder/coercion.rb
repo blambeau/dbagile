@@ -24,9 +24,9 @@ module DbAgile
           ### Validity
           ###############################################################################
         
-          # Raises a DbAgile::InvalidSchemaError
+          # Raises a DbAgile::SchemaSyntaxError
           def invalid!(msg)
-            raise DbAgile::InvalidSchemaError, msg, caller
+            raise DbAgile::SchemaSyntaxError, msg, caller
           end
         
           # Raises a coercion error

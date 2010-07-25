@@ -45,11 +45,15 @@ module DbAgile
           end
           
           # Returns the relation variable primary key
-          def primary_key
+          def primary_key(raise_if_unfound = true)
             constraints.each{|c|
               return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
             }
-            raise InvalidSchemaError, "Relation variable #{name} has no primary key!"
+            if raise_if_unfound
+              raise PrimaryKeyMissingError, "Relation variable #{name} has no primary key!"
+            else
+              nil
+            end
           end
           
           # Yiels the block with each foreign key

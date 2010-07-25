@@ -71,7 +71,7 @@ module DbAgile
         def valid_schema_files!(*files)
           files = files.flatten
           unless files.all?{|f| f.kind_of?(String)}
-            raise DbAgile::InvalidSchemaError, "Invalid schema files #{files.inspect}"
+            raise DbAgile::CorruptedConfigFileError, "Invalid schema files #{files.inspect}"
           end
           files
         end
