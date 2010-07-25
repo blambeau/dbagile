@@ -30,7 +30,7 @@ module DbAgile
         
           # Makes a sanity check on the part
           def _sanity_check(schema)
-            raise "No name provided on #{self}" if name.nil?
+            raise SchemaInternalError, "No name provided on #{self}" if name.nil?
             super(schema)
           end
         
@@ -50,7 +50,7 @@ module DbAgile
               return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
             }
             if raise_if_unfound
-              raise PrimaryKeyMissingError, "Relation variable #{name} has no primary key!"
+              raise MissingPrimaryKeyError, "Relation variable #{name} has no primary key!"
             else
               nil
             end

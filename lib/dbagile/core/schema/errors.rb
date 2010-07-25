@@ -11,6 +11,8 @@ module DbAgile
   # stage is considered a syntax error. However, it includes schema
   # type checking, which is not that syntactic!
   #
+  # Syntax error when parsing #{schema_file}: #{cause.message}
+  #
   class SchemaSyntaxError < DbAgile::SchemaError; end
   
   # 
@@ -20,8 +22,22 @@ module DbAgile
   class SchemaSemanticsError < DbAgile::SchemaError; end
   
   # 
+  # Raised when something goes really wrong with a schema. This certainly
+  # indicates a bug inside DbAgile, please report!
+  #
+  # Something wrong happened in DbAgile when using your schema. Please report 
+  # the error to developers:
+  # #{cause.message}
+  # #{cause.backtrace}
+  #
+  class SchemaInternalError < DbAgile::SchemaError; end
+  
+  # 
   # Raised when a relation variable has no primary key.
   #
-  class PrimaryKeyMissingError < DbAgile::SchemaSemanticsError; end
+  # Relation variable #{relvar.name} has no primary key. Relations should be sets, 
+  # not bags! A primary key ensures this certainly sound fact!
+  #
+  class MissingPrimaryKeyError < DbAgile::SchemaSemanticsError; end
   
 end

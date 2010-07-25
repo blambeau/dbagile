@@ -52,8 +52,8 @@ module DbAgile
         # Makes a sanity check on the composite
         def _sanity_check(schema)
           parts.each{|p| 
-            raise "Invalid parent on #{self}" unless p.parent == self
-            raise "Invalid schema on on #{self}" unless p.schema == schema
+            raise SchemaInternalError, "Invalid parent on #{self}" unless p.parent == self
+            raise SchemaInternalError, "Invalid schema on on #{self}" unless p.schema == schema
             p._sanity_check(schema) 
           }
         end

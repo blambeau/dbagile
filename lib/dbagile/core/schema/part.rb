@@ -17,8 +17,8 @@ module DbAgile
         
         # Makes a sanity check on the part
         def _sanity_check(schema)
-          raise "No name provided on #{self}" if name.nil?
-          raise "No definition provided on #{self}" if definition.nil?
+          raise SchemaInternalError, "No name provided on #{self}" if name.nil?
+          raise SchemaInternalError, "No definition provided on #{self}" if definition.nil?
         end
         
         ############################################################################
