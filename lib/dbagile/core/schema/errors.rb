@@ -43,6 +43,10 @@ module DbAgile
       super(*args)
     end
     
+    def message
+      "#{DbAgile::RubyTools::unqualified_class_name(self.class)}: #{schema_object}"
+    end
+    
   end # class SchemaSemanticsError
   
   # 

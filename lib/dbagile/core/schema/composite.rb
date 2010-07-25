@@ -58,19 +58,24 @@ module DbAgile
           }
         end
         
-        # Checks this composite's semantics and collects errors inside buffer
-        def collect_semantical_errors(buffer = [])
-          parts.each{|p| p.collect_semantical_errors(buffer)}
-        end
-      
         ############################################################################
         ### Public interface
         ############################################################################
         public
       
+        # Checks this composite's semantics and collects errors inside buffer
+        def semantical_errors
+          parts.collect{|p| p.semantical_errors}.flatten
+        end
+      
         # Returns an array with part dependencies
         def dependencies(raise_error_on_unfound = true)
           parts.collect{|p| p.dependencies(raise_error_on_unfound)}.flatten.uniq
+        end
+        
+        # Yields the block with each part in turn
+        def each_part(&block)
+          parts.each(&block)
         end
         
         # @see DbAgile::Core::Schema

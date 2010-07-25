@@ -4,7 +4,7 @@ module DbAgile
       class Logical
         class Heading < Schema::Composite
          
-          alias :attributes     :parts
+          alias :attributes :parts
           
           # Yields the block with each attribute
           def each_attribute(&block)

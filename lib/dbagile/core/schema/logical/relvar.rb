@@ -48,9 +48,10 @@ module DbAgile
           ############################################################################
           
           # Checks this composite's semantics and collects errors inside buffer
-          def collect_semantical_errors(buffer = [])
+          def semantical_errors
+            buffer = super
             buffer << MissingPrimaryKeyError.new(self) if primary_key(false).nil?
-            super(buffer)
+            buffer
           end
       
           ############################################################################
@@ -65,8 +66,8 @@ module DbAgile
           
           # Returns the relation variable primary key
           def primary_key(raise_if_unfound = true)
-            constraints.each{|c|
-              return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
+            constraints.each_part{|c|
+              return c if c.kind_of?(Logical::CandidateKey) and c.primary?
             }
             if raise_if_unfound
               raise MissingPrimaryKeyError.new(self)
@@ -78,7 +79,7 @@ module DbAgile
           # Yiels the block with each foreign key
           def each_foreign_key(&block)
             constraints.select{|c|
-              c.kind_of?(Logical::Constraint::ForeignKey)
+              c.kind_of?(Logical::ForeignKey)
             }.each(&block)
           end
           
