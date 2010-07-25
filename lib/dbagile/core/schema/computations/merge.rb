@@ -21,7 +21,7 @@ module DbAgile
             end
             
             # Computes key differences
-            left_keys, right_keys = left.part_keys, right.part_keys
+            left_keys, right_keys = left.part_keys(true), right.part_keys(true)
             left_only  = left_keys - right_keys
             right_only = right_keys - left_keys
             commons    = left_keys & right_keys 
@@ -43,7 +43,7 @@ module DbAgile
                   if mine == :alter or recursed != :same
                     mine = :alter
                   end
-                elsif on_left == on_right
+                elsif on_left.look_same_as?(on_right)
                   builder_object.[]=(key, left[key].dup, :same)
                 elsif block
                   resolved = block.call(on_left, on_right)

@@ -52,9 +52,9 @@ module DbAgile
         # Makes a sanity check on the composite
         def _sanity_check(schema)
           parts.each{|p| 
-            raise unless p.parent == self
-            raise unless p.schema == schema
-            p._sanity_check(schema) if p.composite?
+            raise "Invalid parent on #{self}" unless p.parent == self
+            raise "Invalid schema on on #{self}" unless p.schema == schema
+            p._sanity_check(schema) 
           }
         end
       
@@ -88,8 +88,12 @@ module DbAgile
         end
       
         # @see DbAgile::Core::SchemaObject
-        def part_keys
-          @composite_parts.keys
+        def part_keys(sort = false)
+          if sort
+            @composite_parts.keys.sort{|k1,k2| k1.to_s <=> k2.to_s}
+          else
+            @composite_parts.keys
+          end
         end
       
         # @see DbAgile::Core::SchemaObject
@@ -159,9 +163,11 @@ module DbAgile
         ############################################################################
       
         # @see DbAgile::Core::SchemaObject
-        def ==(other)
+        def look_same_as?(other)
           return nil unless other.kind_of?(self.class)
-          (@composite_parts == other.composite_parts)
+          my_parts = part_keys(true)
+          return false unless (my_parts == other.part_keys(true))
+          my_parts.all?{|k| self[k].look_same_as?(other[k])}
         end
       
         # @see DbAgile::Core::SchemaObject

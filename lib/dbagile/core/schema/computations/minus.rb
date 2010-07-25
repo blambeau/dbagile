@@ -22,7 +22,7 @@ module DbAgile
                 elsif left_sub.composite?
                   # present in right, possibly the same
                   minus(left_sub, right_sub, builder)
-                elsif left_sub != right_sub
+                elsif not(left_sub.look_same_as?(right_sub))
                   # present in right, conflicting
                   builder_object[name] = left_sub.dup
                 else

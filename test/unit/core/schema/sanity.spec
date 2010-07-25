@@ -3,18 +3,18 @@ describe "DbAgile::Core::Schema's sanity /" do
   
   let(:schema){ DbAgile::Fixtures::Core::Schema::schema(:suppliers_and_parts) }
   
-  it "should equal itself when duplicated while not being same object" do
-    dup = schema.dup
-    dup.should == schema
-    dup.object_id.should_not == schema.object_id
+  it "all objects should looking same as their duplicated" do
+    schema.each{|p,parent| 
+      p.dup.look_same_as?(p).should == true
+    }
   end
   
-  it "all objects should stay equal when duplicated" do
-    schema.each{|p,parent| p.dup.should == p}
-  end
-  
-  it "no objects should stay exactly the same when duplicated" do
+  it "no object be the same object when duplicated" do
     schema.each{|p,parent| p.dup.object_id.should_not == p.object_id}
+  end
+  
+  it "no object should be equal as its duplicated" do
+    schema.each{|p,parent| p.dup.should_not == p}
   end
   
   it "should be sane when loaded" do
@@ -23,8 +23,8 @@ describe "DbAgile::Core::Schema's sanity /" do
   
   it "should stay sane after dup" do
     lambda{ 
-      schema.send(:_sanity_check, schema)
-      schema.dup.send(:_sanity_check, schema) 
+      duplicated = schema.dup
+      duplicated.send(:_sanity_check, duplicated) 
       schema.send(:_sanity_check, schema)
     }.should_not raise_error
   end

@@ -28,6 +28,12 @@ module DbAgile
              :constraints => Schema::Logical::Constraints.new}
           end
         
+          # Makes a sanity check on the part
+          def _sanity_check(schema)
+            raise "No name provided on #{self}" if name.nil?
+            super(schema)
+          end
+        
           # Returns the arguments to pass to builder handler
           def builder_args
             [ name ]
@@ -58,10 +64,10 @@ module DbAgile
           ############################################################################
         
           # Compares with another attribute
-          def ==(other)
+          def look_same_as?(other)
             return nil unless other.kind_of?(Relvar)
             return false unless name == other.name
-            super
+            super(other)
           end
         
           # Returns an hash code

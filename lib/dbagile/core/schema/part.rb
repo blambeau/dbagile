@@ -16,7 +16,9 @@ module DbAgile
         end
         
         # Makes a sanity check on the part
-        def _sanity_check
+        def _sanity_check(schema)
+          raise "No name provided on #{self}" if name.nil?
+          raise "No definition provided on #{self}" if definition.nil?
         end
         
         ############################################################################
@@ -38,7 +40,7 @@ module DbAgile
         ############################################################################
       
         # Compares with another part
-        def ==(other)
+        def look_same_as?(other)
           return nil unless other.kind_of?(self.class)
           (name == other.name) and (definition == other.definition)
         end

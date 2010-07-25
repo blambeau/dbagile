@@ -14,7 +14,7 @@ module DbAgile
             end
             
             # Computes key differences
-            left_keys, right_keys = left.part_keys, right.part_keys
+            left_keys, right_keys = left.part_keys(true), right.part_keys(true)
             left_only  = left_keys - right_keys
             right_only = right_keys - left_keys
             commons    = left_keys & right_keys 
@@ -29,7 +29,7 @@ module DbAgile
               on_left, on_right = left[key], right[key]
               if on_left.composite?
                 diff(on_left, on_right, &block)
-              elsif on_left == on_right
+              elsif on_left.look_same_as?(on_right)
                 block.call(:same, on_left, on_right)
               else
                 block.call(:conflicting, on_left, on_right)
