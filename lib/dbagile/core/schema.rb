@@ -1,3 +1,4 @@
+require 'dbagile/core/schema/errors'
 require 'dbagile/core/schema/schema_object'
 require 'dbagile/core/schema/builder'
 require 'dbagile/core/schema/computations'
