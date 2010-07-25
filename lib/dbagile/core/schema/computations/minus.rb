@@ -5,7 +5,7 @@ module DbAgile
         module Minus
           
           # Computes set difference between schemas.
-          def minus(left, right, builder = DbAgile::Core::Schema::builder)
+          def minus(left, right, builder)
             unless left.class == right.class
               raise ArgumentError, "#{left.class} != #{right.class}"
             end

@@ -33,34 +33,12 @@ module DbAgile
           normalize_comparison_arguments(arguments)
         end
         
-        # Shows the minus
-        def show_diff(left, right)
-          # format debug
-          ld, rd = left.schema_identifier, right.schema_identifier
-          ld, rd = ld.inspect, rd.inspect
-          size = 20 + DbAgile::MathTools::max(ld.length, rd.length)
-          
-          # Say what will be done
-          say "#"*size
-          say "### LEFT: #{ld}"
-          say "### RIGHT: #{rd}"
-          say "### Objects to add on LEFT", :green
-          say "### Objects to remove on LEFT", :red
-          say "#"*size
-          say "\n"
-          
-          to_remove = (left - right)
-          to_add    = (right - left)
-          say(to_add.to_yaml, :green)  
-          say(to_remove.to_yaml, :red)  
-        end
-      
         # Executes the command
         def execute_command
           with_current_config{|config|
             left = config.effective_schema(true)
             right = config.announced_schema(true)
-            merged = DbAgile::Core::Schema::Computations::merge(left, right)
+            merged = DbAgile::Core::Schema::merge(left, right)
             
             # format debug
             ld, rd = left.schema_identifier, right.schema_identifier

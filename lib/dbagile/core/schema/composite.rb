@@ -57,6 +57,11 @@ module DbAgile
             p._sanity_check(schema) 
           }
         end
+        
+        # Checks this composite's semantics and collects errors inside buffer
+        def collect_semantical_errors(buffer = [])
+          parts.each{|p| p.collect_semantical_errors(buffer)}
+        end
       
         ############################################################################
         ### Public interface
@@ -109,7 +114,7 @@ module DbAgile
         # @see DbAgile::Core::SchemaObject
         def []=(name, part, annotation = nil)
           if @composite_parts.key?(name)
-            raise ArgumentError, "A part already exists with name '#{name}'" 
+            raise SchemaConflictError.new(self[name], part)
           end
           @composite_parts[name] = part
           part.send(:parent=, self)

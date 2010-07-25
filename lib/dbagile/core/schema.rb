@@ -21,6 +21,11 @@ module DbAgile
       end
       module_function :new
 
+
+      ##############################################################################
+      ### About schema building 
+      ##############################################################################
+      
       # 
       # Creates a builder instance
       #
@@ -37,6 +42,11 @@ module DbAgile
       end
       module_function :yaml_builder
 
+
+      ##############################################################################
+      ### About Schema and YAML 
+      ##############################################################################
+      
       #
       # Loads a database schema from a YAML string
       #
@@ -75,6 +85,48 @@ module DbAgile
       end
       module_function :yaml_file_load
         
+
+      ##############################################################################
+      ### About Schema computations
+      ##############################################################################
+      
+      # Resolver block that raises a SchemaConflictError
+      DEFAULT_CONFLICT_RESOLVER_BLOCK = lambda{|left,right|
+        raise SchemaConflictError.new(left, right)
+      }
+      
+      #
+      # Computes a new schema by difference.
+      #
+      # @param [DbAgile::Core::Schema::DatabaseSchema] left reference schema
+      # @param [DbAgile::Core::Schema::DatabaseSchema] right retrieval schema
+      # @param [DbAgile::Core::Schema::Builder] builder to use for the operation
+      #
+      def minus(left, right, 
+                builder = DbAgile::Core::Schema::builder)
+        Computations::minus(left, right, builder)
+      end
+      module_function :minus
+      
+      #
+      # Computes a new schema by merging two other schemas.
+      #
+      # @param [DbAgile::Core::Schema::DatabaseSchema] left schema one
+      # @param [DbAgile::Core::Schema::DatabaseSchema] right schema two
+      # @param [DbAgile::Core::Schema::Builder] builder to use for merging
+      # @param [Proc] conflict_resolver a optional block that resolves merging 
+      #               conflicts
+      #
+      def merge(left, right, 
+                builder = DbAgile::Core::Schema::builder, 
+                &conflict_resolver)
+        if conflict_resolver.nil?
+          conflict_resolver = DEFAULT_CONFLICT_RESOLVER_BLOCK
+        end
+        Computations::merge(left, right, builder, &conflict_resolver)
+      end
+      module_function :merge
+      
     end # module Schema
   end # module Core
 end # module DbAgile

@@ -30,6 +30,10 @@ module DbAgile
           []
         end
         
+        # Checks this composite's semantics and collects errors inside buffer
+        def collect_semantical_errors(buffer = [])
+        end
+      
         # @see DbAgile::Core::Schema
         def visit(&block)
           block.call(self, parent)

@@ -12,7 +12,7 @@ module DbAgile
           }
           
           # Computes set difference between schemas.
-          def merge(left, right, builder = DbAgile::Core::Schema::builder, &block)
+          def merge(left, right, builder, &block)
             unless left.class == right.class
               raise ArgumentError, "#{left.class} != #{right.class}"
             end

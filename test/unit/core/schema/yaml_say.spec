@@ -7,7 +7,8 @@ describe "DbAgile::Core::Schema / to_yaml_str" do
   it "should not print the ---" do
     env = DbAgile::default_environment
     env.output_buffer = StringIO.new
-    lambda{ (left + right).yaml_say(env) }.should_not raise_error
+    merged = DbAgile::Core::Schema::merge(left, right){|l,r| nil}
+    lambda{ merged.yaml_say(env) }.should_not raise_error
   end
   
 end

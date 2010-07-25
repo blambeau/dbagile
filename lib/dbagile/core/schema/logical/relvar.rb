@@ -14,9 +14,9 @@ module DbAgile
           end
           
           ############################################################################
-          ### Equality and hash code
+          ### Private interface
           ############################################################################
-        
+          
           # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
           def _install_eigenclass_methods?
             true
@@ -34,11 +34,30 @@ module DbAgile
             super(schema)
           end
         
+          ############################################################################
+          ### Pseudo-private SchemaObject interface
+          ############################################################################
+          
           # Returns the arguments to pass to builder handler
           def builder_args
             [ name ]
           end
 
+          ############################################################################
+          ### Public check interface
+          ############################################################################
+          
+          # Checks this composite's semantics and collects errors inside buffer
+          def collect_semantical_errors(buffer = [])
+            buffer << MissingPrimaryKeyError.new(self) if primary_key(false).nil?
+            super(buffer)
+          end
+      
+          ############################################################################
+          ### Public navigation interface
+          ############################################################################
+          public 
+          
           # Yields the block with each attribute 
           def each_attribute(&block)
             heading.each_attribute(&block)
@@ -50,7 +69,7 @@ module DbAgile
               return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
             }
             if raise_if_unfound
-              raise MissingPrimaryKeyError, "Relation variable #{name} has no primary key!"
+              raise MissingPrimaryKeyError.new(self)
             else
               nil
             end

@@ -38,13 +38,13 @@ module DbAgile
       
         # Applies schema minus
         def minus(other)
-          Schema::Computations::minus(self, other)
+          Schema::minus(self, other)
         end
         alias :- :minus
       
         # Applies schema merging
         def merge(other)
-          Schema::Computations::merge(self, other)
+          Schema::merge(self, other)
         end
         alias :+ :merge
       
