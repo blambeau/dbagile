@@ -63,6 +63,11 @@ module DbAgile
         ############################################################################
         public
       
+        # Returns an array with part dependencies
+        def dependencies(raise_error_on_unfound = true)
+          parts.collect{|p| p.dependencies(raise_error_on_unfound)}.flatten.uniq
+        end
+        
         # @see DbAgile::Core::Schema
         def visit(&block)
           block.call(self, parent)
