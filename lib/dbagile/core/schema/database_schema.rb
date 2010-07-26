@@ -57,6 +57,17 @@ module DbAgile
         alias :inspect :to_yaml
       
 
+        # Returns a yaml string
+        def yaml_say(env, 
+                     options = {}, 
+                     colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
+                     indent = 0)
+          env.say("---\nlogical:")
+          self.logical.yaml_say(env, options, colors, indent + 1)
+          env.say("\n---\nphysical:")
+          self.physical.yaml_say(env, options, colors, indent + 1)
+        end
+        
         ############################################################################
         ### Computations
         ############################################################################
@@ -73,18 +84,20 @@ module DbAgile
         end
         alias :+ :merge
         
-        # Applies schema checking and raises a SchemaSemanticsError if something
-        # is wrong.
+        # Applies schema checking and raises a SchemaSemanticsError if something is wrong.
         def check!(raise_on_error = true)
           errors = SchemaSemanticsError.new(self)
           _semantics_check(SchemaSemanticsError, errors)
-          if errors.empty?
-            raise_on_error ? self : errors
-          elsif raise_on_error
+          if raise_on_error and not(errors.empty?)
             raise errors
           else
             errors
           end
+        end
+        
+        # Convenient method for <code>schema.check!(false).empty?</code>
+        def looks_valid?
+          check!(false).empty?
         end
       
       end # class DatabaseSchema

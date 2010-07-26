@@ -5,6 +5,11 @@ module DbAgile
     #
     module Console
       
+      # Colorizes a string
+      def color(str, color)
+        @highline.color(str, color)
+      end
+      
       # Forces the console width
       def console_width=(width)
         @console_width = width

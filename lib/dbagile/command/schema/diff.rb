@@ -22,7 +22,7 @@ module DbAgile
         def add_options(opt)
           opt.separator nil
           opt.separator "Options:"
-          opt.on("--[no-]skip-unchanged", 
+          opt.on("--[no-]skip-unchanged", "-u",
                  "Don't show objects that did'nt change") do |value|
             self.output_options[:skip_unchanged] = value
           end
@@ -36,24 +36,39 @@ module DbAgile
         # Executes the command
         def execute_command
           with_current_config{|config|
-            left, right = config.effective_schema(true), config.announced_schema(true)
-            merged = DbAgile::Core::Schema::merge(left.check!, right.check!)
+            # left schema
+            left = config.effective_schema(true)
+            right = config.announced_schema(true)
+            merged = DbAgile::Core::Schema::merge(left, right)
             
-            # format debug
-            ld, rd = left.schema_identifier, right.schema_identifier
-            ld, rd = ld.inspect, rd.inspect
-            size = 50 + DbAgile::MathTools::max(ld.length, rd.length)
-
-            # Say what will be done
-            say "#"*size
+            # Validity
+            if left.looks_valid?
+              lv = environment.color("(valid!)", :green)
+            else
+              lv = environment.color("(WARNING, you'd better run 'dba schema:check --effective')", :magenta)
+            end
+            if right.looks_valid?
+              rv = environment.color("(valid!)", :green)
+            else
+              rv = environment.color("(WARNING, you'd better run 'dba schema:check')", :magenta)
+            end
+            
+            # Debug
+            ld, rd = left.schema_identifier.inspect, right.schema_identifier.inspect
+            ld, rd = "#{ld} #{lv}", "#{rd} #{rv}"
+            
+            # Say
+            say '###'
             say "### LEFT: #{ld}"
             say "### RIGHT: #{rd}"
-            say "### Objects to add on LEFT", :green
-            say "### Objects to remove on LEFT", :red
-            say "### Objects to alter on LEFT", :cyan
-            say "#"*size
+            say '###'
+            say "### " + environment.color('Objects to add on LEFT', :green)
+            say '### ' + environment.color('Objects to remove on LEFT', :red)
+            say '### ' + environment.color('Objects to alter on LEFT', :cyan)
+            say '###'
             say "\n"
             merged.yaml_say(environment, output_options)
+
           }
         end
       
