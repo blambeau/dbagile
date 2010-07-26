@@ -10,29 +10,25 @@ module DbAgile
       # With a single YAML file argument, loads the schema from file and checks it.
       #
       class Check < Command
-        include Schema::ComparisonBased
+        include Schema::SchemaBased
         Command::build_me(self, __FILE__)
       
         # Schema to check
         attr_accessor :schema
       
-        # Output options
-        attr_reader :output_options
-      
-        # Sets the default options
-        def set_default_options
-          @output_options = {}
+        # Contribute to options
+        def add_options(opt)
+          opt.separator nil
+          opt.separator "Options:"
+          add_effective_pysical_options(opt)
         end
-    
+        
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           case arguments.size
             when 0
-              self.schema = with_current_config{|config| config.announced_schema(true)}
             when 1
-              file = valid_read_file!(arguments.shift)
-              self.schema = DbAgile::Core::Schema::yaml_file_load(file)
-              self.schema.schema_identifier = file
+              self.schema_file = valid_read_file!(arguments.shift)
             else
               bad_argument_list!(arguments)
           end
@@ -40,17 +36,19 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          errors = self.schema.check!(false)
-          say("\n")
-          if errors.empty?
-            say("Valid schema (#{schema.schema_identifier})!", :green)
+          with_schema do |schema|
+            errors = schema.check!(false)
             say("\n")
-            return self.schema
-          else
-            say("Invalid schema (#{schema.schema_identifier}):", :red)
-            errors.error_messages.each{|m| say("  * #{m}")}
-            say("\n")
-            return errors
+            if errors.empty?
+              say("Valid schema (#{schema.schema_identifier.inspect})!", :green)
+              say("\n")
+              schema
+            else
+              say("Invalid schema (#{schema.schema_identifier.inspect}):", :red)
+              errors.error_messages.each{|m| say("  * #{m}")}
+              say("\n")
+              errors
+            end
           end
         end
       
