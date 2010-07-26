@@ -96,6 +96,11 @@ module DbAgile
             @composite_parts.empty?
           end
         end
+        
+        # Returns number of parts
+        def size
+          @composite_parts.size
+        end
       
         # @see DbAgile::Core::SchemaObject
         def part_keys(sort = false)

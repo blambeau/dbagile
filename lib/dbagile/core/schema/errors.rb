@@ -56,18 +56,21 @@ module DbAgile
   class SchemaSemanticsError < DbAgile::SchemaError
     
     # Object-specific error tree
-    InvalidDatabaseSchema          =                         0x1000000            #
-      InvalidLogicalSchema         = InvalidDatabaseSchema |   0x0100000          # 
-        InvalidRelvar              = InvalidLogicalSchema  |     0x0010000        #
-          InvalidHeading           = InvalidRelvar         |       0x0001000      #
-            InvalidAttribute       = InvalidHeading        |         0x0000100    #
-              InvalidDefaultValue  = InvalidAttribute      |           0x0000010  # schema_object=Attribute
-          InvalidConstraints       = InvalidRelvar         |       0x0002000      # 
-            MissingPrimaryKey      = InvalidConstraints    |         0x0000100    # schema_object=Relvar
-            InvalidConstraint      = InvalidConstraints    |         0x0000200    # schema_object=Constraint
-              InvalidCandidateKey  = InvalidConstraint     |           0x0000010  # schema_object=CandidateKey
-              InvalidForeignKey    = InvalidConstraint     |           0x0000020  # schema_object=ForeignKey
-      InvalidPhysicalSchema        = InvalidDatabaseSchema |   0x0200000
+    InvalidDatabaseSchema           =                         0x1000000            #
+      InvalidLogicalSchema          = InvalidDatabaseSchema |   0x0100000          # 
+        InvalidRelvar               = InvalidLogicalSchema  |     0x0010000        #
+          InvalidHeading            = InvalidRelvar         |       0x0001000      #
+            UnsupportedEmptyHeading = InvalidHeading        |         0x0000100    # schema_object=Heading
+            InvalidAttribute        = InvalidHeading        |         0x0000200    #
+              InvalidDefaultValue   = InvalidAttribute      |           0x0000010  # schema_object=Attribute
+          InvalidConstraints        = InvalidRelvar         |       0x0002000      # 
+            MissingPrimaryKey       = InvalidConstraints    |         0x0000100    # schema_object=Relvar
+            InvalidConstraint       = InvalidConstraints    |         0x0000200    # schema_object=Constraint
+              InvalidCandidateKey   = InvalidConstraint     |           0x0000010  # schema_object=CandidateKey
+              InvalidForeignKey     = InvalidConstraint     |           0x0000020  # schema_object=ForeignKey
+      InvalidPhysicalSchema         = InvalidDatabaseSchema |   0x0200000
+        InvalidIndexes              = InvalidPhysicalSchema |     0x0010000        #
+          InvalidIndex              = InvalidIndexes        |       0x0001000      #
       
     # General flags  
     NoSuchRelvar                   = 0x0000001  # :relvar_name
@@ -76,15 +79,23 @@ module DbAgile
     # User-defined messages
     MESSAGE_KEYS = [ 
       InvalidDefaultValue, 
+      UnsupportedEmptyHeading, 
       MissingPrimaryKey,
       InvalidConstraint,
+      
+      InvalidIndex,
+      
       NoSuchRelvar,
       NoSuchRelvarAttributes
     ]
     MESSAGE_VALUES = [
       'invalid default value on attribute #{schema_object.name}',
+      'relvar #{schema_object.relation_variable.name} has an empty heading (unsupported so far)',
       'relvar #{schema_object.name} has no primary key',
       'invalid constraint #{schema_object.name} on #{schema_object.relation_variable.name}',
+      
+      'invalid index #{schema_object.name}',
+      
       'no such relvar #{args[:relvar_name]}',
       'no such attributes #{args[:attributes].join(\',\')}'
     ]

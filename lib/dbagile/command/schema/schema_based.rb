@@ -30,7 +30,7 @@ module DbAgile
         def with_schema
           schema = nil
           if schema_file
-            file = valid_read_file!(arguments.shift)
+            file = valid_read_file!(schema_file)
             schema = DbAgile::Core::Schema::yaml_file_load(file)
             schema.schema_identifier = file
           elsif reference

@@ -5,6 +5,9 @@ logical:
       ID: { domain: Integer, mandatory: true }
     constraints:
       pk: { type: :primary_key, attributes: [ 'ID' ]}
+  EMPTY: 
+    heading: {}
+    constraints: {}
   MISSING_PRIMARY_KEY: 
     heading: 
       ID: { domain: Integer, mandatory: true }
@@ -31,3 +34,8 @@ logical:
     constraints: 
       pk: { type: :primary_key, attributes: [ 'ID' ]}
       fk: { type: :foreign_key, references: 'VALID_WITH_SINGLE_PK', source: [ 'ID' ], target: [ 'NONE' ] }
+---
+physical:
+  indexes:
+    INVALID_INDEX_NO_SUCH_RELVAR: { relvar: NOSUCH_RELVAR, attributes: ['ID'] }
+    INVALID_INDEX_NO_SUCH_ATTR:   { relvar: VALID_WITH_SINGLE_PK, attributes: ['NOSUCH_ATTR'] }

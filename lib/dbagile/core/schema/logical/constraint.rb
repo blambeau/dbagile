@@ -4,11 +4,6 @@ module DbAgile
       class Logical
         class Constraint < Schema::Part
           
-          # Returns the relation variable on which this key is installed.
-          def relation_variable
-            parent.parent
-          end
-        
           ############################################################################
           ### Constraint factory
           ############################################################################

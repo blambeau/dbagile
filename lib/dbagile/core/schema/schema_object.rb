@@ -14,6 +14,17 @@ module DbAgile
           @schema ||= (parent && parent.schema)
         end
         
+        # Returns relation variable of this object, if any
+        def relation_variable
+          if self.kind_of?(DbAgile::Core::Schema::Logical::Relvar)
+            self
+          elsif parent
+            parent.relation_variable
+          else
+            raise NoMethodError, "undefined method relation_variable for #{self.class}"
+          end
+        end
+        
         # Returns true if this schema object is composite, false
         # otherwise
         def composite?
