@@ -45,12 +45,12 @@ module DbAgile
             if left.looks_valid?
               lv = environment.color("(valid!)", :green)
             else
-              lv = environment.color("(WARNING, you'd better run 'dba schema:check --effective')", :magenta)
+              lv = environment.color("(INVALID, you'd better run 'dba schema:check --effective')", HighLine::RED + HighLine::BOLD)
             end
             if right.looks_valid?
               rv = environment.color("(valid!)", :green)
             else
-              rv = environment.color("(WARNING, you'd better run 'dba schema:check')", :magenta)
+              rv = environment.color("(INVALID, you'd better run 'dba schema:check')", HighLine::RED + HighLine::BOLD)
             end
             
             # Debug
