@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Schema
       #
-      # Checks a relational schema
+      # Check a relational schema
       #
       # Usage: dba #{command_name} [FILE]
       #

@@ -22,7 +22,7 @@ module DbAgile
       
         # Returns command's category
         def category
-          :schema
+          :sql
         end
 
         # Normalizes the pending arguments
