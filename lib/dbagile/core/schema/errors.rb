@@ -113,12 +113,17 @@ module DbAgile
     
     # Returns a friendly message
     def message(long = false)
-      buffer = "Schema #{schema.schema_identifier} contains semantics errors"
+      buffer = "Schema #{schema.schema_identifier} contains errors"
       if long
         buffer << ":\n"
-        errors.each{|e| buffer << "  * " << error_to_message(*e) << "\n"}
+        error_messages.each{|m| buffer << "  * " << m << "\n"}
       end
       buffer
+    end
+    
+    # Returns an arry of error messages
+    def error_messages
+      errors.collect{|e|error_to_message(*e)}
     end
     
     # Returns number of sub errors

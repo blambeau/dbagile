@@ -61,6 +61,8 @@ module DbAgile
           builder._natural(doc)
         }
         builder._dump
+      rescue SByC::TypeSystem::CoercionError => ex
+        raise DbAgile::SchemaSyntaxError, "Syntax error in schema: #{ex.message}"
       end
       module_function :yaml_load
     

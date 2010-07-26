@@ -99,7 +99,13 @@ module DbAgile
       
         # Adds a configuration instance
         def <<(config)
-          config.file_resolver = lambda{|f| File.expand_path("../#{f}", self.file) }
+          config.file_resolver = lambda{|f| 
+            if f[0, 1] == '/'
+              f
+            else
+              ::File.expand_path("../#{f}", self.file) 
+            end
+          }
           self.configurations << config
         end
       

@@ -29,7 +29,7 @@ module DbAgile
             cfg
           }
           unless config_file.nil?
-            config_file.configurations << created
+            config_file << created
           end
           created
         end

@@ -6,7 +6,7 @@ module DbAgile
         alias :each :visit
       
         # Identifier of this schema
-        attr_reader :schema_identifier
+        attr_accessor :schema_identifier
       
         # Creates a schema instance
         def initialize(schema_identifier = nil, parts = _default_parts)
@@ -78,7 +78,9 @@ module DbAgile
         def check!(raise_on_error = true)
           errors = SchemaSemanticsError.new(self)
           _semantics_check(SchemaSemanticsError, errors)
-          if raise_on_error and not(errors.empty?)
+          if errors.empty?
+            raise_on_error ? self : errors
+          elsif raise_on_error
             raise errors
           else
             errors

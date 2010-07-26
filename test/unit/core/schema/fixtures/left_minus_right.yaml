@@ -10,7 +10,7 @@ logical:
       added_constraint: { type: :foreign_key, references: ADDED_COLUMNS_ON_LEFT, source: [ 'ID' ], target: [ 'ID' ]}
   CONFLICTING_HEADING: 
     heading: 
-      CONFLICT:    { domain: Integer, mandatory: true, default: :autonumber }
+      CONFLICT:    { domain: Integer, mandatory: true }
     constraints: {}
   DROPPED_COLUMNS_ON_LEFT:
     heading: {}
@@ -20,7 +20,7 @@ logical:
     constraints: {}
   ONLY_ON_LEFT_RELVAR: 
     heading: 
-      ID:    { domain: Integer, mandatory: true, default: :autonumber }
+      ID:    { domain: Integer, mandatory: true }
     constraints: 
       pk: { type: :primary_key, attributes: [ 'ID' ] }
   SAME: {}

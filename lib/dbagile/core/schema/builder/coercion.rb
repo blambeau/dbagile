@@ -30,8 +30,8 @@ module DbAgile
           end
         
           # Raises a coercion error
-          def coercion_error!
-            raise ::SByC::TypeSystem::CoercionError, caller
+          def coercion_error!(msg = "")
+            raise ::SByC::TypeSystem::CoercionError, msg, caller
           end
         
           # Asserts that all args are not nil
@@ -46,7 +46,7 @@ module DbAgile
           def not_nil_hash!(hash)
             not_nil!(hash)
             unless hash.kind_of?(Hash)
-              coercion_error!
+              coercion_error!("Hash expected, #{hash.class} received")
             end
             hash
           end
@@ -156,6 +156,8 @@ module DbAgile
           # Coerces a constraint definition
           def coerce_constraint_definition(defn)
             defn = coerce_symbolized_hash(defn)
+            not_nil!(defn[:type])
+            defn[:type] = defn[:type].to_sym
             case type = defn[:type]
               when :primary_key, :candidate_key, :key
                 defn[:attributes] = coerce_attribute_names(defn[:attributes], true)

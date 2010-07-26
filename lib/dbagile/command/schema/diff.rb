@@ -36,9 +36,8 @@ module DbAgile
         # Executes the command
         def execute_command
           with_current_config{|config|
-            left = config.effective_schema(true)
-            right = config.announced_schema(true)
-            merged = DbAgile::Core::Schema::merge(left, right)
+            left, right = config.effective_schema(true), config.announced_schema(true)
+            merged = DbAgile::Core::Schema::merge(left.check!, right.check!)
             
             # format debug
             ld, rd = left.schema_identifier, right.schema_identifier
