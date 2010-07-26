@@ -21,6 +21,10 @@ module DbAgile
           raise SchemaInternalError, "No definition provided on #{self}" if definition.nil?
         end
         
+        # Checks this composite's semantics and collect errors
+        def _semantics_check(clazz, buffer)
+        end
+        
         ############################################################################
         ### Schema::SchemaObject
         ############################################################################
@@ -30,11 +34,6 @@ module DbAgile
           []
         end
         
-        # Checks this composite's semantics and collects errors inside buffer
-        def semantical_errors
-          []
-        end
-      
         # @see DbAgile::Core::Schema
         def visit(&block)
           block.call(self, parent)

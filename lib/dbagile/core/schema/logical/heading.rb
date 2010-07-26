@@ -10,6 +10,13 @@ module DbAgile
           def each_attribute(&block)
             attributes.each(&block)
           end
+          
+          # Checks if this heading has some attributes (through 
+          # names)
+          def has_attributes?(names)
+            parts = composite_parts
+            names.all?{|k| parts.key?(k)}
+          end
         
         end # class Heading
       end # class Logical

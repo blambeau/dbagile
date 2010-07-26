@@ -57,16 +57,16 @@ module DbAgile
             p._sanity_check(schema) 
           }
         end
+      
+        # Checks this composite's semantics and collect errors
+        def _semantics_check(clazz, buffer)
+          parts.collect{|p| p._semantics_check(clazz, buffer)}
+        end
         
         ############################################################################
         ### Public interface
         ############################################################################
         public
-      
-        # Checks this composite's semantics and collects errors inside buffer
-        def semantical_errors
-          parts.collect{|p| p.semantical_errors}.flatten
-        end
       
         # Returns an array with part dependencies
         def dependencies(raise_error_on_unfound = true)

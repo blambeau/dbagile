@@ -13,12 +13,12 @@ module DbAgile
           @schema_identifier = schema_identifier
           super(parts)
         end
+
         
-        # Overrided to return self.
-        def schema
-          self
-        end
-      
+        ############################################################################
+        ### Private interface
+        ############################################################################
+          
         # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
         def _install_eigenclass_methods?
           true
@@ -29,13 +29,38 @@ module DbAgile
           {:logical  => Schema::Logical.new,
            :physical => Schema::Physical.new}
         end
+
         
+        ############################################################################
+        ### SchemaObject
+        ############################################################################
+          
+        # Overrided to return self.
+        def schema
+          self
+        end
+      
+        # @see DbAgile::Core::Schema::SchemaObject
+        def dup
+          DatabaseSchema.new(schema_identifier, _dup_parts)
+        end
+
+        
+        ############################################################################
+        ### IO
+        ############################################################################
+          
         # Dumps the schema to YAML
         def to_yaml(opts = {})
           YAML::dump_stream({'logical' => logical}, {'physical' => physical})
         end
         alias :inspect :to_yaml
       
+
+        ############################################################################
+        ### Computations
+        ############################################################################
+          
         # Applies schema minus
         def minus(other)
           Schema::minus(self, other)
@@ -47,22 +72,19 @@ module DbAgile
           Schema::merge(self, other)
         end
         alias :+ :merge
-      
-        # Yields the block with each relvar in turn
-        def each_relvar(&block)
-          logical.each(&block)
+        
+        # Applies schema checking and raises a SchemaSemanticsError if something
+        # is wrong.
+        def check!(raise_on_error = true)
+          errors = SchemaSemanticsError.new(self)
+          _semantics_check(SchemaSemanticsError, errors)
+          if raise_on_error and not(errors.empty?)
+            raise errors
+          else
+            errors
+          end
         end
       
-        # @see DbAgile::Core::Schema::SchemaObject
-        def dup
-          DatabaseSchema.new(schema_identifier, _dup_parts)
-        end
-          
-        # Returns a yaml string
-        def to_yaml_str
-          to_yaml
-        end
-
       end # class DatabaseSchema
     end # module Schema
   end # module Core

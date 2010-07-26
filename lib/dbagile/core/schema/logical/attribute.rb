@@ -20,6 +20,17 @@ module DbAgile
           end
         
           ############################################################################
+          ### Check interface
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def _semantics_check(clazz, buffer)
+            unless default_value.nil? or default_value.kind_of?(domain)
+              buffer.add_error(self, clazz::InvalidDefaultValue)
+            end
+          end
+      
+          ############################################################################
           ### About IO
           ############################################################################
         

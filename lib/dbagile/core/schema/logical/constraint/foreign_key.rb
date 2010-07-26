@@ -4,21 +4,45 @@ module DbAgile
       class Logical
         class ForeignKey < Constraint
         
-          # Returns source table attributes
-          def source_attributes
-            definition[:source]
+          # Returns relation variable on which this foreign key is installed.
+          def source_relvar
+            parent.parent
           end
+          alias :referencing_relvar :source_relvar
           
-          # Returns the referenced table
-          def referenced
-            definition[:references]
+          # Returns target relation variable (aka) referenced_relvar
+          def target_relvar
+            schema.logical.relation_variable(definition[:references])
           end
+          alias :referenced_relvar :target_relvar
+          
+          ############################################################################
+          ### Public check interface
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def _semantics_check(clazz, errors)
+            if (srv = source_relvar).nil?
+              raise DbAgile::SchemaInternalError, "Foreign key without source relvar"
+            elsif !srv.has_attributes?(definition[:source])
+              code = clazz::InvalidForeignKey | clazz::NoSuchRelvarAttributes
+              errors.add_error(self, code, :relvar_name => srv.name,
+                                           :attributes  => definition[:source])
+            end
+            if (trv = target_relvar).nil?
+              code = clazz::InvalidForeignKey | clazz::NoSuchRelvar
+              errors.add_error(self, code, :relvar_name => definition[:references])
+            elsif !trv.has_attributes?(definition[:target])
+              code = clazz::InvalidForeignKey | clazz::NoSuchRelvarAttributes
+              errors.add_error(self, code, :relvar_name => trv.name,
+                                           :attributes  => definition[:target])
+            end
+          end
+      
+          ############################################################################
+          ### About IO
+          ############################################################################
         
-          # Returns target table attributes
-          def target_attributes
-            definition[:target]
-          end
-          
           # Delegation pattern on YAML flushing
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|

@@ -34,6 +34,14 @@ module DbAgile
             super(schema)
           end
         
+          # Checks this composite's semantics and collects errors inside buffer
+          def _semantics_check(clazz, buffer)
+            if primary_key(false).nil?
+              buffer.add_error(self, clazz::MissingPrimaryKey)
+            end
+            super(clazz, buffer)
+          end
+      
           ############################################################################
           ### Pseudo-private SchemaObject interface
           ############################################################################
@@ -44,17 +52,6 @@ module DbAgile
           end
 
           ############################################################################
-          ### Public check interface
-          ############################################################################
-          
-          # Checks this composite's semantics and collects errors inside buffer
-          def semantical_errors
-            buffer = super
-            buffer << MissingPrimaryKeyError.new(self) if primary_key(false).nil?
-            buffer
-          end
-      
-          ############################################################################
           ### Public navigation interface
           ############################################################################
           public 
@@ -62,6 +59,11 @@ module DbAgile
           # Yields the block with each attribute 
           def each_attribute(&block)
             heading.each_attribute(&block)
+          end
+          
+          # Checks if this relation variable has attributes
+          def has_attributes?(names)
+            heading.has_attributes?(names)
           end
           
           # Returns the relation variable primary key

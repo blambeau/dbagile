@@ -2,6 +2,12 @@ module DbAgile
   module Core
     module Schema
       class Logical < Schema::Composite
+        
+        # Returns a relation variable by its name
+        def relation_variable(name)
+          self[name]
+        end
+        
       end # class Logical
     end # module Schema
   end # module Core
