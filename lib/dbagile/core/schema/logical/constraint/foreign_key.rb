@@ -65,8 +65,18 @@ module DbAgile
             if trg_key.nil? or not(trg_key.candidate_key?)
               code = clazz::InvalidForeignKey | clazz::NoSuchCandidateKey
               errors.add_error(self, code, :constraint_name => definition[:key])
+              failed = true
             end
+            return if failed
             
+            source_attrs, target_attrs = source_attributes, trg_key.key_attributes
+            if source_attrs.size != target_attrs.size
+              code = clazz::InvalidForeignKey | clazz::TargetKeyMismatch
+              errors.add_error(self, code, :constraint_name => definition[:key])
+            elsif source_attrs.collect{|a| a.domain} != target_attrs.collect{|a| a.domain}
+              code = clazz::InvalidForeignKey | clazz::TargetKeyMismatch
+              errors.add_error(self, code, :constraint_name => definition[:key])
+            end
           end
       
           ############################################################################

@@ -28,6 +28,25 @@ logical:
     constraints: 
       pk: { type: primary_key, attributes: [ 'ID' ]}
       fk: { type: foreign_key, attributes: [ 'NONE' ], references: 'VALID_WITH_SINGLE_PK' }
+  BAD_FOREIGN_KEY_NO_SUCH_TARGET_KEY: 
+    heading: 
+      ID: { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: primary_key, attributes: [ 'ID' ]}
+      fk: { type: foreign_key, attributes: [ 'ID' ], references: 'VALID_WITH_SINGLE_PK', key: no_suck_pk }
+  BAD_FOREIGN_KEY_TARGET_KEY_SIZE_MISMATCH: 
+    heading: 
+      ID:   { domain: Integer, mandatory: true }
+      NAME: { domain: String, mandatory: true }
+    constraints: 
+      pk: { type: primary_key, attributes: [ 'ID' ]}
+      fk: { type: foreign_key, attributes: [ 'ID', 'NAME' ], references: 'VALID_WITH_SINGLE_PK' }
+  BAD_FOREIGN_KEY_TARGET_KEY_MISMATCH: 
+    heading: 
+      ID: { domain: String, mandatory: true }
+    constraints: 
+      pk: { type: primary_key, attributes: [ 'ID' ]}
+      fk: { type: foreign_key, attributes: [ 'ID' ], references: 'VALID_WITH_SINGLE_PK' }
 ---
 physical:
   indexes:

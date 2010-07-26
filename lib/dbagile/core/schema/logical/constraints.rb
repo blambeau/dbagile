@@ -13,7 +13,7 @@ module DbAgile
           end
           
           # Returns a constraint by name
-          def constraint_key_name(name)
+          def constraint_by_name(name)
             self[name]
           end
           

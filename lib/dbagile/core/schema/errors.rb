@@ -56,27 +56,27 @@ module DbAgile
   class SchemaSemanticsError < DbAgile::SchemaError
     
     # Object-specific error tree
-    InvalidDatabaseSchema           =                         0x1000000            #
-      InvalidLogicalSchema          = InvalidDatabaseSchema |   0x0100000          # 
-        InvalidRelvar               = InvalidLogicalSchema  |     0x0010000        #
-          InvalidHeading            = InvalidRelvar         |       0x0001000      #
-            UnsupportedEmptyHeading = InvalidHeading        |         0x0000100    # schema_object=Heading
-            InvalidAttribute        = InvalidHeading        |         0x0000200    #
-              InvalidDefaultValue   = InvalidAttribute      |           0x0000010  # schema_object=Attribute
-          InvalidConstraints        = InvalidRelvar         |       0x0002000      # 
-            MissingPrimaryKey       = InvalidConstraints    |         0x0000100    # schema_object=Relvar
-            InvalidConstraint       = InvalidConstraints    |         0x0000200    # schema_object=Constraint
-              InvalidCandidateKey   = InvalidConstraint     |           0x0000010  # schema_object=CandidateKey
-              InvalidForeignKey     = InvalidConstraint     |           0x0000020  # schema_object=ForeignKey
-      InvalidPhysicalSchema         = InvalidDatabaseSchema |   0x0200000
-        InvalidIndexes              = InvalidPhysicalSchema |     0x0010000        #
-          InvalidIndex              = InvalidIndexes        |       0x0001000      #
+    InvalidLogicalSchema          =                           0x1000000          # 
+      InvalidRelvar               = InvalidLogicalSchema  |     0x0100000        #
+        InvalidHeading            = InvalidRelvar         |       0x0010000      #
+          UnsupportedEmptyHeading = InvalidHeading        |         0x0001000    # schema_object=Heading
+          InvalidAttribute        = InvalidHeading        |         0x0002000    #
+            InvalidDefaultValue   = InvalidAttribute      |           0x0000100  # schema_object=Attribute
+        InvalidConstraints        = InvalidRelvar         |       0x0020000      # 
+          MissingPrimaryKey       = InvalidConstraints    |         0x0001000    # schema_object=Relvar
+          InvalidConstraint       = InvalidConstraints    |         0x0002000    # schema_object=Constraint
+            InvalidCandidateKey   = InvalidConstraint     |           0x0000100  # schema_object=CandidateKey
+            InvalidForeignKey     = InvalidConstraint     |           0x0000200  # schema_object=ForeignKey
+    InvalidPhysicalSchema         =                           0x2000000
+      InvalidIndexes              = InvalidPhysicalSchema |     0x0100000        #
+        InvalidIndex              = InvalidIndexes        |       0x0010000      #
       
     # General flags  
     NoSuchRelvar                   = 0x0000001  # :relvar_name
     NoSuchRelvarAttributes         = 0x0000002  # :relvar_name, :attributes
     NoSuchCandidateKey             = 0x0000004  # :constraint_name
     AttributeMismatch              = 0x0000008  # 
+    TargetKeyMismatch              = 0x0000010  # 
     
     # User-defined messages
     MESSAGE_KEYS = [ 
@@ -90,7 +90,8 @@ module DbAgile
       NoSuchRelvar,
       NoSuchRelvarAttributes,
       NoSuchCandidateKey,
-      AttributeMismatch
+      AttributeMismatch,
+      TargetKeyMismatch
     ]
     MESSAGE_VALUES = [
       'invalid default value on attribute #{schema_object.name}',
@@ -103,7 +104,8 @@ module DbAgile
       'no such relvar #{args[:relvar_name]}',
       'no such attributes #{args[:attributes].join(\',\')}',
       'no such candidate key #{args[:constraint_name]}',
-      'attribute mismatch'
+      'attribute mismatch',
+      'target key mismatch'
     ]
       
     # Involved schema object

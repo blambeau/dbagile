@@ -10,8 +10,9 @@ module DbAgile
           end
           
           # Returns key attributes
-          def attributes
-            definition[:attributes]
+          def key_attributes
+            rv = relation_variable
+            definition[:attributes].collect{|k| rv.heading[k]}
           end
           
           ############################################################################
@@ -21,10 +22,10 @@ module DbAgile
           # @see DbAgile::Core::Schema::SchemaObject
           def _semantics_check(clazz, buffer)
             rv = relation_variable
-            unless rv.heading.has_attributes?(attributes)
+            unless rv.heading.has_attributes?(definition[:attributes])
               error_code = clazz::InvalidCandidateKey | clazz::NoSuchRelvarAttributes
               buffer.add_error(self, error_code, :relvar_name => rv.name, 
-                                                 :attributes  => attributes)
+                                                 :attributes  => definition[:attributes])
             end
           end
       
