@@ -75,6 +75,7 @@ module DbAgile
     # General flags  
     NoSuchRelvar                   = 0x0000001  # :relvar_name
     NoSuchRelvarAttributes         = 0x0000002  # :relvar_name, :attributes
+    AttributeMismatch              = 0x0000004  # 
     
     # User-defined messages
     MESSAGE_KEYS = [ 
@@ -86,7 +87,8 @@ module DbAgile
       InvalidIndex,
       
       NoSuchRelvar,
-      NoSuchRelvarAttributes
+      NoSuchRelvarAttributes,
+      AttributeMismatch
     ]
     MESSAGE_VALUES = [
       'invalid default value on attribute #{schema_object.name}',
@@ -97,7 +99,8 @@ module DbAgile
       'invalid index #{schema_object.name}',
       
       'no such relvar #{args[:relvar_name]}',
-      'no such attributes #{args[:attributes].join(\',\')}'
+      'no such attributes #{args[:attributes].join(\',\')}',
+      'attribute mismatch'
     ]
       
     # Involved schema object

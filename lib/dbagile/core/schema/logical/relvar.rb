@@ -65,6 +65,11 @@ module DbAgile
           def has_attributes?(names)
             heading.has_attributes?(names)
           end
+
+          # Returns the domain of a specific attribute
+          def domain_of(attr_name)
+            heading.domain_of(attr_name)
+          end
           
           # Returns the relation variable primary key
           def primary_key(raise_if_unfound = true)

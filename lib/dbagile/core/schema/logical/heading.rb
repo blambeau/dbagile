@@ -17,6 +17,12 @@ module DbAgile
             parts = composite_parts
             names.all?{|k| parts.key?(k)}
           end
+          
+          # Returns the domain of a specific attribute
+          def domain_of(attr_name)
+            attribute = self[attr_name]
+            attribute ? attribute.domain : nil
+          end
         
           ############################################################################
           ### Private interface
