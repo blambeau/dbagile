@@ -39,11 +39,13 @@ module DbAgile
         display("\n")
         #
         display("Description:")
-        display("  " + command.summary) unless command.summary.empty?
+        display("  " + command.summary)
         #
         options = command.options.summarize
         unless options.empty?
           display(options.join)
+          display("\n")
+        else
           display("\n")
         end
         #

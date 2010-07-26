@@ -14,8 +14,8 @@ describe "::DbAgile::Command::command_for /" do
   end
   
   describe "when called with a string on a non root command" do
-    let(:arg){ "schema:heading" }
-    it{ should be_kind_of(::DbAgile::Command::Schema::Heading) }
+    let(:arg){ "sql:heading" }
+    it{ should be_kind_of(::DbAgile::Command::SQL::Heading) }
   end
   
   describe "when called with a symbol on a root command" do
@@ -24,8 +24,8 @@ describe "::DbAgile::Command::command_for /" do
   end
   
   describe "when called with a symbol on a non root command" do
-    let(:arg){ :schema_heading }
-    it{ should be_kind_of(::DbAgile::Command::Schema::Heading) }
+    let(:arg){ :sql_heading }
+    it{ should be_kind_of(::DbAgile::Command::SQL::Heading) }
   end
 
 end

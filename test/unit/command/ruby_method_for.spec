@@ -9,8 +9,8 @@ describe "::DbAgile::Command::ruby_method_for /" do
   end
   
   describe "when called on a non root command" do
-    let(:command){ DbAgile::Command::Schema::Heading }
-    it{ should == :schema_heading }
+    let(:command){ DbAgile::Command::SQL::Heading }
+    it{ should == :sql_heading }
   end
   
 end

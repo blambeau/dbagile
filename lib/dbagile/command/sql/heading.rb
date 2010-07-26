@@ -1,10 +1,13 @@
 module DbAgile
   class Command
-    module Schema
+    module SQL
       #
       # Show the heading of a table
       #
       # Usage: dba #{command_name} TABLE
+      #
+      # This commands shows a list with columns names and types for a given table
+      # of the current SQL database.
       #
       class Heading < Command
         Command::build_me(self, __FILE__)
@@ -31,6 +34,6 @@ module DbAgile
           end
         end
       end # class Heading
-    end # # module Schema
+    end # # module SQL
   end # class Command
 end # module DbAgile
