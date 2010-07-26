@@ -7,7 +7,7 @@ logical:
   ADDED_CONSTRAINT_ON_LEFT: 
     heading: {}
     constraints: 
-      added_constraint: { type: :foreign_key, references: ADDED_COLUMNS_ON_LEFT, source: [ 'ID' ], target: [ 'ID' ]}
+      added_constraint: { type: :foreign_key, attributes: [ 'ID' ], references: ADDED_COLUMNS_ON_LEFT}
   CONFLICTING_HEADING: 
     heading: 
       CONFLICT:    { domain: Integer, mandatory: true }

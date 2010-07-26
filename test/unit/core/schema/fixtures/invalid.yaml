@@ -4,7 +4,7 @@ logical:
     heading: 
       ID: { domain: Integer, mandatory: true }
     constraints:
-      pk: { type: :primary_key, attributes: [ 'ID' ]}
+      pk: { type: primary_key, attributes: [ 'ID' ]}
   EMPTY: 
     heading: {}
     constraints: {}
@@ -15,25 +15,19 @@ logical:
     heading: 
       ID: { domain: Integer, mandatory: true }
     constraints: 
-      pk: { type: :primary_key, attributes: [ 'NOT_EXISTS' ] }
+      pk: { type: primary_key, attributes: [ 'NOT_EXISTS' ] }
   BAD_FOREIGN_KEY_NO_SUCH_REFERENCED_RELVAR: 
     heading: 
       ID: { domain: Integer, mandatory: true }
     constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ]}
-      fk: { type: :foreign_key, references: 'NO', source: [ 'ID' ], target: [ 'ID' ] }
+      pk: { type: primary_key, attributes: [ 'ID' ]}
+      fk: { type: foreign_key, attributes: [ 'ID' ], references: 'NO' }
   BAD_FOREIGN_KEY_NO_SUCH_SOURCE_ATTRIBUTES: 
     heading: 
       ID: { domain: Integer, mandatory: true }
     constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ]}
-      fk: { type: :foreign_key, references: 'VALID_WITH_SINGLE_PK', source: [ 'NONE' ], target: [ 'ID' ] }
-  BAD_FOREIGN_KEY_NO_SUCH_TARGET_ATTRIBUTES: 
-    heading: 
-      ID: { domain: Integer, mandatory: true }
-    constraints: 
-      pk: { type: :primary_key, attributes: [ 'ID' ]}
-      fk: { type: :foreign_key, references: 'VALID_WITH_SINGLE_PK', source: [ 'ID' ], target: [ 'NONE' ] }
+      pk: { type: primary_key, attributes: [ 'ID' ]}
+      fk: { type: foreign_key, attributes: [ 'NONE' ], references: 'VALID_WITH_SINGLE_PK' }
 ---
 physical:
   indexes:

@@ -41,6 +41,14 @@ module DbAgile
             end
             args
           end
+          
+          # Asserts that all args are not empty
+          def not_empty!(*args)
+            if args.any?{|arg| arg.nil? or arg.to_s.empty?}
+              coercion_error!
+            end
+            args
+          end
         
           # Asserts that a hash is not nil and a hash
           def not_nil_hash!(hash)
@@ -50,10 +58,18 @@ module DbAgile
             end
             hash
           end
+          
+          def has_exactly_hash_keys!(hash, *keys)
+            not_nil!(hash)
+            unless keys.all?{|k| hash.key?(k)}
+              coercion_error!("Expected #{keys.inspect}, found #{hash.keys.inspect}")
+            end
+            hash
+          end
         
           # Asserts that a name is valid
           def valid_name!(name)
-            not_nil!(name)
+            not_empty!(name)
             unless [String, Symbol].include?(name.class)
               coercion_error!
             end
@@ -156,15 +172,23 @@ module DbAgile
           # Coerces a constraint definition
           def coerce_constraint_definition(defn)
             defn = coerce_symbolized_hash(defn)
-            not_nil!(defn[:type])
-            defn[:type] = defn[:type].to_sym
+            defn[:type] = coerce_name(defn[:type])
+            
             case type = defn[:type]
-              when :primary_key, :candidate_key, :key
+              when :primary_key, :candidate_key
+                has_exactly_hash_keys!(defn, :type, :attributes)
                 defn[:attributes] = coerce_attribute_names(defn[:attributes], true)
               when :foreign_key
-                defn[:references] = coerce_name(defn[:references])
-                defn[:source] = coerce_attribute_names(defn[:source], true)
-                defn[:target] = coerce_attribute_names(defn[:target], true)
+                if defn.key?(:key)
+                  has_exactly_hash_keys!(defn, :type, :attributes, :references, :key)
+                  defn[:attributes] = coerce_attribute_names(defn[:attributes], true)
+                  defn[:references] = coerce_name(defn[:references])
+                  defn[:key]        = coerce_name(defn[:key])
+                else
+                  has_exactly_hash_keys!(defn, :type, :attributes, :references)
+                  defn[:attributes] = coerce_attribute_names(defn[:attributes], true)
+                  defn[:references] = coerce_name(defn[:references])
+                end
               else
                 invalid!("unknown constraint type #{type}")
             end

@@ -18,7 +18,7 @@ module DbAgile
             if (trv = indexed_relvar).nil?
               code = clazz::InvalidIndex | clazz::NoSuchRelvar
               errors.add_error(self, code, :relvar_name => definition[:relvar])
-            elsif !trv.has_attributes?(definition[:attributes])
+            elsif !trv.heading.has_attributes?(definition[:attributes])
               code = clazz::InvalidIndex | clazz::NoSuchRelvarAttributes
               errors.add_error(self, code, :relvar_name => trv.name,
                                            :attributes  => definition[:attributes])

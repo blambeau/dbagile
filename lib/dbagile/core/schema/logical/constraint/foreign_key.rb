@@ -13,7 +13,7 @@ module DbAgile
           # Collects referencing attributes on the source relvar
           def source_attributes
             rv = source_relvar
-            definition[:source].collect{|attr_name| rv.heading[attr_name]}
+            definition[:attributes].collect{|attr_name| rv.heading[attr_name]}
           end
           
           # Returns target relation variable (aka) referenced_relvar
@@ -23,9 +23,13 @@ module DbAgile
           alias :referenced_relvar :target_relvar
           
           # Collects referencing attributes on the source relvar
-          def target_attributes
+          def target_key
             rv = target_relvar
-            definition[:target].collect{|attr_name| rv.heading[attr_name]}
+            if definition.key?(:key)
+              rv.constraints.constraint_by_name(definition[:key])
+            else
+              rv.constraints.primary_key
+            end
           end
           
           ############################################################################
@@ -47,33 +51,20 @@ module DbAgile
             end
             return if failed
             
-            # 2) Both exist, check attributes now
-            if !srv.has_attributes?(definition[:source])
+            # 2) Both exist, check source attributes
+            if !srv.heading.has_attributes?(definition[:attributes])
               code = clazz::InvalidForeignKey | clazz::NoSuchRelvarAttributes
               errors.add_error(self, code, :relvar_name => srv.name,
-                                           :attributes  => definition[:source])
-              failed = true
-            end
-            if !trv.has_attributes?(definition[:target])
-              code = clazz::InvalidForeignKey | clazz::NoSuchRelvarAttributes
-              errors.add_error(self, code, :relvar_name => trv.name,
-                                           :attributes  => definition[:target])
+                                           :attributes  => definition[:attributes])
               failed = true
             end
             return if failed
             
-            # 3) Both exist as well as attributes... type-checking now 
-            source_attrs, target_attrs = source_attributes, target_attributes
-            if source_attrs.size != target_attrs.size
-              code = clazz::InvalidForeignKey | clazz::AttributeMismatch
-              errors.add_error(self, code)
-            else
-              source_domains = source_attrs.collect{|a| a.domain}
-              target_domains = target_attrs.collect{|a| a.domain}
-              if source_domains != target_domains
-                code = clazz::InvalidForeignKey | clazz::AttributeMismatch
-                errors.add_error(self, code)
-              end
+            # 3) Check target key existence and kind now
+            trg_key = self.target_key
+            if trg_key.nil? or not(trg_key.candidate_key?)
+              code = clazz::InvalidForeignKey | clazz::NoSuchCandidateKey
+              errors.add_error(self, code, :constraint_name => definition[:key])
             end
             
           end
@@ -86,13 +77,14 @@ module DbAgile
           def to_yaml(opts = {})
             YAML::quick_emit(self, opts){|out|
               defn = definition
-              source = Schema::Builder::Coercion::unsymbolize_array(definition[:source])
-              target = Schema::Builder::Coercion::unsymbolize_array(definition[:target])
+              attributes = Schema::Builder::Coercion::unsymbolize_array(definition[:attributes])
+              references = definition[:references].to_s
+              key        = definition.key?(:key) ? definition[:key].to_s : nil
               out.map("tag:yaml.org,2002:map", :inline ) do |map|
                 map.add('type', definition[:type])
+                map.add('attributes', attributes)
                 map.add('references', definition[:references].to_s)
-                map.add('source', source)
-                map.add('target', target)
+                map.add('key', key) unless key.nil?
               end
             }
           end

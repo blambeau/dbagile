@@ -75,7 +75,8 @@ module DbAgile
     # General flags  
     NoSuchRelvar                   = 0x0000001  # :relvar_name
     NoSuchRelvarAttributes         = 0x0000002  # :relvar_name, :attributes
-    AttributeMismatch              = 0x0000004  # 
+    NoSuchCandidateKey             = 0x0000004  # :constraint_name
+    AttributeMismatch              = 0x0000008  # 
     
     # User-defined messages
     MESSAGE_KEYS = [ 
@@ -88,6 +89,7 @@ module DbAgile
       
       NoSuchRelvar,
       NoSuchRelvarAttributes,
+      NoSuchCandidateKey,
       AttributeMismatch
     ]
     MESSAGE_VALUES = [
@@ -100,6 +102,7 @@ module DbAgile
       
       'no such relvar #{args[:relvar_name]}',
       'no such attributes #{args[:attributes].join(\',\')}',
+      'no such candidate key #{args[:constraint_name]}',
       'attribute mismatch'
     ]
       

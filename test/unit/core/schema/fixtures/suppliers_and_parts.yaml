@@ -21,8 +21,8 @@ logical:
       QTY:   { domain: Integer, mandatory: true }
     constraints: 
       pk: { type: :primary_key, attributes: [ 'S#', 'P#' ] }
-      is_a_known_supplier: { type: :foreign_key, references: :SUPPLIERS, source: [ 'S#' ], target: [ 'S#' ] }
-      is_a_known_part:     { type: :foreign_key, references: :PARTS,     source: [ 'P#' ], target: [ 'P#' ] }
+      is_a_known_supplier: { type: :foreign_key, attributes: [ 'S#' ], references: :SUPPLIERS }
+      is_a_known_part:     { type: :foreign_key, attributes: [ 'P#' ], references: :PARTS }
 ---
 physical:
   indexes:

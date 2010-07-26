@@ -36,7 +36,7 @@ module DbAgile
         
           # Checks this composite's semantics and collects errors inside buffer
           def _semantics_check(clazz, buffer)
-            if primary_key(false).nil?
+            if constraints.primary_key.nil?
               buffer.add_error(self, clazz::MissingPrimaryKey)
             end
             super(clazz, buffer)
@@ -51,45 +51,6 @@ module DbAgile
             [ name ]
           end
 
-          ############################################################################
-          ### Public navigation interface
-          ############################################################################
-          public 
-          
-          # Yields the block with each attribute 
-          def each_attribute(&block)
-            heading.each_attribute(&block)
-          end
-          
-          # Checks if this relation variable has attributes
-          def has_attributes?(names)
-            heading.has_attributes?(names)
-          end
-
-          # Returns the domain of a specific attribute
-          def domain_of(attr_name)
-            heading.domain_of(attr_name)
-          end
-          
-          # Returns the relation variable primary key
-          def primary_key(raise_if_unfound = true)
-            constraints.each_part{|c|
-              return c if c.kind_of?(Logical::CandidateKey) and c.primary?
-            }
-            if raise_if_unfound
-              raise MissingPrimaryKeyError.new(self)
-            else
-              nil
-            end
-          end
-          
-          # Yiels the block with each foreign key
-          def each_foreign_key(&block)
-            constraints.select{|c|
-              c.kind_of?(Logical::ForeignKey)
-            }.each(&block)
-          end
-          
           ############################################################################
           ### Equality and hash code
           ############################################################################

@@ -21,7 +21,7 @@ module DbAgile
           # @see DbAgile::Core::Schema::SchemaObject
           def _semantics_check(clazz, buffer)
             rv = relation_variable
-            unless rv.has_attributes?(attributes)
+            unless rv.heading.has_attributes?(attributes)
               error_code = clazz::InvalidCandidateKey | clazz::NoSuchRelvarAttributes
               buffer.add_error(self, error_code, :relvar_name => rv.name, 
                                                  :attributes  => attributes)

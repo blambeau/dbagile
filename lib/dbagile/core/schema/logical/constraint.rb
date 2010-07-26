@@ -20,6 +20,26 @@ module DbAgile
             end
           end
 
+          ############################################################################
+          ### Query interface
+          ############################################################################
+          
+          # Returns true if this constraint is a candidate key (including a primary 
+          # key)
+          def candidate_key?
+            self.kind_of?(Logical::CandidateKey)
+          end
+          
+          # Returns true if this constraint is a primary key, false otherwise
+          def primary_key?
+            candidate_key? and primary?
+          end
+        
+          # Returns true if this constraint is a foreign key
+          def foreign_key?
+            self.kind_of?(Logical::ForeignKey)
+          end
+          
         end # class Constraint
       end # module Logical
     end # module Schema
