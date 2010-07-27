@@ -4,8 +4,8 @@ module DbAgile
       class TableExpandHelper
         include Schema::Schema2SequelArgs
     
-        # Table name
-        attr_reader :table_name
+        # Relation variable instance
+        attr_reader :relvar
     
         # Schema information
         attr_reader :schema_info
@@ -16,9 +16,9 @@ module DbAgile
         # Sequel generator wrapped 
         attr_reader :generator
       
-        def initialize(table_name, schema_info, conn)
-          @table_name, @schema_info, @conn = table_name, schema_info, conn
-          if schema_info.table_exists?(table_name)
+        def initialize(relvar, schema_info, conn)
+          @relvar, @schema_info, @conn = relvar, schema_info, conn
+          if schema_info.relvar_exists?(relvar)
             @generator = Sequel::Schema::AlterTableGenerator.new(conn)
           else
             @generator = Sequel::Schema::Generator.new(conn)
@@ -77,11 +77,11 @@ module DbAgile
         # Flushes SQL
         def flush(buffer)
           if create?
-            sql = conn.send(:create_table_sql, table_name, generator, {})
+            sql = conn.send(:create_table_sql, relvar.name, generator, {})
             buffer << sql << ";\n"
-            schema_info.table_exists!(table_name)
+            schema_info.relvar_exists!(relvar)
           else
-            sql = conn.send(:alter_table_sql_list, table_name, generator.operations)
+            sql = conn.send(:alter_table_sql_list, relvar.name, generator.operations)
             sql = sql.flatten.join(";\n")
             buffer << sql << ";\n"
           end

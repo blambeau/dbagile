@@ -4,12 +4,12 @@ module DbAgile
       module TransactionDriven
 
         # 
-        # Expands the schema of the underlying database with schema objects.
+        # Ensures an annoted schema on the underlying database.
         #
         # @param [DbAgile::Core::Transaction] transaction the current transaction
-        # @param [DbAgile::Core::Schema] schema objects to create on the SQL database
+        # @param [DbAgile::Core::Schema] schema objects to create/alter/drop on the SQL database
         #
-        def expand_schema(transaction, schema, options = {})
+        def stage_schema(transaction, schema, options = {})
           Kernel.raise NotImplementedError
         end
 

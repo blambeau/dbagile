@@ -40,35 +40,7 @@ module DbAgile
             left = config.effective_schema(true)
             right = config.announced_schema(true)
             merged = DbAgile::Core::Schema::merge(left, right)
-            
-            # Validity
-            if left.looks_valid?
-              lv = environment.color("(valid!)", :green)
-            else
-              lv = environment.color("(INVALID, you'd better run 'dba schema:check --effective')", HighLine::RED + HighLine::BOLD)
-            end
-            if right.looks_valid?
-              rv = environment.color("(valid!)", :green)
-            else
-              rv = environment.color("(INVALID, you'd better run 'dba schema:check')", HighLine::RED + HighLine::BOLD)
-            end
-            
-            # Debug
-            ld, rd = left.schema_identifier.inspect, right.schema_identifier.inspect
-            ld, rd = "#{ld} #{lv}", "#{rd} #{rv}"
-            
-            # Say
-            say '###'
-            say "### LEFT: #{ld}"
-            say "### RIGHT: #{rd}"
-            say '###'
-            say "### " + environment.color('Objects to add on LEFT', :green)
-            say '### ' + environment.color('Objects to remove on LEFT', :red)
-            say '### ' + environment.color('Objects to alter on LEFT', :cyan)
-            say '###'
-            say "\n"
-            merged.yaml_say(environment, output_options)
-
+            show_diff(left, right, merged, environment, output_options)
           }
         end
       

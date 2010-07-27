@@ -147,6 +147,18 @@ module DbAgile
         end
       end
       
+      # Overrides effective schema with a given schema
+      def set_effective_schema(schema)
+        return unless has_effective_schema?
+        if effective_files.size > 1
+          raise "Unable to set effective schema with multiple effective files"
+        end
+        file = file_resolver.call(effective_files[0])
+        ::File.open(file, 'w') do |io|
+          io << schema.to_yaml
+        end
+      end
+      
       # Returns the database physical schema
       def physical_schema
         with_connection{|c| c.physical_schema}

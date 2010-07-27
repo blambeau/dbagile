@@ -13,28 +13,38 @@ module DbAgile
           bad_argument_list!(arguments) unless arguments.empty?
         end
         
-        # Shows the minus
-        def show_minus(left_schema, right_schema, kind)
-          ld, rd = left_schema.schema_identifier, right_schema.schema_identifier
-          ld, rd = ld.inspect, rd.inspect
-          size = 20 + DbAgile::MathTools::max(ld.length, rd.length)
-          color = (kind == :add ? :green : :red)
-          say "#"*size
-          say "### LEFT: #{ld}"
-          say "### RIGHT: #{rd}"
-          say "### Objects to #{kind} on LEFT", color
-          say "#"*size
-          say "\n"
-          minus = (left_schema - right_schema)
-          if minus.empty?
-            say("nothing to do", :magenta)
-            say "\n"
+        # Shows difference between left and right
+        def show_diff(left, right, merged, environment, output_options)
+          # Validity
+          if left.looks_valid?
+            lv = environment.color("(valid!)", :green)
           else
-            say(minus.to_yaml, color)  
+            lv = environment.color("(INVALID, you'd better run 'dba schema:check --effective')", HighLine::RED + HighLine::BOLD)
           end
-          say ""
+          if right.looks_valid?
+            rv = environment.color("(valid!)", :green)
+          else
+            rv = environment.color("(INVALID, you'd better run 'dba schema:check')", HighLine::RED + HighLine::BOLD)
+          end
+          
+          # Debug
+          ld, rd = left.schema_identifier.inspect, right.schema_identifier.inspect
+          ld, rd = "#{ld} #{lv}", "#{rd} #{rv}"
+          
+          # Say
+          environment.say '###'
+          environment.say "### LEFT: #{ld}"
+          environment.say "### RIGHT: #{rd}"
+          environment.say '###'
+          environment.say "### " + environment.color('Objects to add on LEFT', :green)
+          environment.say '### ' + environment.color('Objects to remove on LEFT', :red)
+          environment.say '### ' + environment.color('Objects to alter on LEFT', :cyan)
+          environment.say '###'
+          environment.say "\n"
+          merged.yaml_say(environment, output_options)
+          environment.say "\n"
         end
-      
+        
       end # module ComparisonBased
     end # module Schema
   end # class Command
