@@ -1,9 +1,13 @@
 require 'dbagile/adapter/sequel/class_methods'
 require 'dbagile/adapter/sequel/connection'
+
 require 'dbagile/adapter/sequel/data/table_driven'
 require 'dbagile/adapter/sequel/data/transaction_driven'
-require 'dbagile/adapter/sequel/schema/loader'
+
+require 'dbagile/adapter/sequel/schema/physical_dump'
+require 'dbagile/adapter/sequel/schema/schema2sequel_args'
 require 'dbagile/adapter/sequel/schema/expander'
+require 'dbagile/adapter/sequel/schema/table_expand_helper'
 require 'dbagile/adapter/sequel/schema/table_driven'
 require 'dbagile/adapter/sequel/schema/transaction_driven'
 module DbAgile

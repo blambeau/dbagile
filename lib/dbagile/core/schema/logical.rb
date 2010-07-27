@@ -8,6 +8,11 @@ module DbAgile
           self[name]
         end
         
+        # Returns an array with part dependencies
+        def dependencies(include_parent = false)
+          []
+        end
+        
       end # class Logical
     end # module Schema
   end # module Core

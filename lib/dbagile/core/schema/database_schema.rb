@@ -12,6 +12,7 @@ module DbAgile
         def initialize(schema_identifier = nil, parts = _default_parts)
           @schema_identifier = schema_identifier
           super(parts)
+          @insert_order = [:logical, :physical]
         end
 
         
@@ -29,11 +30,15 @@ module DbAgile
           {:logical  => Schema::Logical.new,
            :physical => Schema::Physical.new}
         end
-
         
         ############################################################################
         ### SchemaObject
         ############################################################################
+        
+        # Returns an array with part dependencies
+        def dependencies(include_parent = false)
+          []
+        end
           
         # Overrided to return self.
         def schema

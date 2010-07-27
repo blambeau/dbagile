@@ -15,7 +15,7 @@ module DbAgile
       
       # @see DbAgile::Contract::Connection#physical_schema
       def physical_schema
-        SequelAdapter::Schema::Loader.new.run(db, uri)
+        SequelAdapter::Schema::PhysicalDump.new.run(db, uri)
       end
     
       # @see DbAgile::Contract::Connection#transaction

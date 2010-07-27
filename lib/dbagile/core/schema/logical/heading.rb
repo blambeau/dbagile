@@ -36,6 +36,10 @@ module DbAgile
             super(clazz, buffer)
           end
           
+          def to_s
+            "Heading of #{relation_variable.name}"
+          end
+          
         end # class Heading
       end # class Logical
     end # module Schema

@@ -9,6 +9,36 @@ module DbAgile
         # Object annotations
         attr_accessor :annotation
         
+        ############################################################################
+        ### Schema typing
+        ############################################################################
+        
+        # Returns true if this schema object is composite, false
+        # otherwise
+        def composite?
+          self.kind_of?(Schema::Composite)
+        end
+      
+        # Convenient method for !composite?
+        def part?
+          !composite?
+        end
+      
+        ############################################################################
+        ### Schema hierarchy
+        ############################################################################
+        
+        # Returns object's ancestors
+        def ancestors
+          parent.nil? ? [] : [ parent ] + parent.ancestors
+        end
+        
+        # Returns outside dependencies only
+        def outside_dependencies
+          deps = dependencies
+          deps.delete_if{|d| d.ancestors.include?(self)}
+        end
+        
         # Returns the main schema instance
         def schema
           @schema ||= (parent && parent.schema)
@@ -25,17 +55,10 @@ module DbAgile
           end
         end
         
-        # Returns true if this schema object is composite, false
-        # otherwise
-        def composite?
-          self.kind_of?(Schema::Composite)
-        end
-      
-        # Convenient method for !composite?
-        def part?
-          !composite?
-        end
-      
+        ############################################################################
+        ### Package internal methods
+        ############################################################################
+        
         # Returns the builder handler for this object
         def builder_handler
           unqualified = DbAgile::RubyTools::class_unqualified_name(self.class).to_s

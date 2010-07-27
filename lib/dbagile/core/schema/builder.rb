@@ -178,7 +178,7 @@ module DbAgile
           name, defn = coerce_index_name(name), coerce_index_definition(definition)
           _peek(:indexes)[name] = build_index(name, defn)
         rescue SByC::TypeSystem::CoercionError => ex
-          invalid!("Invalid index definition (#{name}): #{ex.message}")
+          invalid!("Invalid index definition (#{name}, #{definition.inspect}): #{ex.message}")
         end
         
       end # class Builder

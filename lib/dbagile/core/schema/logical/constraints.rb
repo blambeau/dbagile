@@ -17,6 +17,10 @@ module DbAgile
             self[name]
           end
           
+          def to_s
+            "Constraints of #{relation_variable.name}"
+          end
+          
         end # class Constraints
       end # class Logical
     end # module Schema

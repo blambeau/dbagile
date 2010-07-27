@@ -4,7 +4,7 @@ module DbAgile
       # 
       # Loads a schema from an existing database through Sequel
       #
-      class Loader
+      class PhysicalDump
       
         # Returns the ruby type associated to a given column info
         def dbtype_to_ruby_type(info)
@@ -90,15 +90,17 @@ module DbAgile
       
         # Loads the physical schema
         def load_physical_schema(conn, builder)
-          conn.tables.each{|table|
-            conn.indexes(table).each_pair{|name, defn|
-              next if defn[:unique]
-              builder.index(name, {:type => :candidate_key, :attributes => defn[:columns]})
+          builder.indexes{
+            conn.tables.each{|table|
+              conn.indexes(table).each_pair{|name, defn|
+                next if defn[:unique]
+                builder.index(name, {:relvar => table, :attributes => defn[:columns]})
+              }
             }
           }
         end
       
-      end # class Loader
+      end # class PhysicalDump
     end # module Schema
   end # module Core
 end # module DbAgile

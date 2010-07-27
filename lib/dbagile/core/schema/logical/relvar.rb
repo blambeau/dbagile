@@ -27,6 +27,10 @@ module DbAgile
             {:heading     => Schema::Logical::Heading.new,
              :constraints => Schema::Logical::Constraints.new}
           end
+          
+          def _prefered_order
+            [ :heading, :constraints ]
+          end
         
           # Makes a sanity check on the part
           def _sanity_check(schema)

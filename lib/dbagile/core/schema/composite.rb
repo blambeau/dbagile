@@ -9,6 +9,7 @@ module DbAgile
             raise ArgumentError, "Composite parts must be a hash, got #{composite_parts.inspect}" 
           end
           _install_parts(composite_parts)
+          @insert_order = nil
         end
       
         ############################################################################
@@ -23,6 +24,15 @@ module DbAgile
           {}
         end
       
+        # Returns prefered keys order
+        def _prefered_order
+          @insert_order || []
+        end
+        
+        def _prefered_order=(order)
+          @insert_order = order
+        end
+        
         # Make installation of parts
         def _install_parts(parts)
           meth = _install_eigenclass_methods?
@@ -93,7 +103,7 @@ module DbAgile
         # @see DbAgile::Core::SchemaObject
         def empty?(recurse = true)
           if recurse
-            parts.all?{|p| p.composite? && p.empty?}
+            parts.all?{|p| p.composite? && p.empty?(recurse)}
           else
             @composite_parts.empty?
           end
@@ -109,13 +119,13 @@ module DbAgile
           if sort
             @composite_parts.keys.sort{|k1,k2| k1.to_s <=> k2.to_s}
           else
-            @composite_parts.keys
+            (_prefered_order + @composite_parts.keys).uniq
           end
         end
       
         # @see DbAgile::Core::SchemaObject
         def parts
-          @composite_parts.values
+          part_keys(false).collect{|k| self[k]}
         end
       
         # @see DbAgile::Core::SchemaObject
@@ -129,6 +139,7 @@ module DbAgile
             raise SchemaConflictError.new(self[name], part)
           end
           @composite_parts[name] = part
+          (@insert_order ||= []) << name
           part.send(:parent=, self)
           unless annotation.nil?
             part.visit{|p, parent| p.annotation = annotation}
@@ -144,7 +155,7 @@ module DbAgile
         def to_yaml(opts = {})
           YAML::quick_emit(self, opts){|out|
             out.map("tag:yaml.org,2002:map") do |map|
-              part_keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
+              part_keys.each{|k|
                 map.add(k.to_s, self[k])
               }
             end
@@ -156,7 +167,7 @@ module DbAgile
                      options = {}, 
                      colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
                      indent = 0)
-          part_keys.sort{|k1, k2| k1.to_s <=> k2.to_s}.each{|k|
+          part_keys.each{|k|
             part = self[k]
             annotation = part.annotation.to_s.ljust(25)
             show_it = !(part.annotation == :same and options[:skip_unchanged])
