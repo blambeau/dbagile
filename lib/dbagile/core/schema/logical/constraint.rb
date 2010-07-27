@@ -40,6 +40,15 @@ module DbAgile
             self.kind_of?(Logical::ForeignKey)
           end
           
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            include_parent ? [ parent ] : false
+          end
+          
         end # class Constraint
       end # module Logical
     end # module Schema

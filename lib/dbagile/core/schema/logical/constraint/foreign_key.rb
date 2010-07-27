@@ -4,6 +4,10 @@ module DbAgile
       class Logical
         class ForeignKey < Constraint
         
+          ############################################################################
+          ### Foreign key
+          ############################################################################
+          
           # Returns relation variable on which this foreign key is installed.
           def source_relvar
             relation_variable
@@ -30,6 +34,17 @@ module DbAgile
             else
               rv.constraints.primary_key
             end
+          end
+          
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            deps = source_attributes + [ target_key ]
+            deps << parent if include_parent
+            deps
           end
           
           ############################################################################

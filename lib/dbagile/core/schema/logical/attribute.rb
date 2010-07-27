@@ -4,6 +4,10 @@ module DbAgile
       class Logical
         class Attribute < Schema::Part
         
+          ############################################################################
+          ### Attribute
+          ############################################################################
+          
           # Returns attribute domain
           def domain
             definition[:domain]
@@ -19,6 +23,15 @@ module DbAgile
             !(definition[:mandatory] == false)
           end
         
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            include_parent ? [ parent ] : []
+          end
+          
           ############################################################################
           ### Check interface
           ############################################################################

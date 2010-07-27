@@ -8,7 +8,23 @@ module DbAgile
           def indexed_relvar
             schema.logical.relation_variable(definition[:relvar])
           end
-
+          
+          # Returns indexed attributes
+          def indexed_attributes
+            definition[:attributes].collect{|k| indexed_relvar.heading[k]}
+          end
+      
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            deps = indexed_attributes
+            deps += [ parent ] if include_parent
+            deps
+          end
+          
           ############################################################################
           ### Check interface
           ############################################################################

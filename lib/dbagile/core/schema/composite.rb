@@ -69,8 +69,10 @@ module DbAgile
         public
       
         # Returns an array with part dependencies
-        def dependencies(raise_error_on_unfound = true)
-          parts.collect{|p| p.dependencies(raise_error_on_unfound)}.flatten.uniq
+        def dependencies(include_parent = false)
+          deps = parts.collect{|p| p.dependencies(include_parent)}.flatten.uniq
+          deps += [ parent ] if include_parent and not(parent.nil?)
+          deps
         end
         
         # Yields the block with each part in turn
@@ -183,11 +185,6 @@ module DbAgile
           my_parts = part_keys(true)
           return false unless (my_parts == other.part_keys(true))
           my_parts.all?{|k| self[k].look_same_as?(other[k])}
-        end
-      
-        # @see DbAgile::Core::SchemaObject
-        def hash
-          @composite_parts.hash
         end
       
         # @see DbAgile::Core::SchemaObject

@@ -4,6 +4,10 @@ module DbAgile
       class Logical
         class CandidateKey < Constraint
         
+          ############################################################################
+          ### Candidate key
+          ############################################################################
+          
           # Is it a primary key?
           def primary?
             definition[:type] == :primary_key
@@ -13,6 +17,15 @@ module DbAgile
           def key_attributes
             rv = relation_variable
             definition[:attributes].collect{|k| rv.heading[k]}
+          end
+          
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            include_parent ? [ parent ] + key_attributes : key_attributes
           end
           
           ############################################################################

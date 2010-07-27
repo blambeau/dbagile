@@ -62,11 +62,6 @@ module DbAgile
             super(other)
           end
         
-          # Returns an hash code
-          def hash
-            [ name, heading, constraints ].hash
-          end
-          
           # Duplicates this attribute
           def dup
             Logical::Relvar.new(name, :heading => heading.dup, :constraints => constraints.dup)

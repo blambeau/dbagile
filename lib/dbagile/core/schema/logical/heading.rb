@@ -35,7 +35,7 @@ module DbAgile
             end
             super(clazz, buffer)
           end
-      
+          
         end # class Heading
       end # class Logical
     end # module Schema

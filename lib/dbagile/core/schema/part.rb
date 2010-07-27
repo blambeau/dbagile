@@ -30,8 +30,8 @@ module DbAgile
         ############################################################################
         
         # Returns an array with part dependencies
-        def dependencies(raise_error_on_unfound = true)
-          []
+        def dependencies(include_parent = false)
+          include_parent ? [ parent ] : []
         end
         
         # @see DbAgile::Core::Schema
@@ -47,11 +47,6 @@ module DbAgile
         def look_same_as?(other)
           return nil unless other.kind_of?(self.class)
           (name == other.name) and (definition == other.definition)
-        end
-        
-        # Returns an hash code
-        def hash
-          [ name, definition ].hash
         end
         
         # Duplicates this part
