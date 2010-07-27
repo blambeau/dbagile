@@ -38,7 +38,8 @@ module DbAgile
       
         # Returns the builder handler for this object
         def builder_handler
-          DbAgile::RubyTools::class_unqualified_name(self.class).downcase.to_sym
+          unqualified = DbAgile::RubyTools::class_unqualified_name(self.class).to_s
+          unqualified.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
         end
         
         # Returns the arguments to pass to builder handler

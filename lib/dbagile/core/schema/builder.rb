@@ -106,9 +106,6 @@ module DbAgile
           schema = (_peek(:root)[:schema] ||= build_schema(identifier))
           _push(:schema, schema, &block)
         end
-        
-        # TODO: remove this hack
-        alias :databaseschema :database_schema
         alias :schema :database_schema
         
         # Starts the logical section and yields
