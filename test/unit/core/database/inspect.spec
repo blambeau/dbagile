@@ -1,5 +1,5 @@
 require File.expand_path('../fixtures', __FILE__)
-describe "DbAgile::Core::Configuration#inspect /" do
+describe "DbAgile::Core::Database#inspect /" do
 
   describe "When no prefix is given" do
     let(:config_str){ %Q{config(:test){\n  uri "sqlite://test.db"\n}} }

@@ -3,7 +3,7 @@ require File.expand_path('../../schema/fixtures', __FILE__)
 module DbAgile
   module Fixtures
     module Core
-      module Configuration
+      module Database
         include Fixtures::Utils
       
         # Returns a config file
@@ -22,8 +22,8 @@ module DbAgile
           Kernel::eval(src)
         end
 
-        extend(Configuration)
-      end # module Configuration
+        extend(Database)
+      end # module Database
     end # module Core
   end # module Fixtures
 end # module DbAgile

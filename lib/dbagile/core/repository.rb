@@ -6,7 +6,7 @@ module DbAgile
       # Path to the actual file
       attr_reader :file
     
-      # Configurations as an array of Configuration instances
+      # Databases as an array of Database instances
       attr_reader :configurations
     
       # Current configuration (its name, i.e. a Symbol)
@@ -34,7 +34,7 @@ module DbAgile
     
       # Parses a configuration source
       def parse(source)
-        Configuration::DSL.new(self).instance_eval(source)
+        Core::IO::DSL.new(self).instance_eval(source)
       end
     
       #############################################################################################
@@ -57,10 +57,10 @@ module DbAgile
           when Symbol
             return nil unless has_config?(name_or_config)
             self.current_config_name == name_or_config
-          when Configuration
+          when Core::Database
             self.current_config_name == name_or_config.name
           else
-            raise ArgumentError, "Symbol or Configuration expected, #{name_or_config.inspect} found."
+            raise ArgumentError, "Symbol or Database expected, #{name_or_config.inspect} found."
         end
       end
     
@@ -71,7 +71,7 @@ module DbAgile
     
       # Returns a configuration by match. Returns nil if no such configuration
       def config(match)
-        return match if match.kind_of?(::DbAgile::Core::Configuration)
+        return match if match.kind_of?(::DbAgile::Core::Database)
         configurations.find{|c| 
           case match
             when Symbol

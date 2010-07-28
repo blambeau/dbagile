@@ -6,7 +6,7 @@ describe "DbAgile::Core::Repository#config" do
   describe("When called with an unexisting configuration name") do
     subject{ config.config(:test) }
     specify{
-      subject.should be_kind_of(::DbAgile::Core::Configuration)
+      subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
       subject.uri.should == "sqlite://test.db"
     }
@@ -15,7 +15,7 @@ describe "DbAgile::Core::Repository#config" do
   describe("When called with an unexisting configuration instance") do
     subject{ config.config(config.config(:test)) }
     specify{
-      subject.should be_kind_of(::DbAgile::Core::Configuration)
+      subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
       subject.uri.should == "sqlite://test.db"
     }
@@ -24,7 +24,7 @@ describe "DbAgile::Core::Repository#config" do
   describe("When called with a String for uri") do
     subject{ config.config("sqlite://test.db") }
     specify{
-      subject.should be_kind_of(::DbAgile::Core::Configuration)
+      subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
       subject.uri.should == "sqlite://test.db"
     }
@@ -33,7 +33,7 @@ describe "DbAgile::Core::Repository#config" do
   describe("When called with a Regexp for uri") do
     subject{ config.config(/postgres/) }
     specify{
-      subject.should be_kind_of(::DbAgile::Core::Configuration)
+      subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :production
       subject.uri.should == "postgres://postgres@localhost/test"
     }

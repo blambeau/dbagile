@@ -115,7 +115,7 @@ module DbAgile
         case config
           when Symbol
             config = config_file.config(config)
-          when DbAgile::Core::Configuration
+          when DbAgile::Core::Database
           else
             raise ArgumentError, "Config should be a config name"
         end

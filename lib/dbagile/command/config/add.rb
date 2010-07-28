@@ -51,18 +51,18 @@ module DbAgile
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Configuration] the created configuration
+        # @return [DbAgile::Core::Database] the created configuration
         #
         def execute_command
           config = nil
           with_config_file do |config_file|
         
             if config_file.has_config?(self.config_name)
-              raise ConfigNameConflictError, "Configuration #{self.config_name} already exists"
+              raise ConfigNameConflictError, "Database #{self.config_name} already exists"
             else
               # Create the configuration and adds it
               name, uri = self.config_name, self.uri
-              config = DbAgile::Core::Configuration.new(name, uri)
+              config = DbAgile::Core::Database.new(name, uri)
               config_file << config
         
               # Makes it the current one if requested

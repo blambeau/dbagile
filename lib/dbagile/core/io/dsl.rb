@@ -1,17 +1,13 @@
 module DbAgile
   module Core
-    class Configuration
-      
-      #
-      # Domain-Specific-Language implementation of configuration and config files
-      #
+    module IO
       class DSL
-        include DbAgile::Core::Configuration::Robustness
+        include DbAgile::Core::IO::Robustness
         
         # The Repository instance passed at construction
         attr_reader :config_file
         
-        # The current Configuration instance
+        # The current Database instance
         attr_reader :configuration
         
         # Creates a DSL instance
@@ -24,7 +20,7 @@ module DbAgile
         # Adds a configuration under a given name
         def config(name, &block)
           valid_configuration_name!(name)
-          created = with_config(Configuration.new(name)){|cfg|
+          created = with_config(Core::Database.new(name)){|cfg|
             self.instance_eval(&block)
             cfg
           }
@@ -53,7 +49,7 @@ module DbAgile
           configuration.effective_files = valid_schema_files!(files)
         end
         
-        # @see DbAgile::Core::Configuration#plug
+        # @see DbAgile::Core::Database#plug
         def plug(*args)
           dsl_has_configuration!
           configuration.plug(*args)
@@ -71,7 +67,7 @@ module DbAgile
 
         # Yields the block with a configuration
         def with_config(cfg)
-          if cfg.kind_of?(DbAgile::Core::Configuration)
+          if cfg.kind_of?(DbAgile::Core::Database)
             @configuration = cfg
             result = yield(cfg)
             @configuration = nil
@@ -85,15 +81,15 @@ module DbAgile
         
         # Asserts that there is a current configuration
         def dsl_has_configuration!
-          raise DbAgile::Error, "Invalid Configuration::DSL usage, no current config" if configuration.nil?
+          raise DbAgile::Error, "Invalid Core::IO::DSL usage, no current config" if configuration.nil?
         end
         
         # Asserts that there is a current config file
         def dsl_has_config_file!
-          raise DbAgile::Error, "Invalid Configuration::DSL usage, no current config file" if config_file.nil?
+          raise DbAgile::Error, "Invalid Core::IO::DSL usage, no current config file" if config_file.nil?
         end
         
       end # class DSL
-    end # class Configuration
+    end # module IO
   end # module Core
 end # module DbAgile

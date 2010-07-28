@@ -1,16 +1,14 @@
-require 'dbagile/core/configuration/robustness'
-require 'dbagile/core/configuration/dsl'
 module DbAgile
   module Core
     #
     # Encapsulates configuration of a database handler.
     # 
-    class Configuration
+    class Database
       
-      # Configuration name
+      # Database name
       attr_reader :name
       
-      # Configuration uri
+      # Database uri
       attr_accessor :uri
       
       # Array of files for the announced schema
@@ -27,8 +25,8 @@ module DbAgile
       
       # Creates a configuration instance
       def initialize(name, uri = nil, &block)
-        raise ArgumentError, "Configuration name is mandatory" unless name.kind_of?(Symbol)
-        raise ArgumentError, "Configuration DSL is deprecated" unless block.nil?
+        raise ArgumentError, "Database name is mandatory" unless name.kind_of?(Symbol)
+        raise ArgumentError, "Database DSL is deprecated" unless block.nil?
         @name = name
         @uri = uri
         @announced_files = nil
@@ -62,7 +60,7 @@ module DbAgile
       # Connects and returns a Connection object
       def connect(options = {})
         raise ArgumentError, "Options should be a Hash" unless options.kind_of?(Hash)
-        raise DbAgile::Error, "Configuration has no database uri" if uri.nil?
+        raise DbAgile::Error, "Database has no uri" if uri.nil?
         if uri =~ /:\/\//
           adapter = DbAgile::Adapter::factor(uri, options)
         elsif file_resolver
@@ -199,6 +197,6 @@ module DbAgile
       end
       
       private :_friendly_files_inspect
-    end # class Configuration
+    end # class Database
   end # module Core
 end # module DbAgile 

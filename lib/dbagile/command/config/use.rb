@@ -26,7 +26,7 @@ module DbAgile
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Configuration] the created configuration
+        # @return [DbAgile::Core::Database] the created configuration
         #
         def execute_command
           config = nil

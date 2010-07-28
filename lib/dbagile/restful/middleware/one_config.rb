@@ -3,7 +3,7 @@ module DbAgile
     class Middleware
       # 
       # Rack middleware that provide access to a database using a config 
-      # instance (DbAgile::Core::Configuration)
+      # instance (DbAgile::Core::Database)
       #
       class OneConfig
         include Middleware::Utils
@@ -16,7 +16,7 @@ module DbAgile
         
         # Creates a middleware instance
         def initialize(config)
-          raise ArgumentError unless config.kind_of?(DbAgile::Core::Configuration)
+          raise ArgumentError unless config.kind_of?(DbAgile::Core::Database)
           @config = config
         end
         

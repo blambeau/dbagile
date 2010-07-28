@@ -74,13 +74,13 @@ module DbAgile
   #
   # @param [Symbol] name configuration name
   # @param [Proc] block configuration block dsl
-  # @return [DbAgile::Core::Configuration] a database configuration instance.
+  # @return [DbAgile::Core::Database] a database configuration instance.
   # 
   def config(name, &block)
     unless block
       default_environment.config_file.config(name)
     else
-      dsl = DbAgile::Core::Configuration::DSL.new
+      dsl = DbAgile::Core::IO::DSL.new
       dsl.config(name, &block)
     end
   end
@@ -94,7 +94,7 @@ module DbAgile
         raise NoSuchConfigError, "No such configuration #{uri}" unless config
         config.connect(options)
       when String
-        DbAgile::Core::Configuration.new.connect(uri, options)
+        DbAgile::Core::Database.new.connect(uri, options)
       else
         raise ArgumentError, "Unable to use #{uri} to connect a database"
     end

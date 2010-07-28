@@ -26,7 +26,7 @@ module DbAgile
         end
       
         extend(Schema)
-      end # module Configuration
+      end # module Schema
     end # module Core
   end # module Fixtures
 end # module DbAgile

@@ -1,7 +1,7 @@
 shared_examples_for("The config:ping command") do
   
   it "should return the pinged configuration" do
-    dba.config_ping(%w{sqlite}).should be_kind_of(::DbAgile::Core::Configuration)
+    dba.config_ping(%w{sqlite}).should be_kind_of(::DbAgile::Core::Database)
   end
 
   it "should return the error if ping failed" do

@@ -1,6 +1,6 @@
 module DbAgile
   module Core
-    class Configuration
+    module IO
       module Robustness
         
         #
@@ -41,7 +41,7 @@ module DbAgile
         # Asserts that a configuration exists inside a Repository instance. 
         # When config_name is nil, asserts that a default configuration is set.
         #
-        # @return [DbAgile::Core::Configuration] the configuration instance when 
+        # @return [DbAgile::Core::Database] the configuration instance when 
         # found.
         # @raise ArgumentError if config_file is not a Repository instance
         # @raise DbAgile::NoSuchConfigError if the configuration cannot be found.
@@ -77,6 +77,6 @@ module DbAgile
         end
       
       end # module Robustness
-    end # class Configuration
+    end # module IO
   end # module Core
 end # module DbAgile

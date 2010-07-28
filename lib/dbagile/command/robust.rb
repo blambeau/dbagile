@@ -1,7 +1,7 @@
 module DbAgile
   class Command
     module Robust
-      include DbAgile::Core::Configuration::Robustness
+      include DbAgile::Core::IO::Robustness
       
       # Raises an OptionParser::InvalidArgument
       def bad_argument_list!(rest)
