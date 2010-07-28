@@ -34,7 +34,7 @@ module DbAgile
             schema = DbAgile::Core::Schema::yaml_file_load(file)
             schema.schema_identifier = file
           elsif reference
-            schema = with_current_config do |config|
+            schema = with_current_database do |config|
               case reference
                 when :announced
                   config.announced_schema(true)

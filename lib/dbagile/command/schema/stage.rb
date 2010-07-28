@@ -40,7 +40,7 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          with_current_config do |config|
+          with_current_database do |config|
             # left schema
             left = config.effective_schema(true)
             left.check!

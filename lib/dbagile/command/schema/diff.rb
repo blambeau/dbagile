@@ -35,7 +35,7 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          with_current_config{|config|
+          with_current_database{|config|
             # left schema
             left = config.effective_schema(true)
             right = config.announced_schema(true)

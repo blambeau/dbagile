@@ -29,7 +29,7 @@ module DbAgile
         #
         :with_config_file,
         :with_config,
-        :with_current_config,
+        :with_current_database,
         #
         :with_connection,
         :with_current_connection

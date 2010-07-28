@@ -95,9 +95,9 @@ module DbAgile
       # @raise NoDefaultConfigError if the configuration cannot be found.
       # @return block execution result
       #
-      def with_current_config
+      def with_current_database
         raise ArgumentError, "Missing block" unless block_given?
-        config = config_file.current_config
+        config = config_file.current_database
         raise NoDefaultConfigError if config.nil?
         yield(config)
       end
@@ -131,7 +131,7 @@ module DbAgile
       # @raise NoDefaultConfigError if the configuration cannot be found.
       #
       def with_current_connection(conn_options = {}, &block)
-        with_current_config{|config|
+        with_current_database{|config|
           with_connection(config, conn_options, &block)
         }
       end

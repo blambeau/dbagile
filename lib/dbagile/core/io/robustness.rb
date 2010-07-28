@@ -52,7 +52,7 @@ module DbAgile
           raise ArgumentError, "Repository expected, got #{repository}"\
             unless repository.kind_of?(DbAgile::Core::Repository)
           db = if db_name.nil?
-            repository.current_config
+            repository.current_database
           else 
             repository.database(db_name)
           end

@@ -85,7 +85,7 @@ module DbAgile
       end
     
       # Returns the current database
-      def current_config
+      def current_database
         database(current_db_name)
       end
     
