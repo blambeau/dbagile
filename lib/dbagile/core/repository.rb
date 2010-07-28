@@ -10,7 +10,7 @@ module DbAgile
       attr_reader :configurations
     
       # Current configuration (its name, i.e. a Symbol)
-      attr_accessor :current_config_name
+      attr_accessor :current_db_name
     
       #############################################################################################
       ### Initialization and parsing
@@ -56,9 +56,9 @@ module DbAgile
         case name_or_config
           when Symbol
             return nil unless has_config?(name_or_config)
-            self.current_config_name == name_or_config
+            self.current_db_name == name_or_config
           when Core::Database
-            self.current_config_name == name_or_config.name
+            self.current_db_name == name_or_config.name
           else
             raise ArgumentError, "Symbol or Database expected, #{name_or_config.inspect} found."
         end
@@ -86,7 +86,7 @@ module DbAgile
     
       # Returns the current configuration
       def current_config
-        config(current_config_name)
+        config(current_db_name)
       end
     
       #############################################################################################
@@ -134,7 +134,7 @@ module DbAgile
       def inspect(prefix = "")
         buffer = ""
         configurations.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
-        buffer << "current_db " << current_config_name.inspect unless current_config_name.nil?
+        buffer << "current_db " << current_db_name.inspect unless current_db_name.nil?
         buffer
       end
     

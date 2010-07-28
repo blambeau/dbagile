@@ -58,7 +58,7 @@ module DbAgile
         # Sets the current configuration
         def current_db(name)
           dsl_has_repository!
-          repository.current_config_name = name
+          repository.current_db_name = name
         end
         
         ###

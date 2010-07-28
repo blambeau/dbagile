@@ -109,7 +109,7 @@ module DbAgile
           environment.config_file_path = self.config_file_path
         end
         if self.use_config
-          environment.config_file.current_config_name = self.use_config.to_sym
+          environment.config_file.current_db_name = self.use_config.to_sym
         end
         
         # Invoke sub command

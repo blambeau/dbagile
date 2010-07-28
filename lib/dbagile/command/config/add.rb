@@ -66,7 +66,7 @@ module DbAgile
               config_file << config
         
               # Makes it the current one if requested
-              config_file.current_config_name = config.name if self.current
+              config_file.current_db_name = config.name if self.current
         
               # Flush the configuration file
               config_file.flush!

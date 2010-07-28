@@ -34,7 +34,7 @@ module DbAgile
 
             # Move the current one if it was it
             if config_file.current?(config)
-              config_file.current_config_name = nil
+              config_file.current_db_name = nil
             end
       
             # Removes it from file
