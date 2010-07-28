@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Config
+    module Repo
       #
       # Set the current database to use
       #
@@ -14,7 +14,7 @@ module DbAgile
       
         # Returns command's category
         def category
-          :config
+          :repo
         end
       
         # Normalizes the pending arguments
@@ -41,13 +41,13 @@ module DbAgile
           end
 
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.config_list %w{}}
+          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
         
           # Return current database
           db
         end
       
       end # class Use
-    end # module Config
+    end # module Repo
   end # class Command
 end # module DbAgile

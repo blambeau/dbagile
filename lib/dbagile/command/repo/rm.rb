@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Config
+    module Repo
       #
       # Remove a database configuration from the repository
       #
@@ -14,7 +14,7 @@ module DbAgile
       
         # Returns command's category
         def category
-          :config
+          :repo
         end
       
         # Normalizes the pending arguments
@@ -45,13 +45,13 @@ module DbAgile
           end
         
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.config_list %w{}}
+          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
         
           # Returns repository
           cf
         end
       
       end # class Rm
-    end # module Config
+    end # module Repo
   end # class Command
 end # module DbAgile

@@ -9,12 +9,12 @@ module DbAgile
     extend ::DbAgile::Command::ClassMethods
     
     # Command categories
-    CATEGORIES = [:dba, :config, :sql, :schema, :bulk, :web]
+    CATEGORIES = [:dba, :repo, :sql, :schema, :bulk, :web]
     
     # Names of the categories
     CATEGORY_NAMES = {
       :dba           => "Main commands:",
-      :config        => "Configuration management:",
+      :repo          => "Repository management:",
       :bulk          => "Import/Export management:",
       :sql           => "SQL:",
       :schema        => "Database schema:",
@@ -137,8 +137,8 @@ require 'dbagile/command/help'
 require 'dbagile/command/history'
 require 'dbagile/command/replay'
 
-# :config category
-require 'dbagile/command/config'
+# :repo category
+require 'dbagile/command/repo'
 
 # :bulk category
 require 'dbagile/command/bulk'

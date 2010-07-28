@@ -4,8 +4,8 @@ describe "::DbAgile::Command::command_for /" do
   subject{ ::DbAgile::Command::command_for(arg, nil) }
   
   describe "when called with a class" do
-    let(:arg){ ::DbAgile::Command::Config::List }
-    it{ should be_kind_of(::DbAgile::Command::Config::List) }
+    let(:arg){ ::DbAgile::Command::Repo::List }
+    it{ should be_kind_of(::DbAgile::Command::Repo::List) }
   end
   
   describe "when called with a string on a root command" do

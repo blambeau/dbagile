@@ -14,20 +14,20 @@ describe "DbAgile::Command::API /" do
   # -- Configuration
   describe "repository commands (touching) /" do 
   
-    # Remove empty config between all test
+    # Remove empty repo between all test
     before       {  dba.repository_path = empty_repository_path }
     before(:each){ FileUtils.rm_rf(empty_repository_path)        }
   
-    describe "config:add /" do
-      it_should_behave_like "The config:add command" 
+    describe "repo:add /" do
+      it_should_behave_like "The repo:add command" 
     end
   
-    describe "config:rm /" do
-      it_should_behave_like "The config:rm command" 
+    describe "repo:rm /" do
+      it_should_behave_like "The repo:rm command" 
     end
   
-    describe "config:use /" do
-      it_should_behave_like "The config:use command" 
+    describe "repo:use /" do
+      it_should_behave_like "The repo:use command" 
     end
   
   end # -- Configuration
@@ -36,14 +36,14 @@ describe "DbAgile::Command::API /" do
   describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.config_use %{sqlite} }
+    before { dba.repo_use %{sqlite} }
   
-    describe "config:list /" do
-      it_should_behave_like "The config:list command" 
+    describe "repo:list /" do
+      it_should_behave_like "The repo:list command" 
     end
   
-    describe "config:ping /" do
-      it_should_behave_like "The config:ping command" 
+    describe "repo:ping /" do
+      it_should_behave_like "The repo:ping command" 
     end
   
   end # -- Configuration
@@ -53,7 +53,7 @@ describe "DbAgile::Command::API /" do
   
     # Make usage of sqlite for these tests
     before{ 
-      dba.config_use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -72,7 +72,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.config_use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -99,7 +99,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.config_use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     

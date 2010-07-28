@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Config
+    module Repo
       #
       # Adds a new database configuration
       #
@@ -20,7 +20,7 @@ module DbAgile
       
         # Returns command's category
         def category
-          :config
+          :repo
         end
 
         # Sets the default options
@@ -77,13 +77,13 @@ module DbAgile
           end
 
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.config_list %w{}}
+          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
         
           # Returns created database
           db
         end
       
       end # class Add
-    end # module Config
+    end # module Repo
   end # class Command
 end # module DbAgile

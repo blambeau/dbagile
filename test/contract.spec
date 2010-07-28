@@ -61,6 +61,6 @@ describe "DbAgile::Contract /" do
       end
 
     end # on #{database.name}
-  end # each config
+  end # each database
   
 end # describe DbAgile::Contract

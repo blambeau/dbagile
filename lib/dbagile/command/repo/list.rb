@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Config
+    module Repo
       #
       # List available databases (found in ~/.dbagile)
       #
@@ -14,7 +14,7 @@ module DbAgile
       
         # Returns command's category
         def category
-          :config
+          :repo
         end
       
         # Sets the default options
@@ -61,6 +61,6 @@ module DbAgile
         end
       
       end # class List
-    end # module Config
+    end # module Repo
   end # class Command
 end # module DbAgile
