@@ -2,21 +2,21 @@ require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command::API /" do
   
-  # Path to an empty configuration file
-  let(:empty_config_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
+  # Path to an empty repository file
+  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
   
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
   # Clean everything after tests
-  after(:all) { FileUtils.rm_rf(empty_config_path) }
+  after(:all) { FileUtils.rm_rf(empty_repository_path) }
     
   # -- Configuration
-  describe "configuration commands (touching) /" do 
+  describe "repository commands (touching) /" do 
   
     # Remove empty config between all test
-    before       {  dba.repository_path = empty_config_path }
-    before(:each){ FileUtils.rm_rf(empty_config_path)        }
+    before       {  dba.repository_path = empty_repository_path }
+    before(:each){ FileUtils.rm_rf(empty_repository_path)        }
   
     describe "config:add /" do
       it_should_behave_like "The config:add command" 
@@ -33,7 +33,7 @@ describe "DbAgile::Command::API /" do
   end # -- Configuration
   
   # -- Configuration
-  describe "configuration commands (non touching) /" do 
+  describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
     before { dba.config_use %{sqlite} }

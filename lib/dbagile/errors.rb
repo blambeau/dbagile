@@ -9,7 +9,7 @@ module DbAgile
   # Some internal assumption failed
   class AssumptionFailedError < DbAgile::InternalError; end
   
-  # Raised when a configuration name is not valid
+  # Raised when a database name is not valid
   class InvalidDatabaseName < DbAgile::Error; end
   
   # Raised when a database URI is not valid
@@ -18,19 +18,19 @@ module DbAgile
   # Raised when a command does not exists (dba command line tool)
   class NoSuchCommandError < DbAgile::Error; end
   
-  # Raised when the configuration file seems corrupted
+  # Raised when the repository seems corrupted
   class CorruptedRepositoryError < DbAgile::Error; end
   
-  # Raised when the configuration file cannot be found
+  # Raised when the main repository file cannot be found
   class NoRepositoryFileError < DbAgile::Error; end
   
-  # Raised when a configuration cannot be found
+  # Raised when a database cannot be found
   class NoSuchDatabaseError < DbAgile::Error; end
 
-  # Raised when a configuration name is already used (on add)
+  # Raised when a database name is already used (on add)
   class DatabaseNameConflictError < DbAgile::Error; end
 
-  # Raised when no default configuration is set
+  # Raised when no default database is set
   class NoDefaultDatabaseError < DbAgile::Error; end
   
   # Raised when input parsing of data fails for some reason

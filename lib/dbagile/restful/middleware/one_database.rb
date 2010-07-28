@@ -2,7 +2,7 @@ module DbAgile
   module Restful
     class Middleware
       # 
-      # Rack middleware that provide access to a database using a config 
+      # Rack middleware that provide access to a database using a database 
       # instance (DbAgile::Core::Database)
       #
       class OneDatabase
@@ -11,13 +11,13 @@ module DbAgile
         include Middleware::Post
         include Middleware::Delete
         
-        # Database configuration
-        attr_reader :config
+        # Database instance
+        attr_reader :database
         
         # Creates a middleware instance
-        def initialize(config)
-          raise ArgumentError unless config.kind_of?(DbAgile::Core::Database)
-          @config = config
+        def initialize(database)
+          raise ArgumentError unless database.kind_of?(DbAgile::Core::Database)
+          @database = database
         end
         
         # Decodes a path and yield the block with a connection and the 
@@ -36,7 +36,7 @@ module DbAgile
                 return _404_(env) unless format
               end
             
-              format, body = config.with_connection do |connection|
+              format, body = database.with_connection do |connection|
                 yield(connection, table, format) 
               end
               
