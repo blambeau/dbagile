@@ -49,7 +49,7 @@ module DbAgile
       #
       # @raise ArgumentError if no block is provided
       #
-      def each_config(&block)
+      def each_database(&block)
         raise ArgumentError, "Missing block" unless block_given?
         config_file.each(&block)
       end

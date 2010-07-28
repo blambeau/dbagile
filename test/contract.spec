@@ -7,7 +7,7 @@ describe "DbAgile::Contract /" do
   let(:basic_values_tuple)  { DbAgile::Fixtures::basic_values_tuple   }
   let(:basic_values_keys)   { DbAgile::Fixtures::basic_values_keys    }
   
-  DbAgile::Fixtures::environment.each_config do |configuration|
+  DbAgile::Fixtures::environment.each_database do |configuration|
     next if configuration.name == :unexisting
     unless configuration.ping?
       puts "skipping #{configuration.name} (no ping)"
