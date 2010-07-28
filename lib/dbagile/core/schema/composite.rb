@@ -134,15 +134,15 @@ module DbAgile
         end
       
         # @see DbAgile::Core::SchemaObject
-        def []=(name, part, annotation = nil)
+        def []=(name, part, status = nil)
           if @composite_parts.key?(name)
             raise SchemaConflictError.new(self[name], part)
           end
           @composite_parts[name] = part
           (@insert_order ||= []) << name
           part.send(:parent=, self)
-          unless annotation.nil?
-            part.visit{|p, parent| p.annotation = annotation}
+          unless status.nil?
+            part.visit{|p, parent| p.status = status}
           end
           part
         end
@@ -165,22 +165,22 @@ module DbAgile
         # Returns a yaml string
         def yaml_say(env, 
                      options = {}, 
-                     colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
+                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
                      indent = 0)
           part_keys.each{|k|
             part = self[k]
-            annotation = part.annotation.to_s.ljust(25)
-            show_it = !(part.annotation == :same and options[:skip_unchanged])
+            status = part.status.to_s.ljust(25)
+            show_it = !(part.status == Schema::NO_CHANGE and options[:skip_unchanged])
             if show_it
               mine = "  "*indent + k.to_s + ":"
               if part.composite?
-                env.say(mine, colors[part.annotation])
+                env.say(mine, colors[part.status])
                 part.yaml_say(env, options, colors, indent+1)
               else
                 part_str = part.to_yaml
                 part_str =~ /---\s*(.*)$/
                 part_str = $1
-                env.say(mine + " " + part_str, colors[part.annotation])
+                env.say(mine + " " + part_str, colors[part.status])
               end
             end
           }

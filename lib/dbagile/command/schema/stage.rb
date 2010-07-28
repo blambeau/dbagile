@@ -12,14 +12,24 @@ module DbAgile
         include Schema::ComparisonBased
         Command::build_me(self, __FILE__)
       
-        attr_accessor :dry_run
+        # Stage options
+        attr_accessor :stage_options
       
         # Contribute to options
         def add_options(opt)
+          @stage_options = {:expand => true, :collapse => true}
           opt.separator nil
           opt.separator "Options:"
-          opt.on('--dry-run', "Trace SQL statements on STDOUT only, do nothing on the database") do |value|
-            self.dry_run = true
+          opt.on('--dry-run', "Trace SQL statements on STDOUT only, do nothing on the database") do
+            self.stage_options[:dry_run] = true
+          end
+          opt.on('--[no-]expand',
+                 'Perform/Avoid schema expansions (creation of missing database objects)') do |value|
+            self.stage_options[:expand] = value
+          end
+          opt.on('--[no-]collapse',
+                 'Perform/Avoid schema collapsing (removal of deprecated database object)') do
+            self.stage_options[:collapse] = value
           end
         end
       
@@ -48,14 +58,18 @@ module DbAgile
               # Show the diff and ask confirmation
               show_diff(left, right, merged, environment, :skip_unchanged => true)
               if self.dry_run or environment.ask("Are you sure? ") =~ /^\s*[y|Y]/
-                sql = with_connection(config){|conn|
+                sql_script = nil
+                with_connection(config){|conn|
                   conn.transaction do |t|
-                    sql = t.stage_schema(merged, {:dry_run => self.dry_run})
-                    config.set_effective_schema(right) unless self.dry_run
-                    sql
+                    sql_script = t.stage_schema(merged, self.stage_options)
+                    # unless self.dry_run
+                    #   config.set_effective_schema(right) 
+                    # end
                   end
                 }
-                say(sql) if self.dry_run
+                if self.dry_run
+                  say(sql)
+                end
                 sql
               else
                 say("Cancelled by user.", :magenta)

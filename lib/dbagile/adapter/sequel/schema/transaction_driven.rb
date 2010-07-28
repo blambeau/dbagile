@@ -4,14 +4,13 @@ module DbAgile
       module TransactionDriven
 
         # @see DbAgile::Contract::Schema::TransactionDriven#expand_schema
-        def stage_schema(transaction, schema, options = {})
+        def stage_schema(transaction, schema, options)
           buffer = ""
-          SequelAdapter::Schema::Stager.new(db).run(schema, buffer)
-          if options[:dry_run]
-            buffer
-          else
+          SequelAdapter::Schema::Stager.new(db).run(schema, buffer, options)
+          unless options[:dry_run]
             db.execute_ddl(buffer)
           end
+          buffer
         end
 
         # @see DbAgile::Contract::Schema::TransactionDriven#create_table

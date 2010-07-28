@@ -6,6 +6,46 @@ module DbAgile
   module Core
     module Schema
 
+      # Status of objects that need to be created (on left)
+      TO_CREATE = :to_create
+
+      # Status of objects that need to be dropped (on left)
+      TO_DROP   = :to_drop
+
+      # Status of objects that need to be altered (on left)
+      TO_ALTER  = :to_alter
+
+      # Status of objects that need not being altered in any way
+      NO_CHANGE = :no_change
+      
+      # Status of objects that have been created
+      CREATED   = :created
+
+      # Status of objects that have been dropped
+      DROPPED   = :dropped
+
+      # Status of objects that have been altered
+      ALTERED   = :altered
+
+      # Status of objects whose migrayion is currently pending
+      PENDING   = :pending
+
+      # Status of objects whose migration has been defered
+      DEFERED   = :defered
+      
+      STATUS_TO_COLOR = {
+        TO_CREATE => :green,
+        TO_DROP   => :red,
+        TO_ALTER  => :cyan,
+        NO_CHANGE => :black,
+        #
+        CREATED   => :green,
+        DROPPED   => :red,
+        ALTERED   => :cyan,
+        PENDING   => :magenta,
+        DEFERED   => :black
+      }
+
       #
       # Creates a DatabaseSchema instance.
       #
@@ -128,6 +168,19 @@ module DbAgile
         Computations::merge(left, right, builder, &conflict_resolver)
       end
       module_function :merge
+      
+      #
+      # Computes and returns a list of abstract operations to perform on a database
+      # given a annotated schema (typically, the result of a merge operation)
+      #
+      # @param [DbAgile::Core::Schema::DatabaseSchema] schema an annotated schema
+      # @param [Hash] options staging options
+      # @returns [Array] a list of abstract operations
+      #
+      def stage_operations(schema, options = Computations::DEFAULT_STAGE_OPTIONS)
+        Computations::stage_operations(schema, options)
+      end
+      module_function :stage_operations
       
     end # module Schema
   end # module Core

@@ -4,13 +4,6 @@ module DbAgile
       module Computations
         module Merge
           
-          ANNOTATION_TO_COLOR = {
-            :create  => HighLine::GREEN + HighLine::BOLD,
-            :drop    => HighLine::RED + HighLine::BOLD,
-            :alter   => :cyan,
-            :same    => :black,
-          }
-          
           # Computes set difference between schemas.
           def merge(left, right, builder, &block)
             unless left.class == right.class
@@ -26,33 +19,31 @@ module DbAgile
             right_only = right_keys - left_keys
             commons    = left_keys & right_keys 
             
-            mine = :same
+            mine = Schema::NO_CHANGE
             builder.send(left.builder_handler, *left.builder_args){|builder_object|
               left_only.each {|key| 
-                mine = :alter
-                builder_object.[]=(key, left[key].dup, :drop)
+                mine = Schema::TO_ALTER
+                builder_object.[]=(key, left[key].dup, Schema::TO_DROP)
               }
               right_only.each{|key| 
-                mine = :alter
-                builder_object.[]=(key, right[key].dup, :create)
+                mine = Schema::TO_ALTER
+                builder_object.[]=(key, right[key].dup, Schema::TO_CREATE)
               }
               commons.each{|key|
                 on_left, on_right = left[key], right[key]
                 if on_left.composite?
-                  recursed = merge(on_left, on_right, builder, &block).annotation
-                  if mine == :alter or recursed != :same
-                    mine = :alter
-                  end
+                  recursed = merge(on_left, on_right, builder, &block).status
+                  mine = Schema::TO_ALTER if recursed != Schema::NO_CHANGE
                 elsif on_left.look_same_as?(on_right)
-                  builder_object.[]=(key, left[key].dup, :same)
+                  builder_object.[]=(key, left[key].dup, Schema::NO_CHANGE)
                 elsif block
                   resolved = block.call(on_left, on_right)
                   if resolved
-                    builder_object.[]=(key, resolved, :alter)
+                    builder_object.[]=(key, resolved, Schema::TO_ALTER)
                   end
                 end
               }
-              builder_object.annotation = mine
+              builder_object.status = mine
             }
           end
           

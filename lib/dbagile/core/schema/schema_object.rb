@@ -6,8 +6,8 @@ module DbAgile
         # Parent object
         attr_accessor :parent
         
-        # Object annotations
-        attr_accessor :annotation
+        # Object status
+        attr_accessor :status
         
         ############################################################################
         ### Schema typing

@@ -65,7 +65,7 @@ module DbAgile
         # Returns a yaml string
         def yaml_say(env, 
                      options = {}, 
-                     colors = DbAgile::Core::Schema::Computations::Merge::ANNOTATION_TO_COLOR, 
+                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
                      indent = 0)
           env.say("---\nlogical:")
           self.logical.yaml_say(env, options, colors, indent + 1)

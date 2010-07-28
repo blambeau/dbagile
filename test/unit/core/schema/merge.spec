@@ -5,48 +5,49 @@ describe "DbAgile::Core::Schema#merge" do
   let(:right)            { DbAgile::Fixtures::Core::Schema::schema(:right) }
   
   it "should correctly label all nodes without conflict resolver" do
+    status = DbAgile::Core::Schema
     schema = DbAgile::Core::Schema::merge(left, right){|l,r| nil}
     schema.visit{|p, parent|
-      annotation = case p
+      s = case p
         when DbAgile::Core::Schema::Logical::Relvar
           case p.name
             when :ADDED_COLUMNS_ON_LEFT,
                  :ADDED_CONSTRAINT_ON_LEFT,
                  :DROPPED_COLUMNS_ON_LEFT,
                  :DROPPED_CONSTRAINT_ON_LEFT,
-              :alter
+              status::TO_ALTER
             when :ONLY_ON_LEFT_RELVAR,
-              :drop
+              status::TO_DROP
             when :ONLY_ON_RIGHT_RELVAR
-              :create
+              status::TO_CREATE
             when :SAME
-              :same
+              status::NO_CHANGE
           end
         when DbAgile::Core::Schema::Logical::Attribute
           case p.name
             when :ADDED
-              :drop
+              status::TO_DROP
             when :DROPPED
-              :create
+              status::TO_CREATE
           end
         when DbAgile::Core::Schema::Physical::Index
           case p.name
             when :ONLY_ON_LEFT_INDEX
-              :drop
+              status::TO_DROP
             when :ONLY_ON_RIGHT_INDEX 
-              :create
+              status::TO_CREATE
             when :COMMON_INDEX
-              :same
+              status::NO_CHANGE
           end
         when DbAgile::Core::Schema::Logical::Constraint
           case p.name
             when :added_constraint
-              :drop
+              status::TO_DROP
             when :dropped_constraint 
-              :create
+              status::TO_CREATE
           end
       end
-      p.annotation.should == annotation unless annotation.nil?
+      p.status.should == s unless s.nil?
     }
   end
   
