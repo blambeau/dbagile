@@ -80,7 +80,7 @@ module DbAgile
       #
       def with_config(name)
         raise ArgumentError, "Missing block" unless block_given?
-        config = config_file.config(name)
+        config = config_file.database(name)
         raise NoSuchConfigError if config.nil?
         yield(config)
       end
@@ -114,7 +114,7 @@ module DbAgile
       def with_connection(config, conn_options = {}, &block)
         case config
           when Symbol
-            config = config_file.config(config)
+            config = config_file.database(config)
           when DbAgile::Core::Database
           else
             raise ArgumentError, "Config should be a config name"

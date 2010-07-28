@@ -78,7 +78,7 @@ module DbAgile
   # 
   def database(name, &block)
     unless block
-      default_environment.config_file.config(name)
+      default_environment.config_file.database(name)
     else
       dsl = DbAgile::Core::IO::DSL.new
       dsl.database(name, &block)

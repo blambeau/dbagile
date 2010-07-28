@@ -4,7 +4,7 @@ describe "DbAgile::Core::Repository#config" do
   let(:config){ DbAgile::Fixtures::Core::Repository::config_file(:test_and_prod) }
 
   describe("When called with an unexisting configuration name") do
-    subject{ config.config(:test) }
+    subject{ config.database(:test) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -13,7 +13,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with an unexisting configuration instance") do
-    subject{ config.config(config.config(:test)) }
+    subject{ config.database(config.database(:test)) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -22,7 +22,7 @@ describe "DbAgile::Core::Repository#config" do
   end
   
   describe("When called with a String for uri") do
-    subject{ config.config("sqlite://test.db") }
+    subject{ config.database("sqlite://test.db") }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -31,7 +31,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with a Regexp for uri") do
-    subject{ config.config(/postgres/) }
+    subject{ config.database(/postgres/) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :production
@@ -40,7 +40,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with an missing configuration") do
-    subject{ config.config(:nosuchone) }
+    subject{ config.database(:nosuchone) }
     it{ should be_nil }
   end
   

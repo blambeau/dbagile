@@ -48,7 +48,7 @@ module DbAgile
     
       # Checks if a configuration exists
       def has_database?(name)
-        !config(name).nil?
+        !database(name).nil?
       end
     
       # Checks if a name/configuration is the current one
@@ -69,8 +69,8 @@ module DbAgile
         databases.each(*args, &block)
       end
     
-      # Returns a configuration by match. Returns nil if no such configuration
-      def config(match)
+      # Returns a database by match. Returns nil if no such database
+      def database(match)
         return match if match.kind_of?(::DbAgile::Core::Database)
         databases.find{|c| 
           case match
@@ -86,7 +86,7 @@ module DbAgile
     
       # Returns the current configuration
       def current_config
-        config(current_db_name)
+        database(current_db_name)
       end
     
       #############################################################################################
@@ -107,7 +107,7 @@ module DbAgile
     
       # Removes a configuration from this config file
       def remove(config)
-        config = self.config(config)
+        config = self.database(config)
         config.nil? ? nil : databases.delete(config)
       end
     

@@ -14,12 +14,12 @@ describe "DbAgile::Core::Repository#current?" do
   end
 
   describe("When called with an existing but not current configuration (instance)") do
-    subject{ config.current?(config.config(:test)) }
+    subject{ config.current?(config.database(:test)) }
     it{ should == false }
   end
 
   describe("When called with an existing and current configuration (instance)") do
-    subject{ config.current?(config.config(:production)) }
+    subject{ config.current?(config.database(:production)) }
     it{ should == true }
   end
 

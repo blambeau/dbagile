@@ -7,7 +7,7 @@ describe "DbAgile::Restful feature" do
   
   let(:environment){ DbAgile::Fixtures::environment                        }
   let(:config_name){ :sqlite                                               }
-  let(:config)     { environment.config_file.config(config_name)           }
+  let(:config)     { environment.config_file.database(config_name)         }
   let(:server)     { DbAgile::Restful::Server.new(environment)             }
   let(:client)     { DbAgile::Restful::Client.new(server.uri)              }
   before(:all)     { server.start                                          }

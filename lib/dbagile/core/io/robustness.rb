@@ -54,7 +54,7 @@ module DbAgile
           config = if config_name.nil?
             config_file.current_config
           else 
-            config_file.config(config_name)
+            config_file.database(config_name)
           end
           if config.nil?
             raise DbAgile::NoSuchConfigError, "Unknown configuration #{config_name}" if config_name
