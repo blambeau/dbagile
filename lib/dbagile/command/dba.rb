@@ -58,7 +58,7 @@ module DbAgile
         return @commands_by_categ if @commands_by_categ
         @commands_by_categ = Hash.new{|h,k| h[k] = []}
         Command.subclasses.each do |subclass|
-          next if subclass == DbA
+          next if subclass == Dba
           name     = Command::command_name_of(subclass)
           command  = Command::command_for(name, environment)
           category = command.category
@@ -71,7 +71,7 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + command.command_name.ljust(20) + command.summary.to_s
+          display options.summary_indent + command.command_name.ljust(30) + command.summary.to_s
         end
       end
 
