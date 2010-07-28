@@ -9,14 +9,14 @@ module DbAgile
       # Databases as an array of Database instances
       attr_reader :databases
     
-      # Current configuration (its name, i.e. a Symbol)
+      # Current database (its name, i.e. a Symbol)
       attr_accessor :current_db_name
     
       #############################################################################################
       ### Initialization and parsing
       #############################################################################################
     
-      # Creates a config file instance, by parsing content of file.
+      # Creates a repository instance, by parsing content of file.
       def initialize(file)
         @file = file
         @databases = []
@@ -32,7 +32,7 @@ module DbAgile
         parse(::File.read(file))
       end
     
-      # Parses a configuration source
+      # Parses a repository source
       def parse(source)
         Core::IO::DSL.new(self).instance_eval(source)
       end
@@ -41,30 +41,30 @@ module DbAgile
       ### Queries
       #############################################################################################
     
-      # Checks if at least one configuration exists
+      # Checks if at least one database exists
       def empty?
         databases.empty?
       end
     
-      # Checks if a configuration exists
+      # Checks if a database exists
       def has_database?(name)
         !database(name).nil?
       end
     
-      # Checks if a name/configuration is the current one
-      def current?(name_or_config)
-        case name_or_config
+      # Checks if a name/database is the current one
+      def current?(name_or_db)
+        case name_or_db
           when Symbol
-            return nil unless has_database?(name_or_config)
-            self.current_db_name == name_or_config
+            return nil unless has_database?(name_or_db)
+            self.current_db_name == name_or_db
           when Core::Database
-            self.current_db_name == name_or_config.name
+            self.current_db_name == name_or_db.name
           else
-            raise ArgumentError, "Symbol or Database expected, #{name_or_config.inspect} found."
+            raise ArgumentError, "Symbol or Database expected, #{name_or_db.inspect} found."
         end
       end
     
-      # Yields the block with each configuration in turn
+      # Yields the block with each database in turn
       def each(*args, &block)
         databases.each(*args, &block)
       end
@@ -84,7 +84,7 @@ module DbAgile
         }
       end
     
-      # Returns the current configuration
+      # Returns the current database
       def current_config
         database(current_db_name)
       end
@@ -93,29 +93,29 @@ module DbAgile
       ### Updates
       #############################################################################################
     
-      # Adds a configuration instance
-      def <<(config)
-        config.file_resolver = lambda{|f| 
+      # Adds a database instance
+      def <<(db)
+        db.file_resolver = lambda{|f| 
           if f[0, 1] == '/'
             f
           else
             ::File.expand_path("../#{f}", self.file) 
           end
         }
-        self.databases << config
+        self.databases << db
       end
     
-      # Removes a configuration from this config file
-      def remove(config)
-        config = self.database(config)
-        config.nil? ? nil : databases.delete(config)
+      # Removes a database from this repository
+      def remove(db)
+        db = self.database(db)
+        db.nil? ? nil : databases.delete(db)
       end
     
       #############################################################################################
       ### Inspection and output
       #############################################################################################
     
-      # Flushes the configuration into a given file
+      # Flushes the repository into a given file
       def flush(output_file)
         if output_file.kind_of?(::IO)
           output_file << self.inspect
@@ -125,12 +125,12 @@ module DbAgile
         self
       end
     
-      # Flushes the configuration into the source file
+      # Flushes the repository into the source file
       def flush!
         flush(self.file)
       end
     
-      # Inspects this configuration file
+      # Inspects this repository
       def inspect(prefix = "")
         buffer = ""
         databases.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
