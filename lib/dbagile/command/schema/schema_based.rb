@@ -10,6 +10,9 @@ module DbAgile
 
         # Schema file
         attr_accessor :schema_file
+        
+        # Checks schema first?
+        attr_accessor :check_schema
       
         # Dump reference
         attr_accessor :reference
@@ -22,6 +25,14 @@ module DbAgile
           end
           opt.on('--physical', "Work on the physical schema (limited feature!)") do |value|
             self.reference = :physical
+          end
+        end
+        
+        # Adds --[no-]check option
+        def add_check_options(opt)
+          self.check_schema = true
+          opt.on('--[no-]check', "Make/Avoid a schema schema first") do |value|
+            self.check_schema = value
           end
         end
         
