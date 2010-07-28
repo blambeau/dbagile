@@ -8,7 +8,7 @@ describe "DbAgile::Core::Repository#database" do
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
-      subject.uri.should == "sqlite://test.db"
+      subject.uri.should == "test.db"
     }
   end
 
@@ -17,16 +17,16 @@ describe "DbAgile::Core::Repository#database" do
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
-      subject.uri.should == "sqlite://test.db"
+      subject.uri.should == "test.db"
     }
   end
   
   describe("When called with a String for uri") do
-    subject{ repository.database("sqlite://test.db") }
+    subject{ repository.database("test.db") }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
-      subject.uri.should == "sqlite://test.db"
+      subject.uri.should == "test.db"
     }
   end
 

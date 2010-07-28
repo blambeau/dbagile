@@ -13,9 +13,11 @@ module DbAgile
       
       # Array of files for the announced schema
       attr_accessor :announced_files
+      alias :announced_schema= :announced_files=
       
       # Array of files for the effective schema
       attr_accessor :effective_files
+      alias :effective_schema= :effective_files=
       
       # Resolves relative files
       attr_accessor :file_resolver
@@ -29,8 +31,8 @@ module DbAgile
         raise ArgumentError, "Database DSL is deprecated" unless block.nil?
         @name = name
         @uri = uri
-        @announced_files = nil
-        @effective_files = nil
+        @announced_files = []
+        @effective_files = []
         @file_resolver = lambda{|f| ::File.expand_path(f) }
         @connector = ::DbAgile::Core::Connector.new
       end
@@ -43,8 +45,14 @@ module DbAgile
       
       # @see Connector#plug
       def plug(*args)
-        (@plugs ||= []) << args
+        (@plugs ||= []).push(*args)
         @connector.plug(*args)
+      end
+      
+      # Installs plugins
+      def plugins=(plugins)
+        plugins = plugins.collect{|p| Kernel.eval(p)}
+        plug(*plugins)
       end
       
       
@@ -162,41 +170,30 @@ module DbAgile
       end
       
       private :load_schema_from_files
+      
       ##############################################################################
       ### About io
       ##############################################################################
       
-      # Inspects this database, returning a ruby chunk of code
-      # whose evaluation leads to a database instance
-      def inspect(prefix = "")
-        require 'sbyc/type_system/ruby'
-        buffer = ""
-        buffer << "#{prefix}database(#{name.inspect}){" << "\n"
-        buffer << "  uri #{uri.inspect}" << "\n"
-        if has_announced_schema?
-          buffer << "  " << _friendly_files_inspect("announced", announced_files) << "\n"
-        end
-        if has_effective_schema?
-          buffer << "  " << _friendly_files_inspect("effective", effective_files) << "\n"
-        end
-        if plugs and not(plugs.empty?)
-          plugs.each{|plug| 
-            plugs_str = plug.collect{|p| SByC::TypeSystem::Ruby::to_literal(p)}.join(', ')
-            buffer << "  plug " << plugs_str << "\n"
-          } 
-        end
-        buffer << "}"
+      # Converts this database to a yaml string
+      def to_yaml(opts = {})
+        YAML::quick_emit(self, opts){|out|
+          out.map("tag:yaml.org,2002:map") do |map|
+            map.add('uri', self.uri)
+            if has_announced_schema?
+              map.add('announced_schema', self.announced_files || [])
+            end
+            if has_effective_schema?
+              map.add('effective_schema', self.effective_files || [])
+            end
+            if plugs and not(plugs.empty?) 
+              ps = plugs.collect{|p| SByC::TypeSystem::Ruby::to_literal(p)}
+              map.add('plugins', ps)
+            end
+          end
+        }
       end
       
-      def _friendly_files_inspect(name, files)
-        if files.size == 1
-          "#{name}_schema #{files[0].inspect}"
-        else
-          "#{name}_schema #{files.inspect}"
-        end  
-      end
-      
-      private :_friendly_files_inspect
     end # class Database
   end # module Core
 end # module DbAgile 

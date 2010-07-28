@@ -20,21 +20,6 @@ module DbAgile
       def initialize(file)
         @file = file
         @databases = []
-        if ::File.exists?(file)
-          raise "File expected, folder found (#{file})" unless ::File.file?(file)
-          raise "Unable to read #{file}" unless ::File.readable?(file)
-          parse_file(file)
-        end
-      end
-    
-      # Parses contents of the file
-      def parse_file(file)
-        parse(::File.read(file))
-      end
-    
-      # Parses a repository source
-      def parse(source)
-        Core::IO::DSL.new(self).instance_eval(source)
       end
     
       #############################################################################################
@@ -112,13 +97,64 @@ module DbAgile
       end
     
       #############################################################################################
-      ### Inspection and output
+      ### YAML input/output
       #############################################################################################
     
+      # Dumps the schema to YAML
+      def to_yaml(opts = {})
+        YAML::quick_emit(self, opts){|out|
+          dbmap = {}
+          databases.each{|db| dbmap[db.name.to_s] = db}
+          out.map("tag:yaml.org,2002:map") do |map|
+            map.add('databases', dbmap)
+            map.add('current', self.current_db_name.to_s)
+          end
+        }
+      end
+      
+      # Loads from a YAML file
+      def self.from_yaml(str, file = nil)
+        # Load the hash
+        hash = YAML::load(str)
+        
+        # create the repository instance
+        repo = Repository.new(file)
+        
+        # load databases
+        hash['databases'].each_pair{|dbname, dbconfig|
+          db = Core::Database.new(dbname.to_s.to_sym)
+          db.file_resolver = repo
+          dbconfig.each_pair{|key, value|
+            db.send(:"#{key}=", value)
+          }
+          repo << db
+        }
+        
+        # Set current database
+        current = hash['current'].to_s.strip
+        unless current.empty?
+          repo.current_db_name = current.to_sym
+        end
+        
+        repo
+      end
+      
+      # Loading from a YAML file
+      def self.from_yaml_file(file)
+        if File::exists?(file) and File::file?(file)
+          from_yaml(File.read(file), file)
+        else
+          Repository.new(file)
+        end
+      rescue StandardError => ex
+        msg = "Repository index #{file} seems corruped: #{ex.message}"
+        raise DbAgile::CorruptedRepositoryError, msg, ex.backtrace
+      end
+        
       # Flushes the repository into a given file
       def flush(output_file)
         if output_file.kind_of?(::IO)
-          output_file << self.inspect
+          output_file << to_yaml
         else
           ::File.open(output_file, 'w'){|io| flush(io)}
         end
@@ -130,15 +166,6 @@ module DbAgile
         flush(self.file)
       end
     
-      # Inspects this repository
-      def inspect(prefix = "")
-        buffer = ""
-        databases.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
-        buffer << "current_db " << current_db_name.inspect unless current_db_name.nil?
-        buffer
-      end
-    
-      private :parse_file, :parse
     end # class Repository
   end # module Core
 end # module DbAgile

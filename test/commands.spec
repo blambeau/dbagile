@@ -3,7 +3,7 @@ dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command::API /" do
   
   # Path to an empty repository file
-  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
+  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty.cfg', __FILE__) }
   
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
@@ -91,7 +91,7 @@ describe "DbAgile::Command::API /" do
     describe "sql:drop /" do
       it_should_behave_like "The sql:drop command" 
     end
-
+  
   end # -- Query
   
   # -- Schema
@@ -106,11 +106,11 @@ describe "DbAgile::Command::API /" do
     describe "schema:dump" do
       it_should_behave_like "The schema:dump command" 
     end
-
+  
     describe "schema:check" do
       it_should_behave_like "The schema:check command" 
     end
-
+  
   end # -- Schema
   
 end

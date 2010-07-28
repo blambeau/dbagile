@@ -150,6 +150,10 @@ module DbAgile
           require 'fileutils'
           FileUtils.mkdir_p(File.dirname(file))
           FileUtils.touch(file)
+          File.open(file, 'w'){|io|
+            io << "---\n"
+            io << "databases: {}\n"
+          }
         end
         
         # Make some checks
@@ -162,7 +166,9 @@ module DbAgile
 
         # Loads it
         begin
-          ::DbAgile::Core::Repository.new(file)
+          ::DbAgile::Core::Repository::from_yaml_file(file)
+        rescue CorruptedRepositoryError
+          raise
         rescue Exception => ex
           raise CorruptedRepositoryError, "Corrupted repository index #{file}: #{ex.message}", ex.backtrace
         end
