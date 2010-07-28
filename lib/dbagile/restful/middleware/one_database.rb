@@ -5,7 +5,7 @@ module DbAgile
       # Rack middleware that provide access to a database using a config 
       # instance (DbAgile::Core::Database)
       #
-      class OneConfig
+      class OneDatabase
         include Middleware::Utils
         include Middleware::Get
         include Middleware::Post
@@ -76,7 +76,7 @@ module DbAgile
           [500, {'Content-Type' => 'text/plain'}, [ex.message]]
         end
         
-      end # class OneConfig
+      end # class OneDatabase
     end # class Middleware
   end # module Restful
 end # module DbAgile
