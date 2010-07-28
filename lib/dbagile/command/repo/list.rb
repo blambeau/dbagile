@@ -40,7 +40,7 @@ module DbAgile
           with_repository do |repository|
 
             if verbose
-              display(repository.inspect)
+              display(repository.to_yaml)
             else
               unless repository.empty?
                 display("Available databases are (#{repository.file}):")
