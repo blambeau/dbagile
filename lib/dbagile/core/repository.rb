@@ -47,7 +47,7 @@ module DbAgile
       end
     
       # Checks if a configuration exists
-      def has_config?(name)
+      def has_database?(name)
         !config(name).nil?
       end
     
@@ -55,7 +55,7 @@ module DbAgile
       def current?(name_or_config)
         case name_or_config
           when Symbol
-            return nil unless has_config?(name_or_config)
+            return nil unless has_database?(name_or_config)
             self.current_db_name == name_or_config
           when Core::Database
             self.current_db_name == name_or_config.name

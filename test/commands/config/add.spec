@@ -19,7 +19,7 @@ shared_examples_for("The config:add command") do
   
   it "should flush the new configuration" do
     dba.config_add(%w{test sqlite://test.db})
-    dba.dup.config_file.has_config?(:test).should be_true
+    dba.dup.config_file.has_database?(:test).should be_true
   end
   
   it "should set the configuration as the current one by default" do

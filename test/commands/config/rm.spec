@@ -12,7 +12,7 @@ shared_examples_for("The config:rm command") do
   it "should flush the new configuration" do
     dba.config_add(%w{test sqlite://test.db})
     dba.config_rm(%w{test})
-    dba.dup.config_file.has_config?(:test).should be_false
+    dba.dup.config_file.has_database?(:test).should be_false
   end
 
 end

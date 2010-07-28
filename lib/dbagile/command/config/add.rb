@@ -57,7 +57,7 @@ module DbAgile
           config = nil
           with_config_file do |config_file|
         
-            if config_file.has_config?(self.config_name)
+            if config_file.has_database?(self.config_name)
               raise ConfigNameConflictError, "Database #{self.config_name} already exists"
             else
               # Create the configuration and adds it
