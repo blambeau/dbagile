@@ -78,7 +78,7 @@ module DbAgile
       # @raise NoSuchConfigError if the configuration cannot be found.
       # @return block execution result
       #
-      def with_config(name)
+      def with_database(name)
         raise ArgumentError, "Missing block" unless block_given?
         config = config_file.database(name)
         raise NoSuchConfigError if config.nil?
