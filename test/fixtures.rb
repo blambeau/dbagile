@@ -32,8 +32,8 @@ module DbAgile
     
     # Creates the physical databases for fixtures
     def create_physical_databases
-      FileUtils.rm_rf '/tmp/test.db'
-      FileUtils.rm_rf '/tmp/robust.db'
+      FileUtils.rm_rf File.expand_path('../fixtures/configs/test.db', __FILE__)
+      FileUtils.rm_rf File.expand_path('../fixtures/configs/robust.db', __FILE__)
       require 'readline'
       puts "#################################################################################"
       puts "ATTENTION: This task will create physical test databases on your computer"
