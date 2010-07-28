@@ -9,13 +9,13 @@ module DbAgile
       class Add < Command
         Command::build_me(self, __FILE__)
       
-        # Name of the configuration to add
-        attr_accessor :config_name
+        # Database name
+        attr_accessor :db_name
       
-        # Database URI of the configuration to add
+        # Database URI 
         attr_accessor :uri
       
-        # Makes it the current configuration
+        # Makes it the current database?
         attr_accessor :current
       
         # Returns command's category
@@ -32,43 +32,45 @@ module DbAgile
         def add_options(opt)
           opt.separator nil
           opt.separator "Options:"
-          opt.on("--[no-]current", "Set as current configuration when created (see use)") do |value|
+          opt.on("--[no-]current", "Set as current database when created (see use)") do |value|
             self.current = false
           end
         end
       
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
-          self.config_name, self.uri = valid_argument_list!(arguments, Symbol, String)
+          self.db_name, self.uri = valid_argument_list!(arguments, Symbol, String)
         end
       
         # Checks command 
         def check_command
-          valid_database_name!(self.config_name)
+          valid_database_name!(self.db_name)
           valid_database_uri!(self.uri)
         end
       
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Database] the created configuration
+        # @return [DbAgile::Core::Database] the created database
         #
         def execute_command
-          config = nil
+          db = nil
           with_repository do |repository|
         
-            if repository.has_database?(self.config_name)
-              raise ConfigNameConflictError, "Database #{self.config_name} already exists"
+            if repository.has_database?(self.db_name)
+              raise ConfigNameConflictError, "Database #{self.db_name} already exists"
             else
-              # Create the configuration and adds it
-              name, uri = self.config_name, self.uri
-              config = DbAgile::Core::Database.new(name, uri)
-              repository << config
+              # Create the database and adds it
+              name, uri = self.db_name, self.uri
+              db = DbAgile::Core::Database.new(name, uri)
+              repository << db
         
               # Makes it the current one if requested
-              repository.current_db_name = config.name if self.current
+              if self.current
+                repository.current_db_name = db.name 
+              end
         
-              # Flush the configuration file
+              # Flush the repository file
               repository.flush!
             end
           
@@ -77,8 +79,8 @@ module DbAgile
           # List available databases now
           DbAgile::dba(environment){|dba| dba.config_list %w{}}
         
-          # Returns created configuration
-          config
+          # Returns created database
+          db
         end
       
       end # class Add

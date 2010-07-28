@@ -2,14 +2,14 @@ module DbAgile
   class Command
     module Config
       #
-      # Ping a configuration (current one by default)
+      # Ping a database (current one by default)
       #
       # Usage: dba #{command_name} [CONFIG]
       #
       class Ping < Command
         Command::build_me(self, __FILE__)
       
-        # Name of the configuration to ping
+        # Name of the database to ping
         attr_accessor :match
       
         # Returns command's category
@@ -31,15 +31,15 @@ module DbAgile
         def execute_command
           cf = with_repository do |repository|
         
-            config = has_database!(repository, self.match)
+            db = has_database!(repository, self.match)
         
             # Make the job now
             begin
-              with_connection(config){|c| c.ping}
-              say("Ping ok (#{config.uri})")
-              config
+              with_connection(db){|c| c.ping}
+              say("Ping ok (#{db.uri})")
+              db
             rescue StandardError => ex
-              say("Ping KO (#{config.uri})", :red)
+              say("Ping KO (#{db.uri})", :red)
               display(ex.message)
               ex
             end

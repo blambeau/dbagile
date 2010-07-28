@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Config
       #
-      # List available database configurations (found in ~/.dbagile)
+      # List available databases (found in ~/.dbagile)
       #
       # Usage: dba #{command_name}
       #
@@ -34,7 +34,7 @@ module DbAgile
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Repository] the configuration file instance
+        # @return [DbAgile::Core::Repository] the repository instance
         #
         def execute_command
           with_repository do |repository|
@@ -44,15 +44,15 @@ module DbAgile
             else
               unless repository.empty?
                 display("Available databases are (#{repository.file}):")
-                repository.each do |config|
-                  msg = repository.current?(config) ? "  -> " : " "*5
-                  msg += config.name.to_s.ljust(15)
+                repository.each do |database|
+                  msg = repository.current?(database) ? "  -> " : " "*5
+                  msg += database.name.to_s.ljust(15)
                   msg += " "
-                  msg += config.uri
+                  msg += database.uri
                   display(msg)
                 end
               else
-                say("No database configuration found. Checks ~/.dbagile", :red)
+                say("No database found. Checks ~/.dbagile", :red)
               end
             end
 

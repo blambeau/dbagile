@@ -2,14 +2,14 @@ module DbAgile
   class Command
     module Config
       #
-      # Remove a configuration in ~/.dbagile
+      # Remove a database configuration from the repository
       #
       # Usage: dba #{command_name} CONFIG
       #
       class Rm < Command
         Command::build_me(self, __FILE__)
       
-        # Name of the configuration to add
+        # Name of the database to remove
         attr_accessor :match
       
         # Returns command's category
@@ -26,28 +26,28 @@ module DbAgile
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Repository] the configuration file instance
+        # @return [DbAgile::Core::Repository] the repository instance
         #
         def execute_command
           cf = with_repository do |repository|
-            config = has_database!(repository, self.match)
+            db = has_database!(repository, self.match)
 
             # Move the current one if it was it
-            if repository.current?(config)
+            if repository.current?(db)
               repository.current_db_name = nil
             end
       
             # Removes it from file
-            repository.remove(config)
+            repository.remove(db)
       
-            # Flush the configuration file
+            # Flush the repository file
             repository.flush!
           end
         
           # List available databases now
           DbAgile::dba(environment){|dba| dba.config_list %w{}}
         
-          # Returns config file
+          # Returns repository
           cf
         end
       
