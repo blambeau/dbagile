@@ -13,19 +13,6 @@ module DbAgile
     class Dba < Command
       Command::build_me(self, __FILE__)
       
-      # Command categories
-      CATEGORIES = [:dba, :repo, :io, :restful, :sql, :schema]
-      
-      # Names of the categories
-      CATEGORY_NAMES = {
-        :dba           => "Main commands:",
-        :repo          => "Repository management:",
-        :io            => "Import/Export management:",
-        :sql           => "Queries:",
-        :schema        => "Database schema:",
-        :restful       => "Database and the web:"
-      }
-
       # Configuration file
       attr_accessor :repository_path
       
