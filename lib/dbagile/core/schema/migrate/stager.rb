@@ -115,6 +115,10 @@ module DbAgile
               else
                 object.status = Status::PENDING
             
+                object.outside_dependents.each{|dep|
+                  collapse_objects([ dep ])
+                }
+
                 collapse_call = :"collapse_#{object.builder_handler}"
                 self.send(collapse_call, object)
             

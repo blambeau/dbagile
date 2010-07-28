@@ -28,6 +28,11 @@ module DbAgile
         ### Schema hierarchy
         ############################################################################
         
+        # Returns the main schema instance
+        def schema
+          @schema ||= (parent && parent.schema)
+        end
+        
         # Returns object's ancestors
         def ancestors
           parent.nil? ? [] : [ parent ] + parent.ancestors
@@ -39,9 +44,17 @@ module DbAgile
           deps.delete_if{|d| d.ancestors.include?(self)}
         end
         
-        # Returns the main schema instance
-        def schema
-          @schema ||= (parent && parent.schema)
+        # Returns objects depending on this
+        def outside_dependents
+          selected = []
+          schema.visit{|part, parent|
+            if part.part? and not(part.ancestors.include?(self))
+              deps = part.outside_dependencies
+              deps = deps.collect{|d| d.ancestors}.flatten.uniq
+              selected << part if deps.include?(self)
+            end
+          }
+          selected
         end
         
         # Returns relation variable of this object, if any
