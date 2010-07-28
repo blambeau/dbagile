@@ -1,7 +1,0 @@
-database(:sqlite){
-  uri "ruby_values.db"
-}
-database(:postgres){
-  uri "postgres://dbagile@localhost/ruby_values"
-}
-current_db :sqlite
