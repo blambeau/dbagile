@@ -49,10 +49,10 @@ module DbAgile
   
   # Finds 
   def find_repository_path
-    if File.exists?("./dbagile.cfg")
-      "./dbagile.cfg"
+    if File.exists?("./dbagile.yaml")
+      "./dbagile.yaml"
     else
-      File.join(ENV['HOME'], '.dbagile')
+      File.join(ENV['HOME'], '.dbagile/repository.idx')
     end
   end
   module_function :find_repository_path
