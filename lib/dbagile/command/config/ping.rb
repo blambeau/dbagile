@@ -31,7 +31,7 @@ module DbAgile
         def execute_command
           cf = with_config_file do |config_file|
         
-            config = has_config!(config_file, self.match)
+            config = has_database!(config_file, self.match)
         
             # Make the job now
             begin

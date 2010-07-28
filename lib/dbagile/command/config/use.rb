@@ -31,7 +31,7 @@ module DbAgile
         def execute_command
           config = nil
           with_config_file do |config_file|
-            config = has_config!(config_file, self.match)
+            config = has_database!(config_file, self.match)
 
             # Makes it the current one
             config_file.current_db_name = config.name

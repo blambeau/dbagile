@@ -38,29 +38,29 @@ module DbAgile
         end
         
         #
-        # Asserts that a configuration exists inside a Repository instance. 
-        # When config_name is nil, asserts that a default configuration is set.
+        # Asserts that a database exists inside a Repository instance. 
+        # When db_name is nil, asserts that a default database is set.
         #
-        # @return [DbAgile::Core::Database] the configuration instance when 
-        # found.
-        # @raise ArgumentError if config_file is not a Repository instance
-        # @raise DbAgile::NoSuchConfigError if the configuration cannot be found.
-        # @raise DbAgile::NoDefaultConfigError if config_name is nil and no 
-        #        current configuration is set on the config file.
+        # @param [DbAgile::Core::Repository] a repository
+        # @return [DbAgile::Core::Database] the database instance when found.
+        # @raise ArgumentError if repository is not a Repository instance
+        # @raise DbAgile::NoSuchConfigError if the database cannot be found.
+        # @raise DbAgile::NoDefaultConfigError if db_name is nil and no 
+        #        current database is set on the repository.
         #
-        def has_config!(config_file, config_name = nil)
-          raise ArgumentError, "Repository expected, got #{config_file}"\
-            unless config_file.kind_of?(DbAgile::Core::Repository)
-          config = if config_name.nil?
-            config_file.current_config
+        def has_database!(repository, db_name = nil)
+          raise ArgumentError, "Repository expected, got #{repository}"\
+            unless repository.kind_of?(DbAgile::Core::Repository)
+          db = if db_name.nil?
+            repository.current_config
           else 
-            config_file.database(config_name)
+            repository.database(db_name)
           end
-          if config.nil?
-            raise DbAgile::NoSuchConfigError, "Unknown configuration #{config_name}" if config_name
-            raise DbAgile::NoDefaultConfigError, "No default configuration set (try 'dba use ...' first)"
+          if db.nil?
+            raise DbAgile::NoSuchConfigError, "Unknown database #{db_name}" if db_name
+            raise DbAgile::NoDefaultConfigError, "No default database set (try 'dba use ...' first)"
           else
-            config
+            db
           end
         end
         

@@ -74,7 +74,7 @@ module DbAgile
             result
           elsif db.kind_of?(Symbol) or db.nil?
             dsl_has_repository!
-            has_config!(repository, cfg)
+            has_database!(repository, cfg)
             with_database(repository.database(cfg), &block)
           end
         end
