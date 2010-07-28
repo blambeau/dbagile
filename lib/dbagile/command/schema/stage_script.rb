@@ -12,13 +12,13 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          with_current_database{|config|
+          with_current_database{|database|
             # left schema
-            left = config.effective_schema(true)
+            left = database.effective_schema(true)
             left.check!
         
             # right schema
-            right = config.announced_schema(true)
+            right = database.announced_schema(true)
             right.check!
         
             # Merge schemas now
@@ -26,7 +26,7 @@ module DbAgile
             if merged.status == DbAgile::Core::Schema::NO_CHANGE
               say("Nothing to stage", :magenta)
             else
-              with_connection(config){|conn|
+              with_connection(database){|conn|
                 script = DbAgile::Core::Schema::stage_script(merged)
                 conn.script2sql(script, environment.output_buffer)
               }

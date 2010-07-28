@@ -35,10 +35,10 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          with_current_database{|config|
+          with_current_database{|database|
             # left schema
-            left = config.effective_schema(true)
-            right = config.announced_schema(true)
+            left = database.effective_schema(true)
+            right = database.announced_schema(true)
             merged = DbAgile::Core::Schema::merge(left, right)
             show_diff(left, right, merged, environment, output_options)
           }

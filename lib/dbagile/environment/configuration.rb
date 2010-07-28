@@ -80,9 +80,9 @@ module DbAgile
       #
       def with_database(name)
         raise ArgumentError, "Missing block" unless block_given?
-        config = repository.database(name)
-        raise NoSuchDatabaseError if config.nil?
-        yield(config)
+        db = repository.database(name)
+        raise NoSuchDatabaseError if db.nil?
+        yield(db)
       end
       
       # 
@@ -97,13 +97,13 @@ module DbAgile
       #
       def with_current_database
         raise ArgumentError, "Missing block" unless block_given?
-        config = repository.current_database
-        raise NoDefaultDatabaseError if config.nil?
-        yield(config)
+        db = repository.current_database
+        raise NoDefaultDatabaseError if db.nil?
+        yield(db)
       end
       
       #
-      # Yields the block with a connection on a given config; diconnect after that.
+      # Yields the block with a connection on a given database; diconnect after that.
       #
       # As this method relies on repository, it shares its exception contract.
       #
@@ -124,7 +124,7 @@ module DbAgile
       end
       
       # 
-      # Yields the block with a connection on the current config.
+      # Yields the block with a connection on the current database.
       #
       # Same contract as with_connection, expect for parameters.
       #

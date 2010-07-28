@@ -1,10 +1,10 @@
 require File.expand_path('../fixtures', __FILE__)
-describe "DbAgile::Core::Repository#config" do
+describe "DbAgile::Core::Repository#database" do
 
-  let(:config){ DbAgile::Fixtures::Core::Repository::repository(:test_and_prod) }
+  let(:repository){ DbAgile::Fixtures::Core::Repository::repository(:test_and_prod) }
 
   describe("When called with an unexisting database name") do
-    subject{ config.database(:test) }
+    subject{ repository.database(:test) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -13,7 +13,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with an unexisting database instance") do
-    subject{ config.database(config.database(:test)) }
+    subject{ repository.database(repository.database(:test)) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -22,7 +22,7 @@ describe "DbAgile::Core::Repository#config" do
   end
   
   describe("When called with a String for uri") do
-    subject{ config.database("sqlite://test.db") }
+    subject{ repository.database("sqlite://test.db") }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :test
@@ -31,7 +31,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with a Regexp for uri") do
-    subject{ config.database(/postgres/) }
+    subject{ repository.database(/postgres/) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
       subject.name.should == :production
@@ -40,7 +40,7 @@ describe "DbAgile::Core::Repository#config" do
   end
 
   describe("When called with an missing database") do
-    subject{ config.database(:nosuchone) }
+    subject{ repository.database(:nosuchone) }
     it{ should be_nil }
   end
   

@@ -34,14 +34,14 @@ module DbAgile
             schema = DbAgile::Core::Schema::yaml_file_load(file)
             schema.schema_identifier = file
           elsif reference
-            schema = with_current_database do |config|
+            schema = with_current_database do |database|
               case reference
                 when :announced
-                  config.announced_schema(true)
+                  database.announced_schema(true)
                 when :effective
-                  config.effective_schema(true)
+                  database.effective_schema(true)
                 when :physical
-                  config.physical_schema
+                  database.physical_schema
               end
             end
           else

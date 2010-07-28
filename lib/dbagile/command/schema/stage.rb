@@ -40,13 +40,13 @@ module DbAgile
         
         # Executes the command
         def execute_command
-          with_current_database do |config|
+          with_current_database do |database|
             # left schema
-            left = config.effective_schema(true)
+            left = database.effective_schema(true)
             left.check!
           
             # right schema
-            right = config.announced_schema(true)
+            right = database.announced_schema(true)
             right.check!
           
             # Merge schemas now
@@ -59,11 +59,11 @@ module DbAgile
               show_diff(left, right, merged, environment, :skip_unchanged => true)
               if self.dry_run or environment.ask("Are you sure? ") =~ /^\s*[y|Y]/
                 sql_script = nil
-                with_connection(config){|conn|
+                with_connection(database){|conn|
                   conn.transaction do |t|
                     sql_script = t.stage_schema(merged, self.stage_options)
                     # unless self.dry_run
-                    #   config.set_effective_schema(right) 
+                    #   database.set_effective_schema(right) 
                     # end
                   end
                 }

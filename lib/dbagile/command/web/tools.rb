@@ -14,11 +14,7 @@ module DbAgile
           :web
         end
 
-        #
         # Executes the command.
-        #
-        # @return [DbAgile::Core::Database] the created configuration
-        #
         def execute_command
           require 'dbagile/restful/server'
           DbAgile::Restful::Server.new(environment).start.join

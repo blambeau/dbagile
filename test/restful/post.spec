@@ -1,7 +1,7 @@
 shared_examples_for("The Restful POST interface") do
   
-  before(:each){ DbAgile::Fixtures::restore_basic_values(config) }
-  after(:each) { DbAgile::Fixtures::restore_basic_values(config) }
+  before(:each){ DbAgile::Fixtures::restore_basic_values(database) }
+  after(:each) { DbAgile::Fixtures::restore_basic_values(database) }
   
   dbagile_install_examples(__FILE__, self)
   
