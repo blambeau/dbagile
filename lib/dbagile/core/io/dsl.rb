@@ -17,7 +17,7 @@ module DbAgile
           self.instance_eval(&block) unless block.nil?
         end
         
-        # Adds a configuration under a given name
+        # Adds a database under a given name
         def database(name, &block)
           valid_database_name!(name)
           created = with_database(Core::Database.new(name)){|cfg|
@@ -30,7 +30,7 @@ module DbAgile
           created
         end
         
-        # Sets the database uri on the current configuration
+        # Sets the uri on the current database
         def uri(str)
           dsl_has_database!
           valid_database_uri!(str)
@@ -55,7 +55,7 @@ module DbAgile
           current_database.plug(*args)
         end
         
-        # Sets the current configuration
+        # Sets the current database
         def current_db(name)
           dsl_has_repository!
           repository.current_db_name = name
@@ -74,17 +74,17 @@ module DbAgile
             result
           elsif db.kind_of?(Symbol) or db.nil?
             dsl_has_repository!
-            has_config!(config_file, cfg)
+            has_config!(repository, cfg)
             with_database(repository.database(cfg), &block)
           end
         end
         
-        # Asserts that there is a current configuration
+        # Asserts that there is a current database
         def dsl_has_database!
           raise DbAgile::Error, "Invalid Core::IO::DSL usage, no current database" if current_database.nil?
         end
         
-        # Asserts that there is a current config file
+        # Asserts that there is a current repository
         def dsl_has_repository!
           raise DbAgile::Error, "Invalid Core::IO::DSL usage, no current repository" if repository.nil?
         end
