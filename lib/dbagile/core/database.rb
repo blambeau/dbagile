@@ -1,7 +1,7 @@
 module DbAgile
   module Core
     #
-    # Encapsulates configuration of a database handler.
+    # Encapsulates a database handler.
     # 
     class Database
       
@@ -38,7 +38,7 @@ module DbAgile
       
       
       ##############################################################################
-      ### About configuration
+      ### About connector
       ##############################################################################
       
       # @see Connector#plug

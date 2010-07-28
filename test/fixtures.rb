@@ -65,16 +65,16 @@ module DbAgile
       DbAgile::dba(environment) do |dba|
         dba.output_buffer = STDOUT
         dba.console_width = nil
-        dba.repository.each do |config|
-          if config.ping?
-            puts "Installing fixture database on #{config.name.inspect}"
-            dba.config_use(config.name)
+        dba.repository.each do |db|
+          if db.ping?
+            puts "Installing fixture database on #{db.name.inspect}"
+            dba.config_use(db.name)
             each_table_file{|name, file|
               dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
             dba.sql_send "DELETE FROM empty_table"
           else
-            puts "Skipping fixture database #{config.name.inspect} (no ping)"
+            puts "Skipping fixture database #{db.name.inspect} (no ping)"
           end
         end
       end
@@ -108,16 +108,16 @@ module DbAgile
       heading
     end
     
-    # Empty the basic values on a config
-    def empty_basic_values(config)
-      config.with_connection{|c|
+    # Empty the basic values on a db
+    def empty_basic_values(db)
+      db.with_connection{|c|
         c.transaction{|t| t.delete(:basic_values) }
       }
     end
     
-    # Empty the basic values on a config
-    def restore_basic_values(config)
-      config.with_connection{|c|
+    # Restored the basic values on a db
+    def restore_basic_values(db)
+      db.with_connection{|c|
         c.transaction{|t| 
           t.delete(:basic_values) 
           t.insert(:basic_values, basic_values[0])
