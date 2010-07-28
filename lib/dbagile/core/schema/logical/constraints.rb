@@ -1,22 +1,28 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Constraints < Schema::Brick
-          include Schema::NamedCollection
-        
-          # Creates a logical schema instance
-          def initialize
-            __initialize_named_collection
+    module Schema
+      class Logical
+        class Constraints < Schema::Composite
+          
+          # Returns the primary key
+          def primary_key
+            each_part{|c|
+              return c if c.kind_of?(Logical::CandidateKey) and c.primary?
+            }
+            nil
           end
-        
-          # @see DbAgile::Core::Schema::NamedCollection#builder_handler_name
-          def builder_handler_name
-            :constraints
+          
+          # Returns a constraint by name
+          def constraint_by_name(name)
+            self[name]
           end
-        
+          
+          def to_s
+            "Constraints of #{relation_variable.name}"
+          end
+          
         end # class Constraints
       end # class Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

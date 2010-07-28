@@ -3,9 +3,14 @@ module DbAgile
     module Schema
       module TransactionDriven
 
-        # @see DbAgile::Contract::Schema::TransactionDriven#expand_schema
-        def expand_schema(transaction, schema, options = {})
-          SequelAdapter::Schema::Expander.new(schema, options).run(db)
+        # @see DbAgile::Contract::Schema::TransactionDriven#run_schema_script
+        def run_schema_script(transaction, script, options)
+          buffer = ""
+          SequelAdapter::Schema::Stager.new(db).run(schema, buffer, options)
+          unless options[:dry_run]
+            db.execute_ddl(buffer)
+          end
+          buffer
         end
 
         # @see DbAgile::Contract::Schema::TransactionDriven#create_table

@@ -41,11 +41,14 @@ module DbAgile
       
       # Returns the command name of a given class
       def command_name_of(clazz)
-        /Command::([A-Za-z0-9]+)(::([A-Za-z0-9]+))?$/ =~ clazz.name
-        if $3
-          "#{$1.downcase}:#{$3.downcase}"
+        name = DbAgile::RubyTools::unqualified_class_name(clazz)
+        name = name.gsub(/[A-Z]/){|x| "-#{x.downcase}"}[1..-1]
+        parent_module = DbAgile::RubyTools::parent_module(clazz)
+        if parent_module == DbAgile::Command
+          name
         else
-          $1.downcase
+          parent_name = DbAgile::RubyTools::unqualified_class_name(parent_module)
+          "#{parent_name.downcase}:#{name}"
         end
       end
       
@@ -56,7 +59,7 @@ module DbAgile
     
       # Returns the ruby name of a given class
       def ruby_method_for(clazz)
-        command_name_of(clazz).gsub(':', '_').to_sym
+        command_name_of(clazz).gsub(/[:\-]/, '_').to_sym
       end
     
       # Returns a command instance for a given name and environment, 

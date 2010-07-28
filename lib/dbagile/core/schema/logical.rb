@@ -1,25 +1,24 @@
+module DbAgile
+  module Core
+    module Schema
+      class Logical < Schema::Composite
+        
+        # Returns a relation variable by its name
+        def relation_variable(name)
+          self[name]
+        end
+        
+        # Returns an array with part dependencies
+        def dependencies(include_parent = false)
+          []
+        end
+        
+      end # class Logical
+    end # module Schema
+  end # module Core
+end # module DbAgile
 require 'dbagile/core/schema/logical/relvar'
 require 'dbagile/core/schema/logical/heading'
 require 'dbagile/core/schema/logical/attribute'
 require 'dbagile/core/schema/logical/constraints'
 require 'dbagile/core/schema/logical/constraint'
-module DbAgile
-  module Core
-    class Schema
-      class Logical < Schema::Brick
-        include Schema::NamedCollection
-        
-        # Creates a logical schema instance
-        def initialize
-          __initialize_named_collection
-        end
-        
-        # @see DbAgile::Core::Schema::NamedCollection#builder_handler_name
-        def builder_handler_name
-          :logical
-        end
-        
-      end # class Logical
-    end # class Schema
-  end # module Core
-end # module DbAgile

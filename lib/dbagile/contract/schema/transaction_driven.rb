@@ -3,16 +3,6 @@ module DbAgile
     module Schema
       module TransactionDriven
 
-        # 
-        # Expands the schema of the underlying database with schema objects.
-        #
-        # @param [DbAgile::Core::Transaction] transaction the current transaction
-        # @param [DbAgile::Core::Schema] schema objects to create on the SQL database
-        #
-        def expand_schema(transaction, schema, options = {})
-          Kernel.raise NotImplementedError
-        end
-
         #
         # Creates a table with some columns. 
         #

@@ -1,11 +1,10 @@
-require 'dbagile/core/schema/coercion'
+require 'dbagile/core/schema/builder/coercion'
 require 'dbagile/core/schema/builder/concept_factory'
 module DbAgile
   module Core
-    class Schema
+    module Schema
       class Builder
-        include Schema::Coercion
-        # include Builder::HashFactory
+        include Builder::Coercion
         include Builder::ConceptFactory
         
         # Call stack
@@ -13,7 +12,11 @@ module DbAgile
         
         # Creates a builder instance
         def initialize(schema = Schema.new)
-          @stack = [ [:root, Schema.new ] ]
+          if schema
+            @stack = [ [:schema, schema ] ]
+          else
+            @stack = [ [:root, {}] ]
+          end
         end
         
         ############################################################################
@@ -22,7 +25,11 @@ module DbAgile
         
         # Dumps as a Schema instance
         def _dump
-          _peek(:root)
+          if stack.last[0] == :schema
+            _peek(:schema)
+          else
+            _peek(:root)[:schema]
+          end
         end
         
         ############################################################################
@@ -57,9 +64,10 @@ module DbAgile
         # Applies natural rules according to current section
         def _natural(hash)
           case section = stack.last[0]
-            when :root
-              s = coerce_symbolized_hash(hash)
-              self.send(s.keys[0], s.values[0])
+            when :schema
+              coerce_symbolized_hash(hash).each_pair{|name, defn|
+                self.send(name, defn)
+              }
             when :logical
               coerce_symbolized_hash(hash).each_pair{|relvar_name, relvar_def|
                 relvar(relvar_name, relvar_def)
@@ -93,9 +101,17 @@ module DbAgile
         ############################################################################
         
         # Starts the logical section and yields
+        def database_schema(identifier = nil, hash = nil, &block)
+          block = lambda{ _natural(hash) } unless block
+          schema = (_peek(:root)[:schema] ||= build_schema(identifier))
+          _push(:schema, schema, &block)
+        end
+        alias :schema :database_schema
+        
+        # Starts the logical section and yields
         def logical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          logical = (_peek(:root)[:logical] ||= build_logical)
+          logical = (_peek(:schema)[:logical] ||= build_logical)
           _push(:logical, logical, &block)
         end
         
@@ -144,7 +160,7 @@ module DbAgile
         # Starts the physical section and yields
         def physical(hash = nil, &block)
           block = lambda{ _natural(hash) } unless block
-          physical = (_peek(:root)[:physical] ||= build_physical)
+          physical = (_peek(:schema)[:physical] ||= build_physical)
           _push(:physical, physical, &block)
         end
         
@@ -162,10 +178,10 @@ module DbAgile
           name, defn = coerce_index_name(name), coerce_index_definition(definition)
           _peek(:indexes)[name] = build_index(name, defn)
         rescue SByC::TypeSystem::CoercionError => ex
-          invalid!("Invalid index definition (#{name}): #{ex.message}")
+          invalid!("Invalid index definition (#{name}, #{definition.inspect}): #{ex.message}")
         end
         
       end # class Builder
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

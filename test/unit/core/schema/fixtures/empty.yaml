@@ -1,5 +1,7 @@
+# This is a comment
 --- 
 logical: 
+  # Here also
   EMPTY_RELVAR: 
     heading: {}
     constraints: {}

@@ -1,104 +1,47 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Heading < Schema::Brick
+    module Schema
+      class Logical
+        class Heading < Schema::Composite
          
-          # Attributes
-          attr_reader :attributes
-          protected :attributes
-        
-          # Creates a heading instance
-          def initialize(attributes = {})
-            @attributes = attributes
-          end
-        
-          # Yields the block with each attribute 
+          alias :attributes :parts
+          
+          # Yields the block with each attribute
           def each_attribute(&block)
-            @attributes.values.each(&block)
+            attributes.each(&block)
           end
           
-          ############################################################################
-          ### Schema computations
-          ############################################################################
-          
-          # Minus pattern delegation
-          def minus(other, builder)
-            builder.heading{|b_attributes|
-              @attributes.keys.each{|name|
-                unless @attributes[name] == other[name]
-                  b_attributes[name] = @attributes[name]
-                end
-              }
-            }
+          # Checks if this heading has some attributes (through 
+          # names)
+          def has_attributes?(names)
+            parts = composite_parts
+            names.all?{|k| parts.key?(k)}
           end
           
-          ############################################################################
-          ### DbAgile::Core::Schema::Brick
-          ############################################################################
-        
-          # @see DbAgile::Core::Schema::Brick#brick_composite?
-          def brick_composite?
-            true
+          # Returns the domain of a specific attribute
+          def domain_of(attr_name)
+            attribute = self[attr_name]
+            attribute ? attribute.domain : nil
           end
         
-          # @see DbAgile::Core::Schema::Brick#brick_empty?
-          def brick_empty?
-            @attributes.empty?
+          ############################################################################
+          ### Private interface
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema
+          def _semantics_check(clazz, buffer)
+            if empty?
+              buffer.add_error(self, clazz::UnsupportedEmptyHeading)
+            end
+            super(clazz, buffer)
           end
           
-          # @see DbAgile::Core::Schema::Brick#brick_children
-          def brick_children
-            @attributes.values
-          end
-        
-          # Returns an attribute definition
-          def [](name)
-            @attributes[name]
-          end
-        
-          # @see DbAgile::Core::Schema::Brick#[]=
-          def []=(name, definition)
-            @attributes[name] = definition
-            definition.send(:parent=, self)
-            definition
+          def to_s
+            "Heading of #{relation_variable.name}"
           end
           
-          ############################################################################
-          ### Equality and hash code
-          ############################################################################
-        
-          # Compares with another attribute
-          def ==(other)
-            return nil unless other.kind_of?(Heading)
-            (@attributes == other.attributes)
-          end
-        
-          # Returns an hash code
-          def hash
-            @attributes.hash
-          end
-          
-          # Duplicates this attribute
-          def dup
-            dup = Logical::Heading.new
-            @attributes.each{|name, attribute|
-              dup[name] = attribute.dup
-            }
-            dup
-          end
-        
-          ############################################################################
-          ### About IO
-          ############################################################################
-        
-          # Delegation pattern on YAML flushing
-          def to_yaml(opts = {})
-            Schema::Coercion::unsymbolize_hash(@attributes).to_yaml(opts)
-          end
-        
         end # class Heading
-      end # module Logical
-    end # class Schema
+      end # class Logical
+    end # module Schema
   end # module Core
 end # module DbAgile

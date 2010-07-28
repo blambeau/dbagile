@@ -4,7 +4,7 @@ module DbAgile
       #
       # Send SQL commands directly to the DBMS
       #
-      # Usage: dba #{command_name} QUERY
+      # Usage: dba #{command_name} [--file=SCRIPT] [QUERY]
       #
       class Send < Command
         Command::build_me(self, __FILE__)
@@ -32,11 +32,14 @@ module DbAgile
       
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
-          if arguments.empty?
-            bad_argument_list!(arguments) unless self.file
-          else
-            self.query = valid_argument_list!(arguments, String)
+          case arguments.size
+            when 0
+            when 1
+              self.query = valid_argument_list!(arguments, String)
+            else
+              bad_argument_list!(arguments)
           end
+          ambigous_argument_list! if self.query and self.file
         end
       
         #
@@ -48,8 +51,14 @@ module DbAgile
           result = nil
           with_current_connection do |connection|
             connection.transaction do |t|
-              result = t.direct_sql(File.read(self.file)) if self.file
-              result = t.direct_sql(self.query) if self.query
+              if self.file
+                result = t.direct_sql(File.read(self.file))
+              elsif self.query
+                result = t.direct_sql(self.query)
+              else
+                script = environment.input_buffer.readlines.join("\n")
+                result = t.direct_sql(script)
+              end
             end
           end
           case result

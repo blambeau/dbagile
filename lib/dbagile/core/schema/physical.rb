@@ -1,23 +1,26 @@
-require 'dbagile/core/schema/physical/indexes'
-require 'dbagile/core/schema/physical/index'
 module DbAgile
   module Core
-    class Schema
-      class Physical < Schema::Brick
-        include Schema::NamedCollection
+    module Schema
+      class Physical < Schema::Composite
         
-        # Creates a logical schema instance
-        def initialize
-          __initialize_named_collection
-          self[:indexes] = Physical::Indexes.new
+        # @see DbAgile::Core::Schema::Composite#_default_parts
+        def _default_parts
+          {:indexes => Physical::Indexes.new}
+        end
+                
+        # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
+        def _install_eigenclass_methods?
+          true
         end
         
-        # @see DbAgile::Core::Schema::NamedCollection#builder_handler_name
-        def builder_handler_name
-          :physical
+        # Returns an array with part dependencies
+        def dependencies(include_parent = false)
+          []
         end
         
       end # class Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile
+require 'dbagile/core/schema/physical/indexes'
+require 'dbagile/core/schema/physical/index'

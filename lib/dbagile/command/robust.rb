@@ -8,6 +8,11 @@ module DbAgile
         raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
       end
       
+      # Raises an OptionParser::AmbiguousArgument
+      def ambigous_argument_list!
+        raise OptionParser::AmbiguousArgument, "Ambiguous options"
+      end
+      
       # Parses pending arguments, assert that it contains exactly
       # types.size arguments, and convert them to types.
       def valid_argument_list!(rest, *types)

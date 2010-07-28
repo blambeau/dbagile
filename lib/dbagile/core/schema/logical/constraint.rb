@@ -1,10 +1,8 @@
-require 'dbagile/core/schema/logical/constraint/candidate_key'
-require 'dbagile/core/schema/logical/constraint/foreign_key'
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Constraint < Schema::Brick
+    module Schema
+      class Logical
+        class Constraint < Schema::Part
           
           ############################################################################
           ### Constraint factory
@@ -14,60 +12,47 @@ module DbAgile
           def self.factor(name, definition)
             case kind = definition[:type]
               when :primary_key, :candidate_key, :key
-                Schema::Logical::Constraint::CandidateKey.new(name, definition)
+                Schema::Logical::CandidateKey.new(name, definition)
               when :foreign_key
-                Schema::Logical::Constraint::ForeignKey.new(name, definition)
+                Schema::Logical::ForeignKey.new(name, definition)
               else 
                 raise ArgumentError, "Unexpected constraint kind #{kind}"
             end
           end
 
           ############################################################################
-          ### Instance variables and initialization
+          ### Query interface
           ############################################################################
-        
-          # Candidate key name
-          attr_reader :name
-        
-          # Candidate key definition
-          attr_reader :definition
-        
-          def initialize(name, definition)
-            @name = name
-            @definition = definition
-          end
-            
-          ############################################################################
-          ### DbAgile::Core::Schema::Brick
-          ############################################################################
-        
-          # @see DbAgile::Core::Schema::Brick#brick_composite?
-          def brick_composite?
-            false
-          end
-        
-          ############################################################################
-          ### Equality and hash code
-          ############################################################################
-        
-          # Compares with another index
-          def ==(other)
-            return nil unless other.kind_of?(self.class)
-            (name == other.name) and (definition == other.definition)
+          
+          # Returns true if this constraint is a candidate key (including a primary 
+          # key)
+          def candidate_key?
+            self.kind_of?(Logical::CandidateKey)
           end
           
-          # Returns an hash code
-          def hash
-            [ name, definition ].hash
-          end
-          
-          # Duplicates this index
-          def dup
-            self.class.new(name, definition.dup)
+          # Returns true if this constraint is a primary key, false otherwise
+          def primary_key?
+            candidate_key? and primary?
           end
         
+          # Returns true if this constraint is a foreign key
+          def foreign_key?
+            self.kind_of?(Logical::ForeignKey)
+          end
+          
+          ############################################################################
+          ### Dependency control
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            include_parent ? [ parent ] : false
+          end
+          
         end # class Constraint
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile
+require 'dbagile/core/schema/logical/constraint/candidate_key'
+require 'dbagile/core/schema/logical/constraint/foreign_key'

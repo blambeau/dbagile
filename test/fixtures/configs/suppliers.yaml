@@ -1,0 +1,30 @@
+--- 
+logical: 
+  suppliers: 
+    heading: 
+      s#:    { domain: Integer, mandatory: true }
+      name:  { domain: String,  mandatory: true }
+      city:  { domain: String,  mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 's#' ] }
+  parts: 
+    heading: 
+      p#:    { domain: Integer, mandatory: true }
+      name:  { domain: String,  mandatory: true }
+      color: { domain: String,  mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'p#' ] }
+  supplies: 
+    heading: 
+      s#:    { domain: Integer, mandatory: true }
+      p#:    { domain: Integer, mandatory: true }
+      qty:   { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 's#', 'p#' ] }
+      is_a_known_supplier: { type: :foreign_key, attributes: [ 's#' ], references: suppliers }
+      is_a_known_part:     { type: :foreign_key, attributes: [ 'p#' ], references: parts     }
+---
+physical:
+  indexes:
+    supplier_name: { relvar: suppliers, attributes: [ 'name' ] }
+  

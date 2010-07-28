@@ -1,9 +1,14 @@
 module DbAgile
   module Core
-    class Schema
+    module Schema
       class Builder
         module ConceptFactory
 
+          # Builds a logical schema
+          def build_schema(identifier)
+            Schema.new(identifier)
+          end
+          
           # Builds a logical schema
           def build_logical
             Schema::Logical.new
@@ -51,6 +56,6 @@ module DbAgile
 
         end # module ConceptFactory
       end # class Builder
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

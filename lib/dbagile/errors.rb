@@ -3,6 +3,12 @@ module DbAgile
   # Main class of all DbAgile errors
   class Error < StandardError; end
   
+  # Raised when something goes really wrong (a bug, typically)
+  class InternalError < DbAgile::Error; end
+  
+  # Some internal assumption failed
+  class AssumptionFailedError < DbAgile::InternalError; end
+  
   # Raised when a configuration name is not valid
   class InvalidConfigurationName < DbAgile::Error; end
   
@@ -30,11 +36,7 @@ module DbAgile
   # Raised when input parsing of data fails for some reason
   class InvalidFormatError < DbAgile::Error; end
   
-  # Raised when something goes wrong with a schema
-  class InvalidSchemaError < DbAgile::Error; end
-  
-  # Raised when usage of schema files fails because they are not 
-  # installed
+  # Raised when usage of schema files fails because they are not installed
   class NoSchemaFilesError < DbAgile::Error; end
   
 end # module DbAgile

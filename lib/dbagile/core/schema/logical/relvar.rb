@@ -1,136 +1,84 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Relvar < Schema::Brick
-        
+    module Schema
+      class Logical
+        class Relvar < Schema::Composite
+          
           # Relvar name
           attr_reader :name
         
-          # Relvar heading
-          attr_reader :heading
-        
-          # Relvar constraints
-          attr_reader :constraints
-        
           # Creates a relation variable instance
-          def initialize(name)
+          def initialize(name, parts = _default_parts)
             @name = name.to_s.to_sym
-            @heading = Schema::Logical::Heading.new
-            @constraints = Schema::Logical::Constraints.new
-          end
-        
-          # Yields the block with each attribute 
-          def each_attribute(&block)
-            heading.each_attribute(&block)
-          end
-          
-          # Returns the relation variable primary key
-          def primary_key
-            constraints.each{|c|
-              return c if c.kind_of?(Logical::Constraint::CandidateKey) and c.primary?
-            }
-            raise InvalidSchemaError, "Relation variable #{name} has no primary key!"
-          end
-          
-          # Yiels the block with each foreign key
-          def each_foreign_key(&block)
-            constraints.select{|c|
-              c.kind_of?(Logical::Constraint::ForeignKey)
-            }.each(&block)
+            super(parts)
           end
           
           ############################################################################
-          ### Schema computations
+          ### Private interface
           ############################################################################
-        
-          # Delegate pattern on minus
-          def minus(other, builder)
-            raise ArgumentError, "Relvar expected" unless other.kind_of?(Relvar)
-            builder.relvar(name){
-              heading.minus(other.heading, builder)
-              constraints.minus(other.constraints, builder)
-            }
-          end
-        
-          ############################################################################
-          ### DbAgile::Core::Schema::Brick
-          ############################################################################
-        
-          # @see DbAgile::Core::Schema::Brick#brick_composite?
-          def brick_composite?
+          
+          # @see DbAgile::Core::Schema::Composite#_install_eigenclass_methods?
+          def _install_eigenclass_methods?
             true
           end
-          
-          # @see DbAgile::Core::Schema::Brick#brick_empty?
-          def brick_empty?
-            heading.brick_empty? and constraints.brick_empty?
+        
+          # Creates default parts
+          def _default_parts
+            {:heading     => Schema::Logical::Heading.new,
+             :constraints => Schema::Logical::Constraints.new}
           end
           
-          # @see DbAgile::Core::Schema::Brick#brick_children
-          def brick_children
-            [ heading, constraints ]
+          def _prefered_order
+            [ :heading, :constraints ]
           end
         
-          # @see DbAgile::Core::Schema::Brick#[]
-          def [](name)
-            return self.heading if name == :heading
-            return self.constraints if name == :constraints
-            raise ArgumentError, "No such mimics method #{name} on Relvar"
+          # Makes a sanity check on the part
+          def _sanity_check(schema)
+            raise SchemaInternalError, "No name provided on #{self}" if name.nil?
+            super(schema)
           end
-          
-          # @see DbAgile::Core::Schema::Brick#[]=
-          def []=(name, value)
-            if (name == :heading) and value.kind_of?(Logical::Constraints)
-              @heading = value 
-              value.send(:parent=, self)
-            elsif name == :constraints and value.kind_of?(Logical::Heading)
-              @constraints = value
-              value.send(:parent=, self)
-            else
-              raise ArgumentError, "Relvar does not accept #{value.class} for #{name}"
+        
+          # Checks this composite's semantics and collects errors inside buffer
+          def _semantics_check(clazz, buffer)
+            if constraints.primary_key.nil?
+              buffer.add_error(self, clazz::MissingPrimaryKey)
             end
+            super(clazz, buffer)
           end
+      
+          ############################################################################
+          ### Pseudo-private SchemaObject interface
+          ############################################################################
           
+          # Returns the arguments to pass to builder handler
+          def builder_args
+            [ name ]
+          end
+
           ############################################################################
           ### Equality and hash code
           ############################################################################
         
           # Compares with another attribute
-          def ==(other)
+          def look_same_as?(other)
             return nil unless other.kind_of?(Relvar)
-            (name == other.name) and (heading == other.heading) and (constraints == other.constraints)
+            return false unless name == other.name
+            super(other)
           end
         
-          # Returns an hash code
-          def hash
-            [ name, heading, constraints ].hash
-          end
-          
           # Duplicates this attribute
           def dup
-            dup = Logical::Relvar.new(name)
-            dup[:heading] = heading.dup
-            dup[:constraints] = constraints.dup
-            dup
+            Logical::Relvar.new(name, :heading => heading.dup, :constraints => constraints.dup)
           end
-        
-          ############################################################################
-          ### About IO
-          ############################################################################
-        
-          # Delegation pattern on YAML flushing
-          def to_yaml(opts = {})
-            YAML::quick_emit(self, opts){|out|
-              out.map("tag:yaml.org,2002:map", to_yaml_style ) do |map|
-                map.add('heading', heading) unless heading.brick_empty?
-                map.add('constraints', constraints) unless constraints.brick_empty?
-              end
-            }
+          
+          # Returns a string representation
+          def to_s
+            "#{DbAgile::RubyTools::unqualified_class_name(self.class)}: #{name}"
           end
-        
+          
+          private :_default_parts
         end # class Relvar
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

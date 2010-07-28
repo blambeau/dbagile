@@ -1,20 +1,12 @@
 module DbAgile
   module Core
-    class Schema
-      class Logical < Schema::Brick
-        class Attribute < Schema::Brick
+    module Schema
+      class Logical
+        class Attribute < Schema::Part
         
-          # Attribute name
-          attr_reader :name
-        
-          # Attribute definition
-          attr_reader :definition
-        
-          # Creates a heading instance
-          def initialize(name, definition)
-            @name = name
-            @definition = definition
-          end
+          ############################################################################
+          ### Attribute
+          ############################################################################
           
           # Returns attribute domain
           def domain
@@ -32,34 +24,25 @@ module DbAgile
           end
         
           ############################################################################
-          ### DbAgile::Core::Schema::Brick
+          ### Dependency control
           ############################################################################
-        
-          # @see DbAgile::Core::Schema::Brick#brick_composite?
-          def brick_composite?
-            false
-          end
-        
-          ############################################################################
-          ### Equality and hash code
-          ############################################################################
-        
-          # Compares with another attribute
-          def ==(other)
-            return nil unless other.kind_of?(Attribute)
-            (name == other.name) and (definition == other.definition)
-          end
-        
-          # Returns an hash code
-          def hash
-            [ name, definition ].hash
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def dependencies(include_parent = false)
+            include_parent ? [ parent ] : []
           end
           
-          # Duplicates this attribute
-          def dup
-            Logical::Attribute.new(name, definition.dup)
+          ############################################################################
+          ### Check interface
+          ############################################################################
+          
+          # @see DbAgile::Core::Schema::SchemaObject
+          def _semantics_check(clazz, buffer)
+            unless default_value.nil? or default_value.kind_of?(domain)
+              buffer.add_error(self, clazz::InvalidDefaultValue)
+            end
           end
-        
+      
           ############################################################################
           ### About IO
           ############################################################################
@@ -80,6 +63,6 @@ module DbAgile
           
         end # class Attribute
       end # module Logical
-    end # class Schema
+    end # module Schema
   end # module Core
 end # module DbAgile

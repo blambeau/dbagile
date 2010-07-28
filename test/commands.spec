@@ -84,6 +84,14 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The sql:show command" 
     end
   
+    describe "sql:heading /" do
+      it_should_behave_like "The sql:heading command" 
+    end
+  
+    describe "sql:drop /" do
+      it_should_behave_like "The sql:drop command" 
+    end
+
   end # -- Query
   
   # -- Schema
@@ -95,16 +103,12 @@ describe "DbAgile::Command::API /" do
       dba.output_buffer = StringIO.new
     }
     
-    describe "schema:heading /" do
-      it_should_behave_like "The schema:heading command" 
-    end
-  
-    describe "schema:drop /" do
-      it_should_behave_like "The schema:drop command" 
+    describe "schema:dump" do
+      it_should_behave_like "The schema:dump command" 
     end
 
-    describe "The schema:dump command" do
-      it_should_behave_like "The schema:dump command" 
+    describe "schema:check" do
+      it_should_behave_like "The schema:check command" 
     end
 
   end # -- Schema

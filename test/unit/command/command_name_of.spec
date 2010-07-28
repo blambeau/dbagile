@@ -9,8 +9,13 @@ describe "::DbAgile::Command::command_name_of /" do
   end
   
   describe "when called on a non root command" do
-    let(:command){ DbAgile::Command::Schema::Heading }
-    it{ should == "schema:heading" }
+    let(:command){ DbAgile::Command::SQL::Heading }
+    it{ should == "sql:heading" }
+  end
+  
+  describe "when called on a complex name command" do
+    let(:command){ DbAgile::Command::Schema::CreateScript }
+    it{ should == "schema:create-script" }
   end
   
 end

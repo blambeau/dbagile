@@ -2,26 +2,28 @@ module DbAgile
   class Command
     module Schema
       #
-      # Dump the schema of the database
+      # Dump database schema (announced by default) 
       #
-      # Usage: dba #{command_name}
+      # Usage: dba #{command_name} [--effective|--physical]
       #
       class Dump < Command
+        include Schema::SchemaBased
         Command::build_me(self, __FILE__)
-      
-        # Returns command's category
-        def category
-          :schema
+        
+        # Contribute to options
+        def add_options(opt)
+          opt.separator nil
+          opt.separator "Options:"
+          add_effective_pysical_options(opt)
         end
-
+      
         # Executes the command
         def execute_command
-          schema = nil
-          with_current_connection do |connection|
-            schema = connection.database_schema
+          with_schema do |schema|
+            say("# Schema of #{schema.schema_identifier.inspect}", :magenta)
             display schema.to_yaml
+            schema
           end
-          schema
         end
       
       end # class SchemaDump

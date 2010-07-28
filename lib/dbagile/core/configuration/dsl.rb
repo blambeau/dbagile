@@ -29,7 +29,7 @@ module DbAgile
             cfg
           }
           unless config_file.nil?
-            config_file.configurations << created
+            config_file << created
           end
           created
         end
@@ -41,16 +41,16 @@ module DbAgile
           configuration.uri = str
         end
         
-        # Sets the schema file
-        def schema_file(file)
+        # Sets the announced schema files
+        def announced_schema(*files)
           dsl_has_configuration!
-          configuration.schema_files << file
+          configuration.announced_files = valid_schema_files!(files)
         end
         
-        # Sets the schema files
-        def schema_files(*files)
+        # Sets the effective schema files
+        def effective_schema(*files)
           dsl_has_configuration!
-          files.flatten.each{|f| configuration.schema_files << f}
+          configuration.effective_files = valid_schema_files!(files)
         end
         
         # @see DbAgile::Core::Configuration#plug

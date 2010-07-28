@@ -18,4 +18,9 @@ describe "DbAgile::RubyTools#class_unqualified_name /" do
     it{ should == "Utils" }
   end
   
+  describe "when piped with parent_module" do
+    let(:clazz){ DbAgile::RubyTools::parent_module(DbAgile::Fixtures::Utils) }
+    it{ should == "Fixtures" }
+  end
+
 end
