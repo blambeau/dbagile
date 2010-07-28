@@ -24,11 +24,6 @@ shared_examples_for("The sql:send command") do
       dba.dataset(:basic_values).count.should == 1
     end
     
-    it "should also execute the query if both are present" do
-      dba.sql_send("--file", insert, "DELETE FROM basic_values WHERE id >= 10")
-      dba.dataset(:basic_values).count.should == 1
-    end
-    
   end
   
 end
