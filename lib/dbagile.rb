@@ -31,7 +31,7 @@ module DbAgile
   # Example
   #   DbAgile::dba do |dba|
   #     # Override environment default values (~/.dbagile, ...)
-  #     dba.repository_path  = ...    # your application own config file
+  #     dba.repository_path  = ...     # your application own repository
   #     dba.history_file_path = nil    # no history
   #     dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   # 

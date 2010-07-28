@@ -15,7 +15,7 @@ module DbAgile
           name_or_file
         end
         
-        # Yields block for each config file
+        # Yields block for each schema file
         def each_schema_file(&block)
           Dir[File.expand_path("../fixtures/*.yaml", __FILE__)].each(&block)
         end

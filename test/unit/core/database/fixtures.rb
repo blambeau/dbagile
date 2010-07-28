@@ -6,12 +6,12 @@ module DbAgile
       module Database
         include Fixtures::Utils
       
-        # Returns a config file
+        # Returns a database file
         def database_file(name_or_file)
           find_file(name_or_file, __FILE__, ".dba")
         end
         
-        # Yields block for each config file
+        # Yields block for each database file
         def each_database_file(&block)
           each_file(__FILE__, ".dba", &block)
         end

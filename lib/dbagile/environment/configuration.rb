@@ -154,17 +154,17 @@ module DbAgile
         
         # Make some checks
         unless File.exists?(file)
-          raise NoRepositoryFileError, "No such config file #{file}" 
+          raise NoRepositoryFileError, "No such repository index #{file}" 
         end
         unless File.file?(file) and File.readable?(file)
-          raise CorruptedRepositoryError, "Corrupted config file #{file}" 
+          raise CorruptedRepositoryError, "Corrupted repository index #{file}" 
         end
 
         # Loads it
         begin
           ::DbAgile::Core::Repository.new(file)
         rescue Exception => ex
-          raise CorruptedRepositoryError, "Corrupted config file #{file}: #{ex.message}", ex.backtrace
+          raise CorruptedRepositoryError, "Corrupted repository index #{file}: #{ex.message}", ex.backtrace
         end
       end
 

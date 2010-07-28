@@ -15,7 +15,7 @@ module DbAgile
         name_or_file
       end
       
-      # Yields block for each config file
+      # Yields block for each file with a given extension
       def each_file(resolver, extension, &block)
         Dir[File.expand_path("../fixtures/*.#{extension}", resolver)].each(&block)
       end
