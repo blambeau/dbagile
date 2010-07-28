@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Schema
       #
-      # Prints a create SQL script for a given schema
+      # Print a create SQL script for a given schema
       #
       # Usage: dba #{command_name} [SCHEMA_FILE]
       #

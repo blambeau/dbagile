@@ -2,9 +2,9 @@ module DbAgile
   class Command
     module Schema
       #
-      # Prints a drop SQL script for a given schema
+      # Print a SQL script for staging from an effective to an announced schema
       #
-      # Usage: dba #{command_name} [SCHEMA_FILE]
+      # Usage: dba #{command_name}
       #
       class StageScript < Command
         include ComparisonBased

@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Schema
       #
-      # Show differences between announed and effective database schemas
+      # Show differences between announced and effective database schemas
       #
       # Usage: dba #{command_name}
       #
