@@ -50,6 +50,24 @@ module DbAgile
           yield(schema)
         end
         
+        # Contribute to options
+        def add_options(opt)
+          opt.separator nil
+          opt.separator "Options:"
+          add_effective_pysical_options(opt)
+        end
+      
+        # Normalizes the pending arguments
+        def normalize_pending_arguments(arguments)
+          case arguments.size
+            when 0
+            when 1
+              self.schema_file = valid_read_file!(arguments.shift)
+            else
+              bad_argument_list!(arguments)
+          end
+        end
+        
       end # module Options
     end # module Schema
   end # class Command

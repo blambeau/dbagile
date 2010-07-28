@@ -32,6 +32,15 @@ module DbAgile
       end
       
       # 
+      # Converts a schema abstract script to a SQL script
+      #
+      # @param [DbAgile::Core::Migrate::AbstractScript] a script to run
+      #
+      def script2sql(script, buffer = "")
+        Kernel.raise NotImplementedError
+      end
+        
+      # 
       # Disconnect the adapter and frees all resources.
       #
       # @return true

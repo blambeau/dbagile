@@ -7,6 +7,9 @@ module DbAgile
   module Core
     module Schema
 
+      # An empty schema
+      EMPTY_SCHEMA = Schema::DatabaseSchema.new
+
       # Status of objects that need to be created (on left)
       TO_CREATE = :to_create
 
@@ -176,12 +179,34 @@ module DbAgile
       #
       # @param [DbAgile::Core::Schema::DatabaseSchema] schema an annotated schema
       # @param [Hash] options staging options
-      # @returns [Array] a list of abstract operations
+      # @return [Migrate::AbstractScript] a list of abstract operations
       #
       def stage_script(schema, options = Migrate::Stager::DEFAULT_OPTIONS)
         Migrate::Stager.new.run(schema, options)
       end
       module_function :stage_script
+      
+      # 
+      # Computes a create abstract script for a given schema.
+      #
+      # @param [DbAgile::Core::Schema::DatabaseSchema] any valid schema
+      # @return [Migrate::AbstractScript] a list of abstract operations
+      #
+      def create_script(schema)
+        stage_script(EMPTY_SCHEMA + schema)
+      end
+      module_function :create_script
+      
+      # 
+      # Computes a drop abstract script for a given schema.
+      #
+      # @param [DbAgile::Core::Schema::DatabaseSchema] any valid schema
+      # @return [Migrate::AbstractScript] a list of abstract operations
+      #
+      def drop_script(schema)
+        stage_script(schema + EMPTY_SCHEMA)
+      end
+      module_function :drop_script
       
     end # module Schema
   end # module Core

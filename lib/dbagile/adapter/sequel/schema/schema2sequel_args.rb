@@ -3,6 +3,15 @@ module DbAgile
     module Schema
       module Schema2SequelArgs
       
+        # Converts a Ruby type to a Sequel type
+        def ruby_type2sequel_type(type)
+          if type == SByC::TypeSystem::Ruby::Boolean
+            TrueClass
+          else
+            type
+          end
+        end
+      
         #
         # Returns Sequel's column argument from an Attribute instance
         #
@@ -11,7 +20,8 @@ module DbAgile
           unless (defa = attribute.default_value).nil?
             options[:default] = defa
           end
-          [attribute.name, attribute.domain, options]
+          domain = ruby_type2sequel_type(attribute.domain)
+          [attribute.name, domain, options]
         end
       
         #
@@ -20,7 +30,7 @@ module DbAgile
         #
         def candidate_key2primary_key_args(ckey)
           columns = ckey.key_attributes.collect{|c| c.name} 
-          options = {}
+          options = {:name => ckey.name}
           [ columns, options ]
         end
       
@@ -30,7 +40,7 @@ module DbAgile
         #
         def candidate_key2unique_args(ckey)
           columns = ckey.key_attributes.collect{|c| c.name} 
-          options = {}
+          options = {:name => ckey.name}
           [ columns, options ]
         end
       
@@ -42,7 +52,7 @@ module DbAgile
           target_relvar = fkey.target_relvar.name
           source_names = fkey.source_attributes.collect{|a| a.name}
           target_names  = fkey.target_key.key_attributes.collect{|a| a.name}
-          [source_names, target_relvar, { :key => target_names }]
+          [source_names, target_relvar, { :key => target_names, :name => fkey.name }]
         end
       
         #
@@ -50,7 +60,8 @@ module DbAgile
         # 
         def index2index_args(index)
           attr_names = index.indexed_attributes.collect{|a| a.name}
-          [ attr_names ]
+          options = {:name => index.name}
+          [ attr_names, options ]
         end
       
       end # module Schema2SequelArgs

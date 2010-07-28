@@ -6,8 +6,7 @@ require 'dbagile/adapter/sequel/data/transaction_driven'
 
 require 'dbagile/adapter/sequel/schema/physical_dump'
 require 'dbagile/adapter/sequel/schema/schema2sequel_args'
-# require 'dbagile/adapter/sequel/schema/table_expand_helper'
-# require 'dbagile/adapter/sequel/schema/table_collapse_helper'
+require 'dbagile/adapter/sequel/schema/concrete_script'
 require 'dbagile/adapter/sequel/schema/table_driven'
 require 'dbagile/adapter/sequel/schema/transaction_driven'
 module DbAgile

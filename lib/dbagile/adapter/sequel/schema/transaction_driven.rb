@@ -3,8 +3,8 @@ module DbAgile
     module Schema
       module TransactionDriven
 
-        # @see DbAgile::Contract::Schema::TransactionDriven#expand_schema
-        def stage_schema(transaction, schema, options)
+        # @see DbAgile::Contract::Schema::TransactionDriven#run_schema_script
+        def run_schema_script(transaction, script, options)
           buffer = ""
           SequelAdapter::Schema::Stager.new(db).run(schema, buffer, options)
           unless options[:dry_run]

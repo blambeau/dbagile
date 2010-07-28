@@ -17,6 +17,14 @@ module DbAgile
             end
           end
           
+          # Yields the block with each (subop_kind, operand) pair
+          def each_sub_operation(&block)
+            unless self.respond_to?(:operations)
+              raise DbAgile::AssumptionFailedError, "#{self.class} does not support sub operations"
+            end
+            operations.each{|op| block.call(op[0], op[1])}
+          end
+          
           # Create/alter an attribute
           def attribute(attribute)
             supports_sub_operation!(:attribute)

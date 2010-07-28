@@ -3,16 +3,6 @@ module DbAgile
     module Schema
       module TransactionDriven
 
-        # 
-        # Ensures an annoted schema on the underlying database.
-        #
-        # @param [DbAgile::Core::Transaction] transaction the current transaction
-        # @param [DbAgile::Core::Schema] schema objects to create/alter/drop on the SQL database
-        #
-        def stage_schema(transaction, schema, options)
-          Kernel.raise NotImplementedError
-        end
-        
         #
         # Creates a table with some columns. 
         #

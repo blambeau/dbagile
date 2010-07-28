@@ -12,27 +12,6 @@ module DbAgile
       class Check < Command
         include Schema::SchemaBased
         Command::build_me(self, __FILE__)
-      
-        # Schema to check
-        attr_accessor :schema
-      
-        # Contribute to options
-        def add_options(opt)
-          opt.separator nil
-          opt.separator "Options:"
-          add_effective_pysical_options(opt)
-        end
-        
-        # Normalizes the pending arguments
-        def normalize_pending_arguments(arguments)
-          case arguments.size
-            when 0
-            when 1
-              self.schema_file = valid_read_file!(arguments.shift)
-            else
-              bad_argument_list!(arguments)
-          end
-        end
         
         # Executes the command
         def execute_command
