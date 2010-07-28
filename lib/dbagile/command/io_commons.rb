@@ -23,7 +23,7 @@ module DbAgile
       # Columns to allbut
       attr_accessor :allbut
       
-      # Builds default configuration
+      # Builds default io options
       def set_default_options
         self.format = :csv
         self.type_system = nil

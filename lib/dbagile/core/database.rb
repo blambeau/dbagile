@@ -23,7 +23,7 @@ module DbAgile
       # Plugs as arrays of arrays
       attr_reader :plugs
       
-      # Creates a configuration instance
+      # Creates a database instance
       def initialize(name, uri = nil, &block)
         raise ArgumentError, "Database name is mandatory" unless name.kind_of?(Symbol)
         raise ArgumentError, "Database DSL is deprecated" unless block.nil?
@@ -94,12 +94,12 @@ module DbAgile
       ### About schema
       ##############################################################################
       
-      # Does this configuration has announced schema files?
+      # Does this database has announced schema files?
       def has_announced_schema?
         !(@announced_files.nil? or @announced_files.empty?)
       end
       
-      # Does this configuration has effective schema files?
+      # Does this database has effective schema files?
       def has_effective_schema?
         !(@effective_files.nil? or @effective_files.empty?)
       end
@@ -166,8 +166,8 @@ module DbAgile
       ### About io
       ##############################################################################
       
-      # Inspects this configuration, returning a ruby chunk of code
-      # whose evaluation leads to a configuration instance
+      # Inspects this database, returning a ruby chunk of code
+      # whose evaluation leads to a database instance
       def inspect(prefix = "")
         require 'sbyc/type_system/ruby'
         buffer = ""

@@ -1,6 +1,6 @@
 shared_examples_for("The config:add command") do
   
-  it "should return the new configuration" do
+  it "should return the new database" do
     dba.config_add(%w{test sqlite://test.db}).should be_kind_of(DbAgile::Core::Database)
   end
   
@@ -17,17 +17,17 @@ shared_examples_for("The config:add command") do
     lambda{ dba.config_add(%w{test sqlite://test.db}) }.should raise_error(DbAgile::ConfigNameConflictError)
   end
   
-  it "should flush the new configuration" do
+  it "should flush the repository" do
     dba.config_add(%w{test sqlite://test.db})
     dba.dup.repository.has_database?(:test).should be_true
   end
   
-  it "should set the configuration as the current one by default" do
+  it "should set the database as the current one by default" do
     dba.config_add(%w{test sqlite://test.db})
     dba.dup.repository.current?(:test).should be_true
   end 
   
-  it "should not set the configuration as the current one with --no-current" do
+  it "should not set the database as the current one with --no-current" do
     dba.config_add(%w{--no-current test sqlite://test.db})
     dba.dup.repository.current?(:test).should be_false
   end 

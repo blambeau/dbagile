@@ -16,8 +16,8 @@ module DbAgile
       # Configuration file
       attr_accessor :repository_path
       
-      # Database configuration to use
-      attr_accessor :use_config
+      # Database to use
+      attr_accessor :use_database
       
       # Continue after my options
       attr_accessor :stop_after_options
@@ -32,12 +32,12 @@ module DbAgile
         opt.separator nil
         opt.separator "Options:"
         opt.on("--config=FILE", 
-               "Use a specific configuration file (defaults to ~/.dbagile)") do |value|
+               "Use a specific repository file (defaults to ~/.dbagile)") do |value|
           self.repository_path = value
         end
         opt.on("--use=DB", 
-               "Use a specific database configuration") do |value|
-          self.use_config = value
+               "Use a specific database") do |value|
+          self.use_database = value
         end
         opt.on_tail("--help", "Show help") do
           show_short_help
@@ -108,8 +108,8 @@ module DbAgile
         if self.repository_path
           environment.repository_path = self.repository_path
         end
-        if self.use_config
-          environment.repository.current_db_name = self.use_config.to_sym
+        if self.use_database
+          environment.repository.current_db_name = self.use_database.to_sym
         end
         
         # Invoke sub command

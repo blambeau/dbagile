@@ -42,11 +42,7 @@ module DbAgile
           ambigous_argument_list! if self.query and self.file
         end
       
-        #
         # Executes the command.
-        #
-        # @return [DbAgile::Core::Database] the created configuration
-        #
         def execute_command
           result = nil
           with_current_connection do |connection|

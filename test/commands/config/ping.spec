@@ -1,6 +1,6 @@
 shared_examples_for("The config:ping command") do
   
-  it "should return the pinged configuration" do
+  it "should return the pinged database" do
     dba.config_ping(%w{sqlite}).should be_kind_of(::DbAgile::Core::Database)
   end
 

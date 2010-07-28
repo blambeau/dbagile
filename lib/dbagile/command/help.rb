@@ -8,7 +8,7 @@ module DbAgile
     class Help < Command
       Command::build_me(self, __FILE__)
       
-      # Name of the configuration to add
+      # Command name
       attr_accessor :command
       
       # Complete help?

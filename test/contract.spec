@@ -7,16 +7,16 @@ describe "DbAgile::Contract /" do
   let(:basic_values_tuple)  { DbAgile::Fixtures::basic_values_tuple   }
   let(:basic_values_keys)   { DbAgile::Fixtures::basic_values_keys    }
   
-  DbAgile::Fixtures::environment.each_database do |configuration|
-    next if configuration.name == :unexisting
-    unless configuration.ping?
-      puts "skipping #{configuration.name} (no ping)"
+  DbAgile::Fixtures::environment.each_database do |database|
+    next if database.name == :unexisting
+    unless database.ping?
+      puts "skipping #{database.name} (no ping)"
       next
     end
   
-    describe "on #{configuration.name} /" do
+    describe "on #{database.name} /" do
     
-      let(:conn)  { configuration.connect                }
+      let(:conn)  { database.connect                }
       let(:trans) { DbAgile::Core::Transaction.new(conn) }
   
       describe "::DbAgile::Core::Connection" do
@@ -24,7 +24,7 @@ describe "DbAgile::Contract /" do
         it_should_behave_like("A Contract::Connection")
         it_should_behave_like("A Contract::Data::TableDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
-        if /robust/ =~ configuration.name.to_s
+        if /robust/ =~ database.name.to_s
           it_should_behave_like("A robust Contract::Data::TableDriven")
           it_should_behave_like("A robust Contract::Schema::TableDriven")
         end
@@ -37,7 +37,7 @@ describe "DbAgile::Contract /" do
         it_should_behave_like("A Contract::Data::TransactionDriven")
         it_should_behave_like("A Contract::Schema::TableDriven")
         it_should_behave_like("A Contract::Schema::TransactionDriven")
-        if /robust/ =~ configuration.name.to_s
+        if /robust/ =~ database.name.to_s
           it_should_behave_like("A robust Contract::Data::TableDriven")
           it_should_behave_like("A robust Contract::Data::TransactionDriven")
           it_should_behave_like("A robust Contract::Schema::TableDriven")
@@ -60,7 +60,7 @@ describe "DbAgile::Contract /" do
         it_should_behave_like("A Contract::Data::Dataset")
       end
 
-    end # on #{configuration.name}
+    end # on #{database.name}
   end # each config
   
 end # describe DbAgile::Contract

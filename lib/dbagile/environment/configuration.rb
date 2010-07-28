@@ -24,7 +24,7 @@ module DbAgile
       
       # 
       # Ensures that repository is loaded and returns the Repository instance. 
-      # If create is set to true, a default configuration file is created when 
+      # If create is set to true, a default repository is created when 
       # file does not exists. Otherwise raises a NoConfigFileError.
       #
       # ATTENTION: the Repository instance is kept in cache. It will not be 
@@ -35,14 +35,14 @@ module DbAgile
       # @raise NoConfigFileError if create is false and file do not exists
       # @raise IOError if something goes wrong when reading/writing the file
       # @raise CorruptedConfigFileError if something goes wrong when parsing the file
-      # @return [Repository] configuration file instance
+      # @return [Repository] repository instance
       #
       def repository(create = true)
         @repository ||= load_repository(create, repository_path)
       end
       
       #
-      # Yields the block with each configuration in turn
+      # Yields the block with each database in turn
       #
       # As this method is a wrapper on repository, it shares the specification
       # about parameters and exceptions.
@@ -75,7 +75,7 @@ module DbAgile
       # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
-      # @raise NoSuchConfigError if the configuration cannot be found.
+      # @raise NoSuchConfigError if the database cannot be found.
       # @return block execution result
       #
       def with_database(name)
@@ -87,12 +87,12 @@ module DbAgile
       
       # 
       # Yields the block with a Configuration instance for the current 
-      # configuration found in condif file.
+      # database found in repository.
       # 
       # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
-      # @raise NoDefaultConfigError if the configuration cannot be found.
+      # @raise NoDefaultConfigError if the database cannot be found.
       # @return block execution result
       #
       def with_current_database
@@ -108,7 +108,7 @@ module DbAgile
       # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
-      # @raise NoSuchConfigError if the configuration cannot be found.
+      # @raise NoSuchConfigError if the database cannot be found.
       # @return block execution result
       #
       def with_connection(config, conn_options = {}, &block)
@@ -128,7 +128,7 @@ module DbAgile
       #
       # Same contract as with_connection, expect for parameters.
       #
-      # @raise NoDefaultConfigError if the configuration cannot be found.
+      # @raise NoDefaultConfigError if the database cannot be found.
       #
       def with_current_connection(conn_options = {}, &block)
         with_current_database{|config|
@@ -140,7 +140,7 @@ module DbAgile
       protected
       
       #
-      # Loads a configuration file and returns a Repository instance. 
+      # Loads a repository file and returns a Repository instance. 
       #
       # Internal implementation of repository, almost same specification.
       #

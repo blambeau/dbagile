@@ -3,7 +3,7 @@ describe "DbAgile::Core::Repository#config" do
 
   let(:config){ DbAgile::Fixtures::Core::Repository::repository(:test_and_prod) }
 
-  describe("When called with an unexisting configuration name") do
+  describe("When called with an unexisting database name") do
     subject{ config.database(:test) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
@@ -12,7 +12,7 @@ describe "DbAgile::Core::Repository#config" do
     }
   end
 
-  describe("When called with an unexisting configuration instance") do
+  describe("When called with an unexisting database instance") do
     subject{ config.database(config.database(:test)) }
     specify{
       subject.should be_kind_of(::DbAgile::Core::Database)
@@ -39,7 +39,7 @@ describe "DbAgile::Core::Repository#config" do
     }
   end
 
-  describe("When called with an missing configuration") do
+  describe("When called with an missing database") do
     subject{ config.database(:nosuchone) }
     it{ should be_nil }
   end

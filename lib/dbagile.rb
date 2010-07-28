@@ -70,11 +70,11 @@ module DbAgile
   module_function :default_environment=
   
   #
-  # Creates a new configuration and returns it.
+  # Creates a new database and returns it.
   #
-  # @param [Symbol] name configuration name
-  # @param [Proc] block configuration block dsl
-  # @return [DbAgile::Core::Database] a database configuration instance.
+  # @param [Symbol] name database name
+  # @param [Proc] block database block dsl
+  # @return [DbAgile::Core::Database] a database instance.
   # 
   def database(name, &block)
     unless block
