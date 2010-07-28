@@ -7,7 +7,7 @@ module DbAgile
       attr_reader :file
     
       # Databases as an array of Database instances
-      attr_reader :configurations
+      attr_reader :databases
     
       # Current configuration (its name, i.e. a Symbol)
       attr_accessor :current_db_name
@@ -19,7 +19,7 @@ module DbAgile
       # Creates a config file instance, by parsing content of file.
       def initialize(file)
         @file = file
-        @configurations = []
+        @databases = []
         if ::File.exists?(file)
           raise "File expected, folder found (#{file})" unless ::File.file?(file)
           raise "Unable to read #{file}" unless ::File.readable?(file)
@@ -43,7 +43,7 @@ module DbAgile
     
       # Checks if at least one configuration exists
       def empty?
-        configurations.empty?
+        databases.empty?
       end
     
       # Checks if a configuration exists
@@ -66,13 +66,13 @@ module DbAgile
     
       # Yields the block with each configuration in turn
       def each(*args, &block)
-        configurations.each(*args, &block)
+        databases.each(*args, &block)
       end
     
       # Returns a configuration by match. Returns nil if no such configuration
       def config(match)
         return match if match.kind_of?(::DbAgile::Core::Database)
-        configurations.find{|c| 
+        databases.find{|c| 
           case match
             when Symbol
               c.name == match
@@ -102,13 +102,13 @@ module DbAgile
             ::File.expand_path("../#{f}", self.file) 
           end
         }
-        self.configurations << config
+        self.databases << config
       end
     
       # Removes a configuration from this config file
       def remove(config)
         config = self.config(config)
-        config.nil? ? nil : configurations.delete(config)
+        config.nil? ? nil : databases.delete(config)
       end
     
       #############################################################################################
@@ -133,7 +133,7 @@ module DbAgile
       # Inspects this configuration file
       def inspect(prefix = "")
         buffer = ""
-        configurations.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
+        databases.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
         buffer << "current_db " << current_db_name.inspect unless current_db_name.nil?
         buffer
       end
