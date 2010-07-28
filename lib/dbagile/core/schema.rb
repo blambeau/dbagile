@@ -2,6 +2,7 @@ require 'dbagile/core/schema/errors'
 require 'dbagile/core/schema/schema_object'
 require 'dbagile/core/schema/builder'
 require 'dbagile/core/schema/computations'
+require 'dbagile/core/schema/migrate'
 module DbAgile
   module Core
     module Schema
@@ -177,10 +178,10 @@ module DbAgile
       # @param [Hash] options staging options
       # @returns [Array] a list of abstract operations
       #
-      def stage_operations(schema, options = Computations::DEFAULT_STAGE_OPTIONS)
-        Computations::stage_operations(schema, options)
+      def stage_script(schema, options = Migrate::Stager::DEFAULT_OPTIONS)
+        Migrate::Stager.new.run(schema, options)
       end
-      module_function :stage_operations
+      module_function :stage_script
       
     end # module Schema
   end # module Core
