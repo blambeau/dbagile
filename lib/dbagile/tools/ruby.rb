@@ -1,6 +1,16 @@
 module DbAgile
   module RubyTools
     
+    # Returns the parent module of a class
+    def parent_module(clazz)
+      name = clazz.name
+      if name =~ /^(.*?)::([^:]+)$/
+        Kernel.eval($1)
+      else
+        nil
+      end
+    end
+    
     # Returns the unqualified name of a class
     def class_unqualified_name(clazz)
       name = clazz.name

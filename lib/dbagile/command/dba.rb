@@ -10,7 +10,7 @@ module DbAgile
     # DbAgile aims at supporting database administrators and developers of database
     # oriented application. Read more about it on http://blambeau.github.com/dbagile.
     #
-    class DbA < Command
+    class Dba < Command
       Command::build_me(self, __FILE__)
       
       # Configuration file
