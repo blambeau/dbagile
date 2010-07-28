@@ -63,7 +63,7 @@ module DbAgile
       # @return [...] result of the block execution
       # @raise ArgumentError if no block is provided
       #
-      def with_config_file(create = true)
+      def with_repository(create = true)
         raise ArgumentError, "Missing block" unless block_given?
         yield(config_file(create))
       end

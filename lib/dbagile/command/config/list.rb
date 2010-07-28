@@ -37,7 +37,7 @@ module DbAgile
         # @return [DbAgile::Core::Repository] the configuration file instance
         #
         def execute_command
-          with_config_file do |config_file|
+          with_repository do |config_file|
 
             if verbose
               display(config_file.inspect)

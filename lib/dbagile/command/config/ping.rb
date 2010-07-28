@@ -29,7 +29,7 @@ module DbAgile
       
         # Executes the command
         def execute_command
-          cf = with_config_file do |config_file|
+          cf = with_repository do |config_file|
         
             config = has_database!(config_file, self.match)
         

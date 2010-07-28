@@ -27,7 +27,7 @@ module DbAgile
         :output_buffer,
         :output_buffer=,
         #
-        :with_config_file,
+        :with_repository,
         :with_config,
         :with_current_database,
         #

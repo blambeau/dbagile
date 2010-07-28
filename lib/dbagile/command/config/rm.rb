@@ -29,7 +29,7 @@ module DbAgile
         # @return [DbAgile::Core::Repository] the configuration file instance
         #
         def execute_command
-          cf = with_config_file do |config_file|
+          cf = with_repository do |config_file|
             config = has_database!(config_file, self.match)
 
             # Move the current one if it was it
