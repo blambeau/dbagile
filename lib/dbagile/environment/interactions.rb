@@ -9,7 +9,13 @@ module DbAgile
       attr_accessor :input_buffer
     
       # The output buffer to use for display
-      attr_accessor :output_buffer
+      attr_reader :output_buffer
+      
+      # Sets the output buffer
+      def output_buffer=(io)
+        @output_buffer = io
+        @highline = HighLine.new(input_buffer, io)
+      end
     
       #
       # Asks something to the user/oracle. If a continuation block is given
@@ -40,8 +46,11 @@ module DbAgile
       # @return [void]
       #
       def say(something, color = nil)
-        writeline(something, color)
-        nil
+        if color
+          @highline.say(@highline.color(something, color))
+        else
+          @highline.say(something)
+        end
       end
     
       # 
@@ -88,10 +97,10 @@ module DbAgile
       #
       # @param [String] something a message to display
       #
-      def writeline(something, color = nil)
+      def writeline(something)
         return if output_buffer.nil?
-        something += "\n" unless something =~ /[\n]$/ 
-        output_buffer << something
+        output_buffer << something 
+        output_buffer << "\n" unless something =~ /\n$/
       end
 
     end # module Interactions

@@ -1,0 +1,5 @@
+DbAgile::database(:many_schema_files){
+  uri "test.db"
+  announced_schema DbAgile::Fixtures::Core::Schema::schema_file(:dbagile), 
+                   DbAgile::Fixtures::Core::Schema::schema_file(:suppliers_and_parts)
+}

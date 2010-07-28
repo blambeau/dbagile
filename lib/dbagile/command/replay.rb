@@ -1,9 +1,12 @@
 module DbAgile
   class Command
     #
-    # Display command history
+    # Replay a previous history command (last one by default)
+    #
+    # Usage: dba #{command_name} [NUMBER]
     #
     class Replay < Command
+      Command::build_me(self, __FILE__)
       
       # Command number to replay
       attr_accessor :number
@@ -11,16 +14,6 @@ module DbAgile
       # Returns command's category
       def category
         :dba
-      end
-      
-      # Returns the command banner
-      def banner
-        "Usage: dba replay [NUMBER]"
-      end
-
-      # Short help
-      def short_help
-        "Replay a previous history command (last one by default)"
       end
       
       # Overrided to avoid parsing options (otherwise -1, -2 will not work)

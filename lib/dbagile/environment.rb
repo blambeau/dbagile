@@ -19,15 +19,16 @@ module DbAgile
     # Creates an Environment instance with two buffers
     def initialize(input_buffer = STDIN, output_buffer = STDOUT)
       @input_buffer, @output_buffer = input_buffer, output_buffer
+      @highline = HighLine.new
     end
     
-    # Duplicates the environment but removes any cached value (config_file 
+    # Duplicates the environment but removes any cached value (repository 
     # and so on)
     def dup
       env = Environment.new
       env.input_buffer = self.input_buffer
       env.output_buffer = self.output_buffer
-      env.config_file_path = self.config_file_path
+      env.repository_path = self.repository_path
       env.history_file_path = self.history_file_path
       env
     end

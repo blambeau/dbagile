@@ -12,7 +12,17 @@ module DbAgile
         @db.disconnect if @db
         true
       end
+      
+      # @see DbAgile::Contract::Connection#physical_schema
+      def physical_schema
+        SequelAdapter::Schema::PhysicalDump.new.run(db, uri)
+      end
     
+      # @see DbAgile::Contract::Connection#script2sql
+      def script2sql(script, buffer = "")
+        SequelAdapter::Schema::ConcreteScript::script2sql(db, script, buffer)
+      end
+      
       # @see DbAgile::Contract::Connection#transaction
       def transaction(&block)
         raise ArgumentError, "Missing transaction block" unless block

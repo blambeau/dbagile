@@ -1,3 +1,0 @@
-DbAgile::config(:simple){
-  uri "sqlite://test.db"
-}

@@ -20,7 +20,7 @@ module DbAgile
         @connected
       end
       
-      # Plugs some components into the configuration
+      # Plugs some components
       def plug(*args)
         tables = []
         tables << args.shift while args[0].kind_of?(Symbol)

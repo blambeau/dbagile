@@ -1,7 +1,0 @@
-config(:test){
-  uri "sqlite://test.db"
-}
-config(:production){
-  uri "postgres://postgres@localhost/test"
-}
-current_config :production

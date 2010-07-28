@@ -17,8 +17,10 @@ module DbAgile
           when OptionParser::ParseError
             say(error.message, :red)
             display(command.options.to_s)
-          when DbAgile::Error, Sequel::Error
+          when DbAgile::Error, Sequel::Error, IOError
             say(error.message, :red)
+          when Interrupt
+            say("Command interrupted by user", :magenta)
           else
             say("ERROR (#{error.class}): #{error.message}", :red)
             display(error.backtrace.join("\n"))

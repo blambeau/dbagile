@@ -5,7 +5,7 @@ require 'dbagile/restful/middleware/utils'
 require 'dbagile/restful/middleware/get'
 require 'dbagile/restful/middleware/post'
 require 'dbagile/restful/middleware/delete'
-require 'dbagile/restful/middleware/one_config'
+require 'dbagile/restful/middleware/one_database'
 module DbAgile
   module Restful
     class Middleware
@@ -14,7 +14,7 @@ module DbAgile
       # Environment
       attr_reader :environment
       
-      # OneConfig delegates
+      # OneDatabase delegates
       attr_reader :delegates
     
       # Creates a Restful handler
@@ -28,8 +28,8 @@ module DbAgile
       # Installs the delegates
       def _install
         @delegates = {}
-        environment.config_file(false).each{|config|
-          @delegates[config.name] = Middleware::OneConfig.new(config)
+        environment.repository(false).each{|db|
+          @delegates[db.name] = Middleware::OneDatabase.new(db)
         }
       end
       

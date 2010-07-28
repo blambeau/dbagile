@@ -10,7 +10,7 @@ module DbAgile
     # Returns the fixture environment
     def environment
       env = DbAgile::Environment.new 
-      env.config_file_path = File.expand_path('../fixtures/configs/dbagile.config', __FILE__)
+      env.repository_path = File.expand_path('../fixtures/configs/dbagile.cfg', __FILE__)
       env.history_file_path = File.expand_path('../fixtures/configs/dbagile.history', __FILE__)
       env.output_buffer = StringIO.new
       env.console_width = 10
@@ -32,8 +32,8 @@ module DbAgile
     
     # Creates the physical databases for fixtures
     def create_physical_databases
-      FileUtils.rm_rf '/tmp/test.db'
-      FileUtils.rm_rf '/tmp/robust.db'
+      FileUtils.rm_rf File.expand_path('../fixtures/configs/test.db', __FILE__)
+      FileUtils.rm_rf File.expand_path('../fixtures/configs/robust.db', __FILE__)
       require 'readline'
       puts "#################################################################################"
       puts "ATTENTION: This task will create physical test databases on your computer"
@@ -65,16 +65,16 @@ module DbAgile
       DbAgile::dba(environment) do |dba|
         dba.output_buffer = STDOUT
         dba.console_width = nil
-        dba.config_file.each do |config|
-          if config.ping?
-            puts "Installing fixture database on #{config.name.inspect}"
-            dba.use(config.name)
+        dba.repository.each do |db|
+          if db.ping?
+            puts "Installing fixture database on #{db.name.inspect}"
+            dba.repo_use(db.name)
             each_table_file{|name, file|
-              dba.import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
+              dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }
-            dba.sql "DELETE FROM empty_table"
+            dba.sql_send "DELETE FROM empty_table"
           else
-            puts "Skipping fixture database #{config.name.inspect} (no ping)"
+            puts "Skipping fixture database #{db.name.inspect} (no ping)"
           end
         end
       end
@@ -108,16 +108,16 @@ module DbAgile
       heading
     end
     
-    # Empty the basic values on a config
-    def empty_basic_values(config)
-      config.with_connection{|c|
+    # Empty the basic values on a db
+    def empty_basic_values(db)
+      db.with_connection{|c|
         c.transaction{|t| t.delete(:basic_values) }
       }
     end
     
-    # Empty the basic values on a config
-    def restore_basic_values(config)
-      config.with_connection{|c|
+    # Restored the basic values on a db
+    def restore_basic_values(db)
+      db.with_connection{|c|
         c.transaction{|t| 
           t.delete(:basic_values) 
           t.insert(:basic_values, basic_values[0])

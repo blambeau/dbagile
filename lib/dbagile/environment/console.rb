@@ -5,6 +5,11 @@ module DbAgile
     #
     module Console
       
+      # Colorizes a string
+      def color(str, color)
+        @highline.color(str, color)
+      end
+      
       # Forces the console width
       def console_width=(width)
         @console_width = width
@@ -17,14 +22,7 @@ module DbAgile
       
       # Tries to infer the console width
       def infer_console_width
-        begin
-          gem 'highline', '>= 1.5.2'
-          require 'highline'
-          HighLine.new.output_cols-3
-        rescue LoadError
-          say("Console output is pretty with highline. Try 'gem install highline'")
-          80
-        end
+        @highline.output_cols-3
       end
       
     end # module Console
