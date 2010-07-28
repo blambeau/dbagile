@@ -10,7 +10,7 @@ module DbAgile
   class AssumptionFailedError < DbAgile::InternalError; end
   
   # Raised when a configuration name is not valid
-  class InvalidConfigurationName < DbAgile::Error; end
+  class InvalidDatabaseName < DbAgile::Error; end
   
   # Raised when a database URI is not valid
   class InvalidDatabaseUri < DbAgile::Error; end
@@ -19,19 +19,19 @@ module DbAgile
   class NoSuchCommandError < DbAgile::Error; end
   
   # Raised when the configuration file seems corrupted
-  class CorruptedConfigFileError < DbAgile::Error; end
+  class CorruptedRepositoryError < DbAgile::Error; end
   
   # Raised when the configuration file cannot be found
-  class NoConfigFileError < DbAgile::Error; end
+  class NoRepositoryFileError < DbAgile::Error; end
   
   # Raised when a configuration cannot be found
-  class NoSuchConfigError < DbAgile::Error; end
+  class NoSuchDatabaseError < DbAgile::Error; end
 
   # Raised when a configuration name is already used (on add)
-  class ConfigNameConflictError < DbAgile::Error; end
+  class DatabaseNameConflictError < DbAgile::Error; end
 
   # Raised when no default configuration is set
-  class NoDefaultConfigError < DbAgile::Error; end
+  class NoDefaultDatabaseError < DbAgile::Error; end
   
   # Raised when input parsing of data fails for some reason
   class InvalidFormatError < DbAgile::Error; end

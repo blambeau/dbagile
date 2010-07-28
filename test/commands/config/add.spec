@@ -14,7 +14,7 @@ shared_examples_for("The config:add command") do
   
   it "should raise an error when the name is already in use" do
     dba.config_add(%w{test sqlite://test.db})
-    lambda{ dba.config_add(%w{test sqlite://test.db}) }.should raise_error(DbAgile::ConfigNameConflictError)
+    lambda{ dba.config_add(%w{test sqlite://test.db}) }.should raise_error(DbAgile::DatabaseNameConflictError)
   end
   
   it "should flush the repository" do

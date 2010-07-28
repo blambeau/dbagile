@@ -4,14 +4,14 @@ module DbAgile
       module Robustness
         
         #
-        # Asserts that a database name is valid or raises a InvalidConfigurationName 
+        # Asserts that a database name is valid or raises a InvalidDatabaseName 
         # error. A valid database name is a Symbol that matches /[a-z][a-z0-9_]*/.
         #
         # @returns [Symbol] name
-        # @raise DbAgile::InvalidConfigurationName if assertion fails
+        # @raise DbAgile::InvalidDatabaseName if assertion fails
         #
         def valid_database_name!(name)
-          raise DbAgile::InvalidConfigurationName, "Invalid database name #{name}"\
+          raise DbAgile::InvalidDatabaseName, "Invalid database name #{name}"\
             unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
           name
         end
@@ -44,8 +44,8 @@ module DbAgile
         # @param [DbAgile::Core::Repository] a repository
         # @return [DbAgile::Core::Database] the database instance when found.
         # @raise ArgumentError if repository is not a Repository instance
-        # @raise DbAgile::NoSuchConfigError if the database cannot be found.
-        # @raise DbAgile::NoDefaultConfigError if db_name is nil and no 
+        # @raise DbAgile::NoSuchDatabaseError if the database cannot be found.
+        # @raise DbAgile::NoDefaultDatabaseError if db_name is nil and no 
         #        current database is set on the repository.
         #
         def has_database!(repository, db_name = nil)
@@ -57,8 +57,8 @@ module DbAgile
             repository.database(db_name)
           end
           if db.nil?
-            raise DbAgile::NoSuchConfigError, "Unknown database #{db_name}" if db_name
-            raise DbAgile::NoDefaultConfigError, "No default database set (try 'dba use ...' first)"
+            raise DbAgile::NoSuchDatabaseError, "Unknown database #{db_name}" if db_name
+            raise DbAgile::NoDefaultDatabaseError, "No default database set (try 'dba use ...' first)"
           else
             db
           end
@@ -71,7 +71,7 @@ module DbAgile
         def valid_schema_files!(*files)
           files = files.flatten
           unless files.all?{|f| f.kind_of?(String)}
-            raise DbAgile::CorruptedConfigFileError, "Invalid schema files #{files.inspect}"
+            raise DbAgile::CorruptedRepositoryError, "Invalid schema files #{files.inspect}"
           end
           files
         end

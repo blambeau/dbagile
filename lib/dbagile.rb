@@ -91,7 +91,7 @@ module DbAgile
     case uri
       when Symbol
         db = database(uri)
-        raise NoSuchConfigError, "No such database #{uri}" unless db
+        raise NoSuchDatabaseError, "No such database #{uri}" unless db
         db.connect(options)
       else
         raise ArgumentError, "Unable to use #{uri} to connect a database"

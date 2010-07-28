@@ -6,7 +6,7 @@ shared_examples_for("The config:use command") do
   end
 
   it "should raise an error if the database is unknown" do
-    lambda{ dba.config_use(%w{test}) }.should raise_error(DbAgile::NoSuchConfigError)
+    lambda{ dba.config_use(%w{test}) }.should raise_error(DbAgile::NoSuchDatabaseError)
   end
 
   it "should flush the repository" do

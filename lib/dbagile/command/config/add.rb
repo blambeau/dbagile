@@ -58,7 +58,7 @@ module DbAgile
           with_repository do |repository|
         
             if repository.has_database?(self.db_name)
-              raise ConfigNameConflictError, "Database #{self.db_name} already exists"
+              raise DatabaseNameConflictError, "Database #{self.db_name} already exists"
             else
               # Create the database and adds it
               name, uri = self.db_name, self.uri

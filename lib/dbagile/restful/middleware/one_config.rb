@@ -45,8 +45,8 @@ module DbAgile
             else
               _404_(env)
           end
-        rescue DbAgile::InvalidConfigurationName,
-               DbAgile::NoSuchConfigError,
+        rescue DbAgile::InvalidDatabaseName,
+               DbAgile::NoSuchDatabaseError,
                DbAgile::NoSuchTableError => ex
           _404_(env, ex)
         rescue DbAgile::Error, Sequel::Error => ex

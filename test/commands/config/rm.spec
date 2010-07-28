@@ -6,7 +6,7 @@ shared_examples_for("The config:rm command") do
   end
   
   it "should raise an error when the name is unknown" do
-    lambda{ dba.config_rm(%w{test}) }.should raise_error(DbAgile::NoSuchConfigError)
+    lambda{ dba.config_rm(%w{test}) }.should raise_error(DbAgile::NoSuchDatabaseError)
   end
   
   it "should flush the repository" do
