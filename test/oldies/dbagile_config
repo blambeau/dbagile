@@ -1,7 +1,7 @@
-config(:sqlite){
+database(:sqlite){
   uri "ruby_values.db"
 }
-config(:postgres){
+database(:postgres){
   uri "postgres://dbagile@localhost/ruby_values"
 }
-current_config :sqlite
+current_db :sqlite

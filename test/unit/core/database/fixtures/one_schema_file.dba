@@ -1,4 +1,4 @@
-DbAgile::config(:one_schema_file){
+DbAgile::database(:one_schema_file){
   uri "test.db"
   announced_schema DbAgile::Fixtures::Core::Schema::schema_file(:dbagile)
 }

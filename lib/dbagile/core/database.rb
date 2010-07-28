@@ -171,7 +171,7 @@ module DbAgile
       def inspect(prefix = "")
         require 'sbyc/type_system/ruby'
         buffer = ""
-        buffer << "#{prefix}config(#{name.inspect}){" << "\n"
+        buffer << "#{prefix}database(#{name.inspect}){" << "\n"
         buffer << "  uri #{uri.inspect}" << "\n"
         if has_announced_schema?
           buffer << "  " << _friendly_files_inspect("announced", announced_files) << "\n"

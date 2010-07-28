@@ -134,7 +134,7 @@ module DbAgile
       def inspect(prefix = "")
         buffer = ""
         configurations.each{|cfg| buffer << cfg.inspect(prefix) << "\n"}
-        buffer << "current_config " << current_config_name.inspect unless current_config_name.nil?
+        buffer << "current_db " << current_config_name.inspect unless current_config_name.nil?
         buffer
       end
     

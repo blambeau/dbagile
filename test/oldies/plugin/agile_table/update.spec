@@ -2,7 +2,7 @@ require File.expand_path('../../../../spec_helper', __FILE__)
 describe "::DbAgile::Plugin::AgileTable#update" do
   
   let(:db){
-    DbAgile::config(:test){ 
+    DbAgile::database(:test){ 
       uri "sqlite://test.db"
       plug DbAgile::Plugin::AgileTable
     }.connect

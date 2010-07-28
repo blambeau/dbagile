@@ -20,7 +20,7 @@ module DbAgile
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.match = valid_argument_list!(arguments, Symbol)
-          self.match = valid_configuration_name!(self.match)
+          self.match = valid_database_name!(self.match)
         end
       
         #

@@ -4,14 +4,14 @@ module DbAgile
       module Robustness
         
         #
-        # Asserts that a configuration name is valid or raises a InvalidConfigurationName 
-        # error. A valid configuration name is a Symbol that matches /[a-z][a-z0-9_]*/.
+        # Asserts that a database name is valid or raises a InvalidConfigurationName 
+        # error. A valid database name is a Symbol that matches /[a-z][a-z0-9_]*/.
         #
         # @returns [Symbol] name
         # @raise DbAgile::InvalidConfigurationName if assertion fails
         #
-        def valid_configuration_name!(name)
-          raise DbAgile::InvalidConfigurationName, "Invalid configuration name #{name}"\
+        def valid_database_name!(name)
+          raise DbAgile::InvalidConfigurationName, "Invalid database name #{name}"\
             unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
           name
         end

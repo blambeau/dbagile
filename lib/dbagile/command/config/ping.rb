@@ -23,7 +23,7 @@ module DbAgile
             self.match = nil
           else
             self.match = valid_argument_list!(arguments, Symbol)
-            self.match = valid_configuration_name!(self.match)
+            self.match = valid_database_name!(self.match)
           end
         end
       

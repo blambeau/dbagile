@@ -44,7 +44,7 @@ module DbAgile
       
         # Checks command 
         def check_command
-          valid_configuration_name!(self.config_name)
+          valid_database_name!(self.config_name)
           valid_database_uri!(self.uri)
         end
       
