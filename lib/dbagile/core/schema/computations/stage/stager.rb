@@ -74,9 +74,9 @@ module DbAgile
               if h = helpers[rv]
                 yield(h)
               else
-                h = helpers[rv] = Stage::CollapseHelper.new(self, rv)
+                h = helpers[rv] = Stage::CollapseTable.new(rv)
                 yield(h)
-                operations.push(*h.flush)
+                operations.push(h)
                 helpers.delete(rv)
               end
             end
@@ -125,7 +125,7 @@ module DbAgile
 
             # Collapses a relation variable
             def collapse_relvar(relvar)
-              operations << [:DROP_TABLE, relvar.name]
+              operations << DropTable.new(relvar)
             end
 
             # Collapses a candidate key
@@ -158,9 +158,20 @@ module DbAgile
               if h = helpers[rv]
                 yield(h)
               else
-                h = helpers[rv] = Stage::ExpandHelper.new(self, rv)
-                yield(h)
-                operations.push(*h.flush)
+                # create the operation
+                exists = relvar_exists?(rv)
+                h = exists ? Stage::ExpandTable.new(rv) : Stage::CreateTable.new(rv)
+                
+                # execute sub operations and save
+                yield(helpers[rv] = h)
+                operations.push(h)
+                
+                # assert that the table now exists
+                unless exists
+                  relvar_exists!(rv)
+                end
+                
+                # remove helper now
                 helpers.delete(rv)
               end
             end

@@ -1,5 +1,4 @@
-require 'dbagile/core/schema/computations/stage/expand_helper'
-require 'dbagile/core/schema/computations/stage/collapse_helper'
+require 'dbagile/core/schema/computations/stage/operation'
 require 'dbagile/core/schema/computations/stage/stager'
 module DbAgile
   module Core
