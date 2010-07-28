@@ -1,7 +1,7 @@
 shared_examples_for("The config:list command") do
   
   it "should return the configuration file instance" do
-    dba.config_list.should be_kind_of(DbAgile::Core::Configuration::File)
+    dba.config_list.should be_kind_of(DbAgile::Core::Repository)
   end
   
   it "should print the configurations" do

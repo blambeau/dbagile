@@ -1,7 +1,7 @@
 require File.expand_path('../fixtures', __FILE__)
-describe "DbAgile::Core::Configuration::File#current?" do
+describe "DbAgile::Core::Repository#current?" do
 
-  let(:config){ DbAgile::Fixtures::Core::Configuration::File::config_file(:test_and_prod) }
+  let(:config){ DbAgile::Fixtures::Core::Repository::config_file(:test_and_prod) }
 
   describe("When called with an existing but not current configuration (name)") do
     subject{ config.current?(:test) }

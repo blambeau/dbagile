@@ -34,7 +34,7 @@ module DbAgile
         #
         # Executes the command.
         #
-        # @return [DbAgile::Core::Configuration::File] the configuration file instance
+        # @return [DbAgile::Core::Repository] the configuration file instance
         #
         def execute_command
           with_config_file do |config_file|

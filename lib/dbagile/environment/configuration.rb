@@ -23,11 +23,11 @@ module DbAgile
       end
       
       # 
-      # Ensures that config_file is loaded and returns the Configuration::File instance. 
+      # Ensures that config_file is loaded and returns the Repository instance. 
       # If create is set to true, a default configuration file is created when 
       # file does not exists. Otherwise raises a NoConfigFileError.
       #
-      # ATTENTION: the Configuration::File instance is kept in cache. It will not be 
+      # ATTENTION: the Repository instance is kept in cache. It will not be 
       # synchronized with modifications of the underlying file made by another 
       # process/thread.
       #
@@ -35,7 +35,7 @@ module DbAgile
       # @raise NoConfigFileError if create is false and file do not exists
       # @raise IOError if something goes wrong when reading/writing the file
       # @raise CorruptedConfigFileError if something goes wrong when parsing the file
-      # @return [Configuration::File] configuration file instance
+      # @return [Repository] configuration file instance
       #
       def config_file(create = true)
         @config_file ||= load_config_file(create, config_file_path)
@@ -55,7 +55,7 @@ module DbAgile
       end
       
       # 
-      # Yields the block with the Configuration::File instance loaded using config_file.
+      # Yields the block with the Repository instance loaded using config_file.
       #
       # As this method is a wrapper on config_file, it shares the specification
       # about parameters and exceptions.
@@ -140,7 +140,7 @@ module DbAgile
       protected
       
       #
-      # Loads a configuration file and returns a Configuration::File instance. 
+      # Loads a configuration file and returns a Repository instance. 
       #
       # Internal implementation of config_file, almost same specification.
       #
@@ -162,7 +162,7 @@ module DbAgile
 
         # Loads it
         begin
-          ::DbAgile::Core::Configuration::File.new(file)
+          ::DbAgile::Core::Repository.new(file)
         rescue Exception => ex
           raise CorruptedConfigFileError, "Corrupted config file #{file}: #{ex.message}", ex.backtrace
         end

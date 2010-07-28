@@ -8,7 +8,7 @@ module DbAgile
       class DSL
         include DbAgile::Core::Configuration::Robustness
         
-        # The Configuration::File instance passed at construction
+        # The Repository instance passed at construction
         attr_reader :config_file
         
         # The current Configuration instance

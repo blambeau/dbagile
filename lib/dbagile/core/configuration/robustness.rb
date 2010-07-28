@@ -38,19 +38,19 @@ module DbAgile
         end
         
         #
-        # Asserts that a configuration exists inside a Configuration::File instance. 
+        # Asserts that a configuration exists inside a Repository instance. 
         # When config_name is nil, asserts that a default configuration is set.
         #
         # @return [DbAgile::Core::Configuration] the configuration instance when 
         # found.
-        # @raise ArgumentError if config_file is not a Configuration::File instance
+        # @raise ArgumentError if config_file is not a Repository instance
         # @raise DbAgile::NoSuchConfigError if the configuration cannot be found.
         # @raise DbAgile::NoDefaultConfigError if config_name is nil and no 
         #        current configuration is set on the config file.
         #
         def has_config!(config_file, config_name = nil)
-          raise ArgumentError, "Configuration::File expected, got #{config_file}"\
-            unless config_file.kind_of?(DbAgile::Core::Configuration::File)
+          raise ArgumentError, "Repository expected, got #{config_file}"\
+            unless config_file.kind_of?(DbAgile::Core::Repository)
           config = if config_name.nil?
             config_file.current_config
           else 
