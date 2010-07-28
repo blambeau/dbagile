@@ -1,0 +1,20 @@
+--- 
+databases: 
+  production: 
+    uri: postgres://postgres@localhost/test
+    announced_schema:
+    - schema.yaml
+    effective_schema:
+    - production.yaml
+  test: 
+    uri: test.db
+    announced_schema: 
+    - schema.yaml
+    effective_schema: 
+    - effective.yaml
+    - unsupported.yaml
+  robust:
+    uri: robust.db
+    plugins:
+    - DbAgile::Contract::Robust::Optimistic
+current: production

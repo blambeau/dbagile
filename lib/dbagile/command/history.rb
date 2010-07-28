@@ -1,23 +1,16 @@
 module DbAgile
   class Command
     #
-    # Display command history
+    # Display 'dba' command history
+    #
+    # Usage: dba #{command_name}
     #
     class History < Command
+      Command::build_me(self, __FILE__)
       
       # Returns command's category
       def category
         :dba
-      end
-      
-      # Returns the command banner
-      def banner
-        "Usage: dba history"
-      end
-
-      # Short help
-      def short_help
-        "Display dba command history"
       end
       
       # Normalizes the pending arguments

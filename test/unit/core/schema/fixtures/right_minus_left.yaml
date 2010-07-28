@@ -1,0 +1,31 @@
+--- 
+logical: 
+  ADDED_COLUMNS_ON_LEFT:
+    heading: {}
+    constraints: {}
+  ADDED_CONSTRAINT_ON_LEFT:
+    heading: {}
+    constraints: {}
+  CONFLICTING_HEADING: 
+    heading: 
+      CONFLICT:    { domain: String, mandatory: false }
+    constraints: {}
+  DROPPED_COLUMNS_ON_LEFT: 
+    heading:
+      DROPPED: { domain: String,  mandatory: true                       }
+    constraints: {}
+  DROPPED_CONSTRAINT_ON_LEFT: 
+    heading: {}
+    constraints:
+      dropped_constraint: { type: :foreign_key, attributes: [ 'ID' ], references: ADDED_COLUMNS_ON_LEFT }
+  ONLY_ON_RIGHT_RELVAR: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  SAME: {}
+---
+physical:
+  indexes:
+    ONLY_ON_RIGHT_INDEX: { relvar: ONLY_ON_RIGHT_RELVAR, attributes: [ 'ID' ] }
+  

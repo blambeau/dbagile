@@ -2,107 +2,115 @@ require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command::API /" do
   
-  # Path to an empty configuration file
-  let(:empty_config_path){ File.expand_path('../fixtures/configs/empty_config.dba', __FILE__) }
+  # Path to an empty repository file
+  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty.cfg', __FILE__) }
   
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
   # Clean everything after tests
-  after(:all) { FileUtils.rm_rf(empty_config_path) }
+  after(:all) { FileUtils.rm_rf(empty_repository_path) }
     
   # -- Configuration
-  describe "configuration commands (touching) /" do 
+  describe "repository commands (touching) /" do 
   
-    # Remove empty config between all test
-    before       {  dba.config_file_path = empty_config_path }
-    before(:each){ FileUtils.rm_rf(empty_config_path)        }
+    # Remove empty repo between all test
+    before       {  dba.repository_path = empty_repository_path }
+    before(:each){ FileUtils.rm_rf(empty_repository_path)        }
   
-    describe "add" do
-      it_should_behave_like "The add command" 
+    describe "repo:add /" do
+      it_should_behave_like "The repo:add command" 
     end
   
-    describe "rm" do
-      it_should_behave_like "The rm command" 
+    describe "repo:rm /" do
+      it_should_behave_like "The repo:rm command" 
     end
   
-    describe "use" do
-      it_should_behave_like "The use command" 
+    describe "repo:use /" do
+      it_should_behave_like "The repo:use command" 
     end
   
   end # -- Configuration
   
   # -- Configuration
-  describe "configuration commands (touching) /" do 
+  describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.use %{sqlite} }
+    before { dba.repo_use %{sqlite} }
   
-    describe "list" do
-      it_should_behave_like "The list command" 
+    describe "repo:list /" do
+      it_should_behave_like "The repo:list command" 
     end
   
-    describe "ping" do
-      it_should_behave_like "The ping command" 
+    describe "repo:ping /" do
+      it_should_behave_like "The repo:ping command" 
     end
-
+  
   end # -- Configuration
   
   # -- Input/Output
-  describe "input/output commands" do 
-
+  describe "bulk commands /" do 
+  
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The show command" do
-      it_should_behave_like "The show command" 
+    describe "bulk:export /" do
+      it_should_behave_like "The bulk:export command" 
     end
-
-    describe "The export command" do
-      it_should_behave_like "The export command" 
+  
+    describe "bulk:import /" do
+      it_should_behave_like "The bulk:import command" 
     end
-
-    describe "The import command" do
-      it_should_behave_like "The import command" 
-    end
-
+  
   end # -- Input/Output
   
-  # -- Query
-  describe "query commands" do
+  # -- Sql 
+  describe "sql commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The sql command" do
-      it_should_behave_like "The sql command" 
+    describe "sql:send /" do
+      it_should_behave_like "The sql:send command" 
     end
-
+  
+    describe "sql:show /" do
+      it_should_behave_like "The sql:show command" 
+    end
+  
+    describe "sql:heading /" do
+      it_should_behave_like "The sql:heading command" 
+    end
+  
+    describe "sql:drop /" do
+      it_should_behave_like "The sql:drop command" 
+    end
+  
   end # -- Query
   
   # -- Schema
-  describe "schema commands" do
+  describe "schema commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.use %{sqlite}
+      dba.repo_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "The heading command" do
-      it_should_behave_like "The heading command" 
+    describe "schema:dump" do
+      it_should_behave_like "The schema:dump command" 
     end
-
-    describe "The drop command" do
-      it_should_behave_like "The drop command" 
+  
+    describe "schema:check" do
+      it_should_behave_like "The schema:check command" 
     end
-
+  
   end # -- Schema
   
 end

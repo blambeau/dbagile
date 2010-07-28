@@ -1,5 +1,0 @@
-DbAgile::config(:complex2){
-  uri "sqlite://test.db"
-  plug DbAgile::Plugin::AgileKeys, {:candidate => /id/}
-  plug DbAgile::Plugin::Defaults, {:hello => "world"}
-}

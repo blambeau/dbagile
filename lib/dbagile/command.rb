@@ -8,6 +8,19 @@ module DbAgile
     include ::DbAgile::Environment::Delegator
     extend ::DbAgile::Command::ClassMethods
     
+    # Command categories
+    CATEGORIES = [:dba, :repo, :sql, :schema, :bulk, :web]
+    
+    # Names of the categories
+    CATEGORY_NAMES = {
+      :dba           => "Main commands:",
+      :repo          => "Repository management:",
+      :bulk          => "Import/Export management:",
+      :sql           => "SQL:",
+      :schema        => "Database schema:",
+      :web           => "Database and the web:"
+    }
+
     ##############################################################################
     ### Instance variables and construction
     ##############################################################################
@@ -23,7 +36,22 @@ module DbAgile
     
     # Returns command name
     def command_name
-      Command::command_name_of(self.class)
+      self.class.command_name
+    end
+    
+    # Returns command summary
+    def summary
+      self.class.summary || ""
+    end
+    
+    # Returns command summary
+    def usage
+      self.class.usage || ""
+    end
+    alias :banner :usage
+    
+    def description
+      self.class.description || ""
     end
     
     ##############################################################################
@@ -59,16 +87,6 @@ module DbAgile
       raise "Command.category should be overriden by subclasses"
     end
       
-    # Returns the command banner
-    def banner
-      raise "Command.banner should be overriden by subclasses"
-    end
-    
-    # Returns a one line help
-    def short_help
-      raise "Command.banner should be overriden by subclasses"
-    end
-    
     # Shows the help
     def show_help
       display banner
@@ -110,17 +128,6 @@ module DbAgile
     def execute_command
     end
     
-    ##############################################################################
-    ### Deprecated or should be moved
-    ##############################################################################
-    
-    # Aligns a string by appending whitespaces up to size.
-    # This method has not effect if size is nil
-    def align(string, size = nil)
-      return string if size.nil?
-      string.to_s + " "*(size - string.to_s.length)
-    end
-    
   end # class Command
 end # module DbAgile
 
@@ -130,27 +137,20 @@ require 'dbagile/command/help'
 require 'dbagile/command/history'
 require 'dbagile/command/replay'
 
-# :configuration category
-require 'dbagile/command/list'
-require 'dbagile/command/ping'
-require 'dbagile/command/use'
-require 'dbagile/command/add'
-require 'dbagile/command/rm'
+# :repo category
+require 'dbagile/command/repo'
 
-# :io category
-require 'dbagile/command/show'
-require 'dbagile/command/export'
-require 'dbagile/command/import'
+# :bulk category
+require 'dbagile/command/bulk'
 
 # :sql category
 require 'dbagile/command/sql'
 
 # :schema category
-require 'dbagile/command/heading'
-require 'dbagile/command/drop'
+require 'dbagile/command/schema'
 
-# :restful category
-require 'dbagile/command/webtools'
+# :web category
+require 'dbagile/command/web'
 
 # Build Command API now
 require 'dbagile/command/api'

@@ -1,4 +1,0 @@
-config(:test){
-  uri "sqlite://test.db"
-}
-current_config :test

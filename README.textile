@@ -34,12 +34,12 @@ Making similar things, ... in Ruby?
 <pre>
   DbAgile::dba do |dba|
     # Override environment default values (~/.dbagile, ...)
-    dba.config_file_path  = ...     # your application own config file
+    dba.repository_path  = ...      # your application own repository folder
     dba.history_file_path = nil     # no history
     dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
-    dba.export %w{--yaml contacts}  # each line pushed in output_buffer
+    dba.bulk_export %w{--yaml contacts}  # each line pushed in output_buffer
   end
 </pre>
 
@@ -55,14 +55,13 @@ The Rack middleware for the restful server (config.ru):
     #          resolved in Rack scope, which contains a File class. Not
     #          doing this may mead to bugs in certain ruby versions.
     #
-    env.config_file_path  = ::File.expand_path('../dbagile.config', __FILE__)
+    env.repository_path  = ::File.expand_path('../dbagile.config', __FILE__)
     env.history_file_path = nil
   }
 </pre>
 
 h2. Pointers
 
-* Read more about "the 'dba' command line tool":http://github.com/blambeau/dbagile/blob/master/COMMAND_LINE.textile
 * DbAgile developper documentation on "rdoc.info":http://rdoc.info/projects/blambeau/dbagile
 
 h2. Installation
@@ -76,6 +75,7 @@ Required dependencies:
 
 * sbyc >= 0.1.4
 * sequel >= 3.8.0
+* highline >= 1.5.2
 
 Optional dependencies (according to your needs):
 
@@ -84,7 +84,6 @@ Optional dependencies (according to your needs):
 * fastercsv              (only if you use csv import/export)
 * yaml                   (only if you use yaml import/export)
 * builder                (only if you use xml export)
-* highline               (only if you want friendly command line tools)
 * rack >= 1.1.0          (only if you use the restful server)
 
 h2. Credits

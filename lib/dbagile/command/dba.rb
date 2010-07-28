@@ -1,14 +1,25 @@
 module DbAgile
   class Command
-    class DbA < Command
+    #
+    # Agile SQL databases and tools for database administrators
+    #
+    # Usage: dba [--version] [--help] [--list]
+    #        dba help [--complete] <subcommand>
+    #        dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+    #
+    # DbAgile aims at supporting database administrators and developers of database
+    # oriented application. Read more about it on http://blambeau.github.com/dbagile.
+    #
+    class Dba < Command
+      Command::build_me(self, __FILE__)
       
       # Command categories
-      CATEGORIES = [:dba, :configuration, :io, :restful, :sql, :schema]
+      CATEGORIES = [:dba, :repo, :io, :restful, :sql, :schema]
       
       # Names of the categories
       CATEGORY_NAMES = {
         :dba           => "Main commands:",
-        :configuration => "Configuration management:",
+        :repo          => "Repository management:",
         :io            => "Import/Export management:",
         :sql           => "Queries:",
         :schema        => "Database schema:",
@@ -16,10 +27,10 @@ module DbAgile
       }
 
       # Configuration file
-      attr_accessor :config_file_path
+      attr_accessor :repository_path
       
-      # Database configuration to use
-      attr_accessor :use_config
+      # Database to use
+      attr_accessor :use_database
       
       # Continue after my options
       attr_accessor :stop_after_options
@@ -29,24 +40,17 @@ module DbAgile
         :dba
       end
       
-      # Returns the command banner
-      def banner
-        "Usage: dba [--version] [--help] [--list]\n"\
-        "       dba help <subcommand>\n"\
-        "       dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]"
-      end
-
       # Contribute to options
       def add_options(opt)
         opt.separator nil
         opt.separator "Options:"
         opt.on("--config=FILE", 
-               "Use a specific configuration file (defaults to ~/.dbagile)") do |value|
-          self.config_file_path = value
+               "Use a specific repository file (defaults to ~/.dbagile)") do |value|
+          self.repository_path = value
         end
         opt.on("--use=DB", 
-               "Use a specific database configuration") do |value|
-          self.use_config = value
+               "Use a specific database") do |value|
+          self.use_database = value
         end
         opt.on_tail("--help", "Show help") do
           show_short_help
@@ -67,11 +71,11 @@ module DbAgile
         return @commands_by_categ if @commands_by_categ
         @commands_by_categ = Hash.new{|h,k| h[k] = []}
         Command.subclasses.each do |subclass|
-          next if subclass == DbA
+          next if subclass == Dba
           name     = Command::command_name_of(subclass)
           command  = Command::command_for(name, environment)
           category = command.category
-          raise "Unknown command category #{category}" unless CATEGORIES.include?(category)
+          raise "Unknown command category #{category}" unless DbAgile::Command::CATEGORIES.include?(category)
           @commands_by_categ[category] << command
         end
         @commands_by_categ
@@ -80,7 +84,7 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + align(command.command_name,10) + command.short_help
+          display options.summary_indent + command.command_name.ljust(30) + command.summary.to_s
         end
       end
 
@@ -95,8 +99,8 @@ module DbAgile
       # Shows the long help
       def show_long_help
         show_short_help
-        CATEGORIES.each{|categ|
-          display CATEGORY_NAMES[categ]
+        DbAgile::Command::CATEGORIES.each{|categ|
+          display DbAgile::Command::CATEGORY_NAMES[categ]
           show_commands_help(categ)
           display ""
         }
@@ -104,7 +108,7 @@ module DbAgile
       
       # Runs the command
       def unsecure_run(requester_file, argv)
-        environment.load_history
+        #environment.load_history
         
         # My own options
         my_args = []
@@ -114,11 +118,11 @@ module DbAgile
         options.parse!(my_args)
         
         # Prepare the environment
-        if self.config_file_path
-          environment.config_file_path = self.config_file_path
+        if self.repository_path
+          environment.repository_path = self.repository_path
         end
-        if self.use_config
-          environment.config_file.current_config_name = self.use_config.to_sym
+        if self.use_database
+          environment.repository.current_db_name = self.use_database.to_sym
         end
         
         # Invoke sub command
@@ -129,14 +133,14 @@ module DbAgile
         environment.on_error(self, ex)
         environment
       ensure
-        environment.save_history if environment.manage_history?
+        #environment.save_history if environment.manage_history?
       end
       
       # Invokes the subcommand
       def invoke_subcommand(requester_file, argv)
         # Save command in history 
         unless ['replay', 'history'].include?(argv[0])
-          environment.push_in_history(argv) 
+          #environment.push_in_history(argv) 
         end
       
         # Command execution

@@ -1,0 +1,46 @@
+--- 
+logical: 
+  ADDED_COLUMNS_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+      ADDED: { domain: String,  mandatory: true                       }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  ADDED_CONSTRAINT_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+      added_constraint: { type: :foreign_key, attributes: [ 'ID' ], references: ADDED_COLUMNS_ON_LEFT}
+  CONFLICTING_HEADING: 
+    heading: 
+      NO_CONFLICT: { domain: Float, mandatory: true }
+      CONFLICT:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'NO_CONFLICT' ] }
+  DROPPED_COLUMNS_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  DROPPED_CONSTRAINT_ON_LEFT: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  ONLY_ON_LEFT_RELVAR: 
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+  SAME:
+    heading: 
+      ID:    { domain: Integer, mandatory: true }
+    constraints: 
+      pk: { type: :primary_key, attributes: [ 'ID' ] }
+---
+physical:
+  indexes:
+    COMMON_INDEX: { relvar: ADDED_COLUMNS_ON_LEFT, attributes: [ 'ID' ] }
+    ONLY_ON_LEFT_INDEX: { relvar: ONLY_ON_LEFT_RELVAR, attributes: [ 'ID' ] }
+  

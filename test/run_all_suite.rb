@@ -17,7 +17,7 @@ def color(message, color)
 end
 
 # Test suite in order
-tests = [ :assumptions, :unit, :contract, :commands, :restful, :oldies ]
+tests = [ :assumptions, :unit, :contract, :commands, :restful ]
 
 # Will contain interesting lines 
 summary = []

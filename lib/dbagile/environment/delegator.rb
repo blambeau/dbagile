@@ -13,10 +13,10 @@ module DbAgile
         :console_width,
         :console_width=,
         #
-        :config_file_path,
-        :config_file_path=,
+        :repository_path,
+        :repository_path=,
         #
-        :config_file,
+        :repository,
         #
         :history_file_path,
         :history_file_path=,
@@ -27,9 +27,9 @@ module DbAgile
         :output_buffer,
         :output_buffer=,
         #
-        :with_config_file,
-        :with_config,
-        :with_current_config,
+        :with_repository,
+        :with_database,
+        :with_current_database,
         #
         :with_connection,
         :with_current_connection

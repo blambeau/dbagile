@@ -1,0 +1,28 @@
+--- 
+logical: 
+  basic_values: 
+    heading: 
+      date: {domain: Date, mandatory: false}
+      false_value: {domain: SByC::TypeSystem::Ruby::Boolean, mandatory: false}
+      id: {domain: Integer, mandatory: false}
+      name: {domain: String, mandatory: false}
+      neg_bignum: {domain: Integer, mandatory: false}
+      neg_fixnum: {domain: Integer, mandatory: false}
+      now: {domain: Time, mandatory: false}
+      pos_bignum: {domain: Integer, mandatory: false}
+      pos_fixnum: {domain: Integer, mandatory: false}
+      ruby_nil: {domain: String, mandatory: false}
+      true_value: {domain: SByC::TypeSystem::Ruby::Boolean, mandatory: false}
+    constraints:
+      pk: { type: primary_key, attributes: ['id'] }
+  empty_table: 
+    heading: 
+      id: {domain: Integer, mandatory: false}
+    constraints:
+      pk: { type: primary_key, attributes: ['id'] }
+  non_empty_table: 
+    heading: 
+      id: {domain: Integer, mandatory: false}
+      english: {domain: String, mandatory: false}
+    constraints:
+      pk: { type: primary_key, attributes: ['id'] }

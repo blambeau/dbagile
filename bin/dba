@@ -10,7 +10,7 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'dbagile'
 
 begin
-  r = DbAgile::Command::DbA.new(DbAgile::default_environment).run '.', ARGV
+  r = DbAgile::Command::Dba.new(DbAgile::default_environment).run '.', ARGV
 rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"

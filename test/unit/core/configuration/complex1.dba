@@ -1,5 +1,0 @@
-DbAgile::config(:complex1){
-  uri "sqlite://test.db"
-  plug DbAgile::Plugin::AgileTable
-  plug DbAgile::Plugin::AgileKeys
-}

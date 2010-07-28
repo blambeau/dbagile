@@ -1,0 +1,3 @@
+DbAgile::database(:simple){
+  uri "postgres://user@localhost/database"
+}

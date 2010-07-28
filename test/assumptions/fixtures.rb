@@ -20,6 +20,20 @@ module DbAgile
         include SafeModule
       end
       
+      class FooComparable
+        
+        attr_reader :int
+        
+        def initialize(int)
+          @int = int
+        end
+        
+        def <=>(other)
+          @int <=> other.int
+        end
+        
+      end
+      
     end # module Assumptions
   end # module Fixtures
 end # module DbAgile
