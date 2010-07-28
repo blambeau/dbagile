@@ -1,7 +1,7 @@
 require File.expand_path('../fixtures', __FILE__)
 describe "DbAgile::Core::Repository#config" do
 
-  let(:config){ DbAgile::Fixtures::Core::Repository::config_file(:test_and_prod) }
+  let(:config){ DbAgile::Fixtures::Core::Repository::repository(:test_and_prod) }
 
   describe("When called with an unexisting configuration name") do
     subject{ config.database(:test) }

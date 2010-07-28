@@ -10,20 +10,20 @@ module DbAgile
       #
       # Default implementation returns ~/.dbagile
       #
-      def config_file_path
-        @config_file_path ||= DbAgile::find_config_file_path
+      def repository_path
+        @repository_path ||= DbAgile::find_repository_path
       end
       
       #
       # Sets the path to the .dbagile file
       #
-      def config_file_path=(path)
-        @config_file = nil
-        @config_file_path = path
+      def repository_path=(path)
+        @repository = nil
+        @repository_path = path
       end
       
       # 
-      # Ensures that config_file is loaded and returns the Repository instance. 
+      # Ensures that repository is loaded and returns the Repository instance. 
       # If create is set to true, a default configuration file is created when 
       # file does not exists. Otherwise raises a NoConfigFileError.
       #
@@ -37,27 +37,27 @@ module DbAgile
       # @raise CorruptedConfigFileError if something goes wrong when parsing the file
       # @return [Repository] configuration file instance
       #
-      def config_file(create = true)
-        @config_file ||= load_config_file(create, config_file_path)
+      def repository(create = true)
+        @repository ||= load_repository(create, repository_path)
       end
       
       #
       # Yields the block with each configuration in turn
       #
-      # As this method is a wrapper on config_file, it shares the specification
+      # As this method is a wrapper on repository, it shares the specification
       # about parameters and exceptions.
       #
       # @raise ArgumentError if no block is provided
       #
       def each_database(&block)
         raise ArgumentError, "Missing block" unless block_given?
-        config_file.each(&block)
+        repository.each(&block)
       end
       
       # 
-      # Yields the block with the Repository instance loaded using config_file.
+      # Yields the block with the Repository instance loaded using repository.
       #
-      # As this method is a wrapper on config_file, it shares the specification
+      # As this method is a wrapper on repository, it shares the specification
       # about parameters and exceptions.
       #
       # @return [...] result of the block execution
@@ -65,14 +65,14 @@ module DbAgile
       #
       def with_repository(create = true)
         raise ArgumentError, "Missing block" unless block_given?
-        yield(config_file(create))
+        yield(repository(create))
       end
       
       #
       # Yields the block with a Configuration instance found by name in config 
       # file. 
       #
-      # As this method relies on config_file, it shares its exception contract.
+      # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
       # @raise NoSuchConfigError if the configuration cannot be found.
@@ -80,7 +80,7 @@ module DbAgile
       #
       def with_database(name)
         raise ArgumentError, "Missing block" unless block_given?
-        config = config_file.database(name)
+        config = repository.database(name)
         raise NoSuchConfigError if config.nil?
         yield(config)
       end
@@ -89,7 +89,7 @@ module DbAgile
       # Yields the block with a Configuration instance for the current 
       # configuration found in condif file.
       # 
-      # As this method relies on config_file, it shares its exception contract.
+      # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
       # @raise NoDefaultConfigError if the configuration cannot be found.
@@ -97,7 +97,7 @@ module DbAgile
       #
       def with_current_database
         raise ArgumentError, "Missing block" unless block_given?
-        config = config_file.current_database
+        config = repository.current_database
         raise NoDefaultConfigError if config.nil?
         yield(config)
       end
@@ -105,7 +105,7 @@ module DbAgile
       #
       # Yields the block with a connection on a given config; diconnect after that.
       #
-      # As this method relies on config_file, it shares its exception contract.
+      # As this method relies on repository, it shares its exception contract.
       #
       # @raise ArgumentError if no block is provided
       # @raise NoSuchConfigError if the configuration cannot be found.
@@ -114,7 +114,7 @@ module DbAgile
       def with_connection(config, conn_options = {}, &block)
         case config
           when Symbol
-            config = config_file.database(config)
+            config = repository.database(config)
           when DbAgile::Core::Database
           else
             raise ArgumentError, "Config should be a config name"
@@ -142,9 +142,9 @@ module DbAgile
       #
       # Loads a configuration file and returns a Repository instance. 
       #
-      # Internal implementation of config_file, almost same specification.
+      # Internal implementation of repository, almost same specification.
       #
-      def load_config_file(create, file)
+      def load_repository(create, file)
         # Creates file as required by spec
         if create and not(File.exists?(file))
           require 'fileutils'

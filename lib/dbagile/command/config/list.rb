@@ -37,15 +37,15 @@ module DbAgile
         # @return [DbAgile::Core::Repository] the configuration file instance
         #
         def execute_command
-          with_repository do |config_file|
+          with_repository do |repository|
 
             if verbose
-              display(config_file.inspect)
+              display(repository.inspect)
             else
-              unless config_file.empty?
-                display("Available databases are (#{config_file.file}):")
-                config_file.each do |config|
-                  msg = config_file.current?(config) ? "  -> " : " "*5
+              unless repository.empty?
+                display("Available databases are (#{repository.file}):")
+                repository.each do |config|
+                  msg = repository.current?(config) ? "  -> " : " "*5
                   msg += config.name.to_s.ljust(15)
                   msg += " "
                   msg += config.uri
@@ -56,7 +56,7 @@ module DbAgile
               end
             end
 
-            config_file
+            repository
           end
         end
       

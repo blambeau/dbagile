@@ -10,7 +10,7 @@ module DbAgile
     # Returns the fixture environment
     def environment
       env = DbAgile::Environment.new 
-      env.config_file_path = File.expand_path('../fixtures/configs/dbagile.config', __FILE__)
+      env.repository_path = File.expand_path('../fixtures/configs/dbagile.config', __FILE__)
       env.history_file_path = File.expand_path('../fixtures/configs/dbagile.history', __FILE__)
       env.output_buffer = StringIO.new
       env.console_width = 10
@@ -65,7 +65,7 @@ module DbAgile
       DbAgile::dba(environment) do |dba|
         dba.output_buffer = STDOUT
         dba.console_width = nil
-        dba.config_file.each do |config|
+        dba.repository.each do |config|
           if config.ping?
             puts "Installing fixture database on #{config.name.inspect}"
             dba.config_use(config.name)

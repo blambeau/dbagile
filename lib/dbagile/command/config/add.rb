@@ -55,21 +55,21 @@ module DbAgile
         #
         def execute_command
           config = nil
-          with_repository do |config_file|
+          with_repository do |repository|
         
-            if config_file.has_database?(self.config_name)
+            if repository.has_database?(self.config_name)
               raise ConfigNameConflictError, "Database #{self.config_name} already exists"
             else
               # Create the configuration and adds it
               name, uri = self.config_name, self.uri
               config = DbAgile::Core::Database.new(name, uri)
-              config_file << config
+              repository << config
         
               # Makes it the current one if requested
-              config_file.current_db_name = config.name if self.current
+              repository.current_db_name = config.name if self.current
         
               # Flush the configuration file
-              config_file.flush!
+              repository.flush!
             end
           
           end

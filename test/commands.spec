@@ -15,7 +15,7 @@ describe "DbAgile::Command::API /" do
   describe "configuration commands (touching) /" do 
   
     # Remove empty config between all test
-    before       {  dba.config_file_path = empty_config_path }
+    before       {  dba.repository_path = empty_config_path }
     before(:each){ FileUtils.rm_rf(empty_config_path)        }
   
     describe "config:add /" do

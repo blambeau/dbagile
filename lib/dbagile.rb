@@ -31,7 +31,7 @@ module DbAgile
   # Example
   #   DbAgile::dba do |dba|
   #     # Override environment default values (~/.dbagile, ...)
-  #     dba.config_file_path  = ...    # your application own config file
+  #     dba.repository_path  = ...    # your application own config file
   #     dba.history_file_path = nil    # no history
   #     dba.output_buffer     = ...    # keep messages in any object supporting :<< (STDOUT by default)
   # 
@@ -48,14 +48,14 @@ module DbAgile
   module_function :dba
   
   # Finds 
-  def find_config_file_path
+  def find_repository_path
     if File.exists?("./dbagile.cfg")
       "./dbagile.cfg"
     else
       File.join(ENV['HOME'], '.dbagile')
     end
   end
-  module_function :find_config_file_path
+  module_function :find_repository_path
   
   # Returns the default environment to use.
   def default_environment
@@ -78,7 +78,7 @@ module DbAgile
   # 
   def database(name, &block)
     unless block
-      default_environment.config_file.database(name)
+      default_environment.repository.database(name)
     else
       dsl = DbAgile::Core::IO::DSL.new
       dsl.database(name, &block)

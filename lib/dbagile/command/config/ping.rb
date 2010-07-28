@@ -29,9 +29,9 @@ module DbAgile
       
         # Executes the command
         def execute_command
-          cf = with_repository do |config_file|
+          cf = with_repository do |repository|
         
-            config = has_database!(config_file, self.match)
+            config = has_database!(repository, self.match)
         
             # Make the job now
             begin

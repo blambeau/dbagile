@@ -12,7 +12,7 @@ shared_examples_for("The config:use command") do
   it "should flush the config file" do
     dba.config_add(%w{--no-current test sqlite://test.db})
     dba.config_use(%w{test})
-    dba.dup.config_file.current?(:test).should be_true
+    dba.dup.repository.current?(:test).should be_true
   end
   
 end

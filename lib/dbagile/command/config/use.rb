@@ -30,14 +30,14 @@ module DbAgile
         #
         def execute_command
           config = nil
-          with_repository do |config_file|
-            config = has_database!(config_file, self.match)
+          with_repository do |repository|
+            config = has_database!(repository, self.match)
 
             # Makes it the current one
-            config_file.current_db_name = config.name
+            repository.current_db_name = config.name
       
             # Flush the configuration file
-            config_file.flush!
+            repository.flush!
           end
 
           # List available databases now

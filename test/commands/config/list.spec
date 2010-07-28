@@ -10,7 +10,7 @@ shared_examples_for("The config:list command") do
   end
   
   it "should print a friendly error message when no config" do
-    dba.config_file_path = empty_config_path
+    dba.repository_path = empty_config_path
     dba.config_list
     dba.output_buffer.string.should =~ /No database configuration found/
   end

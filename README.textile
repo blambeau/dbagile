@@ -34,7 +34,7 @@ Making similar things, ... in Ruby?
 <pre>
   DbAgile::dba do |dba|
     # Override environment default values (~/.dbagile, ...)
-    dba.config_file_path  = ...     # your application own config file
+    dba.repository_path  = ...     # your application own config file
     dba.history_file_path = nil     # no history
     dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
   
@@ -55,7 +55,7 @@ The Rack middleware for the restful server (config.ru):
     #          resolved in Rack scope, which contains a File class. Not
     #          doing this may mead to bugs in certain ruby versions.
     #
-    env.config_file_path  = ::File.expand_path('../dbagile.config', __FILE__)
+    env.repository_path  = ::File.expand_path('../dbagile.config', __FILE__)
     env.history_file_path = nil
   }
 </pre>

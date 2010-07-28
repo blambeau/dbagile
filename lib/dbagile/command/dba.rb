@@ -14,7 +14,7 @@ module DbAgile
       Command::build_me(self, __FILE__)
       
       # Configuration file
-      attr_accessor :config_file_path
+      attr_accessor :repository_path
       
       # Database configuration to use
       attr_accessor :use_config
@@ -33,7 +33,7 @@ module DbAgile
         opt.separator "Options:"
         opt.on("--config=FILE", 
                "Use a specific configuration file (defaults to ~/.dbagile)") do |value|
-          self.config_file_path = value
+          self.repository_path = value
         end
         opt.on("--use=DB", 
                "Use a specific database configuration") do |value|
@@ -105,11 +105,11 @@ module DbAgile
         options.parse!(my_args)
         
         # Prepare the environment
-        if self.config_file_path
-          environment.config_file_path = self.config_file_path
+        if self.repository_path
+          environment.repository_path = self.repository_path
         end
         if self.use_config
-          environment.config_file.current_db_name = self.use_config.to_sym
+          environment.repository.current_db_name = self.use_config.to_sym
         end
         
         # Invoke sub command

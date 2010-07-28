@@ -29,19 +29,19 @@ module DbAgile
         # @return [DbAgile::Core::Repository] the configuration file instance
         #
         def execute_command
-          cf = with_repository do |config_file|
-            config = has_database!(config_file, self.match)
+          cf = with_repository do |repository|
+            config = has_database!(repository, self.match)
 
             # Move the current one if it was it
-            if config_file.current?(config)
-              config_file.current_db_name = nil
+            if repository.current?(config)
+              repository.current_db_name = nil
             end
       
             # Removes it from file
-            config_file.remove(config)
+            repository.remove(config)
       
             # Flush the configuration file
-            config_file.flush!
+            repository.flush!
           end
         
           # List available databases now
