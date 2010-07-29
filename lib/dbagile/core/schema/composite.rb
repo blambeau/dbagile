@@ -62,7 +62,6 @@ module DbAgile
         
         # Removes empty objects from parts
         def _strip!
-          parts.each{|p| p._strip! if p.composite?}
           to_remove = part_keys.select{|k| 
             self[k].composite? and self[k].empty?
           }

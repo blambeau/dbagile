@@ -186,7 +186,7 @@ module DbAgile
           raise ArgumentError, "Builder expected for builder, got #{builder.inspect}" 
         end
         options = Computations::Filter::DEFAULT_OPTIONS.merge(options)
-        Schema::Computations::filter(schema, options, builder, &filter_block)
+        Schema::Computations::filter(schema, options, builder, &filter_block)._strip!
       end
       module_function :filter
         
