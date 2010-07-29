@@ -1,0 +1,9 @@
+--- 
+databases: 
+  sqlite: 
+    uri: /tmp/dbagile_org.db
+  postgres: 
+    uri: postgres://dbagile@localhost/dbagile_org
+  mysql: 
+    uri: mysql://dbagile@localhost/dbagile_org
+current: sqlite

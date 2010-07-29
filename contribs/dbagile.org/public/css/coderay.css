@@ -1,0 +1,46 @@
+.CodeRay {
+	clear: both;
+	font-family: Courier;
+  border: 1px dashed #999;
+	background-color: #f5f5ff;
+	margin: 60px 0px 10px 0px;
+	width: 80%;
+	overflow: auto;
+}
+.CodeRay pre {
+	padding: 10px;
+	margin: 0px;
+	line-height: 1.2em;
+}
+
+/* all but recognized */
+.CodeRay .code { color: black; background: transparent; }
+/* comments */
+.CodeRay .c { color: #0066FF; background: transparent; }
+/* string literal */
+.CodeRay .s { color: #036A07; background: transparent; }
+/* class name */
+.CodeRay .cl { color: #585CF6; }
+/* symbol */
+.CodeRay .sy { color: #C5060B; }
+/* constant */
+.CodeRay .co { color: #585CF6; }
+/* keywords and associated */
+.CodeRay .r, 
+.CodeRay .ke,
+.CodeRay .ty,
+.CodeRay .pd,
+.CodeRay .ta,
+.CodeRay .kw { color: #0000FF; background: transparent; }
+/* instance variable */
+.CodeRay .vl,
+.CodeRay .iv,
+.CodeRay .i  { color: #318495; background: transparent; }
+/* Regular expression */
+.CodeRay .rx  { color: #ffa07a; background: transparent; }
+/* method name */
+.CodeRay .fu,
+.CodeRay .an { color: #036A07; background: transparent; }
+
+.CodeRay .pc  { color: #00ffee; background: transparent; }
+.CodeRay .idl    { color: #ffa07a; background: transparent; }

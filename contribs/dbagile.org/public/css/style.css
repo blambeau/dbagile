@@ -1,0 +1,63 @@
+body{ 
+	width: 80%;
+	margin: auto;
+  padding: 0 20px;
+  font-family: "Lucida Sans", "Lucida Grande", Verdana, Arial, sans-serif; 
+  font-size: 13px;
+  line-height: 1.5em;
+  padding:20px;
+}
+p {
+	text-align: justify;
+}
+a:visited { color: blue; }
+h1 { font-size: 25px; margin: 1em 0 1em;  }
+h2 { 
+  padding: 0;
+  padding-bottom: 3px;
+  border-bottom: 1px #aaa solid;
+  font-size: 1.4em;
+  margin: 1.8em 0 0.5em;
+}
+ul li {
+	padding-bottom: 3px;
+}
+dl {
+	margin-left: 20px;
+	border: 1px dashed #888888;
+	padding: 3px 7px;
+}
+dl dt {
+	padding-top: 2px;
+	font-weight: bold;
+  font-family: Courier; 
+}
+.clear {
+	clear: both;
+}
+blockquote {
+	width: 70%;
+	margin: auto;
+	font-size: 1.1em;
+	font-style: italic;
+}
+
+form label {
+	display: block;
+	clear: both;
+	float: left;
+	width: 200px;
+	height: 30px;
+}
+form input, form select {
+	display: block;
+	float: left;
+	width: 200px;
+	height: 30px;
+}
+pre {
+	
+	clear: both;
+	width: 800px;
+	margin: auto;
+}

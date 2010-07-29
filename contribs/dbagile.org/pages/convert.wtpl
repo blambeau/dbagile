@@ -1,0 +1,25 @@
+<h2>SQL script for creating/dropping database</h2>
+<form action="/convert" method="POST" enctype="multipart/form-data">
+  <label for="schema_file">Your schema file (.yaml)</label>
+  <input type="file" name="schema_file" value=""/>
+  
+  <label for="adapter">The adapter to use</label>
+  <select name="adapter">
+    <option value="sqlite">SQLite</option>
+    <option value="mysql">MySQL</option>
+    <option value="postgres">PostgreSQL</option>
+  </select>
+  
+  <label for="script_kind">Which kind of script?</label>
+  <select name="script_kind">
+    <option value="create">create</option>
+    <option value="drop">drop</option>
+  </select>
+  
+  <div class="clear"></div>
+  <input type="submit" value="Go!"/>
+</form>
+
+?{knows?(:script)}{
+^{xhtml/coderay/sql}{+{script}}
+}
