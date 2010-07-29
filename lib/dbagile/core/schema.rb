@@ -46,10 +46,10 @@ module DbAgile
         NO_CHANGE => :black,
         #
         CREATED   => :green,
-        DROPPED   => :red,
-        ALTERED   => :cyan,
-        PENDING   => :magenta,
-        DEFERED   => :black
+        DROPPED   => :green,
+        ALTERED   => :green,
+        PENDING   => :red,
+        DEFERED   => :red
       }
 
       #
