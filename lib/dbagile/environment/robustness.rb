@@ -19,6 +19,7 @@ module DbAgile
             display(command.options.to_s)
           when DbAgile::Error, Sequel::Error, IOError
             say(error.message, :red)
+            puts error.backtrace.join("\n")
           when Interrupt
             say("Command interrupted by user", :magenta)
           else

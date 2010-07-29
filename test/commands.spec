@@ -111,6 +111,14 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The schema:check command" 
     end
   
+    describe "schema:sql-script" do
+      it_should_behave_like "The schema:sql-script command" 
+    end
+  
+    describe "schema:diff" do
+      it_should_behave_like "The schema:diff command" 
+    end
+  
   end # -- Schema
   
 end

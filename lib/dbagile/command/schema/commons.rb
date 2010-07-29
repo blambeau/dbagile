@@ -39,7 +39,7 @@ module DbAgile
               end
             when :double
               if arguments.empty?
-                [ :announced, :effective ]
+                [ :effective, :announced ]
               elsif arguments.size == 2
                 arguments.collect{|arg| normalize_schema_argument(arg) }
               else
@@ -77,7 +77,8 @@ module DbAgile
               end
             when String
               s = DbAgile::Core::Schema::yaml_file_load(schema_argument)
-              s.schema_identifier = file
+              s.schema_identifier = schema_argument
+              s
           end
           
           # A small check, to be sure

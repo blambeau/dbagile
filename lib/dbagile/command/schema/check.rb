@@ -31,12 +31,12 @@ module DbAgile
             if errors.empty?
               say("Valid schema (#{schema.schema_identifier.inspect})!", :green)
               say("\n")
-              schema
+              [ schema, errors ]
             else
               say("Invalid schema (#{schema.schema_identifier.inspect}):", :red)
               errors.error_messages.each{|m| say("  * #{m}")}
               say("\n")
-              errors
+              [ schema, errors ]
             end
           end
         end
