@@ -16,7 +16,7 @@ describe "DbAgile::Contract /" do
   
     describe "on #{database.name} /" do
     
-      let(:conn)  { database.connect                }
+      let(:conn)  { database.connect                     }
       let(:trans) { DbAgile::Core::Transaction.new(conn) }
   
       describe "::DbAgile::Core::Connection" do

@@ -97,8 +97,8 @@ module DbAgile
         
         # Yields the block, passing schemas as an array, according to 
         # kind_of_schema_arguments
-        def with_schemas
-          schemas = schema_arguments.collect{|arg| load_schema(arg)}
+        def with_schemas(check = self.check_schemas)
+          schemas = schema_arguments.collect{|arg| load_schema(arg, check)}
           case kind_of_schema_arguments
             when :single
               yield(schemas.first)
