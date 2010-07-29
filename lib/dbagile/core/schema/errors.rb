@@ -30,10 +30,18 @@ module DbAgile
     # Right schema object
     attr_reader :right
     
+    # Part name
+    attr_reader :part_name
+    
     # Creates an error instance
-    def initialize(left, right)
+    def initialize(left, right, part_name = nil)
       @left, @right = left, right
+      @part_name = part_name
       super(left.parent)
+    end
+    
+    def message
+      "Schema conflict occured on #{left} : #{part_name}"
     end
     
   end # class SchemaConflictError

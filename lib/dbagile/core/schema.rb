@@ -174,6 +174,27 @@ module DbAgile
       module_function :merge
       
       #
+      # Filters a schema according to a block
+      #
+      def filter(schema, options = {}, 
+                 builder = DbAgile::Core::Schema::builder, 
+                 &filter_block)
+        unless options.kind_of?(Hash)
+          raise ArgumentError, "Hash expected for options, got #{options.inspect}" 
+        end
+        unless builder.kind_of?(DbAgile::Core::Schema::Builder)
+          raise ArgumentError, "Builder expected for builder, got #{builder.inspect}" 
+        end
+        options = Computations::Filter::DEFAULT_OPTIONS.merge(options)
+        Schema::Computations::filter(schema, options, builder, &filter_block)
+      end
+      module_function :filter
+        
+      ##############################################################################
+      ### About Schema scripts
+      ##############################################################################
+      
+      #
       # Computes and returns a list of abstract operations to perform on a database
       # given a annotated schema (typically, the result of a merge operation)
       #

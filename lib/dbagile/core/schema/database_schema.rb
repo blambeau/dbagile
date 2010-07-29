@@ -31,6 +31,12 @@ module DbAgile
            :physical => Schema::Physical.new}
         end
         
+        # Strips this schema
+        def _strip!
+          logical._strip!
+          self
+        end
+        
         ############################################################################
         ### SchemaObject
         ############################################################################
@@ -77,18 +83,6 @@ module DbAgile
         ### Computations
         ############################################################################
           
-        # Applies schema minus
-        def minus(other)
-          Schema::minus(self, other)
-        end
-        alias :- :minus
-      
-        # Applies schema merging
-        def merge(other)
-          Schema::merge(self, other)
-        end
-        alias :+ :merge
-        
         # Applies schema checking and raises a SchemaSemanticsError if something is wrong.
         def check!(raise_on_error = true)
           errors = SchemaSemanticsError.new(self)
@@ -105,6 +99,23 @@ module DbAgile
           check!(false).empty?
         end
       
+        # Applies schema minus
+        def minus(other)
+          Schema::minus(self, other)
+        end
+        alias :- :minus
+      
+        # Applies schema merging
+        def merge(other)
+          Schema::merge(self, other)
+        end
+        alias :+ :merge
+        
+        # Applies schema filtering
+        def filter(options = {}, &filter_block)
+          Schema::filter(self, options, &filter_block)
+        end
+        
       end # class DatabaseSchema
     end # module Schema
   end # module Core
