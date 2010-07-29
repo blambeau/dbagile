@@ -5,6 +5,9 @@ module DbAgile
     #
     module Robustness
       
+      # Show backtrace on errors?
+      attr_accessor :show_backtrace
+      
       #
       # Handles an error that occured during command execution.
       #
@@ -17,14 +20,21 @@ module DbAgile
           when OptionParser::ParseError
             say(error.message, :red)
             display(command.options.to_s)
-          when DbAgile::Error, Sequel::Error, IOError
+          when Sequel::Error, IOError
             say(error.message, :red)
-            puts error.backtrace.join("\n")
+          when DbAgile::SchemaSemanticsError
+            say(error.message(true), :red)
+          when DbAgile::InternalError
+            say("DbAgile encountered an internal error.\n Please replay with dba --backtrace and report the error!", :red)
+          when DbAgile::Error
+            say(error.message, :red)
           when Interrupt
             say("Command interrupted by user", :magenta)
           else
             say("ERROR (#{error.class}): #{error.message}", :red)
-            display(error.backtrace.join("\n"))
+        end
+        if self.show_backtrace
+          say(error.backtrace.join("\n"))
         end
         error
       end

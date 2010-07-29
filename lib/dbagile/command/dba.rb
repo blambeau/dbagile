@@ -19,6 +19,9 @@ module DbAgile
       # Database to use
       attr_accessor :use_database
       
+      # Show backtrace?
+      attr_accessor :show_backtrace
+      
       # Continue after my options
       attr_accessor :stop_after_options
 
@@ -41,6 +44,9 @@ module DbAgile
         opt.on_tail("--list", "Show list of available subcommands") do
           show_long_help
           self.stop_after_options = true
+        end
+        opt.on_tail("--[no-]backtrace", "Print a backtrace on error") do |value|
+          self.show_backtrace = value
         end
         opt.on_tail("--version", "Show version") do
           say("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau")
@@ -102,6 +108,9 @@ module DbAgile
         # Prepare the environment
         if self.repository_path
           environment.repository_path = self.repository_path
+        end
+        unless self.show_backtrace.nil?
+          environment.show_backtrace = self.show_backtrace
         end
         if self.use_database
           environment.repository.current_db_name = self.use_database.to_sym

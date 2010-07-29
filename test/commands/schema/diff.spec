@@ -22,9 +22,9 @@ shared_examples_for("The schema:diff command") do
     dba.output_buffer = StringIO.new
     dba.schema_diff(['-u', effective, announced]).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
     s = dba.output_buffer.string
-    s.should =~ /PARTS/
+    s.should =~ /SUPPLIES/
     s.should_not =~ /SUPPLIERS/
-    s.should_not =~ /SUPPLIES/
+    s.should_not =~ /PARTS/
   end
 
 end

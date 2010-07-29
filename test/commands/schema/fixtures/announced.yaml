@@ -21,7 +21,6 @@ logical:
       QTY:   { domain: Integer, mandatory: true }
     constraints: 
       pk_supplies: { type: :primary_key, attributes: [ 'S#', 'P#' ] }
-      is_a_known_supplier: { type: :foreign_key, attributes: [ 'S#' ], references: :SUPPLIERS }
 ---
 physical:
   indexes:

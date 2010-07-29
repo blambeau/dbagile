@@ -20,6 +20,7 @@ module DbAgile
     def initialize(input_buffer = STDIN, output_buffer = STDOUT)
       @input_buffer, @output_buffer = input_buffer, output_buffer
       @highline = HighLine.new
+      @show_backtrace = false
     end
     
     # Duplicates the environment but removes any cached value (repository 

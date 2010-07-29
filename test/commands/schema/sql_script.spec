@@ -3,6 +3,7 @@ shared_examples_for("The schema:sql-script command") do
   let(:invalid){ File.expand_path('../fixtures/invalid.yaml', __FILE__) }
   let(:announced){ File.expand_path('../fixtures/announced.yaml', __FILE__) }
   let(:effective){ File.expand_path('../fixtures/effective.yaml', __FILE__) }
+  let(:add_constraint){ File.expand_path('../fixtures/add_constraint.yaml', __FILE__) }
   
   it "should return the output buffer with CREATE" do
     dba.output_buffer = StringIO.new
@@ -24,7 +25,7 @@ shared_examples_for("The schema:sql-script command") do
     dba.output_buffer = StringIO.new
     dba.schema_sql_script(['stage', effective, announced]).should == dba.output_buffer
     s = dba.output_buffer.string
-    s.should =~ /CREATE TABLE .PARTS./
+    s.should =~ /CREATE TABLE .SUPPLIES./
     s.should_not =~ /DROP/
   end
 
@@ -32,8 +33,17 @@ shared_examples_for("The schema:sql-script command") do
     dba.output_buffer = StringIO.new
     dba.schema_sql_script(['stage', announced, effective]).should == dba.output_buffer
     s = dba.output_buffer.string
-    s.should =~ /DROP TABLE .PARTS./
+    s.should =~ /DROP TABLE .SUPPLIES./
     s.should_not =~ /CREATE/
+  end
+
+  it "should support adding foreign keys, if it implies deffered staging" do
+    pending("sqlite does not support ALTER TABLE ADD FOREIGN KEY") {
+      dba.output_buffer = StringIO.new
+      dba.schema_sql_script(['stage', '--no-check', announced, add_constraint]).should == dba.output_buffer
+      s = dba.output_buffer.string
+      puts s
+    }
   end
 
   it "should raise an error on invalid schema" do
