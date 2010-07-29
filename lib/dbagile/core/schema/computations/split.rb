@@ -22,7 +22,9 @@ module DbAgile
             # Rebuild schemas now
             schemas = {}
             split_hash.keys.each{|kind|
-              schemas[kind] = Schema::filter(schema){|obj| split_hash[kind].include?(obj)}
+              split_proc    = lambda{|obj| split_hash[kind].include?(obj)}
+              split_options = {:identifier => kind}
+              schemas[kind] = Schema::filter(schema, split_options, &split_proc)
             }
             schemas
           end

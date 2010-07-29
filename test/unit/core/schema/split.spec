@@ -32,6 +32,9 @@ describe "DbAgile::Core::Schema#split" do
       end
     }
     logical, constraints, physical = splitted[:logical], splitted[:constraint], splitted[:physical]
+    logical.schema_identifier.should == :logical
+    constraints.schema_identifier.should == :constraint
+    physical.schema_identifier.should == :physical
     logical.visit{|o, parent|
       unless o.composite?
         o.logical?.should be_true

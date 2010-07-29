@@ -191,7 +191,11 @@ module DbAgile
         hash!(options, :options, caller)
         builder!(builder, :builder, caller)
         options = Computations::Filter::DEFAULT_OPTIONS.merge(options)
-        Schema::Computations::filter(schema, options, builder, &filter_block)._strip!
+        filtered = Schema::Computations::filter(schema, options, builder, &filter_block)._strip!
+        if options[:identifier]
+          filtered.schema_identifier = options[:identifier]
+        end
+        filtered
       end
       module_function :filter
         
