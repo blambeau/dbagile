@@ -10,8 +10,18 @@ module DbAgile
       # With a single YAML file argument, loads the schema from file and checks it.
       #
       class Check < Command
-        include Schema::SchemaBased
+        include Schema::Commons
         Command::build_me(self, __FILE__)
+        
+        # Returns :single
+        def kind_of_schema_arguments
+          :single
+        end
+      
+        # Contribute to options
+        def add_options(opt)
+          self.check_schemas = false
+        end
         
         # Executes the command
         def execute_command
