@@ -37,13 +37,10 @@ shared_examples_for("The schema:sql-script command") do
     s.should_not =~ /CREATE/
   end
 
-  it "should support adding foreign keys, if it implies deffered staging" do
-    pending("sqlite does not support ALTER TABLE ADD FOREIGN KEY") {
-      dba.output_buffer = StringIO.new
-      dba.schema_sql_script(['stage', '--no-check', announced, add_constraint]).should == dba.output_buffer
-      s = dba.output_buffer.string
-      puts s
-    }
+  it "should support adding foreign keys, even if it implies deffered staging" do
+    dba.output_buffer = StringIO.new
+    s = dba.schema_sql_script(['stage', '--no-check', announced, add_constraint])
+    s.should == dba.output_buffer
   end
 
   it "should raise an error on invalid schema" do

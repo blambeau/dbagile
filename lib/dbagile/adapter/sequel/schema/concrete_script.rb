@@ -13,61 +13,81 @@ module DbAgile
         def create_table(conn, op, buffer)
           gen = Sequel::Schema::Generator.new(conn)
           build_sequel_expand_generator(conn, op, gen, "")
-          op.staged!
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         def expand_table(conn, op, buffer)
           gen = Sequel::Schema::AlterTableGenerator.new(conn)
           build_sequel_expand_generator(conn, op, gen, "add_")
-          op.staged!
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         def collapse_table(conn, op, buffer)
           gen = Sequel::Schema::AlterTableGenerator.new(conn)
           build_sequel_collapse_generator(conn, op, gen, "drop_")
-          op.staged!
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         # Drops table
         def drop_table(conn, op, buffer)
           buffer << conn.send(:drop_table_sql, op.table_name) << ";\n"
-          op.staged!
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
+        # Mark objects as staged for an operation
+        def staged!(op)
+          if op.supports_sub_operation?(nil)
+            op.each_sub_operation{|kind, operand| op.staged!(operand)}
+          end
+          op.staged!(op.relvar)
+        end
+        
+        # Mark objects as not staged for an operation
+        def unsupported!(op)
+          if op.supports_sub_operation?(nil)
+            op.each_sub_operation{|kind, operand| op.not_staged!(operand)}
+          end
+          op.not_staged!(op.relvar)
         end
         
         # Builds a sequel expand generator
         def build_sequel_expand_generator(conn, op, generator, prefix)
           op.each_sub_operation{|kind, operand|
-            begin
-              case kind
-                when :attribute
-                  args = attribute2column_args(operand)
-                  generator.send(:"#{prefix}column", *args)
-                  op.staged!(operand)
-                when :candidate_key
-                  if operand.primary?
-                    args = candidate_key2primary_key_args(operand)
-                    generator.send(:"#{prefix}primary_key", *args) 
-                  else
-                    args = candidate_key2unique_args(operand)
-                    generator.send(:"#{prefix}unique", *args)
-                  end
-                  op.staged!(operand)
-                when :foreign_key
-                  args = foreign_key2foreign_key_args(operand)
-                  generator.send(:"#{prefix}foreign_key", *args)
-                  op.staged!(operand)
-                when :index
-                  args = index2index_args(operand)
-                  generator.send(:"#{prefix}index", *args)
-                  op.staged!(operand)
+            case kind
+              when :attribute
+                args = attribute2column_args(operand)
+                generator.send(:"#{prefix}column", *args)
+              when :candidate_key
+                if operand.primary?
+                  args = candidate_key2primary_key_args(operand)
+                  generator.send(:"#{prefix}primary_key", *args) 
                 else
-                  raise DbAgile::AssumptionFailedError, "Unknown script operation kind #{kind}"
-              end
-            rescue Sequel::Error
-              op.not_staged!(operand)
+                  args = candidate_key2unique_args(operand)
+                  generator.send(:"#{prefix}unique", *args)
+                end
+              when :foreign_key
+                args = foreign_key2foreign_key_args(operand)
+                generator.send(:"#{prefix}foreign_key", *args)
+              when :index
+                args = index2index_args(operand)
+                generator.send(:"#{prefix}index", *args)
+              else
+                raise DbAgile::AssumptionFailedError, "Unknown script operation kind #{kind}"
             end
           }
         end
@@ -75,26 +95,19 @@ module DbAgile
         # Builds a sequel collapse generator
         def build_sequel_collapse_generator(conn, op, generator, prefix)
           op.each_sub_operation{|kind, operand|
-            begin
-              case kind
-                when :attribute
-                  args = [ operand.name ]
-                  generator.send(:"#{prefix}column", *args)
-                  op.staged!(operand)
-                when :candidate_key, :foreign_key
-                  args = [ operand.name ]
-                  generator.send(:"#{prefix}constraint", *args) 
-                  op.staged!(operand)
-                when :index
-                  column_names = operand.indexed_attributes.collect{|a| a.name}
-                  args = [ column_names, {:name => operand.name}]
-                  generator.send(:"#{prefix}index", *args)
-                  op.staged!(operand)
-                else
-                  raise DbAgile::AssumptionFailedError, "Unknown script operation kind #{kind}"
-              end
-            rescue Sequel::Error
-              op.not_staged!(operand)
+            case kind
+              when :attribute
+                args = [ operand.name ]
+                generator.send(:"#{prefix}column", *args)
+              when :candidate_key, :foreign_key
+                args = [ operand.name ]
+                generator.send(:"#{prefix}constraint", *args) 
+              when :index
+                column_names = operand.indexed_attributes.collect{|a| a.name}
+                args = [ column_names, {:name => operand.name}]
+                generator.send(:"#{prefix}index", *args)
+              else
+                raise DbAgile::AssumptionFailedError, "Unknown script operation kind #{kind}"
             end
           }
         end

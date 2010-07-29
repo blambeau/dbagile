@@ -59,6 +59,8 @@ module DbAgile
                 Schema::DEFERED
               when Schema::TO_DROP
                 Schema::DEFERED
+              when Schema::DEFERED
+                Schema::DEFERED
               when Schema::NO_CHANGE
                 Schema::NO_CHANGE
               else
@@ -72,8 +74,13 @@ module DbAgile
           ##########################################################################
           
           # Asserts that this operation supports sub operations
+          def supports_sub_operation?(name = nil)
+            !self.kind_of?(Migrate::DropTable)
+          end
+          
+          # Asserts that this operation supports sub operations
           def supports_sub_operation!(name)
-            if self.kind_of?(Migrate::DropTable)
+            unless supports_sub_operation?(name)
               raise DbAgile::AssumptionFailedError, "#{self.class} does not support sub operation #{name}"
             end
           end
@@ -106,6 +113,25 @@ module DbAgile
           def index(index)
             supports_sub_operation!(:index)
             operations << [:index, index]
+          end
+          
+          # Converts operations to simili SQL
+          def ops_to_sql92(ops)
+            ops.collect{|op|
+              kind, operand = op
+              case kind
+                when :attribute
+                  "COLUMN #{operand.name} #{operand.domain}"
+                when :candidate_key
+                  "CANDIDATE KEY #{operand.name})"
+                when :foreign_key
+                  "FOREIGN KEY #{operand.name}"
+                when :index
+                  "INDEX #{operand.name}"
+                else
+                  raise DbAgile::AssumptionFailedError, "Unexpected operation kin #{kind}"
+              end
+            }.join(';')
           end
           
         end # class Operation

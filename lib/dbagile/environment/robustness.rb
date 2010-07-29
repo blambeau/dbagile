@@ -26,6 +26,7 @@ module DbAgile
             say(error.message(true), :red)
           when DbAgile::InternalError
             say("DbAgile encountered an internal error.\n Please replay with dba --backtrace and report the error!", :red)
+            say(error.message, :red)
           when DbAgile::Error
             say(error.message, :red)
           when Interrupt
