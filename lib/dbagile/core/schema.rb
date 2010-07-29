@@ -125,10 +125,10 @@ module DbAgile
         case path_or_io
           when String
             File.open(path_or_io, 'r'){|io| yaml_load(io, builder) }
-          when IO, File
+          when IO, File, Tempfile
             yaml_load(path_or_io, builder)
           else 
-            raise ArgumentError, "Unable to load schema from #{file}"
+            raise ArgumentError, "Unable to load schema from #{path_or_io}"
         end
       end
       module_function :yaml_file_load

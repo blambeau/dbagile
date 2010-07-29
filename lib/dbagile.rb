@@ -1,4 +1,5 @@
 require 'time'
+require 'tempfile'
 require 'date'
 require 'yaml'
 require 'rubygems'
@@ -92,6 +93,12 @@ module DbAgile
       when Symbol
         db = database(uri)
         raise NoSuchDatabaseError, "No such database #{uri}" unless db
+        db.connect(options)
+      when String
+        theuri = uri
+        db = database(:noname){
+          uri theuri
+        }
         db.connect(options)
       else
         raise ArgumentError, "Unable to use #{uri} to connect a database"
