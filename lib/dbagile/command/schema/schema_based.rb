@@ -38,7 +38,7 @@ module DbAgile
         
         # Yields the block with expected schema, based on reference 
         # and other option conventions
-        def with_schema
+        def with_schema(check = self.check_schema)
           schema = nil
           if schema_file
             file = valid_read_file!(schema_file)
@@ -57,6 +57,9 @@ module DbAgile
             end
           else
             raise DbAgile::InternalError, "Unexpected situation on SchemaBased."
+          end
+          if check
+            schema.check!
           end
           yield(schema)
         end

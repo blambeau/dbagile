@@ -36,6 +36,16 @@ module DbAgile
         end
       end
       
+      # Asserts that an argument matches some candidates or
+      # raises a OptionParser::InvalidArgument error.
+      def is_in!(name, value, candidates)
+        value = valid_argument_list!([ value ], candidates.first.class)
+        unless candidates.include?(value)
+          raise OptionParser::InvalidArgument, "Expected one of #{candidates.inspect} for #{name}"
+        end
+        value
+      end
+      
       # Checks that a file exists and can be read or raises an IO error
       def valid_read_file!(file)
         raise IOError, "Unable to read #{file}" unless File.file?(file) and File.readable?(file)
