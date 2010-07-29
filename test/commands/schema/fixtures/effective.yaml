@@ -1,0 +1,21 @@
+--- 
+logical: 
+  SUPPLIERS: 
+    heading: 
+      S#:    { domain: Integer, mandatory: true }
+      NAME:  { domain: String,  mandatory: true }
+      CITY:  { domain: String,  mandatory: true }
+    constraints: 
+      pk_suppliers: { type: :primary_key, attributes: [ 'S#' ] }
+  SUPPLIES: 
+    heading: 
+      S#:    { domain: Integer, mandatory: true }
+      P#:    { domain: Integer, mandatory: true }
+      QTY:   { domain: Integer, mandatory: true }
+    constraints: 
+      pk_supplies: { type: :primary_key, attributes: [ 'S#', 'P#' ] }
+      is_a_known_supplier: { type: :foreign_key, attributes: [ 'S#' ], references: :SUPPLIERS }
+---
+physical:
+  indexes:
+    SUPPLIER_NAMES: { relvar: SUPPLIERS, attributes: [ 'NAME' ] }
