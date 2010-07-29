@@ -29,8 +29,8 @@ describe "::DbAgile::Command::command_for /" do
   end
 
   describe "when called with a symbol on a non root command" do
-    let(:arg){ :schema_create_script }
-    it{ should be_kind_of(::DbAgile::Command::Schema::CreateScript) }
+    let(:arg){ :schema_sql_script }
+    it{ should be_kind_of(::DbAgile::Command::Schema::SqlScript) }
   end
 
 end

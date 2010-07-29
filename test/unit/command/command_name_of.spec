@@ -14,8 +14,8 @@ describe "::DbAgile::Command::command_name_of /" do
   end
   
   describe "when called on a complex name command" do
-    let(:command){ DbAgile::Command::Schema::CreateScript }
-    it{ should == "schema:create-script" }
+    let(:command){ DbAgile::Command::Schema::SqlScript }
+    it{ should == "schema:sql-script" }
   end
   
 end

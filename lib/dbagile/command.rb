@@ -34,6 +34,11 @@ module DbAgile
       set_default_options
     end
     
+    # Returns commands category
+    def category
+      self.class.category
+    end
+      
     # Returns command name
     def command_name
       self.class.command_name
@@ -81,11 +86,6 @@ module DbAgile
     ##############################################################################
     ### Command info/help and so on.
     ##############################################################################
-      
-    # Returns commands category
-    def category
-      raise "Command.category should be overriden by subclasses"
-    end
       
     # Shows the help
     def show_help

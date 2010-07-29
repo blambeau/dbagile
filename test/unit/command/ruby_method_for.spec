@@ -14,8 +14,8 @@ describe "::DbAgile::Command::ruby_method_for /" do
   end
   
   describe "when called on a complex name command" do
-    let(:command){ DbAgile::Command::Schema::CreateScript }
-    it{ should == :schema_create_script }
+    let(:command){ DbAgile::Command::Schema::SqlScript }
+    it{ should == :schema_sql_script }
   end
   
 end

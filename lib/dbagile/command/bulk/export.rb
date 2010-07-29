@@ -17,11 +17,6 @@ module DbAgile
         # Output file to use
         attr_accessor :output_file
       
-        # Returns command's category
-        def category
-          :bulk
-        end
-
         # Contribute to options
         def add_options(opt)
           # Main output options

@@ -12,11 +12,6 @@ module DbAgile
         # Name of the database to remove
         attr_accessor :match
       
-        # Returns command's category
-        def category
-          :repo
-        end
-      
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.match = valid_argument_list!(arguments, Symbol)

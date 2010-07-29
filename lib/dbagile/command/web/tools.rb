@@ -9,11 +9,6 @@ module DbAgile
       class Tools < Command
         Command::build_me(self, __FILE__)
       
-        # Returns command's category
-        def category
-          :web
-        end
-
         # Executes the command.
         def execute_command
           require 'dbagile/restful/server'

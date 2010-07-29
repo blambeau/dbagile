@@ -15,11 +15,6 @@ module DbAgile
         # The file to execute
         attr_accessor :file
       
-        # Returns command's category
-        def category
-          :sql
-        end
-      
         # Contribute to options
         def add_options(opt)
           opt.separator nil

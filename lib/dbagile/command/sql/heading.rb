@@ -15,11 +15,6 @@ module DbAgile
         # Table whose heading must be displayed
         attr_accessor :dataset
       
-        # Returns command's category
-        def category
-          :sql
-        end
-
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.dataset = valid_argument_list!(arguments, Symbol)

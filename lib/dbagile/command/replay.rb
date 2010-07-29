@@ -11,11 +11,6 @@ module DbAgile
       # Command number to replay
       attr_accessor :number
       
-      # Returns command's category
-      def category
-        :dba
-      end
-      
       # Overrided to avoid parsing options (otherwise -1, -2 will not work)
       def unsecure_run(requester_file, argv)
         if argv.empty?

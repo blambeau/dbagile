@@ -22,11 +22,6 @@ module DbAgile
       # Continue after my options
       attr_accessor :stop_after_options
 
-      # Returns command's category
-      def category
-        :dba
-      end
-      
       # Contribute to options
       def add_options(opt)
         opt.separator nil

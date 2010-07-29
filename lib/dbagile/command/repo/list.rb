@@ -12,11 +12,6 @@ module DbAgile
         # Verbose ?
         attr_accessor :verbose
       
-        # Returns command's category
-        def category
-          :repo
-        end
-      
         # Sets the default options
         def set_default_options
           @verbose = false

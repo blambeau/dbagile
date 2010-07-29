@@ -14,11 +14,6 @@ module DbAgile
       # Complete help?
       attr_accessor :complete
       
-      # Returns command's category
-      def category
-        :dba
-      end
-      
       # Contribute to options
       def add_options(opt)
         opt.separator "\nOptions:"

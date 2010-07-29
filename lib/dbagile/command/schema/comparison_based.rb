@@ -3,11 +3,6 @@ module DbAgile
     module Schema
       module ComparisonBased
         
-        # Returns command's category
-        def category
-          :schema
-        end
-
         # Normalizes the pending arguments
         def normalize_comparison_arguments(arguments)
           bad_argument_list!(arguments) unless arguments.empty?

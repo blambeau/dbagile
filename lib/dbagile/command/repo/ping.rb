@@ -12,11 +12,6 @@ module DbAgile
         # Name of the database to ping
         attr_accessor :match
       
-        # Returns command's category
-        def category
-          :repo
-        end
-      
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           if arguments.empty?

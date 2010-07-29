@@ -18,11 +18,6 @@ module DbAgile
         # Makes it the current database?
         attr_accessor :current
       
-        # Returns command's category
-        def category
-          :repo
-        end
-
         # Sets the default options
         def set_default_options
           @current = true

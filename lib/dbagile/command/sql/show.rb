@@ -9,11 +9,6 @@ module DbAgile
       class Show < Command
         Command::build_me(self, __FILE__)
       
-        # Returns command's category
-        def category
-          :sql
-        end
-      
         # Contribute to options
         def add_options(opt)
           opt.separator nil

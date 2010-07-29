@@ -52,6 +52,16 @@ module DbAgile
         end
       end
       
+      # Returns command category
+      def category
+        parent = DbAgile::RubyTools::parent_module(self)
+        if parent == DbAgile::Command
+          :dba
+        else
+          DbAgile::RubyTools::unqualified_class_name(parent).to_s.downcase.to_sym
+        end
+      end
+      
       # Returns command name
       def command_name
         command_name_of(self)

@@ -8,11 +8,6 @@ module DbAgile
     class History < Command
       Command::build_me(self, __FILE__)
       
-      # Returns command's category
-      def category
-        :dba
-      end
-      
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
         bad_argument_list!(arguments) unless arguments.empty?

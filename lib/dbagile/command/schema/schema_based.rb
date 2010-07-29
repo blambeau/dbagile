@@ -3,11 +3,6 @@ module DbAgile
     module Schema
       module SchemaBased
         
-        # Returns command's category
-        def category
-          :schema
-        end
-
         # Schema file
         attr_accessor :schema_file
         

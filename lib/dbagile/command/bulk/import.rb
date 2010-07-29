@@ -24,11 +24,6 @@ module DbAgile
         # Truncate table?
         attr_accessor :truncate_table
             
-        # Returns command's category
-        def category
-          :bulk
-        end
-      
         # Contribute to options
         def add_options(opt)
           # Main output options
