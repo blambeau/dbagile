@@ -103,7 +103,7 @@ module DbAgile
       # Dumps the schema to YAML
       def to_yaml(opts = {})
         YAML::quick_emit(self, opts){|out|
-          dbmap = {}
+          dbmap = DbAgile::Tools::OrderedHash.new
           databases.each{|db| dbmap[db.name.to_s] = db}
           out.map("tag:yaml.org,2002:map") do |map|
             map.add('databases', dbmap)
