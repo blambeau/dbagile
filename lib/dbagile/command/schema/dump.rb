@@ -2,9 +2,20 @@ module DbAgile
   class Command
     module Schema
       #
-      # Dump database schema (announced by default) 
+      # Dump a schema of the current database
       #
-      # Usage: dba #{command_name} [--effective|--physical]
+      # Usage: dba #{command_name} [announced|effective|physical]
+      #
+      # This command dumps the schema of the current database on the output console. 
+      # Without argument, the announced schema is implicit. This command uses the 
+      # fallback chain (announced -> effective -> physical) and has no side-effect 
+      # on the database itself (read-only).
+      #
+      # NOTE: Schema-checking is on by default, which may lead to checking errors, 
+      #       typically when reverse engineering poorly designed databases. Doing so 
+      #       immediately informs you about a potential problem.
+      #
+      #       Use --no-check to bypass schema checking. See also schema:check.
       #
       class Dump < Command
         include Schema::Commons

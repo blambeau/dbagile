@@ -2,9 +2,29 @@ module DbAgile
   class Command
     module Schema
       #
-      # Show differences between announced and effective database schemas
+      # Show differences between database schemas
       #
-      # Usage: dba #{command_name} [SCHEMA_ARG, ...]
+      # Usage: dba #{command_name} [schema1 schema2]
+      #
+      # This command is a diff for database schemas, helping database staging
+      # and migrations by showing objects to create/drop/alter.
+      #
+      # dba #{command_name}
+      #
+      #   Shortcut for 'dba schema:diff announced effective'
+      #
+      # dba #{command_name} schema1 schema2
+      #
+      #   Show differences between two particular schemas, being either installed
+      #   schemas [announced|effective|physical] or schema files.  This command 
+      #   uses a fallback chain (announced -> effective -> physical) and has no 
+      #   side-effect on the database itself (read-only).
+      #
+      # NOTE: Schema-checking is on by default, which may lead to checking errors, 
+      #       typically when reverse engineering poorly designed databases. Doing so 
+      #       immediately informs you about a potential problem.
+      #
+      #       Use --no-check to bypass schema checking. See also schema:check.
       #
       class Diff < Command
         include Schema::Commons

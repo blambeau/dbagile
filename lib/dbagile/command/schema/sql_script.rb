@@ -2,9 +2,37 @@ module DbAgile
   class Command
     module Schema
       #
-      # Print a SQL script for a creating/dropping a schema
+      # Flush a SQL script for a creating/dropping/staging a schema
       #
-      # Usage: dba #{command_name} {create, drop, stage} [SCHEMA_FILE]
+      # Usage: dba #{command_name} {create, drop, stage} [SCHEMA_ARG, ...]
+      #
+      # dba #{command_name} create [announced|effective|physical|FILE.yaml]
+      #
+      #   Flush a SQL script for creating a SQL database from a schema. Announced
+      #   schema of the database is the default. This command uses the fallback chain 
+      #   (announced -> effective -> physical) and has no side-effect on the database 
+      #   itself (read-only).
+      #
+      # dba #{command_name} drop [announced|effective|physical|FILE.yaml]
+      #
+      #   Flush a SQL script for dropping all objects of a SQL database. Announced
+      #   schema of the database is the default. This command uses the fallback chain 
+      #   (announced -> effective -> physical) and has no side-effect on the database 
+      #   itself (read-only).
+      #
+      # dba #{command_name} stage [schema1 schema2]
+      #
+      #   Flush a SQL script for staging a database from schema1 to schema2. Arguments 
+      #   can be installed schemas of the current database or schema files. Effective 
+      #   and announced schema of the current database are respectively used by default. 
+      #   The command uses the fallback chain (announced -> effective -> physical) and 
+      #   has no side-effect on the current database itself (read-only).
+      #
+      # Schema-checking is on by default, which may lead to checking errors, typically 
+      # when reverse engineering poorly designed databases. Doing so immediately informs 
+      # you about a potential problem.
+      #
+      # Use --no-check to bypass schema checking. See also schema:check.
       #
       class SqlScript < Command
         include Schema::Commons

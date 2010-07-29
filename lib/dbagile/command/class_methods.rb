@@ -18,7 +18,7 @@ module DbAgile
         command_class.instance_eval{
           @summary     = summary
           @usage       = usage.gsub('#{command_name}', command_class.command_name)
-          @description = description
+          @description = description.gsub('#{command_name}', command_class.command_name)
         }
       end
       

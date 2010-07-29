@@ -3,24 +3,13 @@ module DbAgile
     #
     # Show help of a given command
     #
-    # Usage: dba #{command_name} [--complete] COMMAND
+    # Usage: dba #{command_name} COMMAND
     #
     class Help < Command
       Command::build_me(self, __FILE__)
       
       # Command name
       attr_accessor :command
-      
-      # Complete help?
-      attr_accessor :complete
-      
-      # Contribute to options
-      def add_options(opt)
-        opt.separator "\nOptions:"
-        opt.on("--complete", "Provide complete command description") do
-          self.complete = true
-        end
-      end
         
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
@@ -34,6 +23,7 @@ module DbAgile
         display("\n")
         #
         display("Description:")
+        display("")
         display("  " + command.summary)
         #
         options = command.options.summarize
@@ -45,14 +35,13 @@ module DbAgile
         end
         #
         description = command.description.to_s
-        if complete
-          if description.strip.empty?
-            display("Sorry, no more information available yet")
-          else
-            display("Read more:")
-            display(description.gsub(/^/, "  ")) 
-            display("")
-          end
+        if description.strip.empty?
+          display("Sorry, no more information available yet")
+        else
+          display("Detailed documentation:")
+          display("")
+          display(description.gsub(/^/, "  ")) 
+          display("")
         end
       end
       

@@ -2,12 +2,24 @@ module DbAgile
   class Command
     module Schema
       #
-      # Check a relational schema
+      # Check a database schema
       #
-      # Usage: dba #{command_name} [FILE]
+      # Usage: dba #{command_name} [SCHEMA.yaml|announced|effective|physical]
       #
-      # Without arguent, this command checks the announced schema of current database. 
-      # With a single YAML file argument, loads the schema from file and checks it.
+      # This command informs you about bad smells and good practices with relational
+      # schemas (i.e. forgetting to create keys, not providing unique constraint 
+      # names, and so on).
+      # 
+      # dba #{command_name} SCHEMA.yaml
+      #
+      #   Load the schema from file and check it, printing advices and errors on the 
+      #   message console. The command does not connect any database in this mode.
+      #
+      # dba #{command_name} [announced|effective|physical]
+      #
+      #   Checks a schema of the current database. Announced schema is implicit without
+      #   any argument. This command uses a fallback chain (announced -> effective -> 
+      #   physical) and has no side-effect on the database itself (read-only).
       #
       class Check < Command
         include Schema::Commons
