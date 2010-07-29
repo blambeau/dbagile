@@ -55,6 +55,11 @@ module DbAgile
               assumption_error!("Unexpected kind of schema argument #{kind_of_schema_arguments}")
           end
         end
+
+        # Normalizes the pending arguments
+        def normalize_pending_arguments(arguments)
+          normalize_schema_arguments(arguments)
+        end
         
         # Loads a given schema from a schema argument
         def load_schema(schema_argument, check = self.check_schemas)

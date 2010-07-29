@@ -7,14 +7,19 @@ module DbAgile
       # Usage: dba #{command_name} [--effective|--physical]
       #
       class Dump < Command
-        include Schema::SchemaBased
+        include Schema::Commons
         Command::build_me(self, __FILE__)
         
         # Contribute to options
         def add_options(opt)
           opt.separator nil
           opt.separator "Options:"
-          add_effective_pysical_options(opt)
+          add_check_options(opt)
+        end
+        
+        # Returns :single
+        def kind_of_schema_arguments
+          :single
         end
       
         # Executes the command
