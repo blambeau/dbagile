@@ -1,4 +1,5 @@
 require 'dbagile/core/schema/errors'
+require 'dbagile/core/schema/robustness'
 require 'dbagile/core/schema/schema_object'
 require 'dbagile/core/schema/builder'
 require 'dbagile/core/schema/computations'
@@ -6,6 +7,7 @@ require 'dbagile/core/schema/migrate'
 module DbAgile
   module Core
     module Schema
+      extend(Schema::Robustness)
 
       # An empty schema
       EMPTY_SCHEMA = Schema::DatabaseSchema.new
@@ -150,6 +152,9 @@ module DbAgile
       #
       def minus(left, right, 
                 builder = DbAgile::Core::Schema::builder)
+        schema!(left, :left, caller)
+        schema!(right, :right, caller)
+        builder!(builder, :builder, caller)
         Computations::minus(left, right, builder)
       end
       module_function :minus
@@ -166,6 +171,9 @@ module DbAgile
       def merge(left, right, 
                 builder = DbAgile::Core::Schema::builder, 
                 &conflict_resolver)
+        schema!(left, :left, caller)
+        schema!(right, :right, caller)
+        builder!(builder, :builder, caller)
         if conflict_resolver.nil?
           conflict_resolver = DEFAULT_CONFLICT_RESOLVER_BLOCK
         end
@@ -179,17 +187,25 @@ module DbAgile
       def filter(schema, options = {}, 
                  builder = DbAgile::Core::Schema::builder, 
                  &filter_block)
-        unless options.kind_of?(Hash)
-          raise ArgumentError, "Hash expected for options, got #{options.inspect}" 
-        end
-        unless builder.kind_of?(DbAgile::Core::Schema::Builder)
-          raise ArgumentError, "Builder expected for builder, got #{builder.inspect}" 
-        end
+        schema!(schema, :schema, caller)
+        hash!(options, :options, caller)
+        builder!(builder, :builder, caller)
         options = Computations::Filter::DEFAULT_OPTIONS.merge(options)
         Schema::Computations::filter(schema, options, builder, &filter_block)._strip!
       end
       module_function :filter
         
+      #
+      # Splits a schema according to a block
+      #
+      def split(schema, options = {}, &filter_block)
+        schema!(schema, :schema, caller)
+        hash!(options, :options, caller)
+        options = Computations::Split::DEFAULT_OPTIONS.merge(options)
+        Schema::Computations::split(schema, options, &filter_block)
+      end
+      module_function :split
+      
       ##############################################################################
       ### About Schema scripts
       ##############################################################################

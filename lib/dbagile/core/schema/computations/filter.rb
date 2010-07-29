@@ -5,7 +5,7 @@ module DbAgile
         module Filter
           
           # Default filtering options
-          DEFAULT_OPTIONS = {:strip => true}
+          DEFAULT_OPTIONS = {}
           
           # Computes set difference between schemas.
           def filter(object, options, builder, &block)

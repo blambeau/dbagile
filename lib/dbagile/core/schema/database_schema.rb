@@ -116,6 +116,11 @@ module DbAgile
           Schema::filter(self, options, &filter_block)
         end
         
+        # Applies schema splitting
+        def split(options = {}, &split_block)
+          Schema::split(self, options, &split_block)
+        end
+        
       end # class DatabaseSchema
     end # module Schema
   end # module Core
