@@ -4,8 +4,12 @@ module DbAgile
       include DbAgile::Core::IO::Robustness
       
       # Raises an OptionParser::InvalidArgument
-      def bad_argument_list!(rest)
-        raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
+      def bad_argument_list!(rest, expected_name = nil)
+        if rest.empty?
+          raise OptionParser::MissingArgument, "#{expected_name}"
+        else
+          raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
+        end
       end
       
       # Raises an OptionParser::AmbiguousArgument
@@ -68,6 +72,13 @@ module DbAgile
         else
           cmd
         end
+      end
+      
+      #
+      # Raises a DbAgile::AssumptionFailedError with a specific message
+      #
+      def assumption_error!(msg)
+        raise DbAgile::AssumptionFailedError, msg
       end
       
     end # module Robust
