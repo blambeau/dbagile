@@ -36,16 +36,17 @@ module DbAgile
           # Mark an object as upgraded
           def staged!(obj = relvar)
             obj.status = case obj.status
-              when Schema::TO_CREATE
+              when Schema::TO_CREATE, Schema::CREATED
                 Schema::CREATED
-              when Schema::TO_ALTER
+              when Schema::TO_ALTER, Schema::ALTERED
                 Schema::ALTERED
-              when Schema::TO_DROP
+              when Schema::TO_DROP, Schema::DROPPED
                 Schema::DROPPED
               when Schema::NO_CHANGE
                 Schema::NO_CHANGE
               else
-                raise DbAgile::AssumptionFailedError, "Unexpected staged! source status #{obj.status}"
+                status_str = obj.status.to_s.upcase
+                raise DbAgile::AssumptionFailedError, "Unexpected staged! source status #{status_str} on #{obj}"
             end
           end
           
@@ -61,7 +62,8 @@ module DbAgile
               when Schema::NO_CHANGE
                 Schema::NO_CHANGE
               else
-                raise DbAgile::AssumptionFailedError, "Unexpected not_staged! source status #{obj.status}"
+                status_str = obj.status.to_s.upcase
+                raise DbAgile::AssumptionFailedError, "Unexpected staged! source status #{status_str} on #{obj}"
             end
           end
           
