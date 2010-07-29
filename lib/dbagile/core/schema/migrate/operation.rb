@@ -4,6 +4,25 @@ module DbAgile
       module Migrate
         class Operation
           
+          # The sub operations
+          attr_reader :operations
+        
+          # Targetted relation variable
+          attr_reader :relvar
+          
+          # Returns table name
+          def table_name
+            relvar.name
+          end
+          
+          def initialize(relvar)
+            unless relvar.kind_of?(DbAgile::Core::Schema::Logical::Relvar)
+              raise ArgumentError, "Relvar expected for relvar, got #{relvar.class}"
+            end
+            @relvar = relvar
+            @operations = []
+          end
+          
           # Returns kind of this operation
           def kind
             unqualified = DbAgile::RubyTools::class_unqualified_name(self.class).to_s
@@ -12,16 +31,14 @@ module DbAgile
           
           # Asserts that this operation supports sub operations
           def supports_sub_operation!(name)
-            unless self.respond_to?(:operations)
+            if self.kind_of?(Migrate::DropTable)
               raise DbAgile::AssumptionFailedError, "#{self.class} does not support sub operation #{name}"
             end
           end
           
           # Yields the block with each (subop_kind, operand) pair
           def each_sub_operation(&block)
-            unless self.respond_to?(:operations)
-              raise DbAgile::AssumptionFailedError, "#{self.class} does not support sub operations"
-            end
+            supports_sub_operation!(nil)
             operations.each{|op| block.call(op[0], op[1])}
           end
           

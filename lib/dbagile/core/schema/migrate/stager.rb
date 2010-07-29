@@ -81,7 +81,7 @@ module DbAgile
             if h = helpers[rv]
               yield(h)
             else
-              h = helpers[rv] = Migrate::CollapseTable.new(rv.name)
+              h = helpers[rv] = Migrate::CollapseTable.new(rv)
               yield(h)
               script << h
               helpers.delete(rv)
@@ -136,7 +136,7 @@ module DbAgile
 
           # Collapses a relation variable
           def collapse_relvar(relvar)
-            script << DropTable.new(relvar.name)
+            script << Migrate::DropTable.new(relvar)
           end
 
           # Collapses a candidate key
@@ -171,7 +171,7 @@ module DbAgile
             else
               # create the operation
               exists = relvar_exists?(rv)
-              h = exists ? Migrate::ExpandTable.new(rv.name) : Migrate::CreateTable.new(rv.name)
+              h = exists ? Migrate::ExpandTable.new(rv) : Migrate::CreateTable.new(rv)
               
               # execute sub operations and save
               yield(helpers[rv] = h)
