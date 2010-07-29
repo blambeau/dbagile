@@ -29,6 +29,46 @@ module DbAgile
             unqualified.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1].to_sym
           end
           
+          ##########################################################################
+          ### Execution feedback
+          ##########################################################################
+          
+          # Mark an object as upgraded
+          def staged!(obj = relvar)
+            obj.status = case obj.status
+              when Schema::TO_CREATE
+                Schema::CREATED
+              when Schema::TO_ALTER
+                Schema::ALTERED
+              when Schema::TO_DROP
+                Schema::DROPPED
+              when Schema::NO_CHANGE
+                Schema::NO_CHANGE
+              else
+                raise DbAgile::AssumptionFailedError, "Unexpected staged! source status #{obj.status}"
+            end
+          end
+          
+          # Mark an object as not being staged
+          def not_staged!(obj = relvar)
+            obj.status = case obj.status
+              when Schema::TO_CREATE
+                Schema::DEFERED
+              when Schema::TO_ALTER
+                Schema::DEFERED
+              when Schema::TO_DROP
+                Schema::DEFERED
+              when Schema::NO_CHANGE
+                Schema::NO_CHANGE
+              else
+                raise DbAgile::AssumptionFailedError, "Unexpected not_staged! source status #{obj.status}"
+            end
+          end
+          
+          ##########################################################################
+          ### About sub operations
+          ##########################################################################
+          
           # Asserts that this operation supports sub operations
           def supports_sub_operation!(name)
             if self.kind_of?(Migrate::DropTable)
