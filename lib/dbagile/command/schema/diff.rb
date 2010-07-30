@@ -91,7 +91,7 @@ module DbAgile
           environment.say '### ' + environment.color('Objects to alter on LEFT', :cyan)
           environment.say '###'
           environment.say "\n"
-          merged.yaml_say(environment, output_options)
+          merged.yaml_display(environment, output_options)
           environment.say "\n"
         end
         

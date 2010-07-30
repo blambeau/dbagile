@@ -86,7 +86,7 @@ module DbAgile
         DbAgile::Command::CATEGORIES.each{|categ|
           display DbAgile::Command::CATEGORY_NAMES[categ]
           show_commands_help(categ)
-          display ""
+          display "\n"
         }
       end
       

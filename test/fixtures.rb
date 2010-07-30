@@ -25,6 +25,8 @@ module DbAgile
       env = DbAgile::Environment.new 
       env.repository_path = repository_path(:basics)
       env.output_buffer = StringIO.new
+      env.message_buffer = StringIO.new
+      env.interactive = true
       env.console_width = 10
       env
     end

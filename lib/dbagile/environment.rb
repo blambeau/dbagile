@@ -1,7 +1,7 @@
 require 'dbagile/environment/robustness'
 require 'dbagile/environment/on_error'
 require 'dbagile/environment/configuration'
-require 'dbagile/environment/console'
+require 'dbagile/environment/buffering'
 require 'dbagile/environment/interactions'
 require 'dbagile/environment/delegator'
 module DbAgile
@@ -11,16 +11,28 @@ module DbAgile
   class Environment
     include DbAgile::Environment::OnError
     include DbAgile::Environment::Configuration
-    include DbAgile::Environment::Console
+    include DbAgile::Environment::Buffering
     include DbAgile::Environment::Interactions
     
     #
-    # Creates an Environment instance with two buffers
+    # Creates a default Environment instance with following options:
+    # 
+    # - repository_path -> what Environment::default_repository_path returns
+    # - input_buffer    -> STDIN
+    # - output_buffer   -> STDOUT
+    # - interactive?    -> true
+    # - asking_buffer   -> STDIN
+    # - message_buffer  -> STDERR
+    # - show_backtrace  -> false
     #
-    def initialize(input_buffer = STDIN, output_buffer = STDOUT)
-      @input_buffer, @output_buffer = input_buffer, output_buffer
-      @highline = HighLine.new
-      @show_backtrace = false
+    def initialize
+      @repository_path = Environment::default_repository_path
+      @input_buffer    = STDIN
+      @output_buffer   = STDOUT
+      @interactive     = true
+      @asking_buffer   = STDIN
+      @message_buffer  = STDERR
+      @show_backtrace  = false
     end
     
     #
@@ -28,9 +40,37 @@ module DbAgile
     # and so on)
     #
     def dup
-      env = Environment.new(input_buffer, output_buffer)
+      env = Environment.new
       env.repository_path = self.repository_path
+      env.input_buffer    = self.input_buffer
+      env.output_buffer   = self.output_buffer
+      env.interactive     = self.interactive?
+      env.asking_buffer   = self.asking_buffer
+      env.message_buffer  = self.message_buffer
+      env.show_backtrace  = self.show_backtrace
       env
+    end
+    
+    # 
+    # Returns the default path to use for a repository.
+    #
+    # The algorithm implemented tries to locate a repository folder in the
+    # following order:
+    #
+    # - dbagile.idx file in the current directory -> it's parent folder
+    # - dbagile folder in the current directory   -> ./dbagile
+    # - .dbagile folder in user's home            -> ~/.dbagile
+    #
+    # If none of those files exists, ~/.dbagile is returned
+    #
+    def self.default_repository_path
+      if File.exists?("./dbagile.idx")
+        "."
+      elsif File.exists?("dbagile")
+        "dbagile"
+      else
+        File.join(ENV['HOME'], '.dbagile')
+      end
     end
     
     #
@@ -51,25 +91,16 @@ module DbAgile
     # load_repository to true to force immediate load.
     #
     def self.default(load_repository = false)
-      # find a root path or return nil
-      root_path = if File.exists?("./dbagile.idx")
-        "."
-      elsif File.exists?("dbagile")
-        "dbagile"
-      else
-        File.join(ENV['HOME'], '.dbagile')
-      end
-
-      # Build environment
       env = Environment.new
-      env.repository_path = root_path
-      return env unless load_repository
-      
-      # Load repository now
-      env.repository
+      if load_repository
+        env.repository
+      end
+      env
     end
     
+    #
     # Convenient method for Environment::default(true)
+    #
     def self.default!
       Environment::default(true)
     end

@@ -19,7 +19,7 @@ describe "DbAgile::Command::API /" do
     describe "db:rm /" do
       it_should_behave_like "The db:rm command" 
     end
-  
+      
     describe "db:use /" do
       it_should_behave_like "The db:use command" 
     end
@@ -87,7 +87,7 @@ describe "DbAgile::Command::API /" do
     end
   
   end # -- sql
-  
+
   # -- schema
   describe "schema commands /" do
     

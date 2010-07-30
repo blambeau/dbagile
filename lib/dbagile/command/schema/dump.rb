@@ -37,7 +37,7 @@ module DbAgile
         def execute_command
           with_schema do |schema|
             say("# Schema of #{schema.schema_identifier.inspect}", :magenta)
-            display schema.to_yaml
+            flush(schema.to_yaml)
             schema
           end
         end

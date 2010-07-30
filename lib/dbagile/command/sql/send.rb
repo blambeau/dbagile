@@ -56,7 +56,7 @@ module DbAgile
             when DbAgile::Contract::Data::Dataset
               result.to_text(environment.output_buffer)
             else
-              display(result)
+              flush(result)
           end
           result
         end

@@ -5,23 +5,23 @@ shared_examples_for("The schema:diff command") do
   let(:effective){ File.expand_path('../fixtures/effective.yaml', __FILE__) }
   
   it "should return merged schema" do
-    dba.output_buffer = StringIO.new
+    dba.message_buffer = StringIO.new
     dba.schema_diff([announced, effective]).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
   end
   
   it "should show all differences without -u" do
-    dba.output_buffer = StringIO.new
+    dba.message_buffer = StringIO.new
     dba.schema_diff([effective, announced]).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
-    s = dba.output_buffer.string
+    s = dba.message_buffer.string
     s.should =~ /PARTS/
     s.should =~ /SUPPLIERS/
     s.should =~ /SUPPLIES/
   end
   
   it "should not show all differences with -u" do
-    dba.output_buffer = StringIO.new
+    dba.message_buffer = StringIO.new
     dba.schema_diff(['-u', effective, announced]).should be_kind_of(DbAgile::Core::Schema::DatabaseSchema)
-    s = dba.output_buffer.string
+    s = dba.message_buffer.string
     s.should =~ /SUPPLIES/
     s.should_not =~ /SUPPLIERS/
     s.should_not =~ /PARTS/

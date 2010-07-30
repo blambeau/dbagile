@@ -1,4 +1,3 @@
-require 'dbagile/command/io_commons'
 module DbAgile
   class Command
     module Bulk
@@ -8,7 +7,7 @@ module DbAgile
       # Usage: dba #{command_name} [OPTIONS] TABLE [FILE]
       #
       class Import < Command
-        include ::DbAgile::Command::IOCommons
+        include Bulk::Commons
         include ::DbAgile::Tools::Tuple
         Command::build_me(self, __FILE__)
       

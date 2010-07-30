@@ -44,7 +44,7 @@ module DbAgile
               result.check!
               say("# And the result is valid!", :green)
             end
-            display result.to_yaml
+            flush(result.to_yaml)
             result
           end
         end

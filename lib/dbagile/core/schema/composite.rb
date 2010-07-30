@@ -188,10 +188,10 @@ module DbAgile
         end
         
         # Returns a yaml string
-        def yaml_say(env, 
-                     options = {}, 
-                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
-                     indent = 0)
+        def yaml_display(env, 
+                         options = {}, 
+                         colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
+                         indent = 0)
           part_keys.each{|k|
             part = self[k]
             status = part.status.to_s.ljust(25)
@@ -199,13 +199,13 @@ module DbAgile
             if show_it
               mine = "  "*indent + k.to_s + ":"
               if part.composite?
-                env.say(mine, colors[part.status])
-                part.yaml_say(env, options, colors, indent+1)
+                env.display(mine, colors[part.status])
+                part.yaml_display(env, options, colors, indent+1)
               else
                 part_str = part.to_yaml
                 part_str =~ /---\s*(.*)$/
                 part_str = $1
-                env.say(mine + " " + part_str, colors[part.status])
+                env.display(mine + " " + part_str, colors[part.status])
               end
             end
           }

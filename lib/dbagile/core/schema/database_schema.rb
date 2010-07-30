@@ -69,14 +69,14 @@ module DbAgile
       
 
         # Returns a yaml string
-        def yaml_say(env, 
-                     options = {}, 
-                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
-                     indent = 0)
-          env.say("---\nlogical:")
-          self.logical.yaml_say(env, options, colors, indent + 1)
-          env.say("\n---\nphysical:")
-          self.physical.yaml_say(env, options, colors, indent + 1)
+        def yaml_display(env, 
+                         options = {}, 
+                         colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
+                         indent = 0)
+          env.display("---\nlogical:")
+          logical.yaml_display(env, options, colors, indent + 1)
+          env.display("\n---\nphysical:")
+          physical.yaml_display(env, options, colors, indent + 1)
         end
         
         ############################################################################

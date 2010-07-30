@@ -18,13 +18,13 @@ module DbAgile
           with_repository do |repository|
 
             unless repository.empty?
-              display("Available databases are (#{repository.friendly_path}):")
+              flush("Available databases are (#{repository.friendly_path}):")
               repository.each do |database|
                 msg = repository.current?(database) ? "  -> " : " "*5
                 msg += database.name.to_s.ljust(15)
                 msg += " "
                 msg += database.uri
-                display(msg)
+                flush(msg)
               end
             else
               say("No database found. Check #{repository.friendly_path}", :red)

@@ -1,4 +1,3 @@
-require 'dbagile/command/io_commons'
 module DbAgile
   class Command
     module Bulk
@@ -11,7 +10,7 @@ module DbAgile
       # formats.
       #
       class Export < Command
-        include ::DbAgile::Command::IOCommons
+        include Bulk::Commons
         Command::build_me(self, __FILE__)
       
         # Output file to use

@@ -31,11 +31,11 @@ module DbAgile
             # Make the job now
             begin
               with_connection(db){|c| c.ping}
-              say("Ping ok (#{db.uri})")
+              flush("Ping ok (#{db.uri})")
               db
             rescue StandardError => ex
-              say("Ping KO (#{db.uri})", :red)
-              display(ex.message)
+              flush("Ping KO (#{db.uri})", :red)
+              flush(ex.message)
               ex
             end
           

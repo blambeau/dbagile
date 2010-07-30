@@ -24,7 +24,7 @@ module DbAgile
         def execute_command
           with_current_connection do |connection|
             heading = connection.heading(self.dataset)
-            display("{\n" + heading.collect{|pair| "  #{pair[0]}: #{pair[1]}"}.join(",\n") + "\n}\n")
+            flush("{\n" + heading.collect{|pair| "  #{pair[0]}: #{pair[1]}"}.join(",\n") + "\n}\n")
             heading
           end
         end

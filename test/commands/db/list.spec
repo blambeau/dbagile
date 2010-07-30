@@ -7,6 +7,7 @@ shared_examples_for("The db:list command") do
     end
   
     it "should print the databases" do
+      dba.output_buffer = StringIO.new
       dba.db_list
       dba.output_buffer.string.should =~ /Available databases/
     end
@@ -18,8 +19,9 @@ shared_examples_for("The db:list command") do
     before{ dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
     
     it "should print a friendly error message when no database" do
+      dba.message_buffer = StringIO.new
       dba.db_list
-      dba.output_buffer.string.should =~ /No database found/
+      dba.message_buffer.string.should =~ /No database found/
     end
     
   end
