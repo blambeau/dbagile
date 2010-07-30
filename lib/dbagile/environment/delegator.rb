@@ -18,9 +18,6 @@ module DbAgile
         #
         :repository,
         #
-        :history_file_path,
-        :history_file_path=,
-        #
         :input_buffer,
         :input_buffer=,
         #

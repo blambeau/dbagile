@@ -3,7 +3,6 @@ require 'dbagile/environment/delegator'
 require 'dbagile/environment/interactions'
 require 'dbagile/environment/robustness'
 require 'dbagile/environment/configuration'
-require 'dbagile/environment/history'
 require 'dbagile/environment/console'
 module DbAgile
   #
@@ -30,7 +29,6 @@ module DbAgile
       env.input_buffer = self.input_buffer
       env.output_buffer = self.output_buffer
       env.repository_path = self.repository_path
-      env.history_file_path = self.history_file_path
       env
     end
     

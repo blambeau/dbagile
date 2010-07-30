@@ -134,8 +134,6 @@ end # module DbAgile
 # :dba category
 require 'dbagile/command/dba'
 require 'dbagile/command/help'
-require 'dbagile/command/history'
-require 'dbagile/command/replay'
 
 # :db category
 require 'dbagile/command/db'
