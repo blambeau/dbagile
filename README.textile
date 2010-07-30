@@ -35,7 +35,6 @@ Making similar things, ... in Ruby?
   DbAgile::dba do |dba|
     # Override environment default values (~/.dbagile, ...)
     dba.repository_path  = ...      # your application own repository folder
-    dba.history_file_path = nil     # no history
     dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
   
     # Start using dbagile commands
@@ -56,7 +55,6 @@ The Rack middleware for the restful server (config.ru):
     #          doing this may mead to bugs in certain ruby versions.
     #
     env.repository_path  = ::File.expand_path('../dbagile.config', __FILE__)
-    env.history_file_path = nil
   }
 </pre>
 
