@@ -96,8 +96,6 @@ module DbAgile
       
       # Runs the command
       def unsecure_run(requester_file, argv)
-        #environment.load_history
-        
         # My own options
         my_args = []
         while argv.first =~ /^--/
@@ -123,17 +121,10 @@ module DbAgile
       rescue Exception => ex
         environment.on_error(self, ex)
         environment
-      ensure
-        #environment.save_history if environment.manage_history?
       end
       
       # Invokes the subcommand
       def invoke_subcommand(requester_file, argv)
-        # Save command in history 
-        unless ['replay', 'history'].include?(argv[0])
-          #environment.push_in_history(argv) 
-        end
-      
         # Command execution
         if argv.size >= 1
           command = has_command!(argv.shift, environment)
