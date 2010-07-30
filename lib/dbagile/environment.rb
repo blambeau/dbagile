@@ -12,7 +12,6 @@ module DbAgile
     include DbAgile::Environment::Interactions
     include DbAgile::Environment::Robustness
     include DbAgile::Environment::Configuration
-    include DbAgile::Environment::History
     include DbAgile::Environment::Console
     
     # Creates an Environment instance with two buffers
