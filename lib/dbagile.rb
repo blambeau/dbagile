@@ -1,14 +1,4 @@
-require 'time'
-require 'fileutils'
-require 'pathname'
-require 'tempfile'
-require 'date'
-require 'yaml'
-require 'rubygems'
-gem "sbyc", ">= 0.1.4"
-gem "sequel", ">= 3.8.0"
-require 'sbyc'
-require 'sequel'
+require 'dbagile/loader'
 module DbAgile
   
   # Version of the DbAgile interface
@@ -53,6 +43,8 @@ module DbAgile
   def find_repository_path
     if File.exists?("./dbagile.idx")
       "."
+    elsif File.exists?("dbagile")
+      "dbagile"
     else
       File.join(ENV['HOME'], '.dbagile')
     end
@@ -112,15 +104,6 @@ module DbAgile
   module_function :connect
   
 end # module DbAgile
-
-require 'rubygems'
-gem "sbyc", ">= 0.1.4"
-gem "sequel", ">= 3.8.0"
-gem 'highline', '>= 1.5.2'
-require 'sbyc'
-require 'sequel'
-require 'highline'
-
 require 'dbagile/robustness'
 require 'dbagile/errors'
 require 'dbagile/contract'

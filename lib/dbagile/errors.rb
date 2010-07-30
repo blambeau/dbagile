@@ -1,14 +1,5 @@
 module DbAgile
   
-  # Main class of all DbAgile errors
-  class Error < StandardError; end
-  
-  # Raised when something goes really wrong (a bug, typically)
-  class InternalError < DbAgile::Error; end
-  
-  # Some internal assumption failed
-  class AssumptionFailedError < DbAgile::InternalError; end
-  
   # Raised when a database name is not valid
   class InvalidDatabaseName < DbAgile::Error; end
   
