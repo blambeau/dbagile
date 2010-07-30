@@ -30,7 +30,7 @@ module DbAgile
         opt.separator nil
         opt.separator "Options:"
         opt.on("--config=FILE", 
-               "Use a specific repository file (defaults to ~/.dbagile)") do |value|
+               "Use a specific repository (current is #{repository.friendly_path})") do |value|
           self.repository_path = value
         end
         opt.on("--use=DB", 

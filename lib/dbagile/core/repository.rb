@@ -21,6 +21,17 @@ module DbAgile
         @file = file
         @databases = []
       end
+      
+      # Returns a friendly path to be printed to user
+      def friendly_path
+        home = Pathname.new(ENV['HOME'])
+        repo = Pathname.new(file)
+        if repo.to_s[0...home.to_s.length] == home.to_s
+          "~/#{repo.relative_path_from(home)}"
+        else
+          file
+        end
+      end
     
       #############################################################################################
       ### Queries
