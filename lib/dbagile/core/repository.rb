@@ -41,13 +41,7 @@ module DbAgile
       
       # Returns a friendly path to be printed to user
       def friendly_path
-        home = Pathname.new(ENV['HOME'])
-        repo = Pathname.new(root_path)
-        if repo.to_s[0...home.to_s.length] == home.to_s
-          "~/#{repo.relative_path_from(home)}"
-        else
-          root_path
-        end
+        DbAgile::FileSystemTools::friendly_path!(root_path)
       end
       
       # Returns the path to the index file

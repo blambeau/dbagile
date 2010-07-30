@@ -29,8 +29,8 @@ module DbAgile
       def add_options(opt)
         opt.separator nil
         opt.separator "Options:"
-        opt.on("--config=FILE", 
-               "Use a specific repository (current is #{repository.friendly_path})") do |value|
+        opt.on("--repository=DIR", 
+               "Use a specific repository (current is #{environment.friendly_repository_path})") do |value|
           self.repository_path = value
         end
         opt.on("--use=DB", 
@@ -123,10 +123,58 @@ module DbAgile
       def invoke_subcommand(requester_file, argv)
         # Command execution
         if argv.size >= 1
-          command = has_command!(argv.shift, environment)
-          command.run(requester_file, argv)
+          ensure_repository{
+            command = has_command!(argv.shift, environment)
+            command.run(requester_file, argv)
+          }
         else
           show_long_help
+        end
+      end
+      
+      #
+      # Ensures that the repository exists. If not, ask the user about creating
+      # one in interactive mode; raises an error otherwise. Continues execution
+      # with the block if required.
+      #
+      def ensure_repository(&block)
+        if environment.repository_exists?
+          block.call
+        elsif environment.interactive?
+          where = environment.friendly_repository_path
+          msg = <<-EOF.gsub(/^\s*\| ?/, '')
+          | DbAgile's repository #{where} does not exist. Maybe it's the first time you
+          | lauch dba. Do you want to create a fresh repository now?
+          EOF
+          confirm(msg, "Have a look at 'dba help repo:create'"){
+            # create it!
+            say("Creating repository #{where}...")
+            DbAgile::Core::Repository::create!(environment.repository_path)
+            say("Repository has been successfully created.")
+            
+            # continue?
+            msg = "Do you want to continue with previous command execution?"
+            confirm(msg, &block)
+          }
+        else
+          # to force an error
+          environment.repository
+        end
+      end
+      
+      # Yields the block if the user confirms something and returns block 
+      # execution. Returns nil otherwise
+      #
+      def confirm(msg, on_no_msg = nil)
+        say("\n")
+        say(msg, :magenta)
+        answer = environment.ask(""){|q| q.validate = /^y(es)?|n(o)?|q(uit)?/i}
+        case answer.strip
+          when /^n/, /^q/
+            say("\n")
+            say(on_no_msg, :magenta) unless on_no_msg.nil?
+          when /^y/
+            yield
         end
       end
 

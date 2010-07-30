@@ -3,6 +3,32 @@ module DbAgile
     module Repository
       
       #
+      # Checks if the repository exists or should be created.
+      #
+      # If the repository is currently loaded, this method returns true.
+      # Otherwise it returns true if the repository path exists. Note that
+      # repository consistency itself (index file) is not checked. You have
+      # to load it and catch exception to have a finer grained info.
+      #
+      def repository_exists?
+        return true if @repository
+        File.exists?(repository_path)
+      end
+      
+      #
+      # Returns a friendly path for the repository, to display to the user.
+      # If a repository is loaded, the call is delegated. Otherwise, the 
+      # repository_path is displayed, without attempting to load repository.
+      # 
+      def friendly_repository_path
+        if @repository
+          @repository.friendly_path
+        else
+          DbAgile::FileSystemTools::friendly_path!(repository_path)
+        end
+      end
+      
+      #
       # Returns path to the repository
       #
       def repository_path
