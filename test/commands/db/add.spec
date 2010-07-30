@@ -1,4 +1,4 @@
-shared_examples_for("The repo:add command") do
+shared_examples_for("The db:add command") do
   
   it "should return the new database" do
     dba.db_add(%w{test sqlite://test.db}).should be_kind_of(DbAgile::Core::Database)
@@ -17,7 +17,7 @@ shared_examples_for("The repo:add command") do
     lambda{ dba.db_add(%w{test sqlite://test.db}) }.should raise_error(DbAgile::DatabaseNameConflictError)
   end
   
-  it "should flush the repository" do
+  it "should save the repository" do
     dba.db_add(%w{test sqlite://test.db})
     dba.dup.repository.has_database?(:test).should be_true
   end

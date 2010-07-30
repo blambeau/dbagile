@@ -1,4 +1,4 @@
-shared_examples_for("The repo:ping command") do
+shared_examples_for("The db:ping command") do
   
   it "should return the pinged database" do
     dba.db_ping(%w{sqlite}).should be_kind_of(::DbAgile::Core::Database)

@@ -2,53 +2,47 @@ require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command::API /" do
   
-  # Path to an empty repository file
-  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty.cfg', __FILE__) }
-  
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
-  # Clean everything after tests
-  after(:all) { FileUtils.rm_rf(empty_repository_path) }
-    
-  # -- Configuration
+  # -- db
   describe "repository commands (touching) /" do 
   
     # Remove empty repo between all test
-    before       {  dba.repository_path = empty_repository_path }
-    before(:each){ FileUtils.rm_rf(empty_repository_path)        }
+    before { dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
+    after  { DbAgile::Fixtures::ensure_empty_repository!                       }
   
-    describe "repo:add /" do
-      it_should_behave_like "The repo:add command" 
+    describe "db:add /" do
+      it_should_behave_like "The db:add command" 
     end
   
-    describe "repo:rm /" do
-      it_should_behave_like "The repo:rm command" 
+    describe "db:rm /" do
+      it_should_behave_like "The db:rm command" 
     end
   
-    describe "repo:use /" do
-      it_should_behave_like "The repo:use command" 
+    describe "db:use /" do
+      it_should_behave_like "The db:use command" 
     end
   
-  end # -- Configuration
+  end # -- db
   
-  # -- Configuration
+  # -- db
   describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
     before { dba.db_use %{sqlite} }
   
-    describe "repo:list /" do
-      it_should_behave_like "The repo:list command" 
+    describe "db:list /" do
+      it_should_behave_like "The db:list command" 
     end
   
-    describe "repo:ping /" do
-      it_should_behave_like "The repo:ping command" 
+    describe "db:ping /" do
+      it_should_behave_like "The db:ping command" 
     end
   
-  end # -- Configuration
+  end # -- db
   
-  # -- Input/Output
+  # -- bulk
   describe "bulk commands /" do 
   
     # Make usage of sqlite for these tests
@@ -65,9 +59,9 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The bulk:import command" 
     end
   
-  end # -- Input/Output
+  end # -- bulk
   
-  # -- Sql 
+  # -- sql 
   describe "sql commands /" do
     
     # Make usage of sqlite for these tests
@@ -92,9 +86,9 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The sql:drop command" 
     end
   
-  end # -- Query
+  end # -- sql
   
-  # -- Schema
+  # -- schema
   describe "schema commands /" do
     
     # Make usage of sqlite for these tests
@@ -119,6 +113,11 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The schema:diff command" 
     end
   
-  end # -- Schema
+  end # -- schema
+  
+  # -- dba
+  describe "main dba command /" do
+    
+  end # -- dba
   
 end

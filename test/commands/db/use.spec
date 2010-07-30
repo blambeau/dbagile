@@ -1,4 +1,4 @@
-shared_examples_for("The repo:use command") do
+shared_examples_for("The db:use command") do
   
   it "should return the current database" do
     dba.db_add(%w{test sqlite://test.db})
@@ -9,7 +9,7 @@ shared_examples_for("The repo:use command") do
     lambda{ dba.db_use(%w{test}) }.should raise_error(DbAgile::NoSuchDatabaseError)
   end
 
-  it "should flush the repository" do
+  it "should save the repository" do
     dba.db_add(%w{--no-current test sqlite://test.db})
     dba.db_use(%w{test})
     dba.dup.repository.current?(:test).should be_true

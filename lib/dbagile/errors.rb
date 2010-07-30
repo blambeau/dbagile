@@ -21,9 +21,6 @@ module DbAgile
   # Raised when the repository seems corrupted
   class CorruptedRepositoryError < DbAgile::Error; end
   
-  # Raised when the main repository file cannot be found
-  class NoRepositoryFileError < DbAgile::Error; end
-  
   # Raised when a database cannot be found
   class NoSuchDatabaseError < DbAgile::Error; end
 

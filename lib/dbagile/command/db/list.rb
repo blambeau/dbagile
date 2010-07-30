@@ -27,7 +27,7 @@ module DbAgile
                 display(msg)
               end
             else
-              say("No database found. Check #{repository.file}", :red)
+              say("No database found. Check #{repository.friendly_path}", :red)
             end
 
             repository

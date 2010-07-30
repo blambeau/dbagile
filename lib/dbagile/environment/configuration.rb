@@ -6,12 +6,10 @@ module DbAgile
     module Configuration
       
       #
-      # Returns path to .dbagile file
-      #
-      # Default implementation returns ~/.dbagile
+      # Returns path to the repository
       #
       def repository_path
-        @repository_path ||= DbAgile::find_repository_path
+        @repository_path
       end
       
       #
@@ -23,29 +21,28 @@ module DbAgile
       end
       
       # 
-      # Ensures that repository is loaded and returns the Repository instance. 
-      # If create is set to true, a default repository is created when 
-      # file does not exists. Otherwise raises a NoRepositoryFileError.
+      # Ensures that repository is loaded and returns the Repository instance.
       #
       # ATTENTION: the Repository instance is kept in cache. It will not be 
-      # synchronized with modifications of the underlying file made by another 
+      # synchronized with modifications of the underlying files made by another 
       # process/thread.
       #
-      # @param [Boolean] create create default file if not existing?
-      # @raise NoRepositoryFileError if create is false and file do not exists
-      # @raise IOError if something goes wrong when reading/writing the file
-      # @raise CorruptedRepositoryError if something goes wrong when parsing the file
+      # @raise IOError if the repository does not exists or something goes wrong
+      #        with repository dir/files
+      # @raise CorruptedRepositoryError if something goes wrong when parsing the 
+      #        repository index file
       # @return [Repository] repository instance
+      # @see DbAgile::Core::Repository::load
       #
-      def repository(create = true)
-        @repository ||= load_repository(create, repository_path)
+      def repository
+        @repository ||= DbAgile::Core::Repository::load(repository_path)
       end
       
       #
       # Yields the block with each database in turn
       #
       # As this method is a wrapper on repository, it shares the specification
-      # about parameters and exceptions.
+      # about exceptions.
       #
       # @raise ArgumentError if no block is provided
       #
@@ -55,17 +52,17 @@ module DbAgile
       end
       
       # 
-      # Yields the block with the Repository instance loaded using repository.
+      # Yields the block with the Repository instance (loaded using repository)
       #
       # As this method is a wrapper on repository, it shares the specification
-      # about parameters and exceptions.
+      # about exceptions.
       #
       # @return [...] result of the block execution
       # @raise ArgumentError if no block is provided
       #
-      def with_repository(create = true)
+      def with_repository
         raise ArgumentError, "Missing block" unless block_given?
-        yield(repository(create))
+        yield(repository)
       end
       
       #
@@ -136,44 +133,6 @@ module DbAgile
         }
       end
       
-      # Protected section starts here ###################################################
-      protected
-      
-      #
-      # Loads a repository file and returns a Repository instance. 
-      #
-      # Internal implementation of repository, almost same specification.
-      #
-      def load_repository(create, file)
-        # Creates file as required by spec
-        if create and not(File.exists?(file))
-          require 'fileutils'
-          FileUtils.mkdir_p(File.dirname(file))
-          FileUtils.touch(file)
-          File.open(file, 'w'){|io|
-            io << "---\n"
-            io << "databases: {}\n"
-          }
-        end
-        
-        # Make some checks
-        unless File.exists?(file)
-          raise NoRepositoryFileError, "No such repository index #{file}" 
-        end
-        unless File.file?(file) and File.readable?(file)
-          raise CorruptedRepositoryError, "Corrupted repository index #{file}" 
-        end
-
-        # Loads it
-        begin
-          ::DbAgile::Core::Repository::from_yaml_file(file)
-        rescue CorruptedRepositoryError
-          raise
-        rescue Exception => ex
-          raise CorruptedRepositoryError, "Corrupted repository index #{file}: #{ex.message}", ex.backtrace
-        end
-      end
-
     end # module Configuration
   end # class Environment
 end # module DbAgile

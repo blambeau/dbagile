@@ -32,7 +32,7 @@ module DbAgile
             repository.current_db_name = db.name
       
             # Flush the repository file
-            repository.flush!
+            repository.save!
           end
 
           # List available databases now

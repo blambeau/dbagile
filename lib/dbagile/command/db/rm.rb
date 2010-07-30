@@ -36,7 +36,7 @@ module DbAgile
             repository.remove(db)
       
             # Flush the repository file
-            repository.flush!
+            repository.save!
           end
         
           # List available databases now

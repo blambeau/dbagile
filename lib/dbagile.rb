@@ -1,4 +1,6 @@
 require 'time'
+require 'fileutils'
+require 'pathname'
 require 'tempfile'
 require 'date'
 require 'yaml'
@@ -41,7 +43,7 @@ module DbAgile
   # end
   #
   def dba(environment = nil)
-    env = environment || ::DbAgile::Environment.new
+    env = environment || default_environment
     api = DbAgile::Command::API.new(env)
     yield(api)
   end
@@ -49,17 +51,21 @@ module DbAgile
   
   # Finds 
   def find_repository_path
-    if File.exists?("./dbagile.yaml")
-      "./dbagile.yaml"
+    if File.exists?("./dbagile.idx")
+      "."
     else
-      File.join(ENV['HOME'], '.dbagile/repository.idx')
+      File.join(ENV['HOME'], '.dbagile')
     end
   end
   module_function :find_repository_path
   
   # Returns the default environment to use.
   def default_environment
-    @environment ||= ::DbAgile::Environment.new
+    unless @environment
+      @environment = ::DbAgile::Environment.new
+      @environment.repository_path = find_repository_path
+    end
+    @environment
   end
   module_function :default_environment
 
@@ -115,6 +121,7 @@ require 'sbyc'
 require 'sequel'
 require 'highline'
 
+require 'dbagile/robustness'
 require 'dbagile/errors'
 require 'dbagile/contract'
 require 'dbagile/tools'

@@ -66,7 +66,7 @@ module DbAgile
               end
         
               # Flush the repository file
-              repository.flush!
+              repository.save!
             end
           
           end

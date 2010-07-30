@@ -1,4 +1,4 @@
-shared_examples_for("The repo:rm command") do
+shared_examples_for("The db:rm command") do
   
   it "should return the repository" do
     dba.db_add(%w{test sqlite://test.db})
@@ -9,7 +9,7 @@ shared_examples_for("The repo:rm command") do
     lambda{ dba.db_rm(%w{test}) }.should raise_error(DbAgile::NoSuchDatabaseError)
   end
   
-  it "should flush the repository" do
+  it "should save the repository" do
     dba.db_add(%w{test sqlite://test.db})
     dba.db_rm(%w{test})
     dba.dup.repository.has_database?(:test).should be_false
