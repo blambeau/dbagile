@@ -45,7 +45,7 @@ module DbAgile
           show_long_help
           self.stop_after_options = true
         end
-        opt.on_tail("--[no-]backtrace", "Print a backtrace on error") do |value|
+        opt.on_tail("--[no-]backtrace", "Print a backtrace when an error occurs") do |value|
           self.show_backtrace = value
         end
         opt.on_tail("--version", "Show version") do
