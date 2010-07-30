@@ -33,76 +33,21 @@ module DbAgile
   # end
   #
   def dba(environment = nil)
-    env = environment || default_environment
-    api = DbAgile::Command::API.new(env)
-    yield(api)
+    environment ||= default_environment
+    yield(DbAgile::Command::API.new(environment))
   end
   module_function :dba
   
-  # Finds 
-  def find_repository_path
-    if File.exists?("./dbagile.idx")
-      "."
-    elsif File.exists?("dbagile")
-      "dbagile"
-    else
-      File.join(ENV['HOME'], '.dbagile')
-    end
-  end
-  module_function :find_repository_path
-  
-  # Returns the default environment to use.
+  #
+  # Builds a default environment instance.
+  #
+  # @see DbAgile::Core::Repository.default
+  #
   def default_environment
-    unless @environment
-      @environment = ::DbAgile::Environment.new
-      @environment.repository_path = find_repository_path
-    end
-    @environment
+    DbAgile::Environment.default
   end
   module_function :default_environment
 
-  # Sets the default environment to use.
-  def default_environment=(env)
-    @environment = env
-  end
-  module_function :default_environment=
-  
-  #
-  # Creates a new database and returns it.
-  #
-  # @param [Symbol] name database name
-  # @param [Proc] block database block dsl
-  # @return [DbAgile::Core::Database] a database instance.
-  # 
-  def database(name, &block)
-    unless block
-      default_environment.repository.database(name)
-    else
-      dsl = DbAgile::Core::IO::DSL.new
-      dsl.database(name, &block)
-    end
-  end
-  module_function :database
-  
-  # Connects to a database and returns a Connection instance
-  def connect(uri, options = {}, &block)
-    case uri
-      when Symbol
-        db = database(uri)
-        raise NoSuchDatabaseError, "No such database #{uri}" unless db
-        db.connect(options)
-      when String
-        theuri = uri
-        db = database(:noname){
-          uri theuri
-        }
-        db.connect(options)
-      else
-        raise ArgumentError, "Unable to use #{uri} to connect a database"
-    end
-  end
-  module_function :connect
-  
 end # module DbAgile
 require 'dbagile/robustness'
 require 'dbagile/errors'
