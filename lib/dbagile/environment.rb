@@ -1,8 +1,8 @@
 require 'dbagile/environment/robustness'
 require 'dbagile/environment/on_error'
-require 'dbagile/environment/configuration'
 require 'dbagile/environment/buffering'
 require 'dbagile/environment/interactions'
+require 'dbagile/environment/repository'
 require 'dbagile/environment/delegator'
 module DbAgile
   #
@@ -10,9 +10,9 @@ module DbAgile
   #
   class Environment
     include DbAgile::Environment::OnError
-    include DbAgile::Environment::Configuration
     include DbAgile::Environment::Buffering
     include DbAgile::Environment::Interactions
+    include DbAgile::Environment::Repository
     
     #
     # Creates a default Environment instance with following options:

@@ -1,9 +1,6 @@
 module DbAgile
   class Environment
-    # 
-    # Environment's configuration contract.
-    #
-    module Configuration
+    module Repository
       
       #
       # Returns path to the repository
@@ -133,6 +130,6 @@ module DbAgile
         }
       end
       
-    end # module Configuration
+    end # module Repository
   end # class Environment
 end # module DbAgile
