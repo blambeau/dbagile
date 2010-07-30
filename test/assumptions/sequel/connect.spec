@@ -21,7 +21,6 @@ describe "Sequel::connect /" do
           primary_key [:id]
         }
         res = db.send(:create_table_sql, :mytable, gen, {})
-        puts res
         res.should =~ /CREATE TABLE/
       }.should_not raise_error
     }

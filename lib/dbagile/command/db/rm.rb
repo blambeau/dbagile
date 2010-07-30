@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Repo
+    module Db
       #
       # Remove a database configuration from the repository
       #
@@ -40,13 +40,13 @@ module DbAgile
           end
         
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
+          DbAgile::dba(environment){|dba| dba.db_list %w{}}
         
           # Returns repository
           cf
         end
       
       end # class Rm
-    end # module Repo
+    end # module Db
   end # class Command
 end # module DbAgile

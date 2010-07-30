@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Repo
+    module Db
       #
       # List available databases (found in ~/.dbagile)
       #
@@ -56,6 +56,6 @@ module DbAgile
         end
       
       end # class List
-    end # module Repo
+    end # module Db
   end # class Command
 end # module DbAgile

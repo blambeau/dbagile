@@ -138,7 +138,7 @@ require 'dbagile/command/history'
 require 'dbagile/command/replay'
 
 # :repo category
-require 'dbagile/command/repo'
+require 'dbagile/command/db'
 
 # :bulk category
 require 'dbagile/command/bulk'

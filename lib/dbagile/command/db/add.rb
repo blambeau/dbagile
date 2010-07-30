@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Repo
+    module Db
       #
       # Adds a new database configuration
       #
@@ -72,13 +72,13 @@ module DbAgile
           end
 
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
+          DbAgile::dba(environment){|dba| dba.db_list %w{}}
         
           # Returns created database
           db
         end
       
       end # class Add
-    end # module Repo
+    end # module Db
   end # class Command
 end # module DbAgile

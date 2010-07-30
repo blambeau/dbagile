@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Repo
+    module Db
       #
       # Ping a database (current one by default)
       #
@@ -44,6 +44,6 @@ module DbAgile
         end
       
       end # class Ping
-    end # module Repo
+    end # module Db
   end # class Command
 end # module DbAgile

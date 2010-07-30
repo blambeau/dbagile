@@ -36,7 +36,7 @@ describe "DbAgile::Command::API /" do
   describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.repo_use %{sqlite} }
+    before { dba.db_use %{sqlite} }
   
     describe "repo:list /" do
       it_should_behave_like "The repo:list command" 
@@ -53,7 +53,7 @@ describe "DbAgile::Command::API /" do
   
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -72,7 +72,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -99,7 +99,7 @@ describe "DbAgile::Command::API /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     

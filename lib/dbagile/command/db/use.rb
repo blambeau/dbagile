@@ -1,6 +1,6 @@
 module DbAgile
   class Command
-    module Repo
+    module Db
       #
       # Set the current database to use
       #
@@ -36,13 +36,13 @@ module DbAgile
           end
 
           # List available databases now
-          DbAgile::dba(environment){|dba| dba.repo_list %w{}}
+          DbAgile::dba(environment){|dba| dba.db_list %w{}}
         
           # Return current database
           db
         end
       
       end # class Use
-    end # module Repo
+    end # module Db
   end # class Command
 end # module DbAgile
