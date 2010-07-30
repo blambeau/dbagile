@@ -37,11 +37,7 @@ module DbAgile
                "Use a specific database") do |value|
           self.use_database = value
         end
-        opt.on_tail("--help", "Show help") do
-          show_short_help
-          self.stop_after_options = true
-        end
-        opt.on_tail("--list", "Show list of available subcommands") do
+        opt.on_tail("--help", "Show list of available subcommands") do
           show_long_help
           self.stop_after_options = true
         end
@@ -130,7 +126,7 @@ module DbAgile
           command = has_command!(argv.shift, environment)
           command.run(requester_file, argv)
         else
-          show_help
+          show_long_help
         end
       end
 
