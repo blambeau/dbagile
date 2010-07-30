@@ -117,7 +117,9 @@ describe "DbAgile::Command::API /" do
   
   # -- dba
   describe "main dba command /" do
-    
+
+    it_should_behave_like "The dba command" 
+
   end # -- dba
   
 end

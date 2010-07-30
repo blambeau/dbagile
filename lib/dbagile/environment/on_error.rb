@@ -3,7 +3,12 @@ module DbAgile
     module OnError
       
       # Show backtrace on errors?
-      attr_accessor :show_backtrace
+      attr_writer :show_backtrace
+      
+      # Shows the backtrace when an error occurs?
+      def show_backtrace?
+        @show_backtrace
+      end
       
       #
       # Handles an error that occured during command execution.
@@ -31,7 +36,7 @@ module DbAgile
           else
             say("ERROR (#{error.class}): #{error.message}", :red)
         end
-        if self.show_backtrace
+        if show_backtrace?
           say(error.backtrace.join("\n"))
         end
         error

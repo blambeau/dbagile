@@ -3,24 +3,15 @@ module DbAgile
     #
     # Agile SQL databases and tools for database administrators
     #
-    # Usage: dba [--version] [--help] [--list]
-    #        dba help [--complete] <subcommand>
-    #        dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+    # Usage: dba [--help] [--version] 
+    #        dba help <subcommand>
+    #        dba [--repository=DIR] [--use=DB] [--no-interactive] <subcommand> [OPTIONS] [ARGS]
     #
     # DbAgile aims at supporting database administrators and developers of database
     # oriented application. Read more about it on http://blambeau.github.com/dbagile.
     #
     class Dba < Command
       Command::build_me(self, __FILE__)
-      
-      # Configuration file
-      attr_accessor :repository_path
-      
-      # Database to use
-      attr_accessor :use_database
-      
-      # Show backtrace?
-      attr_accessor :show_backtrace
       
       # Continue after my options
       attr_accessor :stop_after_options
@@ -31,21 +22,24 @@ module DbAgile
         opt.separator "Options:"
         opt.on("--repository=DIR", 
                "Use a specific repository (current is #{environment.friendly_repository_path})") do |value|
-          self.repository_path = value
+          environment.repository_path = value
         end
         opt.on("--use=DB", 
                "Use a specific database") do |value|
-          self.use_database = value
+          environment.repository.current_db_name = value.to_sym
         end
         opt.on_tail("--help", "Show list of available subcommands") do
           show_long_help
           self.stop_after_options = true
         end
+        opt.on_tail("--[no-]interactive", "[Dis-]allow interactive mode") do |value|
+          environment.interactive = value
+        end
         opt.on_tail("--[no-]backtrace", "Print a backtrace when an error occurs") do |value|
-          self.show_backtrace = value
+          environment.show_backtrace = value
         end
         opt.on_tail("--version", "Show version") do
-          say("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau")
+          flush("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau")
           self.stop_after_options = true
         end
       end
@@ -68,15 +62,15 @@ module DbAgile
       # Show command help for a specific category
       def show_commands_help(category)
         commands_by_categ[category].each do |command|
-          display options.summary_indent + command.command_name.ljust(30) + command.summary.to_s
+          flush(options.summary_indent + command.command_name.ljust(30) + command.summary.to_s)
         end
       end
 
       # Shows the short help
       def show_short_help
-        display banner
-        display options.summarize
-        display "\n"
+        flush banner
+        flush options.summarize
+        flush "\n"
       end
       alias :show_help :show_short_help
       
@@ -84,9 +78,9 @@ module DbAgile
       def show_long_help
         show_short_help
         DbAgile::Command::CATEGORIES.each{|categ|
-          display DbAgile::Command::CATEGORY_NAMES[categ]
+          flush DbAgile::Command::CATEGORY_NAMES[categ]
           show_commands_help(categ)
-          display "\n"
+          flush "\n"
         }
       end
       
@@ -98,17 +92,6 @@ module DbAgile
           my_args << argv.shift
         end
         options.parse!(my_args)
-        
-        # Prepare the environment
-        if self.repository_path
-          environment.repository_path = self.repository_path
-        end
-        unless self.show_backtrace.nil?
-          environment.show_backtrace = self.show_backtrace
-        end
-        if self.use_database
-          environment.repository.current_db_name = self.use_database.to_sym
-        end
         
         # Invoke sub command
         unless stop_after_options

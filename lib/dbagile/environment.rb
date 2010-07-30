@@ -15,6 +15,19 @@ module DbAgile
     include DbAgile::Environment::Repository
     
     #
+    # Installs the testing methods, StringIO on output buffers then 
+    # returns self
+    #
+    def with_testing_methods!(interactive = true)
+      require 'dbagile/environment/testing'
+      extend(DbAgile::Environment::Testing)
+      self.output_buffer  = StringIO.new
+      self.message_buffer = StringIO.new
+      self.interactive = interactive
+      self
+    end
+    
+    #
     # Creates a default Environment instance with following options:
     # 
     # - repository_path -> what Environment::default_repository_path returns
@@ -47,7 +60,7 @@ module DbAgile
       env.interactive     = self.interactive?
       env.asking_buffer   = self.asking_buffer
       env.message_buffer  = self.message_buffer
-      env.show_backtrace  = self.show_backtrace
+      env.show_backtrace  = self.show_backtrace?
       env
     end
     

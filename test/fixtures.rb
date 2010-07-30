@@ -1,4 +1,3 @@
-require 'stringio'
 module DbAgile
   #
   # Provides helper methods about fixture databases

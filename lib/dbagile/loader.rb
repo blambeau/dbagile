@@ -8,6 +8,7 @@ DbAgile::Robustness::has_stdlib! 'tempfile'
 DbAgile::Robustness::has_stdlib! 'date'
 DbAgile::Robustness::has_stdlib! 'yaml'
 DbAgile::Robustness::has_stdlib! 'readline'
+DbAgile::Robustness::has_stdlib! 'stringio'
 
 # external gems
 DbAgile::Robustness::has_gem! "sbyc", ">= 0.1.4"
