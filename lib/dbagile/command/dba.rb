@@ -28,15 +28,15 @@ module DbAgile
                "Use a specific database") do |value|
           environment.repository.current_db_name = value.to_sym
         end
+        opt.on("--[no-]interactive", "[Dis-]allow interactive mode") do |value|
+          environment.interactive = value
+        end
+        opt.on("--[no-]backtrace", "Print a backtrace when an error occurs") do |value|
+          environment.show_backtrace = value
+        end
         opt.on_tail("--help", "Show list of available subcommands") do
           show_long_help
           self.stop_after_options = true
-        end
-        opt.on_tail("--[no-]interactive", "[Dis-]allow interactive mode") do |value|
-          environment.interactive = value
-        end
-        opt.on_tail("--[no-]backtrace", "Print a backtrace when an error occurs") do |value|
-          environment.show_backtrace = value
         end
         opt.on_tail("--version", "Show version") do
           flush("dba" << " " << DbAgile::VERSION << " (c) 2010, Bernard Lambeau")
