@@ -33,23 +33,10 @@ module DbAgile
     
       ### DELEGATE PATTERN #########################################################
       
-      # Automatically install methods of the Connection contract
-      DbAgile::Contract::Connection.instance_methods(false).each do |method|
-        next if method == :transaction
-        self.module_eval <<-EOF
-          def #{method}(*args)
-            connection.chain.#{method}(*args)  
-          end
-        EOF
-      end
-      
-      # Executes the block inside this transaction
-      def transaction(&block)
-        execute(&block)
-      end
-
-      # Automatically install methods of the *::TableDriven contract
-      [ DbAgile::Contract::Data::TableDriven,
+      # Automatically install methods of the Connection and *::TableDriven 
+      # contracts
+      [ DbAgile::Contract::Connection,
+        DbAgile::Contract::Data::TableDriven,
         DbAgile::Contract::Schema::TableDriven ].each do |mod|
 
         mod.instance_methods(false).each do |method|
@@ -60,7 +47,12 @@ module DbAgile
           EOF
         end
       
-      end # *::TableDriven
+      end # Connection and *::TableDriven
+
+      # Executes the block inside this transaction
+      def transaction(&block)
+        execute(&block)
+      end
 
       # Automatically install methods of the *::TransactionDriven contract
       [ DbAgile::Contract::Data::TransactionDriven,
