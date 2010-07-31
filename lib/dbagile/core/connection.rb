@@ -25,25 +25,9 @@ module DbAgile
     
       ### DELEGATE PATTERN ON CONNECTION ################################################
 
-      # Automatically install methods of the Connection contract
-      DbAgile::Contract::Connection.instance_methods(false).each do |method|
-        self.module_eval <<-EOF
-          def #{method}(*args, &block)
-            @chain.#{method}(*args, &block)  
-          end
-        EOF
-      end
-    
-      ### TRANSACTIONS AND WRITE ACCESSES ###############################################
-    
-      # Executes the block inside a transaction.
-      def transaction(&block)
-        raise ArgumentError, "Missing transaction block" unless block
-        Transaction.new(self).execute(&block)
-      end
-      
-      # Automatically install methods of the *::TableDriven contract
-      [ DbAgile::Contract::Data::TableDriven,
+      # Automatically install methods of the Connection and *::TableDriven contracts
+      [ DbAgile::Contract::Connection,
+        DbAgile::Contract::Data::TableDriven,
         DbAgile::Contract::Schema::TableDriven ].each do |mod|
 
         mod.instance_methods(false).each do |method|
@@ -56,6 +40,12 @@ module DbAgile
 
       end
     
+      # Executes the block inside a transaction.
+      def transaction(&block)
+        raise ArgumentError, "Missing transaction block" unless block
+        Transaction.new(self).execute(&block)
+      end
+      
     end # class Connection
   end # module Core
 end # module DbAgile
