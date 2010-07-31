@@ -1,14 +1,10 @@
 --- 
 version: 0.0.1
 databases: 
-  sqlite: 
-    uri: test.db
-    announced_schema: 
-    - fixtures.yaml
   unexisting: 
     uri: postgres://dbagile@localhost/dbagile_unexisting
-  postgres: 
-    uri: postgres://dbagile@localhost/dbagile_test
+  sqlite: 
+    uri: test.db
     announced_schema: 
     - fixtures.yaml
   robust: 
@@ -17,4 +13,8 @@ databases:
     - fixtures.yaml
     plugins: 
     - DbAgile::Contract::Robust::Optimistic
+  postgres: 
+    uri: postgres://dbagile@localhost/dbagile_test
+    announced_schema: 
+    - fixtures.yaml
 current: sqlite

@@ -17,7 +17,7 @@ module DbAgile
       # Executes a block
       def execute(&block)
         raise ArgumentError, "Missing transaction block" unless block
-        connection.main_delegate.transaction do
+        connection.chain.transaction do
           block.call(self)
         end
       end
@@ -35,9 +35,10 @@ module DbAgile
       
       # Automatically install methods of the Connection contract
       DbAgile::Contract::Connection.instance_methods(false).each do |method|
+        next if method == :transaction
         self.module_eval <<-EOF
           def #{method}(*args)
-            connection.#{method}(*args)  
+            connection.chain.#{method}(*args)  
           end
         EOF
       end
@@ -54,7 +55,7 @@ module DbAgile
         mod.instance_methods(false).each do |method|
           self.module_eval <<-EOF
             def #{method}(*args)
-              connection.#{method}(*args)  
+              connection.chain.#{method}(*args)  
             end
           EOF
         end
@@ -68,7 +69,7 @@ module DbAgile
         mod.instance_methods(false).each do |method|
           self.module_eval <<-EOF
             def #{method}(*args)
-              connection.find_delegate(args[0]).#{method}(self, *args)  
+              connection.chain.#{method}(self, *args)  
             end
           EOF
         end

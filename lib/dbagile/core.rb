@@ -1,5 +1,4 @@
 require 'dbagile/core/chain'
-require 'dbagile/core/connector'
 require 'dbagile/core/io'
 require 'dbagile/core/repository'
 require 'dbagile/core/database'

@@ -34,7 +34,7 @@ module DbAgile
         @announced_files = []
         @effective_files = []
         @file_resolver = lambda{|f| ::File.expand_path(f) }
-        @connector = ::DbAgile::Core::Connector.new
+        @chain = ::DbAgile::Core::Chain.new
       end
       
       
@@ -43,10 +43,10 @@ module DbAgile
       ### About connector
       ##############################################################################
       
-      # @see Connector#plug
+      # @see Chain#plug
       def plug(*args)
         (@plugs ||= []).push(*args)
-        @connector.plug(*args)
+        @chain.plug(*args)
       end
       
       # Installs plugins
@@ -77,7 +77,7 @@ module DbAgile
         else
           raise DbAgile::Error, "A file resolver is required for using #{uri} as database uri"
         end
-        connector = @connector.connect(adapter)
+        connector = @chain.connect(adapter)
         Connection.new(connector)
       end
       
