@@ -11,13 +11,14 @@ module DbAgile
       # Database uri
       attr_accessor :uri
       
+      # Database type system
+      attr_accessor :type_system
+      
       # Array of files for the announced schema
       attr_accessor :announced_files
-      alias :announced_schema= :announced_files=
       
       # Array of files for the effective schema
       attr_accessor :effective_files
-      alias :effective_schema= :effective_files=
       
       # Resolves relative files
       attr_accessor :file_resolver
@@ -31,13 +32,15 @@ module DbAgile
         raise ArgumentError, "Database DSL is deprecated" unless block.nil?
         @name = name
         @uri = uri
+        @type_system = SByC::TypeSystem::Ruby
         @announced_files = []
         @effective_files = []
         @file_resolver = lambda{|f| ::File.expand_path(f) }
         @chain = ::DbAgile::Core::Chain.new
       end
       
-      
+      alias :announced_schema= :announced_files=
+      alias :effective_schema= :effective_files=
       
       ##############################################################################
       ### About connector
