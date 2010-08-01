@@ -1,7 +1,7 @@
 shared_examples_for("The db:rm command") do
   
   it "should return the repository" do
-    dba.db_add(%w{test sqlite://test.db})
+    dba.db_add(%w{test test.db})
     dba.db_rm(%w{test}).should be_kind_of(::DbAgile::Core::Repository)
   end
   
@@ -10,7 +10,7 @@ shared_examples_for("The db:rm command") do
   end
   
   it "should save the repository" do
-    dba.db_add(%w{test sqlite://test.db})
+    dba.db_add(%w{test test.db})
     dba.db_rm(%w{test})
     dba.dup.repository.has_database?(:test).should be_false
   end
