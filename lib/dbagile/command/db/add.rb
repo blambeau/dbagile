@@ -59,6 +59,7 @@ module DbAgile
               name, uri = self.db_name, self.uri
               db = DbAgile::Core::Database.new(name, uri)
               repository << db
+              infer_schemas(db) if db.ping?
         
               # Makes it the current one if requested
               if self.current
@@ -76,6 +77,15 @@ module DbAgile
         
           # Returns created database
           db
+        end
+        
+        # Infers database schemas
+        def infer_schemas(db)
+          schema = db.physical_schema
+          db.set_announced_schema(schema)
+          db.set_effective_schema(schema)
+        rescue => ex
+          say("An error occured when infering schema: #{ex.message}\nYou'll have to install them manually. Sorry", :magenta)
         end
       
       end # class Add
