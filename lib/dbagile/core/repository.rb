@@ -1,4 +1,5 @@
 require 'dbagile/core/repository/yaml_methods'
+require 'dbagile/core/repository/builder'
 module DbAgile
   module Core
     class Repository

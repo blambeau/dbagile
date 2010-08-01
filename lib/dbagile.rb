@@ -51,11 +51,11 @@ module DbAgile
 end # module DbAgile
 require 'dbagile/robustness'
 require 'dbagile/errors'
+require 'dbagile/environment'
 require 'dbagile/contract'
 require 'dbagile/tools'
 require 'dbagile/io'
 require 'dbagile/core'
 require 'dbagile/adapter'
 require 'dbagile/plugin'
-require 'dbagile/environment'
 require 'dbagile/command'
