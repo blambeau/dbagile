@@ -5,8 +5,21 @@ describe "DbAgile::Command::API /" do
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
+  # -- repo
+  describe "repo commands /" do 
+  
+    # Remove empty repo between all test
+    before { dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
+    after  { DbAgile::Fixtures::ensure_empty_repository!                       }
+  
+    describe "repo:create /" do
+      it_should_behave_like "The repo:create command" 
+    end
+  
+  end # -- repo
+  
   # -- db
-  describe "repository commands (touching) /" do 
+  describe "db commands (touching) /" do 
   
     # Remove empty repo between all test
     before { dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
@@ -87,7 +100,7 @@ describe "DbAgile::Command::API /" do
     end
   
   end # -- sql
-
+  
   # -- schema
   describe "schema commands /" do
     
@@ -117,9 +130,9 @@ describe "DbAgile::Command::API /" do
   
   # -- dba
   describe "main dba command /" do
-
+  
     it_should_behave_like "The dba command" 
-
+  
   end # -- dba
   
 end
