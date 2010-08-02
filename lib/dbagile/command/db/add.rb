@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Db
       #
-      # Adds a new database configuration
+      # Add a new database configuration
       #
       # Usage: dba #{command_name} NAME URI
       #

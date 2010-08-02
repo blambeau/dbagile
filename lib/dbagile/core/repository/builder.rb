@@ -53,10 +53,10 @@ module DbAgile
           say(msg, :magenta)
           answer = environment.ask(""){|q| q.validate = /^y(es)?|n(o)?|q(uit)?/i}
           case answer.strip
-            when /^n/, /^q/
+            when /^n/i, /^q/i
               say("\n")
               say(on_no_msg, :magenta) unless on_no_msg.nil?
-            when /^y/
+            when /^y/i
               yield
           end
         end

@@ -43,7 +43,7 @@ module DbAgile
         # Drops table
         def drop_table(conn, op, buffer)
           buffer << conn.send(:drop_table_sql, op.table_name) << ";\n"
-          staged!(op)
+          op.relvar.visit{|obj,parent| op.staged!(obj)}
         rescue Sequel::Error => ex
           buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
           unsupported!(op)

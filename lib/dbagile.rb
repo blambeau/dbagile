@@ -34,7 +34,12 @@ module DbAgile
   #
   def dba(environment = nil)
     environment ||= default_environment
-    yield(DbAgile::Command::API.new(environment))
+    dba = DbAgile::Command::API.new(environment)
+    if block_given?
+      yield(dba)
+    else
+      dba
+    end
   end
   module_function :dba
   
