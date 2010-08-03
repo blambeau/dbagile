@@ -4,10 +4,15 @@ module DbAgile
       class Cursor
         include Enumerable
         
+        # Info about ordering
+        attr_reader :order
+        
         # Builds a cursor instance with info about ordering
         def initialize(order)
           @order = order
         end
+        
+        #######################################################################
         
         #
         # Resets the iterator, and position it on the first tuple
@@ -63,7 +68,7 @@ module DbAgile
           self.collect{|t| t}
         end
         
-      end # class Iterator
+      end # class Cursor
     end # module Physical
   end # module Algebra
 end # module DbAgile
