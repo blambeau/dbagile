@@ -2,6 +2,27 @@ module DbAgile
   module IO
     module Ruby
       
+      class Reader
+        
+        def initialize(io, options)
+          @io = io
+          @options = options
+        end
+
+        # Reads content of a file        
+        def read(file)
+          if @options[:input_file]
+            file = File.join(File.dirname(@options[:input_file]), file)
+          end
+          File.read(file)
+        end
+        
+        def tuples
+          self.instance_eval(@io.read)
+        end
+        
+      end
+      
       # 
       # Outputs some data as a Ruby string
       #
@@ -26,7 +47,7 @@ module DbAgile
       # turn. Otherwise returns it.
       #
       def from_ruby(io, options = {}, &block)
-        tuples = Kernel.eval(io.read)
+        tuples = Reader.new(io, options).tuples
         if block
           tuples.each(&block)
           nil

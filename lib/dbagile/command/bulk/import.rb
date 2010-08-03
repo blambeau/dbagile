@@ -89,6 +89,7 @@ module DbAgile
           with_io{|io|
             options = io_options[self.format]
             options[:type_system] = self.type_system if self.type_system
+            options[:input_file] = self.input_file
             case self.format
               when :csv
                 DbAgile::IO::CSV::from_csv(io, options, &block)

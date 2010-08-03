@@ -56,7 +56,7 @@ module DbAgile
           if f[0, 1] == '/'
             f
           else
-            ::File.join(File.expand_path(self.root_path), f) 
+            File.join(File.expand_path(self.root_path), f) 
           end
         }
       end

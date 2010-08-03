@@ -175,7 +175,7 @@ module DbAgile
         self.effective_files ||= []
         case effective_files.size
           when 0
-            FileUtils.mkdir_p(file_resolver.call(name))
+            FileUtils.mkdir_p(file_resolver.call(name.to_s))
             self.effective_files = [ "#{name}/effective.yaml" ]
           when 1
           else 
