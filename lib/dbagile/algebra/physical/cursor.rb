@@ -53,6 +53,12 @@ module DbAgile
         def rewind(mark)
         end
         
+        #
+        # Duplicates this cursor
+        #
+        def dup
+        end
+        
         #######################################################################
         
         # Yields the block with each tuple in turn

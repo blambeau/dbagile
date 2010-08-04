@@ -1,62 +1,55 @@
 module DbAgile
   module Algebra
     module Physical
-      class RestrictCursor < Physical::Cursor
+      class TransformCursor < Physical::Cursor
         
-        # Creates a restriction cursor instance
-        def initialize(delegate, predicate = nil, &block)
+        # Builds a cursor instance with info about ordering
+        def initialize(delegate, tblock, &block)
           @delegate = delegate
-          @predicate = predicate || block
-          super(@delegate.order)
-          @next = nil
-          _find_next
+          @tblock = tblock || block
+          super(delegate.order)
         end
         
         #######################################################################
         
-        def _find_next
-          begin 
-            @next = @delegate.next
-          end until @next.nil? or @predicate.call(@next)
+        # Transforms a given tuple
+        def _transform(tuple)
+          @tblock.call(tuple)
         end
         
         #######################################################################
         
         def reset
           @delegate.reset
-          _find_next
-          @next
+          current
         end
         
         def next
-          to_return = @next
-          _find_next
-          to_return
+          _transform(@delegate.next)
         end
         
         def current
-          @next
+          _transform(@delegate.current)
         end
         
         def has_next?
-          !@next.nil?
+          @delegate.has_next?
         end
         
         def mark
-          [@next, @delegate.mark]
+          @delegate.mark
         end
         
         def rewind(mark)
-          @next, mark = mark
           @delegate.rewind(mark)
-          @next
+          current
         end
         
         def dup
-          RestrictCursor.new(@delegate.dup, @predicate)
+          TransformCursor.new(@delegate.dup, @tblock)
         end
         
-      end # class ArrayCursor
+      end # class TransformCursor
     end # module Physical
   end # module Algebra
 end # module DbAgile
