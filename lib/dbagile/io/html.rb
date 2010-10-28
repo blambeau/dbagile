@@ -33,7 +33,7 @@ module DbAgile
                 columns.each{|column|
                   value = row[column]
                   cssclazz = value.class.name.to_s.downcase
-                  buffer << "  "*3 << "<td class=\"#{cssclazz}\">#{CGI::escape(value.to_s)}</td>\n"
+                  buffer << "  "*3 << "<td class=\"#{cssclazz}\">#{CGI::escapeHTML(value.to_s)}</td>\n"
                 }
               }
             }

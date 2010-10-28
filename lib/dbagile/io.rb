@@ -32,7 +32,7 @@ module DbAgile
       :ruby => DbAgile::IO::Ruby,
       :text => DbAgile::IO::Text,
       :xml  => DbAgile::IO::XML,
-      :xml  => DbAgile::IO::HTML
+      :html => DbAgile::IO::HTML
     }
     
     # Which format for what extension
@@ -55,7 +55,7 @@ module DbAgile
       :json => "application/json",
       :yaml => "text/yaml",
       :xml  => "text/xml",
-      :xml  => "text/html",
+      :html => "text/html",
       :ruby => "text/plain"
     }
       
