@@ -59,8 +59,8 @@ module DbAgile
 
         # Adds the format options for output
         def add_output_format_options(opt)
-          opt.on('--format=X', [:csv, :text, :json, :yaml, :ruby, :xml],
-                 "Export dataset in (csv, text, json, yaml, ruby, xml)") do |value|
+          opt.on('--format=X', [:csv, :text, :json, :yaml, :ruby, :xml, :html],
+                 "Export dataset in (csv, text, json, yaml, ruby, xml, html)") do |value|
             self.format = value
           end
           opt.on("--csv",  "Export dataset in csv (default)"){ self.format = :csv }
@@ -68,6 +68,7 @@ module DbAgile
           opt.on("--json", "Export dataset in json"){ self.format = :json }
           opt.on("--yaml", "Export dataset in yaml"){ self.format = :yaml }
           opt.on("--xml",  "Export dataset in xml"){ self.format = :xml }
+          opt.on("--html",  "Export dataset in html"){ self.format = :html }
           opt.on("--ruby", "Export dataset as ruby code"){ self.format = :ruby }
         end
       
@@ -122,6 +123,10 @@ module DbAgile
             io_options[:text][:truncate_at] = x
             io_options[:text][:append_with] = '...'
           end
+        end
+
+        # Adds output HTML options 
+        def add_html_output_options(opt)
         end
        
       end # module Commons

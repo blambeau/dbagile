@@ -52,7 +52,7 @@ module DbAgile
     DbAgile::Environment.default
   end
   module_function :default_environment
-
+  
 end # module DbAgile
 require 'dbagile/robustness'
 require 'dbagile/errors'

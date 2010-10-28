@@ -39,6 +39,10 @@ module DbAgile
           opt.separator "\nTEXT options:"
           add_text_output_options(opt)
 
+          # HTML output options
+          opt.separator "\nHTML options:"
+          add_html_output_options(opt)
+
           # JSON output options
           opt.separator "\nJSON options:"
           add_json_output_options(opt)

@@ -4,6 +4,7 @@ require 'dbagile/io/csv'
 require 'dbagile/io/json'
 require 'dbagile/io/yaml'
 require 'dbagile/io/xml'
+require 'dbagile/io/html'
 require 'dbagile/io/ruby'
 require 'dbagile/io/text'
 module DbAgile
@@ -15,10 +16,10 @@ module DbAgile
     }
       
     # Known IO formats
-    KNOWN_FORMATS = [:yaml, :csv, :json, :ruby, :text, :xml]
+    KNOWN_FORMATS = [:yaml, :csv, :json, :ruby, :text, :xml, :html]
     
     # Known to_xxx IO formats
-    KNOWN_TO_FORMATS = [:yaml, :csv, :json, :ruby, :text, :xml]
+    KNOWN_TO_FORMATS = [:yaml, :csv, :json, :ruby, :text, :xml, :html]
     
     # Known from_xxx formats
     KNOWN_FROM_FORMATS = [:yaml, :csv, :json, :ruby]
@@ -30,7 +31,8 @@ module DbAgile
       :json => DbAgile::IO::JSON,
       :ruby => DbAgile::IO::Ruby,
       :text => DbAgile::IO::Text,
-      :xml  => DbAgile::IO::XML
+      :xml  => DbAgile::IO::XML,
+      :xml  => DbAgile::IO::HTML
     }
     
     # Which format for what extension
@@ -41,6 +43,7 @@ module DbAgile
       ".yaml"  => :yaml,
       ".yml"   => :yaml,
       ".xml"   => :xml,
+      ".html"  => :html,
       ".ruby"  => :ruby,
       ".rb"    => :ruby
     }
@@ -52,6 +55,7 @@ module DbAgile
       :json => "application/json",
       :yaml => "text/yaml",
       :xml  => "text/xml",
+      :xml  => "text/html",
       :ruby => "text/plain"
     }
       
