@@ -18,6 +18,11 @@ module DbAgile
           def build_relvar(name)
             Schema::Logical::Relvar.new(name)
           end
+          
+          # Builds a relvar
+          def build_relview(name, defn)
+            Schema::Logical::Relview.new(name, defn)
+          end
         
           # Builds a heading
           def build_heading

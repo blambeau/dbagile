@@ -1,0 +1,5 @@
+--- 
+logical: 
+  test: SELECT * FROM test
+--- 
+physical: {}

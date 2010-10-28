@@ -139,6 +139,11 @@ module DbAgile
             script << Migrate::DropTable.new(relvar)
           end
 
+          # Collapses a relation view
+          def collapse_relview(relview)
+            script << Migrate::DropView.new(relview)
+          end
+
           # Collapses a candidate key
           def collapse_candidate_key(ckey)
             with_collapse_helper(ckey.relation_variable){|h| h.candidate_key(ckey)}
@@ -172,16 +177,16 @@ module DbAgile
               # create the operation
               exists = relvar_exists?(rv)
               h = exists ? Migrate::ExpandTable.new(rv) : Migrate::CreateTable.new(rv)
-              
+            
               # execute sub operations and save
               yield(helpers[rv] = h)
               script << h
-              
+            
               # assert that the table now exists
               unless exists
                 relvar_exists!(rv)
               end
-              
+            
               # remove helper now
               helpers.delete(rv)
             end
@@ -248,6 +253,10 @@ module DbAgile
           end
           alias :expand_relvar :expand_relvar_xxx
           alias :expand_heading :expand_relvar_xxx
+          
+          def expand_relview(rv)
+            script << Migrate::CreateView.new(rv)
+          end
 
           ### Parts
 

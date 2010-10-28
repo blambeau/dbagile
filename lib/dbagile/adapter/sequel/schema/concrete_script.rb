@@ -10,6 +10,22 @@ module DbAgile
           buffer
         end
         
+        def create_view(conn, op, buffer)
+          tname = conn.send(:quote_schema_table, op.table_name)
+          buffer <<  "CREATE VIEW #{tname} AS #{op.relview.definition};" << "\n"
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
+        def drop_view(conn, op, buffer)
+          tname = conn.send(:quote_schema_table, op.table_name)
+          buffer <<  "DROP VIEW #{tname};" << "\n"
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
         def create_table(conn, op, buffer)
           gen = Sequel::Schema::Generator.new(conn)
           build_sequel_expand_generator(conn, op, gen, "")

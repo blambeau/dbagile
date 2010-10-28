@@ -7,19 +7,21 @@ module DbAgile
           # The sub operations
           attr_reader :operations
         
-          # Targetted relation variable
-          attr_reader :relvar
+          # Targetted relation variable/view
+          attr_reader :rel_object
+          alias :relvar :rel_object
+          alias :relview :rel_object
           
           # Returns table name
           def table_name
             relvar.name
           end
           
-          def initialize(relvar)
-            unless relvar.kind_of?(DbAgile::Core::Schema::Logical::Relvar)
-              raise ArgumentError, "Relvar expected for relvar, got #{relvar.class}"
+          def initialize(rel_object)
+            unless rel_object.relvar? or rel_object.relview?
+              raise ArgumentError, "Relvar expected for rel_object, got #{rel_object.class}"
             end
-            @relvar = relvar
+            @rel_object = rel_object
             @operations = []
           end
           
