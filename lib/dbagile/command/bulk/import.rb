@@ -23,6 +23,9 @@ module DbAgile
         # Truncate table?
         attr_accessor :truncate_table
             
+        # Update tuple when key already exists?
+        attr_accessor :update_on_existing
+            
         # Contribute to options
         def add_options(opt)
           # Main output options
@@ -47,6 +50,9 @@ module DbAgile
           end
           opt.on('--trace-sql', "Trace SQL statements on STDOUT (but executes them)") do |value|
             self.conn_options[:trace_sql] = true
+          end
+          opt.on("--update", "-u", "Update tuple instead of insert when key already exists") do |value|
+            self.update_on_existing = true
           end
           opt.on('--dry-run', "Trace SQL statements on STDOUT only, do nothing on the database") do |value|
             self.conn_options[:trace_sql] = true
@@ -106,7 +112,7 @@ module DbAgile
         # Executes the command
         def execute_command
           with_current_connection(conn_options) do |connection|
-        
+                  
             # Make the job now
             connection.transaction do |t|
               first = true
@@ -119,10 +125,33 @@ module DbAgile
           end
         end
       
+        def find_key(t, tuple)
+          t.keys(self.dataset).find{|key|
+            key.all?{|k| tuple.has_key?(k)}
+          }
+        end
+      
         # Makes the insert job
         def make_the_job(t, tuple, first = true)
           handle_schema_modification(t, tuple) if first
-          t.insert(self.dataset, tuple)
+          if self.update_on_existing 
+            
+            # find a candidate key
+            key = find_key(t, tuple)
+            if key.nil?
+              raise DbAgile::CandidateKeyNotFoundError, "Unable to find a candidate key for UPDATE"
+            end
+
+            # Make insert or update according to key
+            key_value = tuple_project(tuple, key)
+            if t.exists?(self.dataset, key_value)
+              t.update(self.dataset, tuple, key_value)
+            else
+              t.insert(self.dataset, tuple)
+            end
+          else
+            t.insert(self.dataset, tuple)
+          end
         end
       
         # Handles the schema modifications

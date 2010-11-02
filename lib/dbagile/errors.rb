@@ -27,4 +27,7 @@ module DbAgile
   # Raised when usage of schema files fails because they are not installed
   class NoSchemaFilesError < DbAgile::Error; end
   
+  # Raised when a candidate key cannot be infered from a given tuple
+  class CandidateKeyNotFoundError < DbAgile::Error; end
+  
 end # module DbAgile

@@ -89,7 +89,6 @@ module DbAgile
             # Export it
             with_io{|io| 
               method = "to_#{self.format}".to_sym
-              io = environment.output_buffer
               options =  io_options[self.format]
               options[:type_system] = self.type_system if self.type_system
               ds.send(method, io, options)
