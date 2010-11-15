@@ -31,6 +31,13 @@ module DbAgile
         proj
       end
       
+      # Checks if a given tuple contains value for at least one
+      # key.
+      def tuple_has_key?(tuple, keys)
+        return false if keys.nil?
+        !keys.find{|k| k.all?{|a| !tuple[a].nil? }}.nil?
+      end
+      
       # Extract the key/value pairs that form a key on a tuple, given 
       # keys information. Returns tuple if no such better tuple can be found.
       def tuple_key(tuple, keys)

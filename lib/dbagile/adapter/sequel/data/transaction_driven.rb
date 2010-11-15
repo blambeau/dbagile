@@ -16,6 +16,7 @@ module DbAgile
           else
             db[table_name].where(proj).update(update)
           end 
+          update
         end
     
         # @see DbAgile::Contract::Data::TransactionDriven#delete
