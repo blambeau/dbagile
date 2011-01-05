@@ -118,7 +118,7 @@ module DbAgile
       def with_current_database
         raise ArgumentError, "Missing block" unless block_given?
         db = repository.current_database
-        raise NoDefaultDatabaseError if db.nil?
+        raise DbAgile::NoDefaultDatabaseError, "No default database set (try 'dba use ...' first)" if db.nil?
         yield(db)
       end
       
