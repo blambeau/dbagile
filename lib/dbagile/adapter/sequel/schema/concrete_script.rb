@@ -13,6 +13,7 @@ module DbAgile
         def create_view(conn, op, buffer)
           tname = conn.send(:quote_schema_table, op.table_name)
           buffer <<  "CREATE VIEW #{tname} AS #{op.relview.definition};" << "\n"
+          staged!(op)
         rescue Sequel::Error => ex
           buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
           unsupported!(op)
@@ -21,6 +22,7 @@ module DbAgile
         def drop_view(conn, op, buffer)
           tname = conn.send(:quote_schema_table, op.table_name)
           buffer <<  "DROP VIEW #{tname};" << "\n"
+          staged!(op)
         rescue Sequel::Error => ex
           buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
           unsupported!(op)
