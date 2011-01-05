@@ -2,6 +2,7 @@ h1. CHANGELOG
 
 h2. Version 0.0.2
 
+* Fixed the --dry-run option of bulk:import
 * added a --update option to bulk:import which forces a "INSERT or UPDATE" on existing key values.
 * Added support for SQL views in yaml schemas
 * Restful POST now does a "INSERT or UPDATE" when a key value already exists (will certainly change in the future)
