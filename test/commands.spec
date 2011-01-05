@@ -64,9 +64,9 @@ describe "DbAgile::Command::API /" do
       dba.output_buffer = StringIO.new
     }
     
-    describe "bulk:export /" do
-      it_should_behave_like "The bulk:export command" 
-    end
+    # describe "bulk:export /" do
+    #   it_should_behave_like "The bulk:export command" 
+    # end
   
     describe "bulk:import /" do
       it_should_behave_like "The bulk:import command" 

@@ -57,6 +57,7 @@ module DbAgile
           opt.on('--dry-run', "Trace SQL statements on STDOUT only, do nothing on the database") do |value|
             self.conn_options[:trace_sql] = true
             self.conn_options[:trace_only] = true
+            self.conn_options[:trace_buffer] = environment.output_buffer
           end
 
           opt.separator "\nRecognized format options:"

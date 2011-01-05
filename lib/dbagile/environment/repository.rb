@@ -140,7 +140,7 @@ module DbAgile
             raise ArgumentError, "Invalid database name #{db}"
         end
         raise NoSuchDatabaseError if db.nil?
-        db.with_connection(&block)
+        db.with_connection(conn_options, &block)
       end
       
       # 

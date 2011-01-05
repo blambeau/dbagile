@@ -1,3 +1,4 @@
+require 'logger'
 module DbAgile
   class SequelAdapter
     class SequelTracer
