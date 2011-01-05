@@ -1,5 +1,15 @@
 h1. CHANGELOG
 
+h2. Version 0.0.2
+
+* added a --update option to bulk:import which forces a "INSERT or UPDATE" on existing key values.
+* Added support for SQL views in yaml schemas
+* Restful POST now does a "INSERT or UPDATE" when a key value already exists (will certainly change in the future)
+* Fixed a contract bug in Sequel's contract implementation (update returns updated tuple)
+* Added a basic HTML io generation and --html on bulk:export
+* Fixed a bug on attribute default being _false_
+
 h2. Version 0.0.1
 
+* Initial dba subcommands
 * Project start.

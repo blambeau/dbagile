@@ -2,7 +2,7 @@ require 'dbagile/loader'
 module DbAgile
   
   # Version of the DbAgile interface
-  VERSION = "0.0.1".freeze
+  VERSION = "0.0.2".freeze
   
   # Domains recognized as valid domains inside a SQL database
   RECOGNIZED_DOMAINS = [
