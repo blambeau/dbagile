@@ -98,7 +98,7 @@ module DbAgile
         
         # Returns the kind of an object
         def include?(obj)
-          if include_kind && include_kind.none?{|kind| obj.send(kind)}
+          if include_kind && !include_kind.any?{|kind| obj.send(kind)}
             return false
           end
           if exclude_kind && exclude_kind.any?{|kind| obj.send(kind)}
