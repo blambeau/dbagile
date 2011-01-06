@@ -6,6 +6,9 @@ module DbAgile
         # Checks schema(s) first?
         attr_accessor :check_schemas
       
+        # Take schema on standard input?
+        attr_accessor :on_stdin
+      
         # Schema arguments
         attr_accessor :schema_arguments
       
@@ -14,6 +17,13 @@ module DbAgile
           self.check_schemas = true
           opt.on('--[no-]check', "Perform/Bypass schema checking") do |value|
             self.check_schemas = value
+          end
+        end
+        
+        # Adds --stdin option
+        def add_stdin_options(opt)
+          opt.on('--stdin', "Take schema on the standard command input") do
+            self.on_stdin = true
           end
         end
         
@@ -31,7 +41,7 @@ module DbAgile
           @schema_arguments = case kind_of_schema_arguments
             when :single
               if arguments.empty?
-                [ :announced ]
+                on_stdin ? [ :stdin ] : [ :announced ]
               elsif arguments.size == 1
                 arguments.collect{|arg| normalize_schema_argument(arg) }
               else
@@ -64,6 +74,11 @@ module DbAgile
         # Loads a given schema from a schema argument
         def load_schema(schema_argument, check = self.check_schemas)
           schema = case schema_argument
+            when :stdin
+              r = environment.input_buffer.read
+              s = DbAgile::Core::Schema::yaml_load(r)
+              s.schema_identifier = "--stdin"
+              s
             when Symbol
               with_current_database do |database|
                 case schema_argument

@@ -4,7 +4,7 @@ module DbAgile
       #
       # Check a database schema
       #
-      # Usage: dba #{command_name} [SCHEMA.yaml|announced|effective|physical]
+      # Usage: dba #{command_name} [options] [SCHEMA.yaml|announced|effective|physical]
       #
       # This command informs you about bad smells and good practices with relational
       # schemas (i.e. forgetting to create keys, not providing unique constraint 
@@ -33,6 +33,7 @@ module DbAgile
         # Contribute to options
         def add_options(opt)
           self.check_schemas = false
+          add_stdin_options(opt)
         end
         
         # Executes the command
