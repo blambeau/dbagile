@@ -31,7 +31,7 @@ module DbAgile
         
         # Returns true if this object is a logical object, false otherwise
         def logical?
-          relvar? or attribute? or constraint?
+          relvar? or relview? or attribute? or constraint?
         end
         
           # Returns true if this object is a relation view, false otherwise
@@ -56,7 +56,7 @@ module DbAgile
       
             # Returns true if this object is a candidate key, false otherwise
             def candidate_key?
-              self.kind_of?(Schema::Logical::Constraint::CandidateKey)
+              self.kind_of?(Schema::Logical::CandidateKey)
             end
       
             # Returns true if this object is a primary key, false otherwise
@@ -66,7 +66,7 @@ module DbAgile
       
             # Returns true if this object is a foreign key, false otherwise
             def foreign_key?
-              self.kind_of?(Schema::Logical::Constraint::ForeignKey)
+              self.kind_of?(Schema::Logical::ForeignKey)
             end
       
         # Returns true if this object is a physical object, false otherwise

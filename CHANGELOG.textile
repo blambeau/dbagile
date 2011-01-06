@@ -9,6 +9,7 @@ h2. Version 0.0.2
 * Fixed a contract bug in Sequel's contract implementation (update returns updated tuple)
 * Added a basic HTML io generation and --html on bulk:export
 * Fixed a bug on attribute default being _false_
+* Fixed bugs in SchemaObject's query methods about object kinds
 
 h2. Version 0.0.1
 
