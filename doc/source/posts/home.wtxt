@@ -54,7 +54,7 @@ Then, try
 h2. What DbAgile is NOT
 
 * DbAgile is not a *Object Relational Mapper*, and won't be. Have a look at @{http://ar.rubyonrails.org/}{Active Record}, @{http://datamapper.org/}{DataMapper} or @{http://sequel.rubyforge.org/}{Sequel}
-* DbAgile is not *SQL query helper*. Have a loot at @{http://sequel.rubyforge.org/}{Sequel}
+* DbAgile is not *SQL query helper*. Have a loot at @{http://sequel.rubyforge.org/}{Sequel}, @{https://github.com/rails/arel}{ARel}
 * DbAgile is not a *NoSQL database* for Ruby. Have a loot at @{http://friendlyorm.com/}{Friendly} instead
 
 h2. Licence and Credits

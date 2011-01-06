@@ -1,39 +1,47 @@
-sh$ dba --list
+sh$ dba --help
 
-Usage: dba [--version] [--help] [--list]
+Usage: dba [--help] [--version] 
        dba help <subcommand>
-       dba [--config=FILE] [--use=DB] <subcommand> [OPTIONS] [ARGS]
+       dba [--repository=DIR] [--use=DB] [--no-interactive] <subcommand> [OPTIONS] [ARGS]
 
 Options:
-      --config=FILE                Use a specific configuration file (defaults to ~/.dbagile)
-      --use=DB                     Use a specific database configuration
-      --help                       Show help
-      --list                       Show list of available subcommands
+      --repository=DIR             Use a specific repository (current is ~/.dbagile)
+      --use=DB                     Use a specific database
+      --[no-]interactive           [Dis-]allow interactive mode
+      --[no-]backtrace             Print a backtrace when an error occurs
+      --help                       Show list of available subcommands
       --version                    Show version
 
 Main commands:
-  help      Show help for a specific command
-  history   Display dba command history
-  replay    Replay a previous history command (last one by default)
+  help                          Show help of a given command
 
-Configuration management:
-  list      List available database configurations (found in ~/.dbagile)
-  ping      Ping a configuration (current one by default)
-  use       Set the current database configuration to use
-  add       Add a new database configuration
-  rm        Remove a database configuration
+Repository management:
+  repo:create                   Create a fresh dbagile repository in a specific directory
 
-Import/Export management:
-  show      Display content of a table/view/query (shortcut for 'export --text ...')
-  export    Export a table/view/query to (csv, json, yaml, ruby, xml)
-  import    Import a table from (csv, json, yaml, ruby)
+Database management:
+  db:add                        Add a new database configuration
+  db:rm                         Remove a database configuration from the repository
+  db:list                       List available databases in current repository
+  db:use                        Set the current database to use
+  db:ping                       Ping a database (current one by default)
+  db:stage                      Stage the current database
 
-Database and the web:
-  webtools  Start the web tools
-
-Queries:
-  sql       Send SQL directly to the DBMS
+SQL:
+  sql:show                      Display content of a table/view/query (shortcut for 'export --text ...')
+  sql:send                      Send SQL commands directly to the DBMS
+  sql:heading                   Show the heading of a table
+  sql:drop                      Drop a table from a SQL database
 
 Database schema:
-  heading   Show the heading of a table
-  drop      Drop a table
+  schema:dump                   Dump a schema of the current database
+  schema:check                  Check a database schema
+  schema:diff                   Show differences between database schemas
+  schema:merge                  Merge a list of schemas
+  schema:sql-script             Flush a SQL script for a creating/dropping/staging a schema
+
+Import/Export management:
+  bulk:import                   Import a table from (csv, json, yaml, ruby)
+  bulk:export                   Export a table/view/query to (csv, json, yaml, ruby, xml)
+
+Database and the web:
+  web:tools                     Start the web tools
