@@ -1,3 +1,8 @@
-* Refactor on grep 'WARNING'
-* Refactor on grep 'TODO'
+* Implement db:backup and db:restore (through a schema)
+* Handle relvar/attribute renaming in migrations
+* View support in schemas (YAML refactoring required, breaks existing schemas)
+* Extract hardcoded type-system and provide it as a Database feature
+* Complete Restful implementation
+* Implement plugins (at least Visibility and Enforce)
+* Refactor on grep 'Kernel.eval'
 * @pre and @post tags are used in the contracts modules but they don't appear in the yard documentation (because I don't know how to).

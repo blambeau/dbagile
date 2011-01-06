@@ -117,10 +117,14 @@ module DbAgile
         
         # Starts a relvar section
         def relvar(name, hash = nil, &block)
-          block = lambda{ _natural(hash) } unless block
-          name = coerce_relvar_name(name)
-          relvar = (_peek(:logical)[name] ||= build_relvar(name))
-          _push(:relvar, relvar, &block)
+          if String === hash
+            (_peek(:logical)[name] ||= build_relview(name, hash))
+          else
+            block = lambda{ _natural(hash) } unless block
+            name = coerce_relvar_name(name)
+            relvar = (_peek(:logical)[name] ||= build_relvar(name))
+            _push(:relvar, relvar, &block)
+          end
         rescue SByC::TypeSystem::CoercionError => ex
           invalid!("Invalid relvar definition (#{name}): #{ex.message}")
         end

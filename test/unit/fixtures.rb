@@ -20,6 +20,11 @@ module DbAgile
         Dir[File.expand_path("../fixtures/*.#{extension}", resolver)].each(&block)
       end
       
+      # Yields block for each file with a given extension
+      def each_dir(resolver, &block)
+        Dir[File.expand_path("../fixtures/*", resolver)].each(&block)
+      end
+      
     end
     
     class SayHello

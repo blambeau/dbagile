@@ -1,5 +1,1 @@
-require 'dbagile/command/repo/add'
-require 'dbagile/command/repo/rm'
-require 'dbagile/command/repo/list'
-require 'dbagile/command/repo/use'
-require 'dbagile/command/repo/ping'
+require 'dbagile/command/repo/create.rb'

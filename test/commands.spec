@@ -2,77 +2,84 @@ require File.expand_path('../spec_helper', __FILE__)
 dbagile_load_all_subspecs(__FILE__)
 describe "DbAgile::Command::API /" do
   
-  # Path to an empty repository file
-  let(:empty_repository_path){ File.expand_path('../fixtures/configs/empty.cfg', __FILE__) }
-  
   # The environment to use
   let(:dba){ DbAgile::Command::API.new(DbAgile::Fixtures::environment) }
   
-  # Clean everything after tests
-  after(:all) { FileUtils.rm_rf(empty_repository_path) }
-    
-  # -- Configuration
-  describe "repository commands (touching) /" do 
+  # -- repo
+  describe "repo commands /" do 
   
     # Remove empty repo between all test
-    before       {  dba.repository_path = empty_repository_path }
-    before(:each){ FileUtils.rm_rf(empty_repository_path)        }
+    before { dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
+    after  { DbAgile::Fixtures::ensure_empty_repository!                       }
   
-    describe "repo:add /" do
-      it_should_behave_like "The repo:add command" 
+    describe "repo:create /" do
+      it_should_behave_like "The repo:create command" 
     end
   
-    describe "repo:rm /" do
-      it_should_behave_like "The repo:rm command" 
+  end # -- repo
+  
+  # -- db
+  describe "db commands (touching) /" do 
+  
+    # Remove empty repo between all test
+    before { dba.repository_path = DbAgile::Fixtures::ensure_empty_repository! }
+    after  { DbAgile::Fixtures::ensure_empty_repository!                       }
+  
+    describe "db:add /" do
+      it_should_behave_like "The db:add command" 
     end
   
-    describe "repo:use /" do
-      it_should_behave_like "The repo:use command" 
+    describe "db:rm /" do
+      it_should_behave_like "The db:rm command" 
+    end
+      
+    describe "db:use /" do
+      it_should_behave_like "The db:use command" 
     end
   
-  end # -- Configuration
+  end # -- db
   
-  # -- Configuration
+  # -- db
   describe "repository commands (non touching) /" do 
   
     # Make usage of sqlite for these tests
-    before { dba.repo_use %{sqlite} }
+    before { dba.db_use %{sqlite} }
   
-    describe "repo:list /" do
-      it_should_behave_like "The repo:list command" 
+    describe "db:list /" do
+      it_should_behave_like "The db:list command" 
     end
   
-    describe "repo:ping /" do
-      it_should_behave_like "The repo:ping command" 
+    describe "db:ping /" do
+      it_should_behave_like "The db:ping command" 
     end
   
-  end # -- Configuration
+  end # -- db
   
-  # -- Input/Output
+  # -- bulk
   describe "bulk commands /" do 
   
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
-    describe "bulk:export /" do
-      it_should_behave_like "The bulk:export command" 
-    end
+    # describe "bulk:export /" do
+    #   it_should_behave_like "The bulk:export command" 
+    # end
   
     describe "bulk:import /" do
       it_should_behave_like "The bulk:import command" 
     end
   
-  end # -- Input/Output
+  end # -- bulk
   
-  # -- Sql 
+  # -- sql 
   describe "sql commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -92,14 +99,14 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The sql:drop command" 
     end
   
-  end # -- Query
+  end # -- sql
   
-  # -- Schema
+  # -- schema
   describe "schema commands /" do
     
     # Make usage of sqlite for these tests
     before{ 
-      dba.repo_use %{sqlite}
+      dba.db_use %{sqlite}
       dba.output_buffer = StringIO.new
     }
     
@@ -111,6 +118,21 @@ describe "DbAgile::Command::API /" do
       it_should_behave_like "The schema:check command" 
     end
   
-  end # -- Schema
+    describe "schema:sql-script" do
+      it_should_behave_like "The schema:sql-script command" 
+    end
+      
+    describe "schema:diff" do
+      it_should_behave_like "The schema:diff command" 
+    end
+  
+  end # -- schema
+  
+  # -- dba
+  describe "main dba command /" do
+  
+    it_should_behave_like "The dba command" 
+  
+  end # -- dba
   
 end

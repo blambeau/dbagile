@@ -15,11 +15,6 @@ module DbAgile
         # Table whose heading must be displayed
         attr_accessor :dataset
       
-        # Returns command's category
-        def category
-          :sql
-        end
-
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.dataset = valid_argument_list!(arguments, Symbol)
@@ -29,7 +24,7 @@ module DbAgile
         def execute_command
           with_current_connection do |connection|
             heading = connection.heading(self.dataset)
-            display("{\n" + heading.collect{|pair| "  #{pair[0]}: #{pair[1]}"}.join(",\n") + "\n}\n")
+            flush("{\n" + heading.collect{|pair| "  #{pair[0]}: #{pair[1]}"}.join(",\n") + "\n}\n")
             heading
           end
         end

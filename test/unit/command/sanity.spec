@@ -9,6 +9,11 @@ describe "command sanity /" do
         cmd.summary.strip.should_not be_empty
       end
       
+      it "should have a category" do
+        cmd.category.should_not be_nil
+        cmd.category.should be_kind_of(Symbol)
+      end
+      
       unless cmd.command_name == "dba"
 
         it "should have a usage" do

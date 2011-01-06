@@ -7,6 +7,11 @@ module DbAgile
       
       [
         #
+        :interactive?,
+        :interactive!,
+        :interactive=,
+        #
+        :flush,
         :say,
         :display,
         #
@@ -15,17 +20,16 @@ module DbAgile
         #
         :repository_path,
         :repository_path=,
-        #
         :repository,
-        #
-        :history_file_path,
-        :history_file_path=,
         #
         :input_buffer,
         :input_buffer=,
-        #
         :output_buffer,
         :output_buffer=,
+        :asking_buffer,
+        :asking_buffer=,
+        :message_buffer,
+        :message_buffer=,
         #
         :with_repository,
         :with_database,

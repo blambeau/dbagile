@@ -18,7 +18,7 @@ module DbAgile
         command_class.instance_eval{
           @summary     = summary
           @usage       = usage.gsub('#{command_name}', command_class.command_name)
-          @description = description
+          @description = description.gsub('#{command_name}', command_class.command_name)
         }
       end
       
@@ -49,6 +49,16 @@ module DbAgile
         else
           parent_name = DbAgile::RubyTools::unqualified_class_name(parent_module)
           "#{parent_name.downcase}:#{name}"
+        end
+      end
+      
+      # Returns command category
+      def category
+        parent = DbAgile::RubyTools::parent_module(self)
+        if parent == DbAgile::Command
+          :dba
+        else
+          DbAgile::RubyTools::unqualified_class_name(parent).to_s.downcase.to_sym
         end
       end
       

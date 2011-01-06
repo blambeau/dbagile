@@ -22,6 +22,10 @@ module DbAgile
           def mandatory?
             !(definition[:mandatory] == false)
           end
+          
+          def relvar
+            parent.parent
+          end
         
           ############################################################################
           ### Dependency control
@@ -38,7 +42,7 @@ module DbAgile
           
           # @see DbAgile::Core::Schema::SchemaObject
           def _semantics_check(clazz, buffer)
-            unless default_value.nil? or default_value.kind_of?(domain)
+            unless default_value.nil? or (domain === default_value)
               buffer.add_error(self, clazz::InvalidDefaultValue)
             end
           end
@@ -54,11 +58,16 @@ module DbAgile
               out.map("tag:yaml.org,2002:map", :inline ) do |map|
                 map.add('domain', defn[:domain].to_s)
                 map.add('mandatory', false) unless defn[:mandatory]
-                if defn[:default]
+                unless defn[:default].nil?
                   map.add('default', defn[:default])
                 end
               end
             }
+          end
+          
+          # Returns a string representation
+          def to_s
+            "Attribute  #{relvar.name}::#{name} #{definition.inspect}"
           end
           
         end # class Attribute

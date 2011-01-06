@@ -3,29 +3,13 @@ module DbAgile
     #
     # Show help of a given command
     #
-    # Usage: dba #{command_name} [--complete] COMMAND
+    # Usage: dba #{command_name} COMMAND
     #
     class Help < Command
       Command::build_me(self, __FILE__)
       
       # Command name
       attr_accessor :command
-      
-      # Complete help?
-      attr_accessor :complete
-      
-      # Returns command's category
-      def category
-        :dba
-      end
-      
-      # Contribute to options
-      def add_options(opt)
-        opt.separator "\nOptions:"
-        opt.on("--complete", "Provide complete command description") do
-          self.complete = true
-        end
-      end
         
       # Normalizes the pending arguments
       def normalize_pending_arguments(arguments)
@@ -35,29 +19,29 @@ module DbAgile
       
       # Executes the command
       def execute_command
-        display(command.usage)
-        display("\n")
+        flush(command.usage)
+        flush("\n")
         #
-        display("Description:")
-        display("  " + command.summary)
+        flush("Description:")
+        flush("")
+        flush("  " + command.summary)
         #
         options = command.options.summarize
         unless options.empty?
-          display(options.join)
-          display("\n")
+          flush(options.join)
+          flush("\n")
         else
-          display("\n")
+          flush("\n")
         end
         #
         description = command.description.to_s
-        if complete
-          if description.strip.empty?
-            display("Sorry, no more information available yet")
-          else
-            display("Read more:")
-            display(description.gsub(/^/, "  ")) 
-            display("")
-          end
+        if description.strip.empty?
+          flush("Sorry, no more information available yet")
+        else
+          flush("Detailed documentation:")
+          flush("")
+          flush(description.gsub(/^/, "  ")) 
+          flush("")
         end
       end
       

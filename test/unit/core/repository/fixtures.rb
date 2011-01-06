@@ -6,16 +6,16 @@ module DbAgile
         include Fixtures::Utils
     
         def repository_path(name_or_file)
-          find_file(name_or_file, __FILE__, ".yaml")
+          find_file(name_or_file, __FILE__)
         end
       
         def each_repository_path(&block)
-          each_file(__FILE__, ".yaml", &block)
+          each_dir(__FILE__, &block)
         end
       
         # Returns a Schema instance for a given name
         def repository(name_or_file)
-          DbAgile::Core::Repository::from_yaml_file(repository_path(name_or_file))
+          DbAgile::Core::Repository::load(repository_path(name_or_file))
         end
       
         extend(Repository)

@@ -23,7 +23,62 @@ module DbAgile
         def part?
           !composite?
         end
+        alias :terminal? :part?
+        
+        ############################################################################
+        ### Schema typing
+        ############################################################################
+        
+        # Returns true if this object is a logical object, false otherwise
+        def logical?
+          relvar? or relview? or attribute? or constraint?
+        end
+        
+          # Returns true if this object is a relation view, false otherwise
+          def relview?
+            self.kind_of?(Schema::Logical::Relview)
+          end
+        
+          # Returns true if this object is a relation variable, false otherwise
+          def relvar?
+            self.kind_of?(Schema::Logical::Relvar)
+          end
+        
+          # Returns true if this object is an attribute, false otherwise
+          def attribute?
+            self.kind_of?(Schema::Logical::Attribute)
+          end
+        
+          # Returns true if this object is a constraint, false otherwise
+          def constraint?
+            self.kind_of?(Schema::Logical::Constraint)
+          end
       
+            # Returns true if this object is a candidate key, false otherwise
+            def candidate_key?
+              self.kind_of?(Schema::Logical::CandidateKey)
+            end
+      
+            # Returns true if this object is a primary key, false otherwise
+            def primary_key?
+              self.candidate_key? and self.primary?
+            end
+      
+            # Returns true if this object is a foreign key, false otherwise
+            def foreign_key?
+              self.kind_of?(Schema::Logical::ForeignKey)
+            end
+      
+        # Returns true if this object is a physical object, false otherwise
+        def physical?
+          index?
+        end
+        
+          # Returns true if this object is an index, false otherwise
+          def index?
+            self.kind_of?(Schema::Physical::Index)
+          end
+        
         ############################################################################
         ### Schema hierarchy
         ############################################################################

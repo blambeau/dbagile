@@ -4,8 +4,8 @@ describe "::DbAgile::Command::command_for /" do
   subject{ ::DbAgile::Command::command_for(arg, nil) }
   
   describe "when called with a class" do
-    let(:arg){ ::DbAgile::Command::Repo::List }
-    it{ should be_kind_of(::DbAgile::Command::Repo::List) }
+    let(:arg){ ::DbAgile::Command::Db::List }
+    it{ should be_kind_of(::DbAgile::Command::Db::List) }
   end
   
   describe "when called with a string on a root command" do
@@ -29,8 +29,8 @@ describe "::DbAgile::Command::command_for /" do
   end
 
   describe "when called with a symbol on a non root command" do
-    let(:arg){ :schema_create_script }
-    it{ should be_kind_of(::DbAgile::Command::Schema::CreateScript) }
+    let(:arg){ :schema_sql_script }
+    it{ should be_kind_of(::DbAgile::Command::Schema::SqlScript) }
   end
 
 end

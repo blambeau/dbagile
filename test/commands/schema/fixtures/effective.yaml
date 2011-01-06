@@ -1,0 +1,20 @@
+--- 
+logical: 
+  SUPPLIERS: 
+    heading: 
+      S#:    { domain: Integer, mandatory: true }
+      NAME:  { domain: String,  mandatory: true }
+      CITY:  { domain: String,  mandatory: true }
+    constraints: 
+      pk_suppliers: { type: :primary_key, attributes: [ 'S#' ] }
+  PARTS: 
+    heading: 
+      P#:    { domain: Integer, mandatory: true }
+      NAME:  { domain: String,  mandatory: true }
+      COLOR: { domain: String,  mandatory: true }
+    constraints: 
+      pk_parts: { type: :primary_key, attributes: [ 'P#' ] }
+---
+physical:
+  indexes:
+    SUPPLIER_NAMES: { relvar: SUPPLIERS, attributes: [ 'NAME' ] }

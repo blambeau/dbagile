@@ -1,4 +1,3 @@
-require 'dbagile/command/io_commons'
 module DbAgile
   class Command
     module Bulk
@@ -11,17 +10,12 @@ module DbAgile
       # formats.
       #
       class Export < Command
-        include ::DbAgile::Command::IOCommons
+        include Bulk::Commons
         Command::build_me(self, __FILE__)
       
         # Output file to use
         attr_accessor :output_file
       
-        # Returns command's category
-        def category
-          :bulk
-        end
-
         # Contribute to options
         def add_options(opt)
           # Main output options
@@ -44,6 +38,10 @@ module DbAgile
           # CSV output options
           opt.separator "\nTEXT options:"
           add_text_output_options(opt)
+
+          # HTML output options
+          opt.separator "\nHTML options:"
+          add_html_output_options(opt)
 
           # JSON output options
           opt.separator "\nJSON options:"
@@ -91,7 +89,6 @@ module DbAgile
             # Export it
             with_io{|io| 
               method = "to_#{self.format}".to_sym
-              io = environment.output_buffer
               options =  io_options[self.format]
               options[:type_system] = self.type_system if self.type_system
               ds.send(method, io, options)

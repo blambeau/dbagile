@@ -15,10 +15,8 @@ rescue Interrupt => e
   $stderr.puts
   $stderr.puts "Interrupted"
   raise e
-rescue OptionParser::ParseError => e
-  $stderr.puts e.message
-  raise e
 rescue => e
+  $stderr.puts "DbAgile encountered a grave error, please report it to the developers"
   $stderr.puts e.message
-  raise e
+  $stderr.puts e.backtrace.join("\n")
 end

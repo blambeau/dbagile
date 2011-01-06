@@ -13,8 +13,11 @@ module DbAgile
           # The abstract script we build
           attr_reader :script
 
-          # Helper for each table
+          # Helper for each relation variable
           attr_reader :helpers
+
+          # Status of each object
+          attr_reader :status
 
           ############################################################################
           ### Schema info helpers need
@@ -22,12 +25,14 @@ module DbAgile
       
           # Checks if table already exists
           def relvar_exists?(rv)
-            (rv.status == Status::TO_ALTER) or (rv.status == Status::CREATED)
+            (rv.status == Status::NO_CHANGE) or
+            (rv.status == Status::TO_ALTER) or 
+            (status[rv] == Status::CREATED)
           end
 
           # Asserts that a table exists
           def relvar_exists!(rv)
-            rv.status = Status::CREATED
+            status[rv] = Status::CREATED
           end
 
           ############################################################################
@@ -40,19 +45,21 @@ module DbAgile
           #
           def run(schema, options)
             @helpers = {}
+            @status = {}
             @script = Migrate::AbstractScript.new
         
             # Take all objects and mark them as :to_ensure
             all_objects = schema.collect{|o, parent| o}
+            all_objects.each{|o| @status[o] = o.status}
         
             # Collapse first
             if options[:collapse]
-              collapse_objects(all_objects.select{|obj| obj.status == Status::TO_DROP})
+              collapse_objects(all_objects.select{|obj| @status[obj] == Status::TO_DROP})
             end
         
             # Expand then
             if options[:expand]
-              expand_objects(all_objects.select{|obj| obj.status == Status::TO_CREATE})
+              expand_objects(all_objects.select{|obj| @status[obj] == Status::TO_CREATE})
             end
         
             # clean
@@ -60,6 +67,7 @@ module DbAgile
             to_return = @script
             @script = nil
             @helpers = nil
+            @status = nil
             to_return
           end
       
@@ -73,7 +81,7 @@ module DbAgile
             if h = helpers[rv]
               yield(h)
             else
-              h = helpers[rv] = Migrate::CollapseTable.new(rv.name)
+              h = helpers[rv] = Migrate::CollapseTable.new(rv)
               yield(h)
               script << h
               helpers.delete(rv)
@@ -83,7 +91,7 @@ module DbAgile
           # Ensures inexistence of a list of schema objects
           def collapse_objects(schema_objects)
             schema_objects.each do |object|
-              case s = object.status
+              case s = status[object]
                 when Status::TO_DROP, Status::TO_ALTER
                   collapse_object(object)
                 when Status::NO_CHANGE, Status::DROPPED
@@ -99,10 +107,10 @@ module DbAgile
           def collapse_object(object)
             parent = object.parent
         
-            case parent.status
+            case status[parent]
               when Status::DROPPED
                 # nothing do do, parent has certainly removed me
-                object.status = Status::DROPPED
+                status[object] = Status::DROPPED
               when Status::TO_DROP
                 #
                 # Delegate to parent if it needs to be collapsed itself
@@ -111,9 +119,9 @@ module DbAgile
                 # many ALTER TABLE that will eventually fail (the last column)
                 #
                 collapse_object(parent)
-                object.status = Status::DROPPED
+                status[object] = Status::DROPPED
               else
-                object.status = Status::PENDING
+                status[object] = Status::PENDING
             
                 object.outside_dependents.each{|dep|
                   collapse_objects([ dep ])
@@ -122,13 +130,18 @@ module DbAgile
                 collapse_call = :"collapse_#{object.builder_handler}"
                 self.send(collapse_call, object)
             
-                object.status = Status::DROPPED
+                status[object] = Status::DROPPED
             end
           end
 
           # Collapses a relation variable
           def collapse_relvar(relvar)
-            script << DropTable.new(relvar.name)
+            script << Migrate::DropTable.new(relvar)
+          end
+
+          # Collapses a relation view
+          def collapse_relview(relview)
+            script << Migrate::DropView.new(relview)
           end
 
           # Collapses a candidate key
@@ -163,17 +176,17 @@ module DbAgile
             else
               # create the operation
               exists = relvar_exists?(rv)
-              h = exists ? Migrate::ExpandTable.new(rv.name) : Migrate::CreateTable.new(rv.name)
-              
+              h = exists ? Migrate::ExpandTable.new(rv) : Migrate::CreateTable.new(rv)
+            
               # execute sub operations and save
               yield(helpers[rv] = h)
               script << h
-              
+            
               # assert that the table now exists
               unless exists
                 relvar_exists!(rv)
               end
-              
+            
               # remove helper now
               helpers.delete(rv)
             end
@@ -182,7 +195,7 @@ module DbAgile
           # Ensures existence of a list of schema objects.
           def expand_objects(schema_objects)
             schema_objects.each do |object| 
-              case s = object.status
+              case s = status[object]
                 when Status::TO_CREATE, Status::TO_ALTER
                   expand_object(object)
                 when Status::NO_CHANGE, Status::CREATED
@@ -198,7 +211,7 @@ module DbAgile
           def expand_object(object)
             parent = object.parent
 
-            if parent.status == Status::TO_CREATE
+            if status[parent] == Status::TO_CREATE
               #
               # Delegate to parent if it needs to be ensured itself
               #
@@ -209,7 +222,7 @@ module DbAgile
               expand_object(parent)
             else
               # Mark the object as being currently created
-              object.status = Status::PENDING
+              status[object] = Status::PENDING
     
               # ensure dependencies
               expand_objects(object.outside_dependencies)
@@ -229,7 +242,7 @@ module DbAgile
               end
 
               # mark object as ensured!
-              object.status = Status::CREATED
+              status[object] = Status::CREATED
             end
           end
 
@@ -240,6 +253,10 @@ module DbAgile
           end
           alias :expand_relvar :expand_relvar_xxx
           alias :expand_heading :expand_relvar_xxx
+          
+          def expand_relview(rv)
+            script << Migrate::CreateView.new(rv)
+          end
 
           ### Parts
 

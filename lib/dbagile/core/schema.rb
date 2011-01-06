@@ -1,4 +1,5 @@
 require 'dbagile/core/schema/errors'
+require 'dbagile/core/schema/robustness'
 require 'dbagile/core/schema/schema_object'
 require 'dbagile/core/schema/builder'
 require 'dbagile/core/schema/computations'
@@ -6,6 +7,7 @@ require 'dbagile/core/schema/migrate'
 module DbAgile
   module Core
     module Schema
+      extend(Schema::Robustness)
 
       # An empty schema
       EMPTY_SCHEMA = Schema::DatabaseSchema.new
@@ -44,10 +46,10 @@ module DbAgile
         NO_CHANGE => :black,
         #
         CREATED   => :green,
-        DROPPED   => :red,
-        ALTERED   => :cyan,
-        PENDING   => :magenta,
-        DEFERED   => :black
+        DROPPED   => :green,
+        ALTERED   => :green,
+        PENDING   => :red,
+        DEFERED   => :red
       }
 
       #
@@ -123,10 +125,10 @@ module DbAgile
         case path_or_io
           when String
             File.open(path_or_io, 'r'){|io| yaml_load(io, builder) }
-          when IO, File
+          when IO, File, Tempfile
             yaml_load(path_or_io, builder)
           else 
-            raise ArgumentError, "Unable to load schema from #{file}"
+            raise ArgumentError, "Unable to load schema from #{path_or_io}"
         end
       end
       module_function :yaml_file_load
@@ -150,6 +152,9 @@ module DbAgile
       #
       def minus(left, right, 
                 builder = DbAgile::Core::Schema::builder)
+        schema!(left, :left, caller)
+        schema!(right, :right, caller)
+        builder!(builder, :builder, caller)
         Computations::minus(left, right, builder)
       end
       module_function :minus
@@ -166,12 +171,48 @@ module DbAgile
       def merge(left, right, 
                 builder = DbAgile::Core::Schema::builder, 
                 &conflict_resolver)
+        schema!(left, :left, caller)
+        schema!(right, :right, caller)
+        builder!(builder, :builder, caller)
         if conflict_resolver.nil?
           conflict_resolver = DEFAULT_CONFLICT_RESOLVER_BLOCK
         end
         Computations::merge(left, right, builder, &conflict_resolver)
       end
       module_function :merge
+      
+      #
+      # Filters a schema according to a block
+      #
+      def filter(schema, options = {}, 
+                 builder = DbAgile::Core::Schema::builder, 
+                 &filter_block)
+        schema!(schema, :schema, caller)
+        hash!(options, :options, caller)
+        builder!(builder, :builder, caller)
+        options = Computations::Filter::DEFAULT_OPTIONS.merge(options)
+        filtered = Schema::Computations::filter(schema, options, builder, &filter_block)._strip!
+        if options[:identifier]
+          filtered.schema_identifier = options[:identifier]
+        end
+        filtered
+      end
+      module_function :filter
+        
+      #
+      # Splits a schema according to a block
+      #
+      def split(schema, options = {}, &filter_block)
+        schema!(schema, :schema, caller)
+        hash!(options, :options, caller)
+        options = Computations::Split::DEFAULT_OPTIONS.merge(options)
+        Schema::Computations::split(schema, options, &filter_block)
+      end
+      module_function :split
+      
+      ##############################################################################
+      ### About Schema scripts
+      ##############################################################################
       
       #
       # Computes and returns a list of abstract operations to perform on a database

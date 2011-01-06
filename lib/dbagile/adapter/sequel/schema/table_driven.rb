@@ -43,7 +43,16 @@ module DbAgile
     
         # @see DbAgile::Contract::Schema::TableDriven#keys
         def keys(table_name)
-          db.indexes(table_name).values.select{|i| i[:unique] == true}.collect{|i| i[:columns]}.sort{|a1, a2| a1.size <=> a2.size}
+          # take the indexes
+          indexes = db.indexes(table_name).values
+          indexes = indexes.select{|i| i[:unique] == true}.collect{|i| i[:columns]}.sort{|a1, a2| a1.size <=> a2.size}
+
+          # take single keys as well
+          key = db.schema(table_name).select{|pair|
+            pair[1][:primary_key]
+          }.collect{|pair| pair[0]}
+
+          key.empty? ? indexes : (indexes + [ key ])
         end
     
       end # module TableDriven

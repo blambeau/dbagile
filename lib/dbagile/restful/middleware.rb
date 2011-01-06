@@ -28,7 +28,7 @@ module DbAgile
       # Installs the delegates
       def _install
         @delegates = {}
-        environment.repository(false).each{|db|
+        environment.repository.each{|db|
           @delegates[db.name] = Middleware::OneDatabase.new(db)
         }
       end

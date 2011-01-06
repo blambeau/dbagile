@@ -1,4 +1,3 @@
-require 'stringio'
 module DbAgile
   #
   # Provides helper methods about fixture databases
@@ -7,24 +6,38 @@ module DbAgile
     include DbAgile::Environment::Delegator
     include DbAgile::Tools::Tuple
     
+    # Returns path to a repository
+    def repository_path(name)
+      File.expand_path("../fixtures/#{name}", __FILE__)
+    end
+    
+    # Cleans and recreated the empty repository
+    def ensure_empty_repository!
+      path = repository_path(:empty)
+      FileUtils.rm_rf(path)
+      DbAgile::Core::Repository::create!(path)
+      path
+    end
+    
     # Returns the fixture environment
     def environment
       env = DbAgile::Environment.new 
-      env.repository_path = File.expand_path('../fixtures/configs/dbagile.cfg', __FILE__)
-      env.history_file_path = File.expand_path('../fixtures/configs/dbagile.history', __FILE__)
+      env.repository_path = repository_path(:basics)
       env.output_buffer = StringIO.new
+      env.message_buffer = StringIO.new
+      env.interactive = true
       env.console_width = 10
       env
     end
     
     # Returns the path to the table/basic_values.rb file
     def basic_values_path
-      File.expand_path('../fixtures/tables/basic_values.rb', __FILE__)
+      File.expand_path('../fixtures/basics/data/basic_values.rb', __FILE__)
     end
     
     # Yields the block with each table file in turn
     def each_table_file
-      Dir[File.expand_path('../fixtures/tables/*.rb', __FILE__)].each{|file| 
+      Dir[File.expand_path('../fixtures/basics/data/*.rb', __FILE__)].each{|file| 
         name = File.basename(file, ".rb")
         yield(name, file)
       }
@@ -32,8 +45,8 @@ module DbAgile
     
     # Creates the physical databases for fixtures
     def create_physical_databases
-      FileUtils.rm_rf File.expand_path('../fixtures/configs/test.db', __FILE__)
-      FileUtils.rm_rf File.expand_path('../fixtures/configs/robust.db', __FILE__)
+      FileUtils.rm_rf File.expand_path('../fixtures/basics/test.db', __FILE__)
+      FileUtils.rm_rf File.expand_path('../fixtures/basics/robust.db', __FILE__)
       require 'readline'
       puts "#################################################################################"
       puts "ATTENTION: This task will create physical test databases on your computer"
@@ -68,7 +81,7 @@ module DbAgile
         dba.repository.each do |db|
           if db.ping?
             puts "Installing fixture database on #{db.name.inspect}"
-            dba.repo_use(db.name)
+            dba.db_use(db.name)
             each_table_file{|name, file|
               dba.bulk_import ["--ruby", "--drop-table", "--create-table", "--input=#{file}", name]
             }

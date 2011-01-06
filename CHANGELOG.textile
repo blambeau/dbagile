@@ -1,5 +1,28 @@
 h1. CHANGELOG
 
+h2. Version 0.0.2
+
+h3. Major enhancements
+
+* Added support for SQL views in yaml schemas
+* Added a --update option to bulk:import which forces a "INSERT or UPDATE" on existing key values.
+* Added --include and --exclude options to schema:dump
+* Added --stdin option to schema:check, schema:dump and schema:sql-script
+
+h3. Minor enhancements
+
+* Restful POST now does a "INSERT or UPDATE" when a key value already exists (will certainly change in the future)
+* Added a basic HTML io generation and --html on bulk:export
+* Schema parts ordering is now guaranteed using ruby 1.9
+
+h3. Bugfixes
+
+* Fixed the --dry-run option of bulk:import
+* Fixed a contract bug in Sequel's contract implementation (update returns updated tuple)
+* Fixed a bug on attribute default being _false_
+* Fixed bugs in SchemaObject's query methods about object kinds
+
 h2. Version 0.0.1
 
+* Initial dba subcommands
 * Project start.

@@ -1,0 +1,6 @@
+---
+logical:
+  SUPPLIERS:
+    heading:
+      s#: { domain: Integer, mandatory: true }
+    constraints: {}

@@ -20,11 +20,6 @@ module DbAgile
         # Table which must be dropped
         attr_accessor :table
       
-        # Returns command's category
-        def category
-          :sql
-        end
-
         # Normalizes the pending arguments
         def normalize_pending_arguments(arguments)
           self.table = valid_argument_list!(arguments, Symbol)

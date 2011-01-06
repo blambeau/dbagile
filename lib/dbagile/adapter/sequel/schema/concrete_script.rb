@@ -10,27 +10,77 @@ module DbAgile
           buffer
         end
         
+        def create_view(conn, op, buffer)
+          tname = conn.send(:quote_schema_table, op.table_name)
+          buffer <<  "CREATE VIEW #{tname} AS #{op.relview.definition};" << "\n"
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
+        def drop_view(conn, op, buffer)
+          tname = conn.send(:quote_schema_table, op.table_name)
+          buffer <<  "DROP VIEW #{tname};" << "\n"
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
         def create_table(conn, op, buffer)
           gen = Sequel::Schema::Generator.new(conn)
           build_sequel_expand_generator(conn, op, gen, "")
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         def expand_table(conn, op, buffer)
           gen = Sequel::Schema::AlterTableGenerator.new(conn)
           build_sequel_expand_generator(conn, op, gen, "add_")
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         def collapse_table(conn, op, buffer)
           gen = Sequel::Schema::AlterTableGenerator.new(conn)
           build_sequel_collapse_generator(conn, op, gen, "drop_")
           buffer << to_sql(conn, op, gen)
+          staged!(op)
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
         end
 
         # Drops table
         def drop_table(conn, op, buffer)
           buffer << conn.send(:drop_table_sql, op.table_name) << ";\n"
+          op.relvar.visit{|obj,parent| op.staged!(obj)}
+        rescue Sequel::Error => ex
+          buffer << "-- UNSUPPORTED: #{op.to_sql92}" << "\n"
+          unsupported!(op)
+        end
+        
+        # Mark objects as staged for an operation
+        def staged!(op)
+          if op.supports_sub_operation?(nil)
+            op.each_sub_operation{|kind, operand| op.staged!(operand)}
+          end
+          op.staged!(op.relvar)
+        end
+        
+        # Mark objects as not staged for an operation
+        def unsupported!(op)
+          if op.supports_sub_operation?(nil)
+            op.each_sub_operation{|kind, operand| op.not_staged!(operand)}
+          end
+          op.not_staged!(op.relvar)
         end
         
         # Builds a sequel expand generator

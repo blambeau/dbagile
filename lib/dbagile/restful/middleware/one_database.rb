@@ -10,6 +10,7 @@ module DbAgile
         include Middleware::Get
         include Middleware::Post
         include Middleware::Delete
+        include DbAgile::Tools::Tuple
         
         # Database instance
         attr_reader :database

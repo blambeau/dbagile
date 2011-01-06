@@ -3,6 +3,8 @@ describe "DbAgile::Core::Schema#merge" do
   
   let(:left)             { DbAgile::Fixtures::Core::Schema::schema(:left)  }
   let(:right)            { DbAgile::Fixtures::Core::Schema::schema(:right) }
+  let(:empty)            { DbAgile::Fixtures::Core::Schema::schema(:empty) }
+  let(:sap)              { DbAgile::Fixtures::Core::Schema::schema(:suppliers_and_parts) }
   
   it "should correctly label all nodes without conflict resolver" do
     status = DbAgile::Core::Schema
@@ -54,6 +56,17 @@ describe "DbAgile::Core::Schema#merge" do
   it "should raise a conflict error with a resolver" do
     lambda{ left + right }.should raise_error(DbAgile::SchemaConflictError)
     lambda{ DbAgile::Core::Schema::merge(left, right) }.should raise_error(DbAgile::SchemaConflictError)
+  end
+  
+  it "should be robust enough when merging not similar things" do
+    lambda{ left + empty }.should_not raise_error
+    lambda{ right + empty }.should_not raise_error
+    lambda{ empty + right }.should_not raise_error
+    lambda{ empty + left }.should_not raise_error
+    lambda{ empty + empty }.should_not raise_error
+    lambda{ sap + empty }.should_not raise_error
+    lambda{ sap + left }.should_not raise_error
+    lambda{ sap + right }.should_not raise_error
   end
   
 end

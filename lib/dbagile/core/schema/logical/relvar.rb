@@ -11,6 +11,7 @@ module DbAgile
           def initialize(name, parts = _default_parts)
             @name = name.to_s.to_sym
             super(parts)
+            @insert_order = [ :heading, :constraints ] & parts.keys
           end
           
           ############################################################################
@@ -28,10 +29,6 @@ module DbAgile
              :constraints => Schema::Logical::Constraints.new}
           end
           
-          def _prefered_order
-            [ :heading, :constraints ]
-          end
-        
           # Makes a sanity check on the part
           def _sanity_check(schema)
             raise SchemaInternalError, "No name provided on #{self}" if name.nil?

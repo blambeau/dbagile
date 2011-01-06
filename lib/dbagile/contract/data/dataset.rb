@@ -46,6 +46,15 @@ module DbAgile
         end
       
         # 
+        # Outputs this dataset as a HTML string
+        #
+        # @return [...] the buffer itself
+        #
+        def to_html(buffer = "", options = {})
+          DbAgile::IO::HTML::to_html(self, self.columns, buffer, options)
+        end
+      
+        # 
         # Outputs this dataset as a Ruby Array of hashes string
         #
         # @return [...] the buffer itself

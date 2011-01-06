@@ -1,10 +1,21 @@
+require 'dbagile/core/repository/yaml_methods'
+require 'dbagile/core/repository/builder'
 module DbAgile
   module Core
     class Repository
       include Enumerable
+      extend Repository::YAMLClassMethods
+      include Repository::YAMLInstanceMethods
     
-      # Path to the actual file
-      attr_reader :file
+      # Index file name
+      REPOSITORY_INDEX_FILE_NAME = "dbagile.idx"
+    
+      # Path to the root path of the repository
+      attr_reader :root_path
+    
+      # Repository version
+      attr_accessor :version
+      private :version=
     
       # Databases as an array of Database instances
       attr_reader :databases
@@ -16,14 +27,47 @@ module DbAgile
       ### Initialization and parsing
       #############################################################################################
     
-      # Creates a repository instance, by parsing content of file.
-      def initialize(file)
-        @file = file
+      # Creates a repository instance
+      def initialize(root_path, version = DbAgile::VERSION)
+        DbAgile::Robustness::valid_rw_directory!(root_path)
+        DbAgile::Robustness::valid_rw_file!(File.join(root_path, REPOSITORY_INDEX_FILE_NAME))
+        @root_path = root_path
+        @version = version
         @databases = []
+      end
+      
+      #############################################################################################
+      ### File management
+      #############################################################################################
+      
+      # Returns a friendly path to be printed to user
+      def friendly_path
+        DbAgile::FileSystemTools::friendly_path!(root_path)
+      end
+      
+      # Returns the path to the index file
+      def index_file
+        File.join(root_path, REPOSITORY_INDEX_FILE_NAME)
+      end
+    
+      # Returns a file resolver Proc instance
+      def file_resolver
+        @file_resolver ||= lambda{|f| 
+          if f[0, 1] == '/'
+            f
+          else
+            File.join(File.expand_path(self.root_path), f) 
+          end
+        }
+      end
+      
+      # Resolves a file which could be relative to repository root path
+      def resolve_file(f)
+        file_resolve.call(f)
       end
     
       #############################################################################################
-      ### Queries
+      ### About databases
       #############################################################################################
     
       # Checks if at least one database exists
@@ -80,13 +124,7 @@ module DbAgile
     
       # Adds a database instance
       def <<(db)
-        db.file_resolver = lambda{|f| 
-          if f[0, 1] == '/'
-            f
-          else
-            ::File.expand_path("../#{f}", self.file) 
-          end
-        }
+        db.file_resolver = file_resolver
         self.databases << db
       end
     
@@ -97,61 +135,66 @@ module DbAgile
       end
     
       #############################################################################################
-      ### YAML input/output
+      ### Input/output
       #############################################################################################
+      
+      #
+      # Loads a repository from a root path
+      #
+      # @param [String] root_path path to a repository folder
+      # @raise IOError if required repository files do not exists or access is denied 
+      # @raise DbAgile::CorruptedRepositoryError if anything goes wrong
+      #
+      def self.load(root_path)
+        # some checks first
+        DbAgile::Robustness::valid_rw_directory!(root_path)
+        index_file = File.join(root_path, REPOSITORY_INDEX_FILE_NAME)
+        msg = "Not a dbagile repository, missing or access denied on #{index_file}"
+        DbAgile::Robustness::valid_rw_file!(index_file, msg)
+        
+        # loading
+        begin
+          from_yaml_file(index_file, root_path) 
+        rescue StandardError => ex
+          msg = "Repository corruped: #{ex.message}"
+          raise DbAgile::CorruptedRepositoryError, msg, ex.backtrace
+        end
+      end
+      
+      # 
+      # Creates a fresh new repository somewhere
+      #
+      # @param [String] root_path path to an unexisting repository folder
+      # @return [Repository] the created repository instance
+      # @raise IOError is the repository already exists or cannot be created.
+      #
+      def self.create!(root_path)
+        DbAgile::Robustness::unexisting_directory!(root_path)
+        index_file = File.join(root_path, REPOSITORY_INDEX_FILE_NAME)
+        FileUtils.mkdir_p(root_path)
+        FileUtils.touch(index_file)
+        repo = Repository.new(root_path, DbAgile::VERSION)
+        repo.save!
+      end
     
-      # Dumps the schema to YAML
-      def to_yaml(opts = {})
-        YAML::quick_emit(self, opts){|out|
-          dbmap = {}
-          databases.each{|db| dbmap[db.name.to_s] = db}
-          out.map("tag:yaml.org,2002:map") do |map|
-            map.add('databases', dbmap)
-            map.add('current', self.current_db_name.to_s)
-          end
-        }
+      #
+      # Saves the repository
+      #
+      # @return [Repository] the repository itself
+      # @raise IOError if something goes wrong when saving the repository
+      #
+      def save!
+        DbAgile::Robustness::valid_rw_file!(self.index_file)
+        flush(self.index_file)
+        self
       end
-      
-      # Loads from a YAML file
-      def self.from_yaml(str, file = nil)
-        # Load the hash
-        hash = YAML::load(str)
-        
-        # create the repository instance
-        repo = Repository.new(file)
-        
-        # load databases
-        hash['databases'].each_pair{|dbname, dbconfig|
-          db = Core::Database.new(dbname.to_s.to_sym)
-          db.file_resolver = repo
-          dbconfig.each_pair{|key, value|
-            db.send(:"#{key}=", value)
-          }
-          repo << db
-        }
-        
-        # Set current database
-        current = hash['current'].to_s.strip
-        unless current.empty?
-          repo.current_db_name = current.to_sym
-        end
-        
-        repo
-      end
-      
-      # Loading from a YAML file
-      def self.from_yaml_file(file)
-        if File::exists?(file) and File::file?(file)
-          from_yaml(File.read(file), file)
-        else
-          Repository.new(file)
-        end
-      rescue StandardError => ex
-        msg = "Repository index #{file} seems corruped: #{ex.message}"
-        raise DbAgile::CorruptedRepositoryError, msg, ex.backtrace
-      end
-        
-      # Flushes the repository into a given file
+    
+      # 
+      # Flushes the repository into a given file or IO
+      #
+      # This method is not robust to dir/file errors and should be protected
+      # upstream.
+      #
       def flush(output_file)
         if output_file.kind_of?(::IO)
           output_file << to_yaml
@@ -161,11 +204,8 @@ module DbAgile
         self
       end
     
-      # Flushes the repository into the source file
-      def flush!
-        flush(self.file)
-      end
-    
+      private :flush
+      private_class_method :from_yaml_file, :from_yaml
     end # class Repository
   end # module Core
 end # module DbAgile

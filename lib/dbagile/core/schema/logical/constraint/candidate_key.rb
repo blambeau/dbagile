@@ -13,6 +13,11 @@ module DbAgile
             definition[:type] == :primary_key
           end
           
+          # Returns attribute names
+          def attribute_names
+            definition[:attributes]
+          end
+          
           # Returns key attributes
           def key_attributes
             rv = relation_variable

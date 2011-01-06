@@ -30,10 +30,18 @@ module DbAgile
     # Right schema object
     attr_reader :right
     
+    # Part name
+    attr_reader :part_name
+    
     # Creates an error instance
-    def initialize(left, right)
+    def initialize(left, right, part_name = nil)
       @left, @right = left, right
+      @part_name = part_name
       super(left.parent)
+    end
+    
+    def message
+      "Schema conflict occured on #{left} : #{part_name}"
     end
     
   end # class SchemaConflictError
@@ -94,13 +102,11 @@ module DbAgile
       TargetKeyMismatch
     ]
     MESSAGE_VALUES = [
-      'invalid default value on attribute #{schema_object.name}',
+      'invalid default value \'#{schema_object.default_value}\' on #{schema_object}',
       'relvar #{schema_object.relation_variable.name} has an empty heading (unsupported so far)',
       'relvar #{schema_object.name} has no primary key',
       'invalid constraint #{schema_object.name} on #{schema_object.relation_variable.name}',
-      
       'invalid index #{schema_object.name}',
-      
       'no such relvar #{args[:relvar_name]}',
       'no such attributes #{args[:attributes].join(\',\')}',
       'no such candidate key #{args[:constraint_name]}',

@@ -34,7 +34,7 @@ module DbAgile
         @announced_files = []
         @effective_files = []
         @file_resolver = lambda{|f| ::File.expand_path(f) }
-        @connector = ::DbAgile::Core::Connector.new
+        @chain = ::DbAgile::Core::Chain.new
       end
       
       
@@ -43,10 +43,10 @@ module DbAgile
       ### About connector
       ##############################################################################
       
-      # @see Connector#plug
+      # @see Chain#plug
       def plug(*args)
         (@plugs ||= []).push(*args)
-        @connector.plug(*args)
+        @chain.plug(*args)
       end
       
       # Installs plugins
@@ -77,7 +77,7 @@ module DbAgile
         else
           raise DbAgile::Error, "A file resolver is required for using #{uri} as database uri"
         end
-        connector = @connector.connect(adapter)
+        connector = @chain.connect(adapter)
         Connection.new(connector)
       end
       
@@ -140,6 +140,23 @@ module DbAgile
         end
       end
       
+      # Overrides announced schema with a given schema
+      def set_announced_schema(schema)
+        # Set announced files
+        self.announced_files ||= []
+        case announced_files.size
+          when 0
+            FileUtils.mkdir_p(file_resolver.call(name))
+            self.announced_files = [ "#{name}/announced.yaml" ]
+          when 1
+          else 
+            raise "Unable to set announced schema with multiple effective files"
+        end
+        ::File.open(file_resolver.call(announced_files[0]), 'w') do |io|
+          io << schema.to_yaml
+        end
+      end
+      
       # Returns the effective schema. If no effective files are installed and 
       # unstage is true, returns the physical schema. Returns nil otherwise.
       def effective_schema(unstage = false)
@@ -154,12 +171,17 @@ module DbAgile
       
       # Overrides effective schema with a given schema
       def set_effective_schema(schema)
-        return unless has_effective_schema?
-        if effective_files.size > 1
-          raise "Unable to set effective schema with multiple effective files"
+        # Set effective files
+        self.effective_files ||= []
+        case effective_files.size
+          when 0
+            FileUtils.mkdir_p(file_resolver.call(name.to_s))
+            self.effective_files = [ "#{name}/effective.yaml" ]
+          when 1
+          else 
+            raise "Unable to set effective schema with multiple effective files"
         end
-        file = file_resolver.call(effective_files[0])
-        ::File.open(file, 'w') do |io|
+        ::File.open(file_resolver.call(effective_files[0]), 'w') do |io|
           io << schema.to_yaml
         end
       end

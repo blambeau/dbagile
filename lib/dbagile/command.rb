@@ -9,12 +9,13 @@ module DbAgile
     extend ::DbAgile::Command::ClassMethods
     
     # Command categories
-    CATEGORIES = [:dba, :repo, :sql, :schema, :bulk, :web]
+    CATEGORIES = [:dba, :repo, :db, :sql, :schema, :bulk, :web]
     
     # Names of the categories
     CATEGORY_NAMES = {
       :dba           => "Main commands:",
       :repo          => "Repository management:",
+      :db            => "Database management:",
       :bulk          => "Import/Export management:",
       :sql           => "SQL:",
       :schema        => "Database schema:",
@@ -34,6 +35,11 @@ module DbAgile
       set_default_options
     end
     
+    # Returns commands category
+    def category
+      self.class.category
+    end
+      
     # Returns command name
     def command_name
       self.class.command_name
@@ -82,11 +88,6 @@ module DbAgile
     ### Command info/help and so on.
     ##############################################################################
       
-    # Returns commands category
-    def category
-      raise "Command.category should be overriden by subclasses"
-    end
-      
     # Shows the help
     def show_help
       display banner
@@ -134,11 +135,12 @@ end # module DbAgile
 # :dba category
 require 'dbagile/command/dba'
 require 'dbagile/command/help'
-require 'dbagile/command/history'
-require 'dbagile/command/replay'
 
 # :repo category
 require 'dbagile/command/repo'
+
+# :db category
+require 'dbagile/command/db'
 
 # :bulk category
 require 'dbagile/command/bulk'

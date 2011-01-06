@@ -4,8 +4,12 @@ module DbAgile
       include DbAgile::Core::IO::Robustness
       
       # Raises an OptionParser::InvalidArgument
-      def bad_argument_list!(rest)
-        raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
+      def bad_argument_list!(rest, expected_name = nil)
+        if rest.empty?
+          raise OptionParser::MissingArgument, "#{expected_name}"
+        else
+          raise OptionParser::InvalidArgument, "#{rest.join(' ')}"
+        end
       end
       
       # Raises an OptionParser::AmbiguousArgument
@@ -36,6 +40,16 @@ module DbAgile
         end
       end
       
+      # Asserts that an argument matches some candidates or
+      # raises a OptionParser::InvalidArgument error.
+      def is_in!(name, value, candidates)
+        value = valid_argument_list!([ value ], candidates.first.class)
+        unless candidates.include?(value)
+          raise OptionParser::InvalidArgument, "Expected one of #{candidates.inspect} for #{name}"
+        end
+        value
+      end
+      
       # Checks that a file exists and can be read or raises an IO error
       def valid_read_file!(file)
         raise IOError, "Unable to read #{file}" unless File.file?(file) and File.readable?(file)
@@ -58,6 +72,13 @@ module DbAgile
         else
           cmd
         end
+      end
+      
+      #
+      # Raises a DbAgile::AssumptionFailedError with a specific message
+      #
+      def assumption_error!(msg)
+        raise DbAgile::AssumptionFailedError, msg
       end
       
     end # module Robust

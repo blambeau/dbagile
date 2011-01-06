@@ -15,11 +15,6 @@ module DbAgile
         # The file to execute
         attr_accessor :file
       
-        # Returns command's category
-        def category
-          :sql
-        end
-      
         # Contribute to options
         def add_options(opt)
           opt.separator nil
@@ -61,7 +56,7 @@ module DbAgile
             when DbAgile::Contract::Data::Dataset
               result.to_text(environment.output_buffer)
             else
-              display(result)
+              flush(result)
           end
           result
         end

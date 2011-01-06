@@ -31,6 +31,12 @@ module DbAgile
            :physical => Schema::Physical.new}
         end
         
+        # Strips this schema
+        def _strip!
+          logical._strip!
+          self
+        end
+        
         ############################################################################
         ### SchemaObject
         ############################################################################
@@ -63,32 +69,20 @@ module DbAgile
       
 
         # Returns a yaml string
-        def yaml_say(env, 
-                     options = {}, 
-                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
-                     indent = 0)
-          env.say("---\nlogical:")
-          self.logical.yaml_say(env, options, colors, indent + 1)
-          env.say("\n---\nphysical:")
-          self.physical.yaml_say(env, options, colors, indent + 1)
+        def yaml_display(env, 
+                         options = {}, 
+                         colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
+                         indent = 0)
+          env.display("---\nlogical:")
+          logical.yaml_display(env, options, colors, indent + 1)
+          env.display("\n---\nphysical:")
+          physical.yaml_display(env, options, colors, indent + 1)
         end
         
         ############################################################################
         ### Computations
         ############################################################################
           
-        # Applies schema minus
-        def minus(other)
-          Schema::minus(self, other)
-        end
-        alias :- :minus
-      
-        # Applies schema merging
-        def merge(other)
-          Schema::merge(self, other)
-        end
-        alias :+ :merge
-        
         # Applies schema checking and raises a SchemaSemanticsError if something is wrong.
         def check!(raise_on_error = true)
           errors = SchemaSemanticsError.new(self)
@@ -105,6 +99,28 @@ module DbAgile
           check!(false).empty?
         end
       
+        # Applies schema minus
+        def minus(other)
+          Schema::minus(self, other)
+        end
+        alias :- :minus
+      
+        # Applies schema merging
+        def merge(other)
+          Schema::merge(self, other)
+        end
+        alias :+ :merge
+        
+        # Applies schema filtering
+        def filter(options = {}, &filter_block)
+          Schema::filter(self, options, &filter_block)
+        end
+        
+        # Applies schema splitting
+        def split(options = {}, &split_block)
+          Schema::split(self, options, &split_block)
+        end
+        
       end # class DatabaseSchema
     end # module Schema
   end # module Core

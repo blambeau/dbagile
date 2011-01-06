@@ -14,7 +14,7 @@ module DbAgile
             end
             
             # Computes key differences
-            left_keys, right_keys = left.part_keys(true), right.part_keys(true)
+            left_keys, right_keys = left.part_keys, right.part_keys
             left_only  = left_keys - right_keys
             right_only = right_keys - left_keys
             commons    = left_keys & right_keys 

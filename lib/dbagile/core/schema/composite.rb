@@ -59,13 +59,38 @@ module DbAgile
         end
         
         protected
+        
+        # Removes empty objects from parts
+        def _strip!
+          to_remove = part_keys.select{|k| 
+            self[k].composite? and self[k].empty?
+          }
+          @composite_parts.delete_if{|k, v| 
+            to_remove.include?(k)
+          }
+          if @insert_order
+            @insert_order -= to_remove 
+          end
+          _sanity_check(schema)
+          self
+        end
+        
         # Makes a sanity check on the composite
         def _sanity_check(schema)
+          if @insert_order
+            too_much = @insert_order - @composite_parts.keys
+            missing = @composite_parts.keys - @insert_order
+            unless too_much.empty? and missing.empty?
+              raise SchemaInternalError, "Key divergence" 
+            end
+          end
           parts.each{|p| 
             raise SchemaInternalError, "Invalid parent on #{self}" unless p.parent == self
             raise SchemaInternalError, "Invalid schema on on #{self}" unless p.schema == schema
             p._sanity_check(schema) 
           }
+        rescue StandardError => ex
+          raise SchemaInternalError, "Something goes wrong on #{self}: #{ex.message}", ex.backtrace
         end
       
         # Checks this composite's semantics and collect errors
@@ -115,7 +140,7 @@ module DbAgile
         end
       
         # @see DbAgile::Core::SchemaObject
-        def part_keys(sort = false)
+        def part_keys(sort = (RUBY_VERSION < "1.9"))
           if sort
             @composite_parts.keys.sort{|k1,k2| k1.to_s <=> k2.to_s}
           else
@@ -136,7 +161,7 @@ module DbAgile
         # @see DbAgile::Core::SchemaObject
         def []=(name, part, status = nil)
           if @composite_parts.key?(name)
-            raise SchemaConflictError.new(self[name], part)
+            raise SchemaConflictError.new(self[name], part, name)
           end
           @composite_parts[name] = part
           (@insert_order ||= []) << name
@@ -163,10 +188,10 @@ module DbAgile
         end
         
         # Returns a yaml string
-        def yaml_say(env, 
-                     options = {}, 
-                     colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
-                     indent = 0)
+        def yaml_display(env, 
+                         options = {}, 
+                         colors = DbAgile::Core::Schema::STATUS_TO_COLOR, 
+                         indent = 0)
           part_keys.each{|k|
             part = self[k]
             status = part.status.to_s.ljust(25)
@@ -174,13 +199,13 @@ module DbAgile
             if show_it
               mine = "  "*indent + k.to_s + ":"
               if part.composite?
-                env.say(mine, colors[part.status])
-                part.yaml_say(env, options, colors, indent+1)
+                env.display(mine, colors[part.status])
+                part.yaml_display(env, options, colors, indent+1)
               else
                 part_str = part.to_yaml
                 part_str =~ /---\s*(.*)$/
                 part_str = $1
-                env.say(mine + " " + part_str, colors[part.status])
+                env.display(mine + " " + part_str, colors[part.status])
               end
             end
           }

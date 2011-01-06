@@ -7,36 +7,35 @@ h2. Motivation
 Have you ever dreamed of having one central point for keeping your database access infos?
 
 <pre class="shell">
-  sh$ dba list
-  sh$ dba use contacts
+  sh$ dba db:list
+  sh$ dba db:use my_contacts
 </pre> 
 
 Or displaying a SQL table (say, 'contacts') in one shell command?
 
 <pre class="shell">
-  sh$ dba show contacts
+  sh$ dba sql:show contacts
 </pre> 
 
 Or to output the result of any SQL query to yaml, json, csv, ruby, ... or even xml?
 
 <pre class="shell">
-  sh$ dba export --yaml "SELECT name, mail FROM contacts" 
+  sh$ dba bulk:export --yaml "SELECT name, mail FROM contacts" 
 </pre> 
 
 Or to have a Restful server on top of SQL databases?
 
 <pre class="shell">
-  dba webtools
+  dba web:tools
 </pre>
 
 Making similar things, ... in Ruby?
 
 <pre>
   DbAgile::dba do |dba|
-    # Override environment default values (~/.dbagile, ...)
-    dba.repository_path  = ...      # your application own repository folder
-    dba.history_file_path = nil     # no history
-    dba.output_buffer     = ...     # keep messages in any object supporting :<< (STDOUT by default)
+    # Override environment default values (~/.dbagile, STDOUT)
+    dba.repository_path  = ...      # your application database repository
+    dba.output_buffer     = ...     # keep output in any IO object
   
     # Start using dbagile commands
     dba.bulk_export %w{--yaml contacts}  # each line pushed in output_buffer
@@ -55,8 +54,7 @@ The Rack middleware for the restful server (config.ru):
     #          resolved in Rack scope, which contains a File class. Not
     #          doing this may mead to bugs in certain ruby versions.
     #
-    env.repository_path  = ::File.expand_path('../dbagile.config', __FILE__)
-    env.history_file_path = nil
+    env.repository_path  = ::File.expand_path('../dbagile', __FILE__)
   }
 </pre>
 
