@@ -7,6 +7,7 @@ h3. Major enhancements
 * Added support for SQL views in yaml schemas
 * Added a --update option to bulk:import which forces a "INSERT or UPDATE" on existing key values.
 * Added --include and --exclude options to schema:dump
+* Added --stdin option to schema:check, schema:dump and schema:sql-script
 
 h3. Minor enhancements
 

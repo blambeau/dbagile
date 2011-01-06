@@ -85,6 +85,7 @@ module DbAgile
           opt.separator nil
           opt.separator "Options:"
           add_check_options(opt)
+          add_stdin_options(opt)
           opt.on('--include=x,y,z', Array, 
                  "Include object kinds (logical, physical, candidate_key, ...)") do |values|
             values.each{|value| include_kind!(value.to_sym)}

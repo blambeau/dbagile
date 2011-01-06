@@ -49,6 +49,7 @@ module DbAgile
           opt.separator nil
           opt.separator "Options:"
           add_check_options(opt)
+          add_stdin_options(opt)
         end
         
         # Returns :single
