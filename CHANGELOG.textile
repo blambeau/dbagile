@@ -13,6 +13,7 @@ h3. Minor enhancements
 
 * Restful POST now does a "INSERT or UPDATE" when a key value already exists (will certainly change in the future)
 * Added a basic HTML io generation and --html on bulk:export
+* Schema parts ordering is now guaranteed using ruby 1.9
 
 h3. Bugfixes
 

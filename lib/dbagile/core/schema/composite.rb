@@ -140,7 +140,7 @@ module DbAgile
         end
       
         # @see DbAgile::Core::SchemaObject
-        def part_keys(sort = false)
+        def part_keys(sort = (RUBY_VERSION < "1.9"))
           if sort
             @composite_parts.keys.sort{|k1,k2| k1.to_s <=> k2.to_s}
           else
