@@ -65,11 +65,12 @@ module DbAgile
             cmd_text
           else
             # Execute the command
-            result = if silent? 
-              `#{cmd_text}`
+            pid = if silent? 
+              Kernel.spawn(cmd_text, {:out => :close, :err => :close})
             else
-              Kernel.system(cmd_text)
+              Kernel.spawn(cmd_text)
             end
+            Process.wait(pid)
             
             # Save process status
             process_status = $?
