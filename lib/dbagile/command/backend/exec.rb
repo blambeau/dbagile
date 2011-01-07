@@ -31,7 +31,7 @@ module DbAgile
           opt.on("--verbose", "-v", "Print additional information about sub-process execution") do
             self.verbose = 1
           end
-          opt.on("--silent", "-s", "Be quiet, even silent (don't print anything at all)") do
+          opt.on("--silent", "-s", "Be silent (don't print anything at all)") do
             self.verbose = -1
           end
         end
