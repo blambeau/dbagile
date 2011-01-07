@@ -1,5 +1,11 @@
 module DbAgile
   
+  # Raised when a backend name is not valid
+  class InvalidBackendName < DbAgile::Error; end
+  
+  # Raised when a backend cannot be found
+  class NoSuchBackendError < DbAgile::Error; end
+  
   # Raised when a database name is not valid
   class InvalidDatabaseName < DbAgile::Error; end
   

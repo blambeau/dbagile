@@ -71,6 +71,38 @@ module DbAgile
       end
     
       #############################################################################################
+      ### About backends
+      #############################################################################################
+    
+      # Checks if a backend exists
+      def has_backend?(name)
+        !backend(name).nil?
+      end
+    
+      # Yields the block with each backend in turn
+      def each_backend(*args, &block)
+        backends.each(*args, &block)
+      end
+    
+      # Returns a backend by match. Returns nil if no such backend
+      def backend(match)
+        return match if match.kind_of?(::DbAgile::Core::Backend)
+        backends.find{|c| 
+          case match
+            when Symbol, String
+              c.name.to_s == match.to_s
+            when Regexp
+              match =~ c.name.to_s
+          end
+        }
+      end
+    
+      # Adds a backend instance
+      def add_backend(backend)
+        self.backends << backend
+      end
+    
+      #############################################################################################
       ### About databases
       #############################################################################################
     
@@ -98,9 +130,10 @@ module DbAgile
       end
     
       # Yields the block with each database in turn
-      def each(*args, &block)
+      def each_database(*args, &block)
         databases.each(*args, &block)
       end
+      alias :each :each_database
     
       # Returns a database by match. Returns nil if no such database
       def database(match)
@@ -120,15 +153,6 @@ module DbAgile
       # Returns the current database
       def current_database
         database(current_db_name)
-      end
-    
-      #############################################################################################
-      ### Updates
-      #############################################################################################
-      
-      # Adds a backend instance
-      def add_backend(backend)
-        self.backends << backend
       end
     
       # Adds a database instance

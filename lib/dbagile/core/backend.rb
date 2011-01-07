@@ -44,7 +44,11 @@ module DbAgile
       def instantiate_command(name)
         if cmd_text = commands[name]
           cmd_text = "<<EOF\n#{cmd_text}\nEOF"
-          config.instance_eval(cmd_text)
+          cmd_text = config.instance_eval(cmd_text)
+          if w = wrappers[:default]
+            wrapped = "<<EOF\n#{w}\nEOF"
+            wrapped = config.merge(:command => cmd_text).instance_eval(wrapped)
+          end
         else
           raise DbAgile::NoSuchCommandError, "Unknown backend command #{name}"
         end

@@ -4,6 +4,36 @@ module DbAgile
       module Robustness
         
         #
+        # Asserts that a backend name is valid or raises a InvalidBackendName 
+        # error. A valid backend name is a Symbol that matches /[a-z][a-z0-9_]*/.
+        #
+        # @returns [Symbol] name
+        # @raise DbAgile::InvalidBackendName if assertion fails
+        #
+        def valid_backend_name!(name)
+          raise DbAgile::InvalidBackendName, "Invalid backend name #{name}"\
+            unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
+          name
+        end
+      
+        #
+        # Asserts that a backend exists inside a Repository instance. 
+        #
+        # @param [DbAgile::Core::Repository] a repository
+        # @return [DbAgile::Core::Backend] the backend instance when found.
+        # @raise ArgumentError if repository is not a Repository instance
+        # @raise DbAgile::NoSuchBackendError if the backend cannot be found.
+        #
+        def has_backend!(repository, backend_name)
+          raise ArgumentError, "Repository expected, got #{repository}"\
+            unless repository.kind_of?(DbAgile::Core::Repository)
+          unless b = repository.backend(backend_name)
+            raise DbAgile::NoSuchBackendError, "Unknown backend #{backend_name}"
+          end
+          b
+        end
+        
+        #
         # Asserts that a database name is valid or raises a InvalidDatabaseName 
         # error. A valid database name is a Symbol that matches /[a-z][a-z0-9_]*/.
         #
