@@ -21,13 +21,17 @@ module DbAgile
         require 'rubygems'
         gem gem_name, gem_version
         require gem_name
-      rescue StandardError => ex
-        if msg.nil?
-          msg = gem_version.nil? ? gem_name : "#{gem_name} (#{gem_version})"
-          msg = "DbAgile requires #{msg} but failed to load it" 
+      rescue Exception => ex
+        begin
+          require File.expand_path("../../../../vendor/#{gem_name}", __FILE__)
+        rescue LoadError => ex
+          if msg.nil?
+            msg = gem_version.nil? ? gem_name : "#{gem_name} (#{gem_version})"
+            msg = "DbAgile requires #{msg} but failed to load it" 
+          end
+          msg = "#{msg}\n#{ex.message}"
+          raise DbAgile::DependencyError, msg, ex.backtrace
         end
-        msg = "#{msg}\n#{ex.message}"
-        raise DbAgile::DependencyError, msg, ex.backtrace
       end
       
     end # module Dependencies
