@@ -2,7 +2,7 @@ module DbAgile
   class Command
     module Backend
       #
-      # Executes a backend command
+      # Execute a backend command
       #
       # Usage: dba #{command_name} [options] BACKEND COMMAND
       #
@@ -18,6 +18,9 @@ module DbAgile
         # Dry-run ?
         attr_accessor :dry_run
       
+        # Verbose ?
+        attr_accessor :verbose
+      
         # Contribute to options
         def add_options(opt)
           opt.separator nil
@@ -25,6 +28,22 @@ module DbAgile
           opt.on("--dry-run", "Only print what would be executed but don't do it") do
             self.dry_run = true
           end
+          opt.on("--verbose", "-v", "Print additional information about sub-process execution") do
+            self.verbose = 1
+          end
+          opt.on("--silent", "-s", "Be quiet, even silent (don't print anything at all)") do
+            self.verbose = -1
+          end
+        end
+        
+        # Silent level activated?
+        def silent?
+          verbose && verbose < 0
+        end
+      
+        # Verbosity level activated?
+        def verbose?
+          verbose && verbose > 0
         end
       
         # Normalizes the pending arguments
@@ -42,9 +61,25 @@ module DbAgile
         def execute_command
           cmd_text = backend.instantiate_command(command)
           if dry_run
-            say cmd_text
+            say(cmd_text) unless silent?
+            cmd_text
           else
-            Kernel.exec cmd_text
+            # Execute the command
+            result = if silent? 
+              `#{cmd_text}`
+            else
+              Kernel.system(cmd_text)
+            end
+            
+            # Save process status
+            process_status = $?
+            
+            # Verbose information
+            if verbose?
+              say("exit status: #{process_status.exitstatus}", :magenta)
+            end
+            
+            process_status
           end
         end
       

@@ -1,5 +1,7 @@
 --- 
 version: 0.0.1
+backends: {}
+
 databases: 
   sqlite: 
     uri: test.db
