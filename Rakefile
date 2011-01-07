@@ -82,6 +82,7 @@ gemspec = Gem::Specification.new do |s|
   s.add_dependency('sbyc', '>= 0.1.4')
   s.add_dependency('sequel', '>= 0.3.8')
   s.add_dependency('highline', '>= 1.5.2')
+  s.add_dependency('map', '>= 2.1.0')
 end
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true

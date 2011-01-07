@@ -1,5 +1,19 @@
 --- 
 version: 0.0.1
+backends:
+  mysql:
+    config:
+      host: localhost
+      port: 3306
+      superuser: mysql
+    wrappers:
+      default: sudo -v && sudo #{command}
+    commands:
+      start:   /sbin/SystemStarter start   MySQL
+      stop:    /sbin/SystemStarter stop    MySQL
+      restart: /sbin/SystemStarter restart MySQL
+      status: |
+        mysqladmin --user=#{superuser} --host=#{host} --port=#{port} status
 databases: 
   production: 
     uri: postgres://postgres@localhost/test

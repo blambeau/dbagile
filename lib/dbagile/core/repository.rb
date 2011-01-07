@@ -17,6 +17,9 @@ module DbAgile
       attr_accessor :version
       private :version=
     
+      # Backends as an array of Backend instances
+      attr_reader :backends
+      
       # Databases as an array of Database instances
       attr_reader :databases
     
@@ -34,6 +37,7 @@ module DbAgile
         @root_path = root_path
         @version = version
         @databases = []
+        @backends = []
       end
       
       #############################################################################################
@@ -121,18 +125,25 @@ module DbAgile
       #############################################################################################
       ### Updates
       #############################################################################################
+      
+      # Adds a backend instance
+      def add_backend(backend)
+        self.backends << backend
+      end
     
       # Adds a database instance
-      def <<(db)
+      def add_database(db)
         db.file_resolver = file_resolver
         self.databases << db
       end
+      alias :<< :add_database
     
       # Removes a database from this repository
-      def remove(db)
+      def remove_database(db)
         db = self.database(db)
         db.nil? ? nil : databases.delete(db)
       end
+      alias :remove :remove_database
     
       #############################################################################################
       ### Input/output

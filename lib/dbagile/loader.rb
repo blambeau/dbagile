@@ -14,3 +14,4 @@ DbAgile::Robustness::has_stdlib! 'stringio'
 DbAgile::Robustness::has_gem! "sbyc", ">= 0.1.4"
 DbAgile::Robustness::has_gem! "sequel", ">= 3.8.0"
 DbAgile::Robustness::has_gem! 'highline', '>= 1.5.2'
+DbAgile::Robustness::has_gem! "map", ">= 2.1.0"

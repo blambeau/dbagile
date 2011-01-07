@@ -1,6 +1,7 @@
 require 'dbagile/core/chain'
 require 'dbagile/core/io'
 require 'dbagile/core/repository'
+require 'dbagile/core/backend'
 require 'dbagile/core/database'
 require 'dbagile/core/connection'
 require 'dbagile/core/transaction'

@@ -7,10 +7,13 @@ module DbAgile
         # Dumps the repository to YAML
         def to_yaml(opts = {})
           YAML::quick_emit(self, opts){|out|
+            backendmap = DbAgile::Tools::OrderedHash.new
+            backends.each{|b| backendmap[b.name.to_s] = b}
             dbmap = DbAgile::Tools::OrderedHash.new
             databases.each{|db| dbmap[db.name.to_s] = db}
             out.map("tag:yaml.org,2002:map") do |map|
               map.add('version', self.version)
+              map.add('backends', backendmap)
               map.add('databases', dbmap)
               map.add('current', self.current_db_name.to_s)
             end
@@ -56,15 +59,28 @@ module DbAgile
         
           # create the repository instance
           repo = Repository.new(root_path, version)
+          
+          # load backends
+          if hash['backends']
+            hash['backends'].each_pair{|backend_name, backend_config|
+              backend = Core::Backend.new(backend_name.to_s.to_sym)
+              backend_config.each_pair{|key, value|
+                backend.send(:"#{key}=", value)
+              }
+              repo.add_backend(backend)
+            }
+          end
         
           # load databases
-          hash['databases'].each_pair{|dbname, dbconfig|
-            db = Core::Database.new(dbname.to_s.to_sym)
-            dbconfig.each_pair{|key, value|
-              db.send(:"#{key}=", value)
+          if hash['databases'] 
+            hash['databases'].each_pair{|dbname, dbconfig|
+              db = Core::Database.new(dbname.to_s.to_sym)
+              dbconfig.each_pair{|key, value|
+                db.send(:"#{key}=", value)
+              }
+              repo.add_database(db)
             }
-            repo << db
-          }
+          end
         
           # Set current database
           current = hash['current'].to_s.strip
