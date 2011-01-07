@@ -11,7 +11,7 @@ module DbAgile
         # @raise DbAgile::InvalidBackendName if assertion fails
         #
         def valid_backend_name!(name)
-          raise DbAgile::InvalidBackendName, "Invalid backend name #{name}"\
+          raise DbAgile::InvalidBackendName, "Invalid backend name: #{name}"\
             unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
           name
         end
@@ -28,7 +28,7 @@ module DbAgile
           raise ArgumentError, "Repository expected, got #{repository}"\
             unless repository.kind_of?(DbAgile::Core::Repository)
           unless b = repository.backend(backend_name)
-            raise DbAgile::NoSuchBackendError, "Unknown backend #{backend_name}"
+            raise DbAgile::NoSuchBackendError, "Unknown backend: #{backend_name}"
           end
           b
         end
@@ -41,7 +41,7 @@ module DbAgile
         # @raise DbAgile::InvalidDatabaseName if assertion fails
         #
         def valid_database_name!(name)
-          raise DbAgile::InvalidDatabaseName, "Invalid database name #{name}"\
+          raise DbAgile::InvalidDatabaseName, "Invalid database name: #{name}"\
             unless name.kind_of?(Symbol) and /[a-z][a-z0-9_]*/ =~ name.to_s
           name
         end
@@ -87,7 +87,7 @@ module DbAgile
             repository.database(db_name)
           end
           if db.nil?
-            raise DbAgile::NoSuchDatabaseError, "Unknown database #{db_name}" if db_name
+            raise DbAgile::NoSuchDatabaseError, "Unknown database: #{db_name}" if db_name
             raise DbAgile::NoDefaultDatabaseError, "No default database set (try 'dba use ...' first)"
           else
             db
