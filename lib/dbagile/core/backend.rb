@@ -47,7 +47,7 @@ module DbAgile
           cmd_text = config.instance_eval(cmd_text)
           if w = wrappers[:default]
             wrapped = "<<EOF\n#{w}\nEOF"
-            wrapped = config.merge(:command => cmd_text).instance_eval(wrapped)
+            wrapped = config.merge(:command => cmd_text.strip).instance_eval(wrapped)
           end
         else
           raise DbAgile::NoSuchCommandError, "Unknown backend command #{name}"
