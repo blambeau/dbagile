@@ -4,8 +4,6 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'dbagile'
 require 'rubygems'
 require 'fixtures'
-require 'spec'
-require 'spec/autorun'
 require 'fileutils'
 
 def dbagile_load_all_subfiles(requester_file, match)

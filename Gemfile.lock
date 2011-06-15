@@ -1,0 +1,43 @@
+PATH
+  remote: .
+  specs:
+    dbagile (0.0.2)
+      builder
+      fastercsv
+      highline (>= 1.5.2)
+      json
+      sbyc (>= 0.1.4)
+      sequel (>= 0.3.8)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    bluecloth (2.0.9)
+    builder (3.0.0)
+    diff-lcs (1.1.2)
+    fastercsv (1.5.4)
+    highline (1.6.2)
+    json (1.5.2)
+    rake (0.8.7)
+    rspec (2.4.0)
+      rspec-core (~> 2.4.0)
+      rspec-expectations (~> 2.4.0)
+      rspec-mocks (~> 2.4.0)
+    rspec-core (2.4.0)
+    rspec-expectations (2.4.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.4.0)
+    sbyc (0.1.4)
+    sequel (3.24.1)
+    yard (0.6.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bluecloth (~> 2.0.9)
+  bundler (~> 1.0)
+  dbagile!
+  rake (~> 0.8.7)
+  rspec (~> 2.4.0)
+  yard (~> 0.6.4)

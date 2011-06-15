@@ -1,7 +1,6 @@
 require "rubygems"
 require "rake/rdoctask"
 require "rake/testtask"
-require 'spec/rake/spectask'
 require "rake/gempackagetask"
 require "yard"
 
@@ -32,12 +31,13 @@ task :fixtures do
   DbAgile::Fixtures::create_fixtures
 end
 
+require "rspec/core/rake_task"
 tests = Dir[File.expand_path('../test/*.spec', __FILE__)].collect{|f| File.basename(f, '.spec')}
 tests.each do |kind|
   desc "Run #{kind} spec tests"  
-  Spec::Rake::SpecTask.new("#{kind}_test".to_sym) do |t|
+  RSpec::Core::RakeTask.new("#{kind}_test".to_sym) do |t|
     t.ruby_opts = ['-I.']
-    t.spec_files = FileList["test/#{kind}.spec"]
+    t.pattern = "test/#{kind}.spec"
   end
 end
 
@@ -62,27 +62,7 @@ YARD::Rake::YardocTask.new do |t|
 end
 
 # About gem specification
-gemspec = Gem::Specification.new do |s|
-  s.name = 'dbagile'
-  s.version = version
-  s.summary = "DbAgile - Agile Interface on top of SQL Databases"
-  s.description = %{Agile Interface on top of SQL Databases}
-  s.files = Dir['lib/**/*'] + Dir['test/**/*']
-  s.require_path = 'lib'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ["README.textile", "LICENCE.textile"]
-  s.rdoc_options << '--title' << 'DbAgile - Agile Interface on top of SQL Databases' <<
-                    '--main' << 'README.textile' <<
-                    '--line-numbers'  
-  s.bindir = "bin"
-  s.executables = ['dba']
-  s.author = "Bernard Lambeau"
-  s.email = "blambeau@gmail.com"
-  s.homepage = "http://github.com/blambeau/dbagile"
-  s.add_dependency('sbyc', '>= 0.1.4')
-  s.add_dependency('sequel', '>= 0.3.8')
-  s.add_dependency('highline', '>= 1.5.2')
-end
+gemspec = Kernel.eval(File.read("dbagile.gemspec"))
 Rake::GemPackageTask.new(gemspec) do |pkg|
 	pkg.need_tar = true
 end
