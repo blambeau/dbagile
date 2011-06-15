@@ -4,3 +4,5 @@ spec/fixtures/test.db
 doc/api
 .yardoc
 *.db
+.project
+.buildpath
