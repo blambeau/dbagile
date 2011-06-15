@@ -1,4 +1,4 @@
-Spec::Matchers.define :be_a_valid_yaml_string do
+RSpec::Matchers.define :be_a_valid_yaml_string do
   match do |actual|
     begin
       !YAML::load(actual).nil?

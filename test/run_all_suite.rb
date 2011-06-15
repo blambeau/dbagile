@@ -30,7 +30,7 @@ tests.each do |kind|
   summary << "\nSummary for #{kind}_test (#{kind}.spec)\n"
   
   # Executes it in a subprocess
-  IO.popen("ruby #{file} 2>&1"){|io|
+  IO.popen("ruby -I. -S bundle exec rspec #{file} 2>&1"){|io|
     while l = io.gets
       puts l unless $silent
       unless l =~ /^\s*\.*\s*$|\(in /

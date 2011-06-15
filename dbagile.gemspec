@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency('fastercsv')
   s.add_dependency('json')
   s.add_dependency('builder')
+  s.add_dependency('rack')
   s.add_dependency('sbyc', '>= 0.1.4')
   s.add_dependency('sequel', '>= 0.3.8')
   s.add_dependency('highline', '>= 1.5.2')
