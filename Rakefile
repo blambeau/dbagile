@@ -17,8 +17,8 @@ desc "Creates physical SQL test databases"
 task :physical_databases do
   $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
   $LOAD_PATH.unshift(File.expand_path('../test', __FILE__))
-  require 'fixtures'
   require 'dbagile'
+  require 'fixtures'
   DbAgile::Fixtures::ensure_physical_databases!
 end
 

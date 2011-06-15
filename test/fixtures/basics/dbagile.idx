@@ -17,4 +17,4 @@ databases:
     - fixtures.yaml
     plugins: 
     - DbAgile::Contract::Robust::Optimistic
-current: sqlite
+current: robust
